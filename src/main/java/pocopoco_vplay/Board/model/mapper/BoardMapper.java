@@ -1,4 +1,4 @@
-package pocopoco_vplay.Board.model.mapper;
+package pocopoco_vplay.board.model.mapper;
 
 public class BoardMapper {
 
