@@ -1,4 +1,4 @@
-package pocopoco_vplay.Board.controller;
+package pocopoco_vplay.board.controller;
 
 public class BoardController {
 

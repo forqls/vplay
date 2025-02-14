@@ -1,4 +1,4 @@
-package pocopoco_vplay.Board.model.vo;
+package pocopoco_vplay.board.model.vo;
 
 public class Board {
 

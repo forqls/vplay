@@ -1,4 +1,4 @@
-package pocopoco_vplay.Board.model.service;
+package pocopoco_vplay.board.model.service;
 
 public class BoardService {
 
