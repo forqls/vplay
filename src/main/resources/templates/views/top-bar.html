@@ -1,10 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>top-bar</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #191820;
+}
+
+.header {
+	padding: 1rem 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	background-color: #191820;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.logo-circle {
+	width: 24px;
+	height: 24px;
+	background-color: #d46868;
+	border-radius: 50%;
+}
+
+.nav-main {
+	display: flex;
+	gap: 2rem;
+}
+
+.nav-right {
+	display: flex;
+	gap: 1rem;
+}
+
+.nav-link {
+	color: #949396;
+	text-decoration: none;
+	font-size: 0.9rem;
+}
+
+.sign-in {
+	color: #ffffff;
+}
+
+@media ( max-width : 768px) {
+	.nav-main {
+		display: none;
+	}
+}
+</style>
 </head>
 <body>
-	<h1>탑 바</h1>
+	<header class="header">
+		<a href="/" class="logo">
+			<div class="logo-circle"></div> VPLAY
+		</a>
+		<nav class="nav-main">
+			<a href="#" class="nav-link">Video Templates</a>
+			<a href="#" class="nav-link">Music</a>
+			<a href="#" class="nav-link">Sound Effects</a>
+			<a href="#" class="nav-link">Graphic Templates</a>
+			<a href="#" class="nav-link">Stock Video</a>
+			<a href="#" class="nav-link">Photos</a>
+			<a href="#" class="nav-link">Fonts</a>
+		</nav>
+		<div class="nav-right">
+			<a href="#" class="nav-link">License</a>
+			<a href="#" class="nav-link">Pricing</a>
+			<a href="#" class="nav-link sign-in">Sign in</a>
+		</div>
+	</header>
 </body>
 </html>

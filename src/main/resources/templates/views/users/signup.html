@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FindId</title>
+<title>SignUp</title>
 <style>
 * {
 	margin: 0;
@@ -32,14 +32,14 @@ body {
 	color: #5e37e9;
 }
 
-.find-id-container {
+.signup-container {
 	max-width: 400px;
 	margin: 2rem auto;
 	padding: 2rem;
 	text-align: center;
 }
 
-.find-id-title {
+.signup-title {
 	font-size: 1.5rem;
 	margin-bottom: 2rem;
 }
@@ -57,6 +57,10 @@ body {
 	border: 1px solid #28303f;
 	border-radius: 4px;
 	color: #ffffff;
+}
+
+.input-field::placeholder {
+	color: #949396;
 }
 
 .button {
@@ -84,7 +88,7 @@ body {
 	display: block;
 }
 
-.find-id-btn {
+.signup-btn {
 	width: 100%;
 	padding: 0.8rem;
 	background-color: #5e37e9;
@@ -97,7 +101,7 @@ body {
 }
 
 @media ( max-width : 768px) {
-	.find-id-container {
+	.signup-container {
 		margin: 1rem;
 		padding: 1rem;
 	}
@@ -115,14 +119,26 @@ body {
 </head>
 <body>
 	<div class="breadcrumb">
-		<a href="/">Home</a> > <span class="current">Find ID</span>
+		<a href="/">Home</a> > <span class="current">Sign Up</span>
 	</div>
 
-	<main class="find-id-container">
-		<h1 class="find-id-title">아이디 찾기</h1>
-		<form id="findIdForm">
+	<main class="signup-container">
+		<h1 class="signup-title">VPLAY 회원가입</h1>
+		<form id="signupForm">
+			<div class="input-group">
+				<input type="text" placeholder="ID" class="input-field">
+			</div>
+			<div class="input-group">
+				<input type="password" placeholder="Password" class="input-field">
+			</div>
+			<div class="input-group">
+				<input type="password" placeholder="Password 확인" class="input-field">
+			</div>
 			<div class="input-group">
 				<input type="text" placeholder="User name" class="input-field">
+			</div>
+			<div class="input-group">
+				<input type="text" placeholder="Nick name" class="input-field">
 			</div>
 			<div class="input-group">
 				<input type="tel" placeholder="Phone" class="input-field">
@@ -139,7 +155,11 @@ body {
 				</div>
 			</div>
 
-			<button type="submit" class="find-id-btn">아이디 찾기</button>
+			<div class="input-group">
+				<input type="date" placeholder="Birth day" class="input-field">
+			</div>
+
+			<button type="submit" class="signup-btn">회원가입</button>
 		</form>
 	</main>
 
