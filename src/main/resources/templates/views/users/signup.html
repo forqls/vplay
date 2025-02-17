@@ -121,42 +121,47 @@ body {
 	<div class="breadcrumb">
 		<a href="/">Home</a> > <span class="current">Sign Up</span>
 	</div>
-
+	<!-- VO 완성되면 아이디 중복확인 버튼 구현하기 (비동기) -->
 	<main class="signup-container">
 		<h1 class="signup-title">VPLAY 회원가입</h1>
-		<form id="signupForm">
+		<form id="signupForm" method="post">
 			<div class="input-group">
-				<input type="text" placeholder="ID" class="input-field">
+				<input type="text" placeholder="ID" class="input-field" name="ID" id="ID">
+				<button id="checkIdBtn" class="button verify-button">중복확인</button>
+			</div>
+			
+			<div class="input-group">
+				<input type="password" placeholder="Password" class="input-field" name="pasword" id="password">
 			</div>
 			<div class="input-group">
-				<input type="password" placeholder="Password" class="input-field">
+				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword">
+			</div>
+			<tr>
+				<td><label id="confirmText"></label></td>
+			</tr>
+			<div class="input-group">
+				<input type="text" placeholder="User name" class="input-field" name="name">
 			</div>
 			<div class="input-group">
-				<input type="password" placeholder="Password 확인" class="input-field">
+				<input type="text" placeholder="Nick name" class="input-field" name="nickName">
 			</div>
 			<div class="input-group">
-				<input type="text" placeholder="User name" class="input-field">
+				<input type="tel" placeholder="Phone" class="input-field" name="tel">
 			</div>
 			<div class="input-group">
-				<input type="text" placeholder="Nick name" class="input-field">
-			</div>
-			<div class="input-group">
-				<input type="tel" placeholder="Phone" class="input-field">
-			</div>
-			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field">
+				<input type="email" placeholder="Email" class="input-field" name="email">
 				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
 			</div>
 
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
-					<input type="text" placeholder="인증번호 입력" class="input-field">
+					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi">
 					<button type="button" class="button verify-button">확인</button>
 				</div>
 			</div>
 
 			<div class="input-group">
-				<input type="date" placeholder="Birth day" class="input-field">
+				<input type="date" placeholder="Birth day" class="input-field" name="birthDate">
 			</div>
 
 			<button type="submit" class="signup-btn">회원가입</button>
@@ -164,10 +169,39 @@ body {
 	</main>
 
 	<script>
-		function showVerification() {
-			document.getElementById('verificationSection').classList
-					.add('active');
-		}
+		let idCheck = false;
+		let pwdCheck = false;
+		
+		document.getElementById('checkIdBtn').addEventListener('click',()=>{
+			const id = document.getElementById('ID').value;
+			$.ajax({
+				url:'/users/idCheck',
+				data:{id:id},
+				success:(data)=>{
+					console.log(data);
+				},error:data=>console.log(data)
+			});
+		});
+		
+		
+		
+		document.getElementById('confirmPassword').addEventListener('change',()=>{
+			const password = document.getElementById('password').value;
+			const confirmPassword = document.getElementById('confirmPassword').value;
+			const confirmText = document.getElementById('confirmText');
+			
+			if(password != confirmPassword){
+				confirmText.innerText = '비밀번호가 일치하지 않습니다.';
+				confirmText.style.color='red';
+				pwdCheck = false;
+			}else{
+				confirmText.innerText= '비밀번호가 일치합니다.';
+				confirmText.style.color='green';
+				pwdCheck=true;
+			}
+			
+			
+		});
 	</script>
 </body>
 </html>
