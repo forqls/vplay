@@ -177,6 +177,7 @@ body {
 			const id = document.getElementById('ID').value;
 			$.ajax({
 				url:'/users/idCheck',
+				method:'post',
 				data:{id:id},
 				success:(data)=>{
 					console.log(data);
