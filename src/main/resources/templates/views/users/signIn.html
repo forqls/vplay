@@ -130,13 +130,16 @@ body {
 	<main class="login-container">
 		<h1 class="login-title">로그인</h1>
 		<form action="/users/signIn" method="post">
-			<input type="text" placeholder="ID" class="input-field">
-			<input type="password" placeholder="Password" class="input-field">
+			<input type="text" placeholder="ID" class="input-field" name="userId" required>
+			<input type="password" placeholder="Password" class="input-field" name="userPw" required>
 			<div class="links">
 				<a href="#">Sign Up</a> <a href="#">Find ID</a> <a href="#">Find PW</a>
 			</div>
 
 			<button type="submit" class="login-btn">로그인</button>
+
+			<input type="hidden" name="beforeURL"/>
+
 		</form>
 
 		<div class="social-divider">Or login with Social</div>
@@ -146,5 +149,11 @@ body {
 			<button class="social-btn google-btn">Sign in with Google</button>
 		</div>
 	</main>
+<script>
+	window.onload = () => {
+		const beforeURL = document.referrer;
+		document.getElementsByName('beforeURL')[0].value = beforeURL;
+	}
+</script>
 </body>
 </html>

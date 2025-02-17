@@ -105,16 +105,19 @@ public class UsersController {
 
 
     @GetMapping("signIn")
-    public String signIn() { return "login"; }
+    public String signIn() {
+        System.out.println(bcrypt.encode("vplay"));
+        return "signIn"; }
 
-    @PostMapping("/users/signIn")
+    @PostMapping("signIn")
     public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL){
-        Users loginUser = uService.login(user);
-        if(loginUser != null && bcrypt.matches(user.getUserPw(), loginUser.getUserPw())){
-            model.addAttribute("loginUser", loginUser);
+        Users loginUser = uService.signIn(user);
 
+        if(loginUser != null && bcrypt.matches(user.getUserPw(), loginUser.getUserPw())){
+
+            model.addAttribute("loginUser", loginUser);
             if(loginUser.getIsAdmin().equals("Y")){
-                return "redirect:/admin/index";
+                return "redirect:/admin/dashboard";
             }else{
                 return "redirect:" + beforeURL;
             }

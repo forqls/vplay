@@ -16,9 +16,7 @@ public class UsersService {
 		return mapper.checkId(id);
 	}
 
-	public Users login(Users user) {
-		// TODO Auto-generated method stub
-		return null;
+	public Users signIn(Users user) {
+		return mapper.signIn(user);
 	}
-
 }
