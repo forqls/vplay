@@ -1,9 +1,10 @@
 package pocopoco_vplay.users.model.mapper;
 
-public class UsersMapper {
+import org.apache.ibatis.annotations.Mapper;
 
-	public int checkId(String id) {
-		return 0;
-	}
+@Mapper
+public interface UsersMapper {
+
+	int checkId(String id);
 
 }
