@@ -1,10 +1,323 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<title>Creator</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Oxygen, Ubuntu, Cantarell, sans-serif;
+	background-color: #191820;
+	color: white;
+	padding: 40px;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.profile-section {
+	display: grid;
+	grid-template-columns: 250px 1fr;
+	gap: 24px;
+	margin-bottom: 80px;
+	height: 300px;
+}
+
+.profile-card {
+	background-color: #1f1f2c;
+	padding: 20px;
+	border-radius: 12px;
+	text-align: center;
+}
+
+.profile-image {
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	margin: 0 auto 16px;
+	background-color: #33333e;
+}
+
+.profile-name {
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 8px;
+}
+
+.profile-description {
+	color: #6f757d;
+	font-size: 14px;
+	line-height: 1.5;
+	margin-bottom: 16px;
+}
+
+.subscribe-button {
+	width: 100%;
+	padding: 12px;
+	background-color: #33333e;
+	border: none;
+	border-radius: 8px;
+	color: white;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.profile-banner {
+	background-size: cover;
+	background-position: center;
+	border-radius: 12px;
+	background-color: #33333e;
+}
+
+.content-section {
+	margin-bottom: 60px;
+}
+
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.section-title {
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.filter-buttons {
+	display: flex;
+	gap: 10px;
+}
+
+.filter-dropdown {
+	padding: 8px 16px;
+	background-color: #33333e;
+	border: none;
+	border-radius: 6px;
+	color: white;
+	font-size: 14px;
+	text-align: center;
+	cursor: pointer;
+	appearance: none;
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	padding-right: 30px;
+	background-image:
+		url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	background-size: 16px;
+}
+
+.filter-dropdown:hover {
+	box-shadow: 0 0 0 0.5px #ffffff;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 16px;
+}
+
+.grid-item {
+	position: relative;
+	background-color: #33333e;
+	border-radius: 8px;
+	aspect-ratio: 16/9;
+	overflow: hidden;
+}
+
+.item-content {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 12px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.item-title {
+	font-size: 12px;
+	color: white;
+}
+
+.item-actions {
+	display: flex;
+	gap: 8px;
+}
+
+@media ( max-width : 1024px) {
+	.grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media ( max-width : 768px) {
+	.profile-section {
+		grid-template-columns: 1fr;
+		height: auto;
+	}
+	.profile-banner {
+		height: 200px;
+		margin-top: 24px;
+	}
+}
+</style>
 </head>
+<div th:replace="~{views/common/topbar :: topbar}"></div>
 <body>
-	<h1>크리에이터 페이지</h1>
+	<div class="container">
+		<!-- Profile Section -->
+		<div class="profile-section">
+			<div class="profile-card">
+				<div class="profile-image"></div>
+				<h2 class="profile-name">Handsomegwon</h2>
+				<p class="profile-description">차원이 다른 영상을 제공합니다. 핸썸권의 자세한 튜토리얼을 따라오세요!</p>
+				<button class="subscribe-button">구독하기</button>
+			</div>
+			<div class="profile-banner"></div>
+		</div>
+
+		<!-- Recent Works Section -->
+		<div class="content-section">
+			<div class="section-header">
+				<h3 class="section-title">최신 작업물</h3>
+			</div>
+			<div class="grid">
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="content-section">
+			<div class="section-header">
+				<h3 class="section-title">전체 작업물</h3>
+				<div class="filter-buttons">
+					<select class="filter-dropdown">
+						<option value="stock-video">Stock Video</option>
+						<option value="graphic-templates">Graphic Templates</option>
+						<option value="music">Music</option>
+						<option value="sound-effects">Sound Effects</option>
+						<option value="photos">Photos</option>
+						<option value="fonts">Fonts</option>
+					</select> <select class="filter-dropdown">
+						<option value="newest">새로운순</option>
+						<option value="most-viewed">조회수 많은 순</option>
+					</select>
+				</div>
+			</div>
+			<div class="grid">
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+				<div class="grid-item">
+					<div class="item-content">
+						<span class="item-title">Big Game Grunge</span>
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>♥️</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
