@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<title>Pricing</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Oxygen, Ubuntu, Cantarell, sans-serif;
+	background-color: #191820;
+	color: white;
+	line-height: 1.5;
+}
+
+/* Hero Section */
+.hero {
+	text-align: center;
+	padding: 5rem 1rem;
+}
+
+.hero h1 {
+	font-size: 2rem;
+	margin-bottom: 1rem;
+}
+
+.hero p {
+	color: #9ca3af;
+	margin-bottom: 2rem;
+}
+
+/* Categories */
+.categories {
+	display: flex;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-bottom: 4rem;
+	flex-wrap: wrap;
+}
+
+.category {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #9ca3af;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.5rem;
+}
+
+.category:hover {
+	color: white;
+}
+
+.category span {
+	margin-top: 0.5rem;
+}
+
+.pricing {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1.5rem;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 1rem;
+}
+
+.card {
+	background-color: #1f1f2c;
+	border: 1px solid rgba(129, 55, 233, 0.2);
+	border-radius: 0.5rem;
+	padding: 1.5rem;
+}
+
+.card h3 {
+	font-size: 1.25rem;
+	margin-bottom: 0.5rem;
+}
+
+.price {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 1.5rem;
+}
+
+.price span {
+	font-size: 0.875rem;
+	color: #9ca3af;
+}
+
+.features {
+	list-style: none;
+	color: #9ca3af;
+	margin-bottom: 1.5rem;
+}
+
+.features li {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.features li::before {
+	content: "•";
+	margin-right: 0.5rem;
+}
+
+.start-button {
+	width: 100%;
+	background-color: #8137e9;
+	color: white;
+	border: none;
+	padding: 0.75rem;
+	border-radius: 0.25rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.start-button:hover {
+	background-color: #6c2bd9;
+}
+
+.footer-text {
+	text-align: center;
+	color: #9ca3af;
+	margin-top: 4rem;
+	padding: 0 1rem;
+}
+
+.question {
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-top: 4rem;
+}
+
+@media ( max-width : 768px) {
+	.hero h1 {
+		font-size: 1.5rem;
+	}
+	.categories {
+		gap: 1rem;
+	}
+}
+</style>
+</head>
+<div th:replace="~{views/common/topbar :: topbar}"></div>
+<body>
+	<div class="hero">
+		<h1>
+			작업을 위한 무제한의 컨텐츠들을<br> 한곳에서 만나보세요.
+		</h1>
+		<p>글로벌 아티스트를 구독하고, 그들의 고품질 자산과 템플릿을 마음껏 활용해 보세요!</p>
+
+		<div class="categories">
+			<button class="category">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                </svg>
+				<span>Video</span>
+			</button>
+			<button class="category">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+				<span>Graphics</span>
+			</button>
+			<button class="category">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+				<span>Audio</span>
+			</button>
+			<button class="category">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+				<span>Photos</span>
+			</button>
+			<button class="category">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                    <line x1="9" y1="20" x2="15" y2="20"></line>
+                    <line x1="12" y1="4" x2="12" y2="20"></line>
+                </svg>
+				<span>Fonts</span>
+			</button>
+			<button class="category">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L12 22M17 12L7 12M22 12L2 12"></path>
+    </svg>
+				<span>More</span>
+			</button>
+		</div>
+
+		<div class="pricing">
+			<div class="card">
+				<h3>Frame Pro</h3>
+				<div class="price">
+					16,500<span>/30</span>
+				</div>
+				<ul class="features">
+					<li>FREE Stock Video</li>
+					<li>FREE Sound Effects</li>
+					<li>FREE Fonts</li>
+				</ul>
+				<button class="start-button" style="margin-top: 63px">Start now</button>
+			</div>
+
+			<div class="card">
+				<h3>Graphic Pro</h3>
+				<div class="price">
+					12,500<span>/30</span>
+				</div>
+				<ul class="features">
+					<li>FREE Graphic Templates & Photo</li>
+					<li>FREE Sound Effects</li>
+					<li>FREE Fonts</li>
+				</ul>
+				<button class="start-button" style="margin-top: 63px">Start now</button>
+			</div>
+
+			<div class="card">
+				<h3>All Rounder</h3>
+				<div class="price">
+					26,000<span>/30</span>
+				</div>
+				<ul class="features">
+					<li>Enjoy All Content for Free on VPLAY</li>
+					<li>FREE Stock Video</li>
+					<li>FREE Graphic Templates & Photo</li>
+					<li>FREE Sound Effects</li>
+					<li>FREE Fonts</li>
+				</ul>
+				<button class="start-button">Start now</button>
+			</div>
+		</div>
+
+		<p class="footer-text">가격은 한국 원(₩) 기준이며, 부가세가 포함된 가격입니다. VPLAY 의 사용자 약관이 적용됩니다.</p>
+
+		<h2 class="question">추가로 궁금하신 사항이 있으신가요?</h2>
+	</div>
+</body>
+</html>
