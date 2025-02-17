@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>top-bar</title>
+	<style>
+
+</style>
+</head>
+<body>
+
+	<header class="header" th:fragment="topbar">
+		<a href="/" class="logo">
+			<div class="logo-circle"></div> VPLAY
+		</a>
+		<nav class="nav-main">
+			<a href="#" class="nav-link">Video Templates</a>
+			<a href="#" class="nav-link">Music</a>
+			<a href="#" class="nav-link">Sound Effects</a>
+			<a href="#" class="nav-link">Graphic Templates</a>
+			<a href="#" class="nav-link">Stock Video</a>
+			<a href="#" class="nav-link">Photos</a>
+			<a href="#" class="nav-link">Fonts</a>
+		</nav>
+		<div class="nav-right">
+			<a href="#" class="nav-link">License</a>
+			<a href="#" class="nav-link">Pricing</a>
+			<a onclick="location.href='/users/signIn'" class="nav-link sign-in">Sign in</a>
+		</div>
+	</header>
+</body>
+</html>

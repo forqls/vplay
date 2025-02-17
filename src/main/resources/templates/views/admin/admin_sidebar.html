@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="/css/admin/admin_sidebar.css" rel="stylesheet">
+</head>
+<body>
+	<div class="sidebar">
+        <div class="logo">
+            <div class="logo-circle"></div>
+            <div class="logo-text">VPLAY</div>
+        </div>
+        <nav>
+            <a onclick="location.href = '/admin/dashboard'" class="nav-item active">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+            <a onclick="location.href = '/admin/users'" class="nav-item">회원 관리</a>
+            <a onclick="location.href = '/admin/inquiry'" class="nav-item">문의 관리</a>
+            <a onclick="location.href = '/admin/templates'" class="nav-item">템플릿 관리</a>
+            <a onclick="location.href = '/admin/requestPost'" class="nav-item">의뢰 게시물 관리</a>
+        </nav>
+    </div>
+</body>
+</html>

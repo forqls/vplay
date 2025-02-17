@@ -166,8 +166,8 @@ public class UsersController {
 
 
 
-
-
+    @GetMapping("signIn")
+    public String signIn() { return "login"; }
 
     @PostMapping("/users/signIn")
     public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL){
