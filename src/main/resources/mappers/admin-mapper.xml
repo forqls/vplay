@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pocopoco_vplay.admin.model.mapper.AdminMapper">
+	<select id="getUsersCount">
+		select count(*)
+		from users
+	</select>
+	
+	<select id="selectAllUser">
+		select *
+		from users
+		order by user_no desc
+	</select>
+</mapper>
