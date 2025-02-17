@@ -22,4 +22,5 @@ public class UsersService {
   
 	public int insertUser(Users user) {
 		return mapper.insertUser(user);
-
+	}
+}

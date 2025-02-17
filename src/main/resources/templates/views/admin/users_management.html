@@ -39,15 +39,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>ditkddbs5002</td>
-                            <td>이상훈</td>
-                            <td>ZAYN</td>
-                            <td>ditkddbs5002@gmail.com</td>
-                            <td>010-2239-5002</td>
-                            <td>2024-01-01</td>
-                            <td><span class="status active">Y</span></td>
+                        <tr th:each="u : ${list}">
+                            <td>[[${u.userNo}]]</td>
+                            <td>[[${u.userId}]]</td>
+                            <td>[[${u.userName}]]</td>
+                            <td>[[${u.userNickname}]]</td>
+                            <td>[[${u.userEmail}]]</td>
+                            <td>[[${u.userPhone}]]</td>
+                            <td>[[${u.joinDate}]]</td>
+                            <td><span class="status active">[[${u.status}]]</span></td>
                             <td>
                                 <button class="action-btn">
                                     <svg viewBox="0 0 24 24" width="18" height="18">
@@ -58,26 +58,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>handsomesalgu</td>
-                            <td>김태혁</td>
-                            <td>handsomesalgu</td>
-                            <td>rnjsxogur@naver.com</td>
-                            <td>010-5011-5974</td>
-                            <td>2024-02-19</td>
-                            <td><span class="status active">Y</span></td>
-                            <td>
-                                <button class="action-btn">
-                                    <svg viewBox="0 0 24 24" width="18" height="18">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- 추가 행들... -->
                     </tbody>
                 </table>
             </div>
