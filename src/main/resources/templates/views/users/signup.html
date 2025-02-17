@@ -172,7 +172,16 @@ body {
 		let idCheck = false;
 		let pwdCheck = false;
 		
-		
+		document.getElementById('checkIdBtn').addEventListener('click',()=>{
+			const id = document.getElementById('ID').value;
+			$.ajax({
+				url:'/users/idCheck',
+				data:{id:id},
+				success:(data)=>{
+					console.log(data);
+				},error:data=>console.log(data)
+			});
+		});
 		
 		
 		
