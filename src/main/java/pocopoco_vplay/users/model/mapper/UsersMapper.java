@@ -13,4 +13,6 @@ public interface UsersMapper {
   Users signIn(Users user);
 
 	int insertUser(Users user);
+	
+}
 
