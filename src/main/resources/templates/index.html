@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>크리에이티브 플랫폼</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
     <style>
         * {
             margin: 0;
@@ -15,7 +17,6 @@
             background-color: #191820;
             color: white;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            padding: 40px 20px;
         }
 
         .container {
@@ -240,8 +241,9 @@
     </style>
 </head>
 <body>
+<div th:replace="~{views/common/topbar :: topbar}"></div>
     <div class="container">
-        <!-- 헤더 섹션 -->
+
         <section class="hero">
             <div class="hero-content">
                 <h1>
