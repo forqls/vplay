@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPLAY - 회원 관리</title>
-    <link href="/css/admin/users_management.css" rel="stylesheet">
+    <title>VPLAY - 템플릿 관리</title>
+    <link href="/css/admin/managing_Templates.css" rel="stylesheet">
 </head>
 <body>
     <div th:replace="~{admin_sidebar}"></div>
 
     <main class="main-content">
-        <h1 class="page-title">회원 관리</h1>
+        <h1 class="page-title">템플릿 관리</h1>
         
         <div class="content-card">
             <div class="search-bar">
@@ -28,12 +28,10 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>template type</th>
                             <th>User ID</th>
-                            <th>User name</th>
-                            <th>Nick name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Join date</th>
+                            <th>title</th>
+                            <th>inquiry date</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -41,11 +39,9 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>ditkddbs5002</td>
-                            <td>이상훈</td>
-                            <td>ZAYN</td>
-                            <td>ditkddbs5002@gmail.com</td>
-                            <td>010-2239-5002</td>
+                            <td>Video Templates</td>
+                            <td>dongjunson</td>
+                            <td>The Most Useful Transit...</td>
                             <td>2024-01-01</td>
                             <td><span class="status active">Y</span></td>
                             <td>
@@ -60,12 +56,27 @@
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>handsomesalgu</td>
-                            <td>김태혁</td>
-                            <td>handsomesalgu</td>
-                            <td>rnjsxogur@naver.com</td>
-                            <td>010-5011-5974</td>
-                            <td>2024-02-19</td>
+                            <td>Music</td>
+                            <td>dhkwkdckd99</td>
+                            <td>Commercial Rock</td>
+                            <td>2024-01-04</td>
+                            <td><span class="status active">Y</span></td>
+                            <td>
+                                <button class="action-btn">
+                                    <svg viewBox="0 0 24 24" width="18" height="18">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Sound Effects</td>
+                            <td>forqls123</td>
+                            <td>Woosh</td>
+                            <td>2024-02-09</td>
                             <td><span class="status active">Y</span></td>
                             <td>
                                 <button class="action-btn">
