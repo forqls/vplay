@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SignUp</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <style>
 * {
 	margin: 0;
@@ -127,7 +128,7 @@ body {
 		<form id="signupForm" method="post">
 			<div class="input-group">
 				<input type="text" placeholder="ID" class="input-field" name="ID" id="ID">
-				<button id="checkIdBtn" class="button verify-button">중복확인</button>
+				<button type="button" id="checkIdBtn" class="button verify-button">중복확인</button>
 			</div>
 			
 			<div class="input-group">
