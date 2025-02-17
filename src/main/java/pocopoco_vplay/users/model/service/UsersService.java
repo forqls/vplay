@@ -21,4 +21,8 @@ public class UsersService {
 		return null;
 	}
 
+	public int insertUser(Users user) {
+		return mapper.insertUser(user);
+	}
+
 }
