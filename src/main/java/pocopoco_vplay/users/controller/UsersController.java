@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
@@ -124,6 +125,12 @@ public class UsersController {
         } else{
             throw new UsersException("로그인을 실패하였습니다.");
         }
+    }
+
+    @GetMapping("logout")
+    public String logout(SessionStatus session) {
+        session.setComplete();
+        return "redirect:/";
     }
 
 
