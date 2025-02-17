@@ -107,7 +107,7 @@ public class UsersController {
 
     @PostMapping("/users/signIn")
     public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL){
-        Users loginUser = usersService.login(user);
+        Users loginUser = uService.login(user);
         if(loginUser != null && bcrypt.matches(user.getUserPw(), loginUser.getUserPw())){
             model.addAttribute("loginUser", loginUser);
 
