@@ -7,10 +7,18 @@
 		where user_id=#{id}
 	</select>
 
+
 <!-- 로그인 -->
 	<select id="signIn">
 		select *
 		from users
 		where USER_ID = #{userId} and STATUS ='Y'
 	</select>
+
+	
+	<insert id="insertUser">
+		   insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL,USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE
+    ) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone},#{userEmail}, #{userBirth}, 'M', 'Y', 'N', sysdate, '안녕하세요.', 'STARTER',#{userPlan}, 'DEFAULT_IMG.JPG')
+	</insert>
+
 </mapper>

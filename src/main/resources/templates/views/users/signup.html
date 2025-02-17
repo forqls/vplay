@@ -127,14 +127,17 @@ body {
 	<!-- VO 완성되면 아이디 중복확인 버튼 구현하기 (비동기) -->
 	<main class="signup-container">
 		<h1 class="signup-title">VPLAY 회원가입</h1>
-		<form id="signupForm" method="post">
+		<form id="signupForm" method="post" action="/users/signUp">
 			<div class="input-group">
-				<input type="text" placeholder="ID" class="input-field" name="ID" id="ID">
+				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID">
 				<button type="button" id="checkIdBtn" class="button verify-button">중복확인</button>
 			</div>
+			<tr>
+				<td><label id="confirmIdText"></label></td>
+			</tr>
 			
 			<div class="input-group">
-				<input type="password" placeholder="Password" class="input-field" name="pasword" id="password">
+				<input type="password" placeholder="Password" class="input-field" name="userPw" id="password">
 			</div>
 			<div class="input-group">
 				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword">
@@ -143,48 +146,88 @@ body {
 				<td><label id="confirmText"></label></td>
 			</tr>
 			<div class="input-group">
-				<input type="text" placeholder="User name" class="input-field" name="name">
+				<input type="text" placeholder="User name" class="input-field" name="userName" id="name">
 			</div>
 			<div class="input-group">
-				<input type="text" placeholder="Nick name" class="input-field" name="nickName">
+				<input type="text" placeholder="Nick name" class="input-field" name="userNickname" id = "nickName">
 			</div>
 			<div class="input-group">
-				<input type="tel" placeholder="Phone" class="input-field" name="tel">
+				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel">
 			</div>
 			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field" name="email">
-				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
+				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email">
+				<button type="button" class="button verify-button" onclick="showVerification()" id="emailBtn">인증하기</button>
 			</div>
 
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
-					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi">
-					<button type="button" class="button verify-button">확인</button>
+					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi" id="confirmVerifi">
+					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 				</div>
 			</div>
 
 			<div class="input-group">
-				<input type="date" placeholder="Birth day" class="input-field" name="birthDate">
+				<input type="date" placeholder="Birth day" class="input-field" name="userBrith">
 			</div>
 
-			<button type="submit" class="signup-btn">회원가입</button>
+			<button type="button" class="signup-btn" onclick="joinBtn()" id="join">회원가입</button>
 		</form>
 	</main>
 
 	<script>
 		let idCheck = false;
 		let pwdCheck = false;
+		let emailCheck = false;
+		let nameCheck = false;
+		let nickNameCheck = false;
+		let phoneCheck = false;
+		let confirmEmail = '';
+		
+		window.onload = () => {
+		    const nameInput = document.getElementById('name');
+		    const nickNameInput = document.getElementById('nickName');
+		    const telInput = document.getElementById('tel');
+		    
+		    nameInput.addEventListener('input', () => {
+		        const name = nameInput.value.trim();
+		        nameCheck = name !== '';
+		    });
+
+		    nickNameInput.addEventListener('input', () => {
+		        const nickName = nickNameInput.value.trim();
+		        nickNameCheck = nickName !== '';
+		    });
+
+		    telInput.addEventListener('input', () => {
+		        const tel = telInput.value.trim();
+		        phoneCheck = tel !== '';
+		    });
+		};
 		
 		document.getElementById('checkIdBtn').addEventListener('click',()=>{
 			const id = document.getElementById('ID').value;
-			$.ajax({
-				url:'/users/idCheck',
-				method:'post',
-				data:{id:id},
-				success:(data)=>{
-					console.log(data);
-				},error:data=>console.log(data)
-			});
+			const idText = document.getElementById('confirmIdText');
+			if(id.trim() !=''){
+				$.ajax({
+					url:'/users/idCheck',
+					method:'post',
+					data:{id:id},
+					success:(data)=>{
+	// 					console.log(data);
+						if(data == 1){
+							idText.innerText = '이미 존재하는 아이디입니다.';
+							idText.style.color='red';
+							idCheck = false;
+						}else{
+							idText.innerText = '사용 가능한 아이디입니다.';
+							idText.style.color='green';
+							idCheck = true;
+						}
+					},error:data=>console.log(data)
+				});
+			}else{
+				alert('아이디를 입력하세요!');
+			}
 		});
 		
 		
@@ -203,9 +246,76 @@ body {
 				confirmText.style.color='green';
 				pwdCheck=true;
 			}
-			
-			
 		});
+		
+
+		const showVerification=()=>{
+			const email = document.getElementById('email').value.trim();
+			const verfication = document.getElementById('verificationSection');
+			const emailBtn = document.getElementById('emailBtn');
+			if(email ==''){
+				alert('이메일을 입력해주세요.');
+			}else{
+				$.ajax({
+					url:'/users/emailCheck',
+					data:{email:email},
+					success:data=>{
+						alert('이메일이 발송되었습니다.');
+						verfication.style.display='block';
+// 						console.log(data);
+						confirmEmail = data;
+						emailBtn.disabled=true;
+					},error:data=>console.log(data)
+				});
+			}
+		}
+		
+		
+		
+		confirmEmailBtn.addEventListener('click',()=>{
+			const confirmEmailBtn = document.getElementById('confirmEmailBtn');
+			const confirmVerifi = document.getElementById('confirmVerifi').value.trim();
+			const verfication = document.getElementById('verificationSection');
+			if(confirmVerifi == ''){
+				alert('인증번호를 입력해주세요');
+			}else if(confirmVerifi == confirmEmail){
+				alert('이메일 인증이 완료되었습니다.');
+				emailCheck = true;
+				verfication.style.display='none';
+				confirmEmailBtn
+			}else{
+				alert('인증번호가 틀렸습니다.');
+				emailCheck=false;
+			}
+		});
+		
+		const joinBtn = () =>{
+			if(!idCheck){
+				alert('아이디를 입력하세요!');
+			}else if(!pwdCheck){
+				alert('비밀번호를 입력하세요!');
+			}else if(!emailCheck){
+				alert('이메일 인증이 성공하지 않았습니다.');
+			}else if(!nameCheck){
+				alert('이름을 확인하세요!');
+			}else if(!nickNameCheck){
+				alert('사용하실 활동명(닉네임)을 적어주세요.');
+			}else if(!phoneCheck){
+				alert('핸드폰 번호를 입력해주세요!');
+			}else{
+				document.getElementById('signupForm').submit();
+			}
+		};
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	</script>
 </body>
 </html>
