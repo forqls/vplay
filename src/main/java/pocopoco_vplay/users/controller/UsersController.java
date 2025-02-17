@@ -3,6 +3,7 @@ package pocopoco_vplay.users.controller;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,9 +36,14 @@ public class UsersController {
 	
 	
 	
+	@GetMapping("singUp")
+	public String singUp() {
+		return "signup";
+	}
 	
 	@PostMapping("idCheck")
 	public int checkId(@RequestParam("id") String id) {
+		System.out.println("userId 는 " + id);
 		return uService.checkId(id);
 	}
 

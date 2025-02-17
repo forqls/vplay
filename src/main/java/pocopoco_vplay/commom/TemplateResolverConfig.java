@@ -11,7 +11,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver usersResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/users");
+		mResolver.setPrefix("templates/views/users/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -32,7 +32,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver adminResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/admin");
+		mResolver.setPrefix("templates/views/admin/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -53,7 +53,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver myPageResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/myPage");
+		mResolver.setPrefix("templates/views/myPage/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -74,7 +74,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver inqueryResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/inquery");
+		mResolver.setPrefix("templates/views/board/inquery/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -95,7 +95,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver requestResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/request");
+		mResolver.setPrefix("templates/views/board/request/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -116,7 +116,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver fontsResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/content/fonts");
+		mResolver.setPrefix("templates/views/board/content/fonts/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -137,7 +137,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver GraphicTemplatesResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/content/GraphicTemplates");
+		mResolver.setPrefix("templates/views/board/content/GraphicTemplates/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -158,7 +158,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver musicResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/content/music");
+		mResolver.setPrefix("templates/views/board/content/music/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -179,7 +179,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver soundEffectsResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/content/soundEffects");
+		mResolver.setPrefix("templates/views/board/content/soundEffects/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -200,7 +200,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver stockVideoResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/content/stockVideo");
+		mResolver.setPrefix("templates/views/board/content/stockVideo/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
@@ -221,7 +221,7 @@ public class TemplateResolverConfig {
 	@Bean
 	public ClassLoaderTemplateResolver videoTemplatesResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
-		mResolver.setPrefix("templates/views/board/content/videoTemplates");
+		mResolver.setPrefix("templates/views/board/content/videoTemplates/");
 		mResolver.setSuffix(".html");
 		
 		mResolver.setTemplateMode(TemplateMode.HTML);
