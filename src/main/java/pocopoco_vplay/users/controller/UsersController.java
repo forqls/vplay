@@ -46,7 +46,7 @@ public class UsersController {
 		System.out.println("userId 는 " + id);
 		int result = uService.checkId(id);
 		System.out.println(result);
-		return 0;
+		return result;
 	}
 
 
