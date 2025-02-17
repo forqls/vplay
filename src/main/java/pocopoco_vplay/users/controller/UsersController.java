@@ -30,7 +30,7 @@ public class UsersController {
 	
 	
 	
-	@GetMapping("/signUp")
+	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
 	}
@@ -38,7 +38,9 @@ public class UsersController {
 	@PostMapping("idCheck")
 	public int checkId(@RequestParam("id") String id) {
 		System.out.println("userId 는 " + id);
-		return uService.checkId(id);
+		int result = uService.checkId(id);
+		System.out.println(result);
+		return 0;
 	}
 	
 	
