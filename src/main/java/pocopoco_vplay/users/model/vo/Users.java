@@ -1,8 +1,14 @@
 package pocopoco_vplay.users.model.vo;
 
-import lombok.*;
-
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -17,7 +23,7 @@ public class Users {
     private String userName;
     private String userPhone;
     private String userEmail;
-    private Date userBrith;
+    private Date userBirth;
     private String userGender;
     private String status;
     private String isAdmin;
