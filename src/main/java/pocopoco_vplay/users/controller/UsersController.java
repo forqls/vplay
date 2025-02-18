@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -53,7 +54,7 @@ public class UsersController {
 		System.out.println(result);
 		return result;
 	}
-	
+
 	@GetMapping("emailCheck")
 	@ResponseBody
 	public String emailSend(@RequestParam("email") String email) {
@@ -65,10 +66,10 @@ public class UsersController {
 		for(int i=0;i<5;i++) {
 			random += (int)(Math.random()*10);
 		}
-		
+
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-		
-		
+
+
 		try {
 			mimeMessageHelper.setSubject(random);
 			mimeMessageHelper.setTo(email);
@@ -79,20 +80,20 @@ public class UsersController {
 		mailSender.send(mimeMessage);
 		System.out.println(random);
 		return random;
-		
+
 	}
-	
+
 	@PostMapping("signUp")
 	public int joinUser(@ModelAttribute Users user) {
 		user.setUserPw(bcrypt.encode(user.getUserPw()));
-		
+
 		Date userBirthday = user.getUserBirth();
-		
+
 		if(userBirthday != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String birthDateString = sdf.format(userBirthday);
 			String realBirthday = birthDateString.replace("-", "/");
-			
+
 			SimpleDateFormat StringtoDate = new SimpleDateFormat("yyyy/MM/dd");
 			try {
 				Date formattedDate = StringtoDate.parse(realBirthday);
@@ -101,13 +102,12 @@ public class UsersController {
 				e.printStackTrace();
 			}
 		}
-		
+
 		int result = uService.insertUser(user);
 		System.out.println("결과 값은 : " + result);
-		
+
 		return result;
 	}
-
 
 
 
@@ -163,9 +163,10 @@ public class UsersController {
 
     @GetMapping("signIn")
     public String signIn() {
-        System.out.println(bcrypt.encode("vplay"));
+        //System.out.println(bcrypt.encode("vplay"));
         return "signIn"; }
-
+	
+	//로그인
     @PostMapping("signIn")
     public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL){
         Users loginUser = uService.signIn(user);
@@ -182,6 +183,18 @@ public class UsersController {
             throw new UsersException("로그인을 실패하였습니다.");
         }
     }
+	//로그아웃
+    @GetMapping("logout")
+    public String logout(SessionStatus session) {
+        session.setComplete();
+        return "redirect:/";
+    }
+
+	@GetMapping("findId")
+	public String findId() {
+		return "find_id";
+	}
+	
 
 
 }
