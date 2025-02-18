@@ -40,13 +40,6 @@ public class UsersController {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
 	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
@@ -55,6 +48,7 @@ public class UsersController {
 	@PostMapping("idCheck")
 	@ResponseBody
 	public int checkId(@RequestParam("id") String id) {
+		System.out.println(1);
 		System.out.println("userId 는 " + id);
 		int result = uService.checkId(id);
 		System.out.println(result);
@@ -64,6 +58,7 @@ public class UsersController {
 	@GetMapping("emailCheck")
 	@ResponseBody
 	public String emailSend(@RequestParam("email") String email) {
+		System.out.println("email");
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		System.out.println("email은 "+email);
 		String subject = "인증번호 입니다.";

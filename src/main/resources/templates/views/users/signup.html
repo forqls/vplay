@@ -205,6 +205,7 @@ body {
 		};
 		
 		document.getElementById('checkIdBtn').addEventListener('click',()=>{
+// 			console.log(1);
 			const id = document.getElementById('ID').value;
 			const idText = document.getElementById('confirmIdText');
 			if(id.trim() !=''){
@@ -213,7 +214,7 @@ body {
 					method:'post',
 					data:{id:id},
 					success:(data)=>{
-	// 					console.log(data);
+// 						console.log(data);
 						if(data == 1){
 							idText.innerText = '이미 존재하는 아이디입니다.';
 							idText.style.color='red';
