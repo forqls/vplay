@@ -161,7 +161,6 @@ public class UsersController {
 
 
 
-	//로그인 페이지 이동
     @GetMapping("signIn")
     public String signIn() {
         //System.out.println(bcrypt.encode("vplay"));
@@ -190,7 +189,11 @@ public class UsersController {
         session.setComplete();
         return "redirect:/";
     }
-	//아이디 찾기
+
+	@GetMapping("findId")
+	public String findId() {
+		return "find_id";
+	}
 	
 
 
