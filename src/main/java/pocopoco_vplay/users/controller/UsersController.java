@@ -166,12 +166,13 @@ public class UsersController {
 
 
 
-
+	//로그인 페이지 이동
     @GetMapping("signIn")
     public String signIn() {
-        System.out.println(bcrypt.encode("vplay"));
+        //System.out.println(bcrypt.encode("vplay"));
         return "signIn"; }
-
+	
+	//로그인
     @PostMapping("signIn")
     public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL){
         Users loginUser = uService.signIn(user);
@@ -188,12 +189,14 @@ public class UsersController {
             throw new UsersException("로그인을 실패하였습니다.");
         }
     }
-
+	//로그아웃
     @GetMapping("logout")
     public String logout(SessionStatus session) {
         session.setComplete();
         return "redirect:/";
     }
+	//아이디 찾기
+	
 
 
 }
