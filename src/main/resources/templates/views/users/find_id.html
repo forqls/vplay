@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FindId</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <style>
 * {
@@ -130,13 +131,13 @@ body {
 				<input type="tel" placeholder="Phone" class="input-field">
 			</div>
 			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field">
+				<input type="email" placeholder="Email" class="input-field" id="email">
 				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
 			</div>
 
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
-					<input type="text" placeholder="인증번호 입력" class="input-field">
+					<input type="text" placeholder="인증번호 입력" class="input-field" name="userEmail" id="confirmVerifi">
 					<button type="button" class="button verify-button">확인</button>
 				</div>
 			</div>
@@ -146,10 +147,36 @@ body {
 	</main>
 
 	<script>
+		let nameCheck = false;
+		let phoneCheck = false;
+		let emailCheck = false;
+
 		function showVerification() {
+
+			const email = document.getElementById('email').value.trim();
+			const verification  = document.getElementById('verificationSection');
+			const emailBtn = document.getElementById('emailBtn');
+			if(email == ''){
+				alert('이메일을 입력해주세요.');
+			}else{
+				$.ajax({
+					url:'/users/emailCheck',
+					data:{email:email},
+					success:data=>{
+						alert('이메일이 발송되었습니다.');
+						verification .style.display='block';
+						console.log(data);
+						confirmEmail = data;
+						emailBtn.disabled = true;
+					}, error:data=>console.log(data)
+				});
+			}
+
 			document.getElementById('verificationSection').classList
 					.add('active');
 		}
+
+
 	</script>
 </body>
 </html>
