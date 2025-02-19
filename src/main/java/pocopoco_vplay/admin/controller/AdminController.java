@@ -1,6 +1,5 @@
 package pocopoco_vplay.admin.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
@@ -13,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.admin.model.service.AdminService;
 import pocopoco_vplay.admin.model.vo.PageInfo;
+import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.commom.Pagination;
 import pocopoco_vplay.users.model.vo.Users;
 
@@ -38,12 +38,8 @@ public class AdminController {
 		
 		ArrayList<Users> list = aService.selectAllUser(pi);
 		
-		SimpleDateFormat formmatter = new SimpleDateFormat("yyyy-MM-dd");
-		
-		if(!list.isEmpty()) {
-			for(Users u : list) {
-//				String 
-			}
+		for(Users u : list) {
+			System.out.println(u.getJoinDate());
 		}
 		
 		mv.addObject("list", list).setViewName("users_management");
@@ -51,8 +47,19 @@ public class AdminController {
 	}
 	
 	@GetMapping("inquiry")
-	public String joinInquiry() {
-		return "Inquiry_management";
+	public ModelAndView joinInquiry(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
+		
+//		int listCount = aService.getInquiryCount();
+//		
+//		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+//		
+//		ArrayList<Content> list = aService.selectAllQuiry(pi);
+		
+//		mv.addObject("list", list);
+		
+		mv.setViewName("Inquiry_management");
+		
+		return mv;
 	}
 	
 	@GetMapping("templates")
