@@ -1,10 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Oxygen, Ubuntu, Cantarell, sans-serif;
+	background-color: #191820;
+	color: white;
+	padding: 40px;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.section {
+	margin-bottom: 3rem;
+}
+
+.section-title {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-bottom: 1.5rem;
+}
+
+.profile-image {
+	width: 128px;
+	height: 128px;
+	background-color: #252535;
+	border-radius: 50%;
+	margin-bottom: 2rem;
+}
+
+.form-group {
+	margin-bottom: 1rem;
+}
+
+.form-label {
+	display: block;
+	color: #6f757d;
+	margin-bottom: 0.5rem;
+	font-size: 0.875rem;
+}
+
+.form-control {
+	width: 100%;
+	padding: 0.75rem;
+	background-color: #252535;
+	border: none;
+	border-radius: 0.375rem;
+	color: white;
+	font-size: 0.875rem;
+}
+
+.form-control:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px #8137e9;
+}
+
+textarea.form-control {
+	min-height: 100px;
+	resize: vertical;
+}
+
+.radio-group {
+	display: flex;
+	gap: 1rem;
+	margin-top: 0.5rem;
+}
+
+.radio-label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+
+.radio-input {
+	width: 1rem;
+	height: 1rem;
+	accent-color: #8137e9;
+}
+
+.btn {
+	display: block;
+	width: 100%;
+	padding: 0.75rem;
+	background-color: #8137e9;
+	color: white;
+	border: none;
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	margin-top: 1.5rem;
+}
+
+.btn:hover {
+	background-color: #6a2ec4;
+}
+</style>
 </head>
 <body>
-	<h1>내 정보 수정 페이지</h1>
+	<div class="container">
+		<!-- Personal Information -->
+		<section class="section">
+			<h2 class="section-title">My Account</h2>
+			<div class="profile-image"></div>
+
+			<form>
+				<div class="form-group">
+					<label class="form-label" for="id">아이디</label> <input type="text" id="id" class="form-control" value="HandsomeGwon" readonly>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="name">이름</label> <input type="text" id="name" class="form-control" value="권태혁">
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="nickname">닉네임</label> <input type="text" id="nickname" class="form-control" value="HandsomeGwon">
+				</div>
+
+				<div class="form-group">
+					<label class="form-label">성별</label>
+					<div class="radio-group">
+						<label class="radio-label"> <input type="radio" name="gender" value="male" class="radio-input" checked> <span>남자</span>
+						</label> <label class="radio-label"> <input type="radio" name="gender" value="female" class="radio-input"> <span>여자</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="email">이메일</label> <input type="email" id="email" class="form-control" value="HandsomeSalgu@gmail.com">
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="birthdate">생년월일</label> <input type="date" id="birthdate" class="form-control" name="userBrith">
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="description">한마디</label>
+					<textarea id="description" class="form-control">저보다 더 잘생긴 개발자는 없습니다. 행복하고 자유롭게 살아가고 싶어요!</textarea>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="password">비밀번호</label> <input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요.">
+				</div>
+
+				<button type="submit" class="btn">Update</button>
+			</form>
+		</section>
+
+		<!-- Change Password -->
+		<section class="section">
+			<h2 class="section-title">Change password</h2>
+			<form>
+				<div class="form-group">
+					<label class="form-label" for="current-password">현재 비밀번호</label> <input type="password" id="current-password" class="form-control" placeholder="현재 비밀번호를 입력하세요.">
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="new-password">새 비밀번호</label> <input type="password" id="new-password" class="form-control" placeholder="새로운 비밀번호를 입력하세요.">
+				</div>
+
+				<div class="form-group">
+					<label class="form-label" for="confirm-password">새 비밀번호 확인</label> <input type="password" id="confirm-password" class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
+				</div>
+
+				<button type="submit" class="btn">Update Password</button>
+			</form>
+		</section>
+	</div>
 </body>
 </html>
