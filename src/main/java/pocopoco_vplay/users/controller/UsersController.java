@@ -32,10 +32,6 @@ public class UsersController {
 	private final JavaMailSender mailSender;
 	
 	
-	
-	
-	
-	
 	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
@@ -54,29 +50,28 @@ public class UsersController {
 	@GetMapping("emailCheck")
 	@ResponseBody
 	public String emailSend(@RequestParam("email") String email) {
-		System.out.println("email");
+		System.out.println("email은 " + email);
+
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
-		System.out.println("email은 "+email);
 		String subject = "인증번호 입니다.";
 		String random = "";
-		for(int i=0;i<5;i++) {
-			random += (int)(Math.random()*10);
+		for (int i = 0; i < 5; i++) {
+			random += (int) (Math.random() * 10);
 		}
-
-		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-
 
 		try {
-			mimeMessageHelper.setSubject(random);
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+			mimeMessageHelper.setSubject(subject);
 			mimeMessageHelper.setTo(email);
-			mimeMessageHelper.setText("인증번호는 : "+ random + " 입니다.");
+			mimeMessageHelper.setText("인증번호는 : " + random + " 입니다.");
+
+			mailSender.send(mimeMessage);
+			System.out.println("발송된 인증번호: " + random);
+			return random;
 		} catch (MessagingException e) {
 			e.printStackTrace();
+			return "메일 전송 중 오류 발생"; // 예외 발생 시 오류 메시지 반환
 		}
-		mailSender.send(mimeMessage);
-		System.out.println(random);
-		return random;
-
 	}
 
 	@PostMapping("signUp")
