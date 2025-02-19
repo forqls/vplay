@@ -80,7 +80,7 @@ public class UsersController {
 	}
 
 	@PostMapping("signUp")
-	public int joinUser(@ModelAttribute Users user) {
+	public String joinUser(@ModelAttribute Users user) {
 		user.setUserPw(bcrypt.encode(user.getUserPw()));
 
 		System.out.println(user);
@@ -88,7 +88,7 @@ public class UsersController {
 		int result = uService.insertUser(user);
 		System.out.println("결과 값은 : " + result);
 
-		return result;
+		return "signup_success";
 	}
 
 
