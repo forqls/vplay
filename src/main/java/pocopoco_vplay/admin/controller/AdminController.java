@@ -42,7 +42,7 @@ public class AdminController {
 			System.out.println(u.getJoinDate());
 		}
 		
-		mv.addObject("list", list).setViewName("users_management");
+		mv.addObject("list", list).addObject("pi",pi).setViewName("users_management");
 		return mv;
 	}
 	
@@ -57,10 +57,11 @@ public class AdminController {
 		ArrayList<Content> list = aService.selectAllQuiry(pi);
 		
 		for(Content c : list) {
+			c.setUserId(aService.selectUser(c.getUserNo()));
 			System.out.println(c);
 		}
 		
-		mv.addObject("list", list);
+		mv.addObject("list", list).addObject("pi",pi);
 		
 		mv.setViewName("Inquiry_management");
 		
