@@ -183,6 +183,7 @@ public class UsersController {
             throw new UsersException("로그인을 실패하였습니다.");
         }
     }
+    
 	//로그아웃
     @GetMapping("logout")
     public String logout(SessionStatus session) {
@@ -195,6 +196,9 @@ public class UsersController {
 		return "find_id";
 	}
 	
-
+	@GetMapping("findPw")
+	public String findPw() {
+		return "find_pw";
+	}
 
 }

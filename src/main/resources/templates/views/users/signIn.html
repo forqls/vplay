@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
-	<title>Login</title>
+<title>SignIn</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <style>
 * {
 	margin: 0;
@@ -34,14 +34,14 @@ body {
 	color: #5e37e9;
 }
 
-.login-container {
+.signin-container {
 	max-width: 400px;
 	margin: 2rem auto;
 	padding: 2rem;
 	text-align: center;
 }
 
-.login-title {
+.signin-title {
 	font-size: 1.5rem;
 	margin-bottom: 2rem;
 }
@@ -58,8 +58,8 @@ body {
 
 .links {
 	display: flex;
-	justify-content: center;
-	gap: 1rem;
+	justify-content: right;
+	gap:0.5rem;
 	margin-bottom: 1rem;
 	font-size: 0.9rem;
 }
@@ -67,9 +67,10 @@ body {
 .links a {
 	color: #949396;
 	text-decoration: none;
+	cursor: pointer;
 }
 
-.login-btn {
+.signin-btn {
 	width: 100%;
 	padding: 0.8rem;
 	background-color: #5e37e9;
@@ -115,41 +116,43 @@ body {
 }
 
 @media ( max-width : 768px) {
-	.login-container {
+	.signin-container {
 		margin: 1rem;
 	}
 }
 </style>
 </head>
 <body>
-<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<div class="breadcrumb">
-		<a href="/">Home</a> > <span class="current">Login</span>
+		<a href="/">Home</a> > <span class="current">Sign In</span>
 	</div>
 
-	<main class="login-container">
-		<h1 class="login-title">로그인</h1>
+	<main class="signin-container">
+		<h1 class="signin-title">로그인</h1>
 		<form action="/users/signIn" method="post">
 			<input type="text" placeholder="ID" class="input-field" name="userId" required>
 			<input type="password" placeholder="Password" class="input-field" name="userPw" required>
 			<div class="links">
-				<a href="/users/signUp">Sign Up</a> <a onclick="location.href='/users/findId'">Find ID</a> <a href="#">Find PW</a>
+				<a onclick="location.href='/users/signUp'">Sign Up</a>
+				<a>/</a>
+				<a onclick="location.href='/users/findId'">Find ID</a>
+				<a>/</a>
+				<a onclick="location.href='/users/findPw'">Find PW</a>
 			</div>
 
-			<button type="submit" class="login-btn">로그인</button>
-
-			<input type="hidden" name="beforeURL"/>
-
+			<button type="submit" class="signin-btn">로그인</button>
+			<input type="hidden" name="beforeURL" />
 		</form>
 
-		<div class="social-divider">Or login with Social</div>
-
+		<div class="social-divider">------------------- Or Sign In with Social -------------------</div>
+		
 		<div class="social-buttons">
 			<button class="social-btn kakao-btn">카카오 로그인</button>
 			<button class="social-btn google-btn">Sign in with Google</button>
 		</div>
 	</main>
-<script>
+	<script>
 	window.onload = () => {
 		const beforeURL = document.referrer;
 		document.getElementsByName('beforeURL')[0].value = beforeURL;
