@@ -21,7 +21,7 @@ public class Content {
 	private Date modifyDate;
 	private String contentStatus;
 	private String deleteStatus;
-	private String userNickName;
+	private String userNo;
 	private String categoryName;
 	private String menuName;
 	private String hashtagName;

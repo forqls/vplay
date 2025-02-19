@@ -11,4 +11,19 @@
 		from users
 		order by user_no desc
 	</select>
+	
+	<select id="getInquiryCount">
+		select count(*)
+		from content
+			 join board using(content_no)
+		where board_type = 1
+	</select>
+	
+	<select id="selectAllQuiry">
+		select *
+		from content
+			 join board using(content_no)
+		where board_type = 1
+		order by content_no desc
+	</select>
 </mapper>

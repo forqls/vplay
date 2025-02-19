@@ -36,10 +36,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>시스템 오류</td>
-                            <td>ditkddbs5002</td>
+                        <tr th:each="I : ${list}">
+                            <td>[[${I.contentNo}]]</td>
+                            <td>[[${I.contentTitle}]]</td>
+                            <td></td>
                             <td>템플릿 등록이 안됩니다.</td>
                             <td>2024-01-01</td>
                             <td><span class="status active">Y</span></td>
