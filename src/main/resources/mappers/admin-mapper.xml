@@ -23,7 +23,14 @@
 		select *
 		from content
 			 join board using(content_no)
+			 join MENU using(menu_no)
 		where board_type = 1
 		order by content_no desc
+	</select>
+	
+	<select id="selectUser">
+		select user_id
+		from users
+		where user_no = #{userNo}
 	</select>
 </mapper>

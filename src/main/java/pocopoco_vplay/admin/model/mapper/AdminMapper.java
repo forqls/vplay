@@ -19,4 +19,6 @@ public interface AdminMapper {
 
 	ArrayList<Content> selectAllQuiry(RowBounds rowBounds);
 
+	String selectUser(int userNo);
+
 }
