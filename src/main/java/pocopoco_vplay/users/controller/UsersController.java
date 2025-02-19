@@ -31,6 +31,11 @@ public class UsersController {
     private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 	
+	
+	
+	
+	
+	
 	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
@@ -62,6 +67,7 @@ public class UsersController {
 
 
 		try {
+			mimeMessageHelper.setFrom("dongjunson0518@gmail.com");
 			mimeMessageHelper.setSubject(random);
 			mimeMessageHelper.setTo(email);
 			mimeMessageHelper.setText("인증번호는 : "+ random + " 입니다.");
