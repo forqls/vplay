@@ -49,13 +49,18 @@ public class AdminController {
 	@GetMapping("inquiry")
 	public ModelAndView joinInquiry(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
 		
-//		int listCount = aService.getInquiryCount();
-//		
-//		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-//		
-//		ArrayList<Content> list = aService.selectAllQuiry(pi);
+		int listCount = aService.getInquiryCount();
+		System.out.println(listCount);
 		
-//		mv.addObject("list", list);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		ArrayList<Content> list = aService.selectAllQuiry(pi);
+		
+		for(Content c : list) {
+			System.out.println(c);
+		}
+		
+		mv.addObject("list", list);
 		
 		mv.setViewName("Inquiry_management");
 		

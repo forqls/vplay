@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.admin.model.mapper.AdminMapper;
 import pocopoco_vplay.admin.model.vo.PageInfo;
+import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Service
@@ -24,6 +25,16 @@ public class AdminService {
 		int offset = (pi.getCurrentPage() - 1)* pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectAllUser(rowBounds);
+	}
+
+	public int getInquiryCount() {
+		return mapper.getInquiryCount();
+	}
+
+	public ArrayList<Content> selectAllQuiry(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)* pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectAllQuiry(rowBounds);
 	}
 
 
