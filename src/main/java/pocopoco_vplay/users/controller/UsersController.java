@@ -31,11 +31,6 @@ public class UsersController {
     private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 	
-	
-	
-	
-	
-	
 	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
