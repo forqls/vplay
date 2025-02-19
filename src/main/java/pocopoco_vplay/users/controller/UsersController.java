@@ -1,9 +1,5 @@
 package pocopoco_vplay.users.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -85,23 +81,7 @@ public class UsersController {
 	@PostMapping("signUp")
 	public int joinUser(@ModelAttribute Users user) {
 		user.setUserPw(bcrypt.encode(user.getUserPw()));
-		
-		Date userBirthday = user.getUserBirth();
-		
-		if(userBirthday != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String birthDateString = sdf.format(userBirthday);
-			String realBirthday = birthDateString.replace("-", "/");
-			
-			SimpleDateFormat StringtoDate = new SimpleDateFormat("yyyy/MM/dd");
-			try {
-				Date formattedDate = StringtoDate.parse(realBirthday);
-				user.setUserBirth(formattedDate);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		
+		System.out.println(user);
 		int result = uService.insertUser(user);
 		System.out.println("결과 값은 : " + result);
 		
