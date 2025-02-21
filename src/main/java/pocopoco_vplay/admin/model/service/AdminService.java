@@ -1,6 +1,7 @@
 package pocopoco_vplay.admin.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,16 @@ public class AdminService {
 
 	public String selectUser(int userNo) {
 		return mapper.selectUser(userNo);
+	}
+
+	public int getTemplatesCount() {
+		return mapper.getTemplatesCount();
+	}
+
+	public ArrayList<Content> selectAllTemplates(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectAllTemplates(rowBounds);
 	}
 
 

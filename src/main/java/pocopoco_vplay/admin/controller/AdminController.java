@@ -50,7 +50,6 @@ public class AdminController {
 	public ModelAndView joinInquiry(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
 		
 		int listCount = aService.getInquiryCount();
-		System.out.println(listCount);
 		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		
@@ -58,7 +57,7 @@ public class AdminController {
 		
 		for(Content c : list) {
 			c.setUserId(aService.selectUser(c.getUserNo()));
-			System.out.println(c);
+			//System.out.println(c);
 		}
 		
 		mv.addObject("list", list).addObject("pi",pi);
@@ -69,8 +68,26 @@ public class AdminController {
 	}
 	
 	@GetMapping("templates")
-	public String joinTemplates() {
-		return "managing_templates";
+	public ModelAndView joinTemplates(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
+		
+		int listCount = aService.getTemplatesCount();
+		System.out.println(listCount);
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		ArrayList<Content> list = aService.selectAllTemplates(pi);
+		
+		
+		
+		for(Content c : list) {
+			System.out.println(c);
+			c.setUserId(aService.selectUser(c.getUserNo()));
+		}
+		
+		mv.addObject("list", list).addObject("pi",pi);
+		mv.setViewName("managing_templates");
+		
+		return mv;
 	}
 	
 	@GetMapping("requestPost")

@@ -33,4 +33,30 @@
 		from users
 		where user_no = #{userNo}
 	</select>
+	
+	<select id="getTemplatesCount">
+		select count(*)
+		from content 
+			 left join board using(content_no)
+		where board_type is null
+	</select>
+	
+	<resultMap id="ContentResultMap" type="pocopoco_vplay.board.model.vo.Content">
+    <id property="contentNo" column="content_no"/>
+    <result property="menuName" column="menu_name"/>  <!-- 명시적 매핑 -->
+    <result property="contentTitle" column="content_title"/>
+    <result property="userNo" column="user_no"/>
+</resultMap>
+	
+	<select id="selectAllTemplates" resultMap="ContentResultMap">
+		select co.content_no, me.menu_name as menu_name, co.content_title, user_no
+		from content co
+		     left join board b on(co.content_no = b.content_no)
+		     left join content_category coa on(co.content_no = coa.content_no)
+		     left join category ca on(ca.category_no = coa.category_no)
+		     left outer join menu me on(ca.menu_no = me.menu_no)
+		where board_type is null
+		order by co.content_no
+	</select>
+	
 </mapper>
