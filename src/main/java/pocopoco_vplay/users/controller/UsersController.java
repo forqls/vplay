@@ -195,7 +195,8 @@ public class UsersController {
 		if(loginUser != null) {
 			int id = loginUser.getUserNo();
 			ArrayList<HashMap<String,Object>> list = uService.selectMyProjects(id);
-			model.addAttribute(list);
+			System.out.println(list);
+			model.addAttribute("list",list);
 		}else {
 			throw new UsersException("로그인이 풀렸습니다.");
 		}
