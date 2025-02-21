@@ -141,13 +141,14 @@ body {
 			<h1>My Projects</h1>
 			<div class="filter-buttons">
 				<select class="filter-dropdown">
-					<option value="stock-video">Stock Video</option>
-					<option value="graphic-templates">Graphic Templates</option>
+					<option value="stock_video">Stock Video</option>
+					<option value="graphic_templates">Graphic Templates</option>
 					<option value="music">Music</option>
-					<option value="sound-effects">Sound Effects</option>
+					<option value="sound_effects">Sound Effects</option>
 					<option value="photos">Photos</option>
 					<option value="fonts">Fonts</option>
-				</select> <select class="filter-dropdown">
+				</select> 
+				<select class="filter-dropdown">
 					<option value="newest">새로운순</option>
 					<option value="most-viewed">조회수 많은 순</option>
 				</select>
@@ -168,5 +169,34 @@ body {
 			
 		</div>
 	</div>
+	
+	<script type="text/javascript">
+			document.querySelector('.filter-dropdown').addEventListener('change',(e)=>{
+				let value = e.target.value;
+				console.log(value);
+				$.ajax({
+					url:'board/selectCategory',
+					data:{value:value},
+					success:data=>{
+						console.log(data);
+					},
+					error:data=>console.log(data)
+				});
+			});
+	</script>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </body>
 </html>
