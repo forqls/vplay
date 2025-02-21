@@ -286,7 +286,7 @@ body {
 		
 		const showVerification=()=>{
 			const email = document.getElementById('email').value.trim();
-			const verfication = document.getElementById('verificationSection');
+			const verification  = document.getElementById('verificationSection');
 			const emailBtn = document.getElementById('emailBtn');
 			console.log(document.getElementById('email').value.trim());
 			if(email ==''){
@@ -297,7 +297,7 @@ body {
 					data:{email:email},
 					success:data=>{
 						alert('이메일이 발송되었습니다.');
-						verfication.style.display='block';
+						verification .style.display='block';
 // 						console.log(data);
 						confirmEmail = data;
 						emailBtn.disabled=true;

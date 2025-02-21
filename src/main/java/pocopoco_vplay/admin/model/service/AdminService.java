@@ -37,5 +37,9 @@ public class AdminService {
 		return mapper.selectAllQuiry(rowBounds);
 	}
 
+	public String selectUser(int userNo) {
+		return mapper.selectUser(userNo);
+	}
+
 
 }

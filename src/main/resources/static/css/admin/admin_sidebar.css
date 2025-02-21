@@ -40,3 +40,7 @@
     background-color: #5e37e9;
     color: white;
 }
+
+li{
+	display: inline-block;
+}
