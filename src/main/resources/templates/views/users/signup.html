@@ -283,11 +283,12 @@ body {
 			}
 		});
 		
-
+		
 		const showVerification=()=>{
 			const email = document.getElementById('email').value.trim();
 			const verification  = document.getElementById('verificationSection');
 			const emailBtn = document.getElementById('emailBtn');
+			console.log(document.getElementById('email').value.trim());
 			if(email ==''){
 				alert('이메일을 입력해주세요.');
 			}else{

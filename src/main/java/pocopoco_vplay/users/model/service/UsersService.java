@@ -1,5 +1,8 @@
 package pocopoco_vplay.users.model.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -22,5 +25,9 @@ public class UsersService {
   
 	public int insertUser(Users user) {
 		return mapper.insertUser(user);
+	}
+
+	public ArrayList<HashMap<String, Object>> selectMyProjects(int id) {
+		return mapper.selectMyProject(id);
 	}
 }
