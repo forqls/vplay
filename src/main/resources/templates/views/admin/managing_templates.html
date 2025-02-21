@@ -37,11 +37,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Video Templates</td>
-                            <td>dongjunson</td>
-                            <td>The Most Useful Transit...</td>
+                        <tr th:each="t : ${list}">
+                            <td>[[${t.contentNo}]]</td>
+                            <td>[[${t.menuName}]]</td>
+                            <td>[[${t.userId}]]</td>
+                            <td>[[${t.contentTitle}]]</td>
                             <td>2024-01-01</td>
                             <td><span class="status active">Y</span></td>
                             <td>
@@ -54,41 +54,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Music</td>
-                            <td>dhkwkdckd99</td>
-                            <td>Commercial Rock</td>
-                            <td>2024-01-04</td>
-                            <td><span class="status active">Y</span></td>
-                            <td>
-                                <button class="action-btn">
-                                    <svg viewBox="0 0 24 24" width="18" height="18">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Sound Effects</td>
-                            <td>forqls123</td>
-                            <td>Woosh</td>
-                            <td>2024-02-09</td>
-                            <td><span class="status active">Y</span></td>
-                            <td>
-                                <button class="action-btn">
-                                    <svg viewBox="0 0 24 24" width="18" height="18">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- 추가 행들... -->
                     </tbody>
                 </table>
             </div>
