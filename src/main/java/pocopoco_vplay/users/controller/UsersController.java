@@ -65,7 +65,6 @@ public class UsersController {
 
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
-
 		try {
 			mimeMessageHelper.setFrom("dongjunson0518@gmail.com");
 			mimeMessageHelper.setSubject(random);
