@@ -1,5 +1,8 @@
 package pocopoco_vplay.users.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
@@ -183,5 +187,27 @@ public class UsersController {
 	public String findPw() {
 		return "find_pw";
 	}
+	
+	@GetMapping("my_projects")
+	public String myProjects(Model model , HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		if(loginUser != null) {
+			int id = loginUser.getUserNo();
+			ArrayList<HashMap<String,Object>> list = uService.selectMyProjects(id);
+			model.addAttribute(list);
+		}else {
+			throw new UsersException("로그인이 풀렸습니다.");
+		}
+		return "my_projects";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
