@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pocopoco_vplay.board.model.mapper.BoardMapper">
+	<select id="selectCategory" resultType="map">
+		select content_no, content_title from content join board using(content_no) join menu using(menu_no) where menu_name = #{category}
+	</select>
+</mapper>
