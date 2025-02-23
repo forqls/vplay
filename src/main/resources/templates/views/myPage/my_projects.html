@@ -141,7 +141,7 @@ body {
 			<h1>My Projects</h1>
 			<div class="filter-buttons">
 				<select class="filter-dropdown">
-					<option value="stock_video">Stock Video</option>
+					<option value="Stock Video">Stock Video</option>
 					<option value="graphic_templates">Graphic Templates</option>
 					<option value="music">Music</option>
 					<option value="sound_effects">Sound Effects</option>
@@ -175,7 +175,7 @@ body {
 				let value = e.target.value;
 				console.log(value);
 				$.ajax({
-					url:'board/selectCategory',
+					url:'/board/selectCategory',
 					data:{value:value},
 					success:data=>{
 						console.log(data);
@@ -184,19 +184,6 @@ body {
 				});
 			});
 	</script>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 </body>
 </html>
