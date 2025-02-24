@@ -175,7 +175,6 @@ body {
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 
@@ -184,9 +183,11 @@ body {
 				let value = e.target.value;
 				console.log(value);
 				$.ajax({
+					
 					url:'/board/selectCategory',
 					data:{value:value},
 					success:data=>{
+						console.log(data);
 						let grids = document.querySelectorAll('.grid');
 						
 						grids.forEach(grid=>{
