@@ -204,9 +204,10 @@ public class UsersController {
 	}
 	
 	
-	
-	
-	
+	@GetMapping("price")
+	public String price() {
+		return "price";
+	}
 	
 	
 	
