@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VPLAY - 회원 관리</title>
     <link href="/css/admin/users_management.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <body>
     <div th:replace="~{admin_sidebar}"></div>
@@ -39,7 +40,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="u : ${list}">
+                        <tr class="user-list" th:each="u : ${list}">
                             <td>[[${u.userNo}]]</td>
                             <td>[[${u.userId}]]</td>
                             <td>[[${u.userName}]]</td>
@@ -47,7 +48,9 @@
                             <td>[[${u.userEmail}]]</td>
                             <td>[[${u.userPhone}]]</td>
                             <td>[[${u.joinDate}]]</td>
-                            <td><span class="status active">[[${u.status}]]</span></td>
+                            <td>
+                            	<span class="status active">[[${u.status}]]</span>
+                            </td>
                             <td>
                                 <button class="action-btn">
                                     <svg viewBox="0 0 24 24" width="18" height="18">
@@ -122,5 +125,27 @@
             </div>
         </div>
     </main>
+    
+    <script>
+    
+    	[...document.querySelectorAll(".user-list")].map((user, index, array) =>{
+    		user.children[7].addEventListener('click', function(){
+    			
+    			const status = this.innerText == "Y" ? "N" : "Y";
+    			
+    			$.ajax({
+    				url: "/admin/mupdate",
+    				data: {userNo : user.children[0].innerText, status : status},
+    				success: data=>{
+    					if(data == 1){
+    						
+    					}
+    				},
+    				error: data=> console.log(data)
+    			})
+    		})
+    	})
+
+    </script>
 </body>
 </html>
