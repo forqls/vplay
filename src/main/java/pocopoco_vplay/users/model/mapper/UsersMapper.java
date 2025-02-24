@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+
+import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.vo.Users;
 
 import pocopoco_vplay.users.model.vo.Users;
@@ -18,6 +20,8 @@ public interface UsersMapper {
 	int insertUser(Users user);
 
 	ArrayList<HashMap<String, Object>> selectMyProject(int id);
+
+	ArrayList<Content> selectMyRealProjects(int userNo);
 
 }
 

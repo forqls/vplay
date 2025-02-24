@@ -21,6 +21,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
@@ -189,13 +190,27 @@ public class UsersController {
 		return "find_pw";
 	}
 	
-	@GetMapping("my_projects")
-	public String myProjects(Model model , HttpSession session) {
+	@GetMapping("my_favorites")
+	public String myFavorites(Model model , HttpSession session) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
 		if(loginUser != null) {
 			int id = loginUser.getUserNo();
-			ArrayList<HashMap<String,Object>> list = uService.selectMyProjects(id);
+			ArrayList<HashMap<String,Object>> list = uService.selectMyProjects(id); // 좋아요 한 목록가져오기 
 			System.out.println(list);
+			model.addAttribute("list",list);
+		}else {
+			throw new UsersException("로그인이 풀렸습니다.");
+		}
+		return "my_favorites";
+	}
+	
+	@GetMapping("my_projects")
+	public String myProjects(Model model, HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		if(loginUser != null) {
+			int userNo = loginUser.getUserNo();
+			ArrayList<Content> list = uService.selectMyRealProjects(userNo); // ㄹㅇ 그냥 자기가 한 프로젝트 가져오기
+			System.out.println(list.size());
 			model.addAttribute("list",list);
 		}else {
 			throw new UsersException("로그인이 풀렸습니다.");

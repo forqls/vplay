@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.mapper.UsersMapper;
 import pocopoco_vplay.users.model.vo.Users;
 
@@ -29,5 +30,10 @@ public class UsersService {
 
 	public ArrayList<HashMap<String, Object>> selectMyProjects(int id) {
 		return mapper.selectMyProject(id);
+	}
+
+	public ArrayList<Content> selectMyRealProjects(int userNo) {
+//		System.out.println(mapper.selectMyRealProjects(userNo));
+		return mapper.selectMyRealProjects(userNo);
 	}
 }
