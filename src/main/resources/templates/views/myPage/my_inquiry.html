@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,32 +9,6 @@
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Inquiry</title>
 <style>
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-body {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-		Oxygen, Ubuntu, Cantarell, sans-serif;
-	background-color: #191820;
-	color: white;
-	min-height: 100vh;
-	padding: 32px;
-}
-
-.container {
-	margin: 0 auto;
-	padding: 2rem;
-}
-
-.page-title {
-	font-size: 1.5rem;
-	font-weight: 600;
-	margin-bottom: 2rem;
-}
-
 .inquiry-list {
 	width: 100%;
 	display: flex;
@@ -171,13 +145,11 @@ body {
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
-
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
-
 		<div class="container content_wrap flex_custom_wrap">
 			<div class="content-header">
-				<h1 class="page-title">My Inquiry</h1>
+				<h1>My Inquiry</h1>
 			</div>
 			<div class="inquiry-list">
 				<div class="inquiry-item">
