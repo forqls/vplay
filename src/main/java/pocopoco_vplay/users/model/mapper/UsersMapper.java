@@ -19,5 +19,6 @@ public interface UsersMapper {
 
 	ArrayList<HashMap<String, Object>> selectMyProject(int id);
 
+	int selectuserIdPhone(String userName, String userPhone);
 }
 
