@@ -9,24 +9,45 @@
 </style>
 </head>
 <body>
-	<header class="header" th:fragment="sidebar">
-		<div class="sidebar">
-			<div class="profile">
-				<div class="profile-image"></div>
-				<h2>Handsomegwon</h2>
-				<p>
-					치열한 다툼 무상을 꽃들에는<br>현저하게 석가를 방지하는 뿐이다
-				</p>
-			</div>
-			<ul class="menu-list">
-				<li class="menu-item active"><span>📁</span> My Projects</li>
-				<li class="menu-item"><span>⭐</span> My Favorites</li>
-				<li class="menu-item"><span>⬇️</span> My Downloads</li>
-				<li class="menu-item"><span>👤</span> My Account</li>
-				<li class="menu-item"><span>❓</span> My Inquiry</li>
-				<li class="menu-item"><span>💳</span> My Payments</li>
-			</ul>
+
+<header class="header" th:fragment="sidebar">
+	<div class="sidebar">
+		<div class="profile">
+			<div class="profile-image"><img src="img/testProfile"></div>
+			<h2>Handsomegwon</h2>
+			<p>
+				차원이 다른 영상을 제공합니다.
+				핸썸권의 자세한 튜토리얼을 따라오세요!
+			</p>
 		</div>
-	</header>
+		<div class="menu-list">
+			<a class="menu-item active">
+				<span><object type="image/svg+xml" data="/img/myProjects.svg" class="svg-icon"></object></span>
+				My Projects
+			</a>
+			<a class="menu-item">
+				<span><object type="image/svg+xml" data="/img/myFavorite.svg" class="svg-icon"></object></span>
+				My Favorites
+			</a>
+			<a class="menu-item">
+				<span><object type="image/svg+xml" data="/img/myDownloads.svg" class="svg-icon"></object></span>
+				My Downloads
+			</a>
+			<a class="menu-item">
+				<span><object type="image/svg+xml" data="/img/myAccount.svg" class="svg-icon"></object></span>
+				My Account
+			</a>
+			<a class="menu-item">
+				<span><object type="image/svg+xml" data="/img/myInquiry.svg" class="svg-icon"></object></span>
+				My Inquiry
+			</a>
+			<a class="menu-item">
+				<span><object type="image/svg+xml" data="/img/myPayments.svg" class="svg-icon"></object></span>
+				My Payments
+			</a>
+		</div>
+	</div>
+</header>
+
 </body>
 </html>
