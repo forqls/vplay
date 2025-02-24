@@ -52,5 +52,19 @@ public class AdminService {
 		return mapper.selectAllTemplates(rowBounds);
 	}
 
+	public int getrequestPostCount() {
+		return mapper.getrequestPostCount();
+	}
+
+	public ArrayList<Content> selectAllRequestPost(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectAllRequestPost(rowBounds);
+	}
+
+	public int userUpdate(Users user) {
+		return mapper.userUpdate(user);
+	}
+
 
 }

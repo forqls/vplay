@@ -53,4 +53,25 @@
 		order by co.content_no
 	</select>
 	
+	<select id="getrequestPostCount">
+		select count(*)
+		from content
+			 join board using(content_no)
+		where board_type = 2
+	</select>
+	
+	<select id="selectAllRequestPost">
+		select *
+		from content
+			 join board using(content_no)
+			 join MENU using(menu_no)
+		where board_type = 2
+		order by content_no desc
+	</select>
+	
+	<update id="userUpdate">
+		update users
+		set status = #{status}
+		where user_no = #{userNo}
+	</update>
 </mapper>

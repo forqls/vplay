@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -91,9 +93,27 @@ public class AdminController {
 	}
 	
 	@GetMapping("requestPost")
-	public String joinrequestPost() {
-		return "Managing_request_posts";
+	public ModelAndView joinrequestPost(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
+		
+		int listCount = aService.getrequestPostCount();
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		
+		ArrayList<Content> list = aService.selectAllRequestPost(pi);
+		
+		for(Content c : list) {
+			c.setUserId(aService.selectUser(c.getUserNo()));
+		}
+		
+		mv.addObject("list", list).addObject("pi", pi);
+		mv.setViewName("Managing_request_posts");
+		return mv;
 	}
 	
+	@GetMapping("mupdate")
+	@ResponseBody
+	public int userUpdate(@ModelAttribute Users user) {
+		return aService.userUpdate(user);
+	}
 	
 }

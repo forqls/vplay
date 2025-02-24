@@ -111,6 +111,12 @@ tbody tr:hover {
 .status.active {
     background-color: #065f46;
     color: #34d399;
+    cursor : pointer;
+}
+
+.status.active:hover{
+	background-color: #804000;
+    color: #ff8000;
 }
 
 .action-btn {
