@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>top-bar</title>
-<style>
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>top-bar</title>
+    <link rel="stylesheet" href="/css/topbar.css">
 </head>
 <body>
-
-	<header class="header" th:fragment="topbar">
-		<a href="/" class="logo">
-			<div class="logo-circle"></div> VPLAY
-		</a>
-		<nav class="nav-main">
-			<a href="#" class="nav-link">Video Templates</a>
-			<a href="#" class="nav-link">Music</a>
-			<a href="#" class="nav-link">Sound Effects</a>
-			<a href="#" class="nav-link">Graphic Templates</a>
-			<a href="#" class="nav-link">Stock Video</a>
-			<a href="#" class="nav-link">Photos</a>
-			<a href="#" class="nav-link">Fonts</a>
-		</nav>
-		<div class="nav-right">
-			<a href="#" class="nav-link">License</a>
-			<a onclick="location.href='/users/price'" class="nav-link pricing">Pricing</a>
-			<th:block th:if="${session.loginUser == null}">
-				<a onclick="location.href='/users/signIn'" class="nav-link sign-in">Sign in</a>
-			</th:block>
-			<th:block th:if="${session.loginUser != null}">
-				<a onclick="location.href='/users/my_projects'" class="nav-link sign-in">MyPage</a>
-				<a onclick="location.href='/users/logout'" class="nav-link sign-in">Log out</a>
-			</th:block>
-			
-		</div>
-	</header>
+<header class="vplay-header" th:fragment="topbar">
+    <a href="/" class="vplay-logo">
+        <div class="vplay-logo-circle"></div> VPLAY
+    </a>
+    <nav class="vplay-nav-main">
+        <a href="#" class="vplay-nav-link">Video Templates</a>
+        <a href="#" class="vplay-nav-link">Music</a>
+        <a href="#" class="vplay-nav-link">Sound Effects</a>
+        <a href="#" class="vplay-nav-link">Graphic Templates</a>
+        <a href="#" class="vplay-nav-link">Stock Video</a>
+        <a href="#" class="vplay-nav-link">Photos</a>
+        <a href="#" class="vplay-nav-link">Fonts</a>
+    </nav>
+    <div class="vplay-nav-right">
+        <a href="#" class="vplay-nav-link">License</a>
+        <a onclick="location.href='/users/price'" class="vplay-nav-link vplay-pricing">Pricing</a>
+        <th:block th:if="${session.loginUser == null}">
+            <a onclick="location.href='/users/signIn'" class="vplay-nav-link vplay-sign-in">Sign in</a>
+        </th:block>
+        <th:block th:if="${session.loginUser != null}">
+            <a onclick="location.href='/users/my_projects'" class="vplay-nav-link vplay-sign-in">MyPage</a>
+            <a onclick="location.href='/users/logout'" class="vplay-nav-link vplay-sign-in">Log out</a>
+        </th:block>
+    </div>
+</header>
 </body>
 </html>
