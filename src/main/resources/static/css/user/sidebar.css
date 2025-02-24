@@ -29,6 +29,7 @@ body {
 	border-radius: 50%;
 	background-color: #33333e;
 	margin: 0 auto 16px;
+	overflow: hidden;
 }
 
 .profile h2 {
