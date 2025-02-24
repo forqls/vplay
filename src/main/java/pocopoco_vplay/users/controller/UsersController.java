@@ -96,59 +96,7 @@ public class UsersController {
 		return "signup_success";
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @GetMapping("signIn")
+	@GetMapping("signIn")
     public String signIn() {
         //System.out.println(bcrypt.encode("vplay"));
         return "signIn"; }
