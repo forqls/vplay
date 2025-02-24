@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Payments</title>
 <style>
 * {
@@ -21,7 +25,6 @@ body {
 }
 
 .container {
-	max-width: 768px;
 	margin: 0 auto;
 	padding: 2rem;
 }
@@ -37,8 +40,8 @@ body {
 	border-radius: 1rem;
 	padding: 2rem;
 	position: relative;
-	max-width: 400px;
 	border: 1px solid rgba(129, 55, 233, 0.2);
+	max-width: 22rem;
 }
 
 .badge {
@@ -114,33 +117,38 @@ body {
 </style>
 </head>
 <body>
-	<div class="container">
-		<h1 class="page-title">My Payments</h1>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
 
-		<div class="subscription-card">
-			<span class="badge">26</span>
-			<h2 class="plan-name">Frame Pro</h2>
-			<div class="price">
-				16,500<span class="price-period">/30</span>
+	<div class="main-content">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class=" container content_wrap flex_custom_wrap">
+			<h1>My Payments</h1>
+
+			<div class="subscription-card">
+				<span class="badge">26</span>
+				<h2 class="plan-name">Frame Pro</h2>
+				<div class="price">
+					16,500<span class="price-period">/30</span>
+				</div>
+
+				<ul class="features-list">
+					<li>
+						<div class="feature-item">
+							<span class="feature-icon"></span> <span class="feature-text">FREE Stock Video</span>
+						</div>
+					</li>
+					<li>
+						<div class="feature-item">
+							<span class="feature-icon"></span> <span class="feature-text">FREE Sound Effects</span>
+						</div>
+					</li>
+					<li>
+						<div class="feature-item">
+							<span class="feature-icon"></span> <span class="feature-text">FREE Fonts</span>
+						</div>
+					</li>
+				</ul>
 			</div>
-
-			<ul class="features-list">
-				<li>
-					<div class="feature-item">
-						<span class="feature-icon"></span> <span class="feature-text">FREE Stock Video</span>
-					</div>
-				</li>
-				<li>
-					<div class="feature-item">
-						<span class="feature-icon"></span> <span class="feature-text">FREE Sound Effects</span>
-					</div>
-				</li>
-				<li>
-					<div class="feature-item">
-						<span class="feature-icon"></span> <span class="feature-text">FREE Fonts</span>
-					</div>
-				</li>
-			</ul>
 		</div>
 	</div>
 </body>

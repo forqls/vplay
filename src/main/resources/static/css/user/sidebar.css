@@ -87,6 +87,16 @@ body {
 	margin-right: 8px;
 }
 
+.menu-item.active{
+	border: 1px solid #8137E9;
+	color: #fff;
+	background: linear-gradient(45deg, #161840, #272A65);
+}
+
+.active svg {
+	color: #8137E9;
+}
+
 @media ( max-width : 768px) {
 	.sidebar {
 		width: 100%;

@@ -203,8 +203,22 @@ public class UsersController {
 		return "my_projects";
 	}
 
+	@GetMapping("my_favorites")
+	public String myFavorites() { return "my_favorites"; }
 
-	
+	@GetMapping("my_downloads")
+	public String myDownloads() { return "my_downloads"; }
+
+	@GetMapping("my_account")
+	public String myAccount() { return "my_account"; }
+
+	@GetMapping("my_inquiry")
+	public String myInquiry() { return "my_inquiry"; }
+
+	@GetMapping("my_payments")
+	public String myPayments() { return "my_payments"; }
+
+
 	@GetMapping("price")
 	public String price() {
 		return "price";

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Downloads</title>
 <style>
 * {
@@ -151,137 +153,143 @@ body {
 </style>
 </head>
 <body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+
 	<div class="main-content">
-		<div class="content-header">
-			<h1>My Downloads</h1>
-			<div class="filter-buttons">
-				<select class="filter-dropdown">
-					<option value="stock-video">Stock Video</option>
-					<option value="graphic-templates">Graphic Templates</option>
-					<option value="music">Music</option>
-					<option value="sound-effects">Sound Effects</option>
-					<option value="photos">Photos</option>
-					<option value="fonts">Fonts</option>
-				</select>
-				<div style="display: flex; align-items: center; gap: 10px;">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class="container content_wrap">
+			<div class="content-header">
+				<h1>My Downloads</h1>
+				<div class="filter-buttons">
 					<select class="filter-dropdown">
-						<option value="newest">새로운순</option>
-						<option value="most-viewed">조회수 많은 순</option>
+						<option value="stock-video">Stock Video</option>
+						<option value="graphic-templates">Graphic Templates</option>
+						<option value="music">Music</option>
+						<option value="sound-effects">Sound Effects</option>
+						<option value="photos">Photos</option>
+						<option value="fonts">Fonts</option>
 					</select>
-					<button class="delete-button">🗑️</button>
+					<div style="display: flex; align-items: center; gap: 10px;">
+						<select class="filter-dropdown">
+							<option value="newest">새로운순</option>
+							<option value="most-viewed">조회수 많은 순</option>
+						</select>
+						<button class="delete-button">🗑️</button>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="grid">
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
+				</div>
+			</div>
+			<div class="grid-item">
+				<button class="menu-dots">⋮</button>
+				<div class="item-content">
+					<span class="item-title">Big Game Grunge</span>
+					<div class="item-actions">
+						<span>👁️ 157</span> <span>❤️</span>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="grid">
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">Big Game Grunge</span>
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 </body>
