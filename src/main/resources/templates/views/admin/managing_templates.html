@@ -42,7 +42,7 @@
                             <td>[[${t.menuName}]]</td>
                             <td>[[${t.userId}]]</td>
                             <td>[[${t.contentTitle}]]</td>
-                            <td>2024-01-01</td>
+                            <td>[[${t.createDate}]]</td>
                             <td><span class="status active">Y</span></td>
                             <td>
                                 <button class="action-btn">
@@ -59,21 +59,45 @@
             </div>
 
             <div class="pagination">
-                <button class="prev">
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-                <button class="next">
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
+            	<!-- 이전 -->
+            	<ul>
+            		<th:block th:if="${pi.currentPage >1}">
+	                <li class="prev">
+                    	<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+                        	<
+                    	</a>
+	               	</li>
+	               	</th:block>
+	               	<th:block th:if="${pi.currentPage <=1}">
+	                <li class="prev">
+                    	<a aria-label="Previous">
+                        	<
+                    	</a>
+	               	</li>
+	               	</th:block>
+	                
+	                <!-- 숫자 -->
+	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+	                	<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
+	                </li>
+	                
+	                
+	                <!-- 다음 -->
+	                <th:block th:if="${pi.currentPage < pi.MaxPage}">
+	                <li class="next">
+	                	<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
+	                		>
+	                	</a>
+	                </li>
+	                </th:block>
+	                <th:block th:if="${pi.currentPage >= pi.MaxPage}">
+	                <li class="next">
+	                	<a aria-label="Next">
+	                		>
+	                	</a>
+	                </li>
+	                </th:block>
+                </ul>
             </div>
         </div>
     </main>

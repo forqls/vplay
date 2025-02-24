@@ -41,15 +41,9 @@
 		where board_type is null
 	</select>
 	
-	<resultMap id="ContentResultMap" type="pocopoco_vplay.board.model.vo.Content">
-    <id property="contentNo" column="content_no"/>
-    <result property="menuName" column="menu_name"/>  <!-- 명시적 매핑 -->
-    <result property="contentTitle" column="content_title"/>
-    <result property="userNo" column="user_no"/>
-</resultMap>
 	
-	<select id="selectAllTemplates" resultMap="ContentResultMap">
-		select co.content_no, me.menu_name as menu_name, co.content_title, user_no
+	<select id="selectAllTemplates">
+		select *
 		from content co
 		     left join board b on(co.content_no = b.content_no)
 		     left join content_category coa on(co.content_no = coa.content_no)
