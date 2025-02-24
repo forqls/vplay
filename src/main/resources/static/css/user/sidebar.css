@@ -1,0 +1,81 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Oxygen, Ubuntu, Cantarell, sans-serif;
+	background-color: #1f1f2c;
+	color: white;
+	min-height: 100vh;
+}
+
+.sidebar {
+	width: 240px;
+	padding: 24px;
+}
+
+/* Profile Section */
+.profile {
+	text-align: center;
+	margin-bottom: 24px;
+}
+
+.profile-image {
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	background-color: #33333e;
+	margin: 0 auto 16px;
+}
+
+.profile h2 {
+	font-size: 18px;
+	margin-bottom: 8px;
+}
+
+.profile p {
+	color: #6f757d;
+	font-size: 14px;
+	line-height: 1.5;
+	margin-bottom: 16px;
+}
+
+/* Menu List */
+.menu-list {
+	list-style: none;
+}
+
+.menu-item {
+	display: flex;
+	align-items: center;
+	padding: 12px;
+	color: #6f757d;
+	border-radius: 8px;
+	margin-bottom: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+	background-color: #33333e;
+	color: white;
+}
+
+.menu-item.active {
+	background-color: #33333e;
+	color: white;
+}
+
+.menu-item span {
+	margin-right: 8px;
+}
+
+@media ( max-width : 768px) {
+	.sidebar {
+		width: 100%;
+	}
+}
