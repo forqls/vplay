@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div class="sidebar_wrap" th:fragment="sidebar">
+<div class="sidebar_wrap">
 	<div class="sidebar">
 		<div class="profile">
 			<div class="profile-image"><img src="/img/testProfile.jpg" alt="크리에이터의 프로필 사진" width="100%" ></div>
@@ -20,34 +20,48 @@
 				핸썸권의 자세한 튜토리얼을 따라오세요!
 			</p>
 		</div>
-		<div class="menu-list">
-			<a class="menu-item active">
+		<nav class="menu-list">
+			<a id="myProjects" class="menu-item active" onclick="location.href='/users/my_projects'">
 				<span><object type="image/svg+xml" data="/img/myProjects.svg" class="svg-icon"></object></span>
 				My Projects
 			</a>
-			<a class="menu-item">
+			<a id="myFavorites" class="menu-item" onclick="location.href='myPage/my_favorites.html'">
 				<span><object type="image/svg+xml" data="/img/myFavorite.svg" class="svg-icon"></object></span>
 				My Favorites
 			</a>
-			<a class="menu-item">
+			<a id="myDownloads" class="menu-item" onclick="location.href='myPage/my_downloads.html'">
 				<span><object type="image/svg+xml" data="/img/myDownloads.svg" class="svg-icon"></object></span>
 				My Downloads
 			</a>
-			<a class="menu-item">
+			<a id="myAccount" class="menu-item" onclick="location.href='myPage/my_account.html'">
 				<span><object type="image/svg+xml" data="/img/myAccount.svg" class="svg-icon"></object></span>
 				My Account
 			</a>
-			<a class="menu-item">
+			<a id="myInquiry" class="menu-item" onclick="location.href='myPage/my_inquiries.html'">
 				<span><object type="image/svg+xml" data="/img/myInquiry.svg" class="svg-icon"></object></span>
 				My Inquiry
 			</a>
-			<a class="menu-item">
+			<a id="myPayments" class="menu-item" onclick="location.href='myPage/my_payments.html'">
 				<span><object type="image/svg+xml" data="/img/myPayments.svg" class="svg-icon"></object></span>
 				My Payments
 			</a>
-		</div>
+		</nav>
 	</div>
 </div>
+
+<script>
+	window.onload =() => {
+		const currentAddress = window.location.pathname;/*pathname : 현재 주소*/
+		const arr = currentAddress.split('/');
+		console.log(arr[2]);
+		let currentPage = null;
+
+		//switch(arr[2]){
+
+		//}
+	}
+
+</script>
 
 </body>
 </html>
