@@ -24,15 +24,19 @@ body {
 }
 
 .main-content {
-	max-width: 1200px;
+	max-width: 1520px;
 	margin: 0 auto;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
 }
 
 .content-header {
+	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 24px;
+	padding: 2rem;
 }
 
 .content-header h1 {
@@ -139,9 +143,11 @@ body {
 <body>
 
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
-	<div th:replace="~{views/myPage/my_sidebar :: sidebar}"></div>
+
+
 
 	<div class="main-content">
+		<div th:replace="~{views/myPage/my_sidebar :: sidebar}"></div>
 		<div class="content-header">
 			<h1>My Projects</h1>
 			<div class="filter-buttons">
