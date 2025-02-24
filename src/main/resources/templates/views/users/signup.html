@@ -48,6 +48,7 @@ body {
 
 .input-group {
 	display: flex;
+	margin-top: 1rem;
 	margin-bottom: 1rem;
 	align-items: center;
 }
@@ -119,29 +120,35 @@ body {
 }
 
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    background-color: white;
-    color: black;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	background-color: white;
+	color: black;
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
+#confirmIdText {
+	font-size: 13px;
+}
 
+#confirmPwText {
+	font-size: 13px;
+}
 </style>
 </head>
 <body>
@@ -157,19 +164,14 @@ body {
 				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID">
 				<button type="button" id="checkIdBtn" class="button verify-button">중복확인</button>
 			</div>
-			<tr>
-				<td><label id="confirmIdText"></label></td>
-			</tr>
-
+			<div id="confirmIdText"></div>
 			<div class="input-group">
 				<input type="password" placeholder="Password" class="input-field" name="userPw" id="password">
 			</div>
 			<div class="input-group">
 				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword">
 			</div>
-			<tr>
-				<td><label id="confirmText"></label></td>
-			</tr>
+			<div id="confirmPwText"></div>
 			<div class="input-group">
 				<input type="text" placeholder="User name" class="input-field" name="userName" id="name">
 			</div>
@@ -197,17 +199,14 @@ body {
 
 			<button type="button" class="signup-btn" onclick="joinBtn()" id="join">회원가입</button>
 		</form>
-		
-		<div id="successModal" class="modal">
-  		    <div class="modal-content">
-	        <p>회원가입이 완료되었습니다!</p>
-	        <button onclick="redirectHome()">확인</button>
-    </div>
-</div>
-		
-		
-	</main>
 
+		<div id="successModal" class="modal">
+			<div class="modal-content">
+				<p>회원가입이 완료되었습니다!</p>
+				<button onclick="redirectHome()">확인</button>
+			</div>
+		</div>
+	</main>
 	<script>
 		let idCheck = false;
 		let pwdCheck = false;
@@ -239,7 +238,6 @@ body {
 		};
 		
 		document.getElementById('checkIdBtn').addEventListener('click',()=>{
-// 			console.log(1);
 			const id = document.getElementById('ID').value;
 			const idText = document.getElementById('confirmIdText');
 			if(id.trim() !=''){
@@ -265,24 +263,21 @@ body {
 			}
 		});
 		
-		
-		
 		document.getElementById('confirmPassword').addEventListener('change',()=>{
 			const password = document.getElementById('password').value;
 			const confirmPassword = document.getElementById('confirmPassword').value;
-			const confirmText = document.getElementById('confirmText');
+			const confirmPwText = document.getElementById('confirmPwText');
 			
 			if(password != confirmPassword){
-				confirmText.innerText = '비밀번호가 일치하지 않습니다.';
-				confirmText.style.color='red';
+				confirmPwText.innerText = '비밀번호가 일치하지 않습니다.';
+				confirmPwText.style.color='red';
 				pwdCheck = false;
 			}else{
-				confirmText.innerText= '비밀번호가 일치합니다.';
-				confirmText.style.color='green';
-				pwdCheck=true;
+				confirmPwText.innerText= '비밀번호가 일치합니다.';
+				confirmPwText.style.color='green';
+				pwdCheck = true;
 			}
 		});
-		
 		
 		const showVerification=()=>{
 			const email = document.getElementById('email').value.trim();
@@ -300,15 +295,13 @@ body {
 						verification .style.display='block';
 // 						console.log(data);
 						confirmEmail = data;
-						emailBtn.disabled=true;
+						emailBtn.disabled = true;
 					},error:data=>console.log(data)
 				});
 			}
 		}
 		
-		
-		
-		confirmEmailBtn.addEventListener('click',()=>{
+		confirmEmailBtn.addEventListener('click',()=> {
 			const confirmEmailBtn = document.getElementById('confirmEmailBtn');
 			const confirmVerifi = document.getElementById('confirmVerifi').value.trim();
 			const verfication = document.getElementById('verificationSection');
@@ -317,21 +310,21 @@ body {
 			}else if(confirmVerifi == confirmEmail){
 				alert('이메일 인증이 완료되었습니다.');
 				emailCheck = true;
-				verfication.style.display='none';
+				verfication.style.display = 'none';
 				confirmEmailBtn
 			}else{
 				alert('인증번호가 틀렸습니다.');
-				emailCheck=false;
+				emailCheck = false;
 			}
 		});
 		
-		const joinBtn = () =>{
+		const joinBtn = () => {
 			if(!idCheck){
 				alert('아이디를 입력하세요!');
 			}else if(!pwdCheck){
 				alert('비밀번호를 입력하세요!');
 			}else if(!emailCheck){
-				alert('이메일 인증이 성공하지 않았습니다.');
+				alert('이메일 인증을 성공하지 못했습니다.');
 			}else if(!nameCheck){
 				alert('이름을 확인하세요!');
 			}else if(!nickNameCheck){
@@ -342,10 +335,6 @@ body {
 				document.getElementById('signupForm').submit();
 			}
 		};
-		
-		
-		
-		
 	</script>
 </body>
 </html>
