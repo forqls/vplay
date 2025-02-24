@@ -31,12 +31,18 @@ body {
 	justify-content: space-between;
 }
 
-.content-header {
+.content_wrap {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 2rem;
+}
+
+.content-header {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }
 
 .content-header h1 {
@@ -147,35 +153,42 @@ body {
 
 
 	<div class="main-content">
-		<div th:replace="~{views/myPage/my_sidebar :: sidebar}"></div>
-		<div class="content-header">
-			<h1>My Projects</h1>
-			<div class="filter-buttons">
-				<select class="filter-dropdown">
-					<option value="Stock Video">Stock Video</option>
-					<option value="Graphic Templates">Graphic Templates</option>
-					<option value="Music">Music</option>
-					<option value="Sound Effects">Sound Effects</option>
-					<option value="Photos">Photos</option>
-					<option value="Fonts">Fonts</option>
-				</select> <select class="filter-dropdown">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class="content_wrap">
+			<div class="content-header">
+				<h1>My Projects</h1>
+				<div class="filter-buttons">
+					<select class="filter-dropdown">
+						<option value="Stock Video">Stock Video</option>
+						<option value="Graphic Templates">Graphic Templates</option>
+						<option value="Music">Music</option>
+						<option value="Sound Effects">Sound Effects</option>
+						<option value="Photos">Photos</option>
+						<option value="Fonts">Fonts</option>
+					</select> <select class="filter-dropdown">
 					<option value="newest">새로운순</option>
 					<option value="most-viewed">조회수 많은 순</option>
 				</select>
-			</div>
-		</div>
-
-		<div class="grid" th:each="r : ${list}">
-			<div class="grid-item">
-				<button class="menu-dots">⋮</button>
-				<div class="item-content">
-					<span class="item-title">[[${r.CONTENT_TITLE}]]</span> [[${r.CONTENT_NO}]]
-					<div class="item-actions">
-						<span>👁️ 157</span> <span>❤️</span>
-					</div>
 				</div>
 			</div>
+<<<<<<< HEAD
+=======
+
+			<div class="grid" th:each="r : ${list}">
+				<div class="grid-item">
+					<button class="menu-dots">⋮</button>
+					<div class="item-content">
+						<span class="item-title">[[${r.CONTENT_TITLE}]]</span> [[${r.CONTENT_NO}]]
+						<div class="item-actions">
+							<span>👁️ 157</span> <span>❤️</span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+>>>>>>> f1246bd3d6b50228fef1af9da077ad53c535d52e
 		</div>
+
 	</div>
 
 	<script type="text/javascript">

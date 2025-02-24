@@ -34,6 +34,14 @@ body {
 	background-color: #33333e;
 	margin: 0 auto 16px;
 	overflow: hidden;
+	position: relative;
+}
+
+.profile-image img{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .profile h2 {
