@@ -12,9 +12,13 @@ body {
 	min-height: 100vh;
 }
 
+.sidebar_wrap{
+	display: inline-block;
+}
+
 .sidebar {
 	width: 240px;
-	padding: 24px;
+	padding: 2rem;
 }
 
 /* Profile Section */
