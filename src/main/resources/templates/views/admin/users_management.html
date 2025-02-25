@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VPLAY - 회원 관리</title>
     <link href="/css/admin/users_management.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <body>
     <div th:replace="~{admin_sidebar}"></div>
@@ -133,12 +132,17 @@
     			
     			const status = this.innerText == "Y" ? "N" : "Y";
     			
+    			
     			$.ajax({
     				url: "/admin/mupdate",
     				data: {userNo : user.children[0].innerText, status : status},
     				success: data=>{
     					if(data == 1){
-    						
+    						if(status == "Y"){
+    							this.children[0].innerHTML = "Y";
+    						}else{
+    							this.children[0].innerHTML = "N";
+    						}
     					}
     				},
     				error: data=> console.log(data)

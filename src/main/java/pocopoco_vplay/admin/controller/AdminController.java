@@ -116,4 +116,15 @@ public class AdminController {
 		return aService.userUpdate(user);
 	}
 	
+	@GetMapping("iupdate")
+	@ResponseBody
+	public int inquiryUpdate(@ModelAttribute Content content) {
+		if(content.getContentStatus().equals("N")) {
+			content.setDeleteStatus("Y");
+		}else {
+			content.setDeleteStatus("N");
+		}
+		
+		return aService.inquiryUpdate(content);
+	}
 }

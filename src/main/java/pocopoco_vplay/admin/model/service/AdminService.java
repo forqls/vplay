@@ -66,5 +66,10 @@ public class AdminService {
 		return mapper.userUpdate(user);
 	}
 
+	public int inquiryUpdate(Content content) {
+		
+		return mapper.inquiryUpdate(content);
+	}
+
 
 }

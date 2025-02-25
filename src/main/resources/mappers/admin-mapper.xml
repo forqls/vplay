@@ -74,4 +74,10 @@
 		set status = #{status}
 		where user_no = #{userNo}
 	</update>
+	
+	<update id="inquiryUpdate">
+		update content
+		set CONTENT_STATUS = #{contentStatus}, DELETE_STATUS = #{deleteStatus}
+		where content_no = #{contentNo}
+	</update>
 </mapper>

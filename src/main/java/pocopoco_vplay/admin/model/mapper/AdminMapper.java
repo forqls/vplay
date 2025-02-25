@@ -32,4 +32,6 @@ public interface AdminMapper {
 
 	int userUpdate(Users user);
 
+	int inquiryUpdate(Content content);
+
 }
