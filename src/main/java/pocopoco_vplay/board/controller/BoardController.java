@@ -32,23 +32,26 @@ public class BoardController {
 	
 	@GetMapping("selectCategory")
 	@ResponseBody
-	public ArrayList<HashMap<String, Object>> selectCategory(@RequestParam("value") String menu , Model model , HttpSession session) {
+	public ArrayList<HashMap<String, Object>> selectCategory(@RequestParam("value") String menu ,@RequestParam("sortValue") String sort, Model model , HttpSession session) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
-		
+//		System.out.println("메뉴 : "+menu);
+//		System.out.println("정렬 : "+sort);
 		if(loginUser == null) throw new UsersException("로그인하삼");
 		
 		int userNo = loginUser.getUserNo(); 
-		ArrayList<HashMap<String,Object>> list =bService.selectCategory(menu,userNo);
+		ArrayList<HashMap<String,Object>> list =bService.selectCategory(menu,userNo,sort);
 		System.out.println(list);
 		return list;
 	}
 	
 	@GetMapping("selectCategoryMyProjects")
 	@ResponseBody
-	public ArrayList<Content> selectCategoryMyProjects(@RequestParam("value") String menu,HttpSession session){
+	public ArrayList<Content> selectCategoryMyProjects(@RequestParam("value") String menu,HttpSession session , @RequestParam("sortValue") String sort){
 		Users loginUser = (Users)session.getAttribute("loginUser");
+//		System.out.println(sort);
+//		System.out.println(menu);
 		int userNo = loginUser.getUserNo();
-		ArrayList<Content> list = bService.selectCategoryMyProjects(menu,userNo);
+		ArrayList<Content> list = bService.selectCategoryMyProjects(menu,userNo,sort);
 		System.out.println("리스트는 "  +list);
 		if(list != null) {
 			return list;
