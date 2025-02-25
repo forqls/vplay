@@ -36,7 +36,6 @@ public class UsersController {
 
     private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
-	private final UsersService usersService;
 
 
 
@@ -129,13 +128,24 @@ public class UsersController {
     }
 
 	@GetMapping("findId")
-	public String findId(@RequestParam(required = false, value="name") String userName, @RequestParam(required = false, value="phoneNum")String userPhone) {
+	public String findId(){
+		return "find_id";
+	}
+
+	@PostMapping("findId")
+	@ResponseBody
+	public int findId(@RequestParam(required = false, value="userName") String userName, @RequestParam(required = false, value="userPhone")String userPhone) {
+		int result = uService.selectIdPhone(userName, userPhone);
 		System.out.println(userName);
 		System.out.println(userPhone);
-
-		int result = usersService.selectIdPhone(userName, userPhone);
 		System.out.println(result);
-		return "find_id";
+
+		return result;
+	}
+
+	@GetMapping("findIdSuccess")
+	public String findIdSuccess(){
+		return "find_id_success";
 	}
 	
 	@GetMapping("findPw")
