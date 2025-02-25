@@ -37,13 +37,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="t : ${list}">
+                        <tr class="templates-list" th:each="t : ${list}">
                             <td>[[${t.contentNo}]]</td>
                             <td>[[${t.menuName}]]</td>
                             <td>[[${t.userId}]]</td>
                             <td>[[${t.contentTitle}]]</td>
                             <td>[[${t.createDate}]]</td>
-                            <td><span class="status active">Y</span></td>
+                            <td><span class="status active">[[${t.contentStatus}]]</span></td>
                             <td>
                                 <button class="action-btn">
                                     <svg viewBox="0 0 24 24" width="18" height="18">
@@ -101,5 +101,28 @@
             </div>
         </div>
     </main>
+    <script>
+	    [...document.querySelectorAll(".templates-list")].map((templates, index, array) =>{
+	    			templates.children[5].addEventListener('click', function(){
+	    			
+	    			const status = this.innerText == "Y" ? "N" : "Y";
+	    			
+	    			$.ajax({
+	    				url: "/admin/tupdate",
+	    				data: {contentNo : templates.children[0].innerText, contentStatus : status},
+	    				success: data=>{
+	    					if(data == 1){
+	    						if(status == "Y"){
+	    							this.children[0].innerHTML = "Y";
+	    						}else{
+	    							this.children[0].innerHTML = "N";
+	    						}
+	    					}
+	    				},
+	    				error: data=> console.log(data)
+	    			})
+	    		})
+	    	})
+    </script>
 </body>
 </html>
