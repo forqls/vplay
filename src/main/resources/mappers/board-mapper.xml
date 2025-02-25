@@ -12,6 +12,13 @@
 		<if test="menu != 'All'">
 			AND menu.menu_name =#{menu}
 		</if>
+		<if test="sort == 'newest'">
+			order by content.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by content.views desc
+		</if>
+		
 	</select>
 	
 	<select id="selectCategoryMyProjects">
@@ -24,7 +31,15 @@
 		WHERE content.user_no =#{userNo}
 		<if test="menu != 'All'">
 			AND menu.menu_name =#{menu}
-		</if>	
+		</if>
+		<if test="sort == 'newest'">
+			order by content.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by content.views desc
+		</if>
+		
+		
 	</select>
 	
 </mapper>

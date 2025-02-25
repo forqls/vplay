@@ -15,12 +15,12 @@ public class BoardService {
 		
 	private final BoardMapper mapper;
 	
-	public ArrayList<HashMap<String, Object>> selectCategory(String menu, int userNo) {
-		return mapper.selectCategory(menu,userNo);
+	public ArrayList<HashMap<String, Object>> selectCategory(String menu, int userNo, String sort) {
+		return mapper.selectCategory(menu,userNo,sort);
 	}
 
-	public ArrayList<Content> selectCategoryMyProjects(String menu, int userNo) {
-		return mapper.selectCategoryMyProjects(menu,userNo);
+	public ArrayList<Content> selectCategoryMyProjects(String menu, int userNo, String sort) {
+		return mapper.selectCategoryMyProjects(menu,userNo,sort);
 	}
 
 }

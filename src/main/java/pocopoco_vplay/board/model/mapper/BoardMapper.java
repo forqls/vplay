@@ -11,8 +11,8 @@ import pocopoco_vplay.board.model.vo.Content;
 @Mapper
 public interface BoardMapper {
 
-	ArrayList<HashMap<String, Object>> selectCategory(@Param("menu") String menu, @Param("userNo") int userNo);
+	ArrayList<HashMap<String, Object>> selectCategory(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
 
-	ArrayList<Content> selectCategoryMyProjects(@Param("menu") String menu, @Param("userNo") int userNo);
+	ArrayList<Content> selectCategoryMyProjects(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
 
 }
