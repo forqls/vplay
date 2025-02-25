@@ -34,8 +34,8 @@
 			</div>
 
  		<th:block th:if="${not #lists.isEmpty(list)}">
-			<div class="grid" th:each="r : ${list}">
-				<div class="grid-item">
+			<div class="grid">
+				<div class="grid-item" th:each="r : ${list}">
 					<button class="menu-dots">⋮</button>
 					<div class="item-content">
 						<span class="item-title" th:text="${r.contentTitle}"></span> 
