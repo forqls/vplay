@@ -34,4 +34,8 @@ public interface AdminMapper {
 
 	int inquiryUpdate(Content content);
 
+	int templatesUpdate(Content content);
+
+	int requestUpdate(Content content);
+
 }

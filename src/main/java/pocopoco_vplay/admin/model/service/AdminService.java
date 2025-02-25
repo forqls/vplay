@@ -71,5 +71,13 @@ public class AdminService {
 		return mapper.inquiryUpdate(content);
 	}
 
+	public int templatesUpdate(Content content) {
+		return mapper.templatesUpdate(content);
+	}
+
+	public int requestUpdate(Content content) {
+		return mapper.requestUpdate(content);
+	}
+
 
 }

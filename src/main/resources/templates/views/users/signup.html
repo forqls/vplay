@@ -66,6 +66,18 @@ body {
 	color: #949396;
 }
 
+.radio-group {
+	display: flex;
+	gap: 0.5rem;
+}
+.radio-group span {
+    font-size: 0.9rem;
+}
+
+.radio-input {
+	accent-color: #5e37e9;
+}
+
 .button {
 	background-color: #5e37e9;
 	color: #ffffff;
@@ -185,21 +197,23 @@ body {
 				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email">
 				<button type="button" class="button verify-button" onclick="showVerification()" id="emailBtn">인증하기</button>
 			</div>
-
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
 					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi" id="confirmVerifi">
 					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 				</div>
 			</div>
-
 			<div class="input-group">
 				<input type="date" placeholder="Birth day" class="input-field" name="userBirth">
 			</div>
-
+			<div class="input-group">
+				<div class="radio-group">
+					<input type="radio" name="userGender" value="M" class="radio-input" id="male"> <span>남자</span>
+					<input type="radio" name="userGender" value="F" class="radio-input" id="female"> <span>여자</span>
+				</div>
+			</div>
 			<button type="button" class="signup-btn" onclick="joinBtn()" id="join">회원가입</button>
 		</form>
-
 		<div id="successModal" class="modal">
 			<div class="modal-content">
 				<p>회원가입이 완료되었습니다!</p>
@@ -235,6 +249,7 @@ body {
 		        const tel = telInput.value.trim();
 		        phoneCheck = tel !== '';
 		    });
+		    
 		};
 		
 		document.getElementById('checkIdBtn').addEventListener('click',()=>{
