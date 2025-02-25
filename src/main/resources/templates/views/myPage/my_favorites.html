@@ -32,7 +32,7 @@
 					<option value="most-viewed">조회수 많은 순</option>
 				</select>
 			</div>
-
+		<th:block th:if="${not #lists.isEmpty(list)}">
 			<div class="grid">
 				<div class="grid-item" th:each="r : ${list}">
 					<button class="menu-dots">⋮</button>
@@ -44,6 +44,12 @@
 					</div>
 				</div>
 			</div>
+		</th:block>	
+		
+		<th:block th:if="${#lists.isEmpty(list)}">
+			<p>좋아요를 누른 목록이 없습니다!</p>
+		</th:block>
+		
 		</div>
 	</div>
 

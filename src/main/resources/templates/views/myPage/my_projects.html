@@ -64,6 +64,26 @@
  					url:'/board/selectCategoryMyProjects',
  					data:{value:value},
  					success:data=>{
+ 						let grids = document.getquerySelectorAll('.grid');
+ 						grids.forEach(grid=>{
+ 							gird.innerHTML='';
+ 						});
+ 						
+ 						data.forEach((r)=>{
+							let gridItem = `
+								<div class="grid-item">
+		                            <button class="menu-dots">⋮</button>
+		                            <div class="item-content">
+		                                <span class="item-title">${r.CONTENT_TITLE}</span> ${r.CONTENT_NO}
+		                                <div class="item-actions">
+		                                    <span>👁️ ${r.VIEW_COUNT}</span> <span>❤️ ${r.LIKE_COUNT}</span>
+		                                </div>
+		                            </div>
+		                        </div>
+								`;
+							grids[0].innerHTML += gridItem;
+						});
+ 						
  						console.log(data);
 						
  					},
