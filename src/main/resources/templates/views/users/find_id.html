@@ -129,7 +129,7 @@ body {
 				<span class="alert_text"></span>
 			</div>
 			<div class="input-group">
-				<input type="tel" placeholder="Phone(-를 포함하여 작성해주세요.)" class="input-field user_phone" id="phone" name="userPhone">
+				<input type="tel" placeholder="Phone" class="input-field user_phone" id="phone" name="userPhone">
 				<span class="alert_text"></span>
 			</div>
 			<div class="input-group">
@@ -201,17 +201,24 @@ body {
 		});
 
 	}
-
+		let idCheck = false;
 		let emailCheck = false;
 		let confirmEmail = '';
 
 		function showVerification() {
-
+			const userName = document.getElementById('userName').value.trim();
+			const userPhone = document.getElementById('phone').value.trim();
 			const email = document.getElementById('email').value.trim();
 			const verification  = document.getElementById('verificationSection');
 			const emailBtn = document.getElementById('emailBtn');
 			if(email === ''){
 				alert('이메일을 입력해주세요.');
+				verification.style.display='none';
+			}else if(userName === ''){
+				alert('이름을 입력해 주세요.');
+				verification.style.display='none';
+			}else if(userPhone === ''){
+				alert('회원 정보에 등록된 전화번호를 입력해 주세요.');
 				verification.style.display='none';
 			}else if(email !== ''){
 				$.ajax({
@@ -230,14 +237,14 @@ body {
 			document.getElementById('verificationSection').classList
 					.add('active');
 		}
+		const confirmEmailBtn =	document.getElementById('confirmEmailBtn');
 
 		confirmEmailBtn.addEventListener('click', () => {
-			const confirmEmailBtn =	document.getElementById('confirmEmailBtn');
 			const confirmVerify = document.getElementById('confirmVerify').value.trim();
 			const verification = document.getElementById('verificationSection');
-			if(confirmVerify == ''){
+			if(confirmVerify === ''){
 				alert('인증번호를 입력해주세요.');
-			}else if(confirmVerify == confirmEmail){
+			}else if(confirmVerify === confirmEmail){
 				alert('이메일 인증이 완료되었습니다.');
 				emailCheck = true;
 				verification.style.display='none';
