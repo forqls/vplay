@@ -5,20 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <title>Sidebar</title>
-<style>
-</style>
 </head>
 <body>
 <div class="sidebar_wrap">
 	<div class="sidebar">
 		<div class="profile">
 			<div class="profile-image"><img src="/img/testProfile.jpg" alt="크리에이터의 프로필 사진" width="100%" ></div>
-			<h2>Handsomegwon</h2>
-			<p>
-				차원이 다른 영상을 제공합니다.
-				핸썸권의 자세한 튜토리얼을 따라오세요!
-			</p>
-			<span><object type="image/svg+xml" data="/img/subscribers.svg" class="svg-icon"></object>1157</span>
+			<h5>[[${session.loginUser.userId}]]</h5>
+			<p style="margin-top: 5px">[[${session.loginUser.userComment}]]</p>
+			<span><object type="image/svg+xml" data="/img/subscribers.svg" class="svg-icon"></object></span>
 		</div>
 		<nav class="menu-list">
 			<a id="myProjects" class="menu-item active" onclick="location.href='/users/my_projects'">
@@ -36,8 +31,6 @@
                			<path d="M8.40391 1.1451C8.17391 1.3451 7.82091 1.3451 7.59191 1.1451C5.80991 -0.404897 3.16191 -0.462897 1.34291 1.4741C-2.64109 6.5191 3.14291 10.9711 6.95791 13.6691C7.26198 13.8844 7.62536 14 7.99791 14C8.37046 14 8.73384 13.8844 9.03791 13.6691C12.8809 10.9581 18.6379 6.5191 14.6529 1.4741C12.8349 -0.462897 10.1849 -0.404897 8.40291 1.1451" fill="#6F757D"/>
                		</svg>
             	</span>
-
-
 				My Favorites
 			</a>
 			<a id="myDownloads" class="menu-item" onclick="location.href='/users/my_downloads'">
@@ -75,8 +68,11 @@
 		</nav>
 	</div>
 </div>
-	<script>
+	<script th:inline="javascript">
 	window.onload = () => {
+		  /*<![CDATA[*/
+		  const loginUser = /*[[${session.loginUser}]]*/'loginUser';
+		  /*]]>*/
 		  const currentAddress = window.location.pathname;
 		  const arr = currentAddress.split('/');
 		  console.log(arr[2]);
@@ -98,7 +94,6 @@
 		      aTag.classList.add("active");
 		      const svg = aTag.querySelector("svg");
 		      if (svg) {
-
 		        const paths = svg.querySelectorAll("path");
 		        paths.forEach(path => {
 		          path.setAttribute("fill", "#8137E9");
@@ -114,6 +109,17 @@
 		        });
 		      }
 		    }
+		  });
+		  
+		  const follow = document.querySelectorAll(".svg-icon")[0].parentNode
+		  
+		  $.ajax({
+			  url : "/users/findfollow",
+			  data : {userNo : loginUser.userNo},
+			  success: data=>{
+				  	follow.innerHTML = '<object type="image/svg+xml" data="/img/subscribers.svg" class="svg-icon"></object> &nbsp' + data;
+			  },
+			  error : data => console.log(data)
 		  });
 		}
 	</script>
