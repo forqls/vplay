@@ -34,7 +34,8 @@ public class BoardController {
 	@ResponseBody
 	public ArrayList<HashMap<String, Object>> selectCategory(@RequestParam("value") String menu , Model model , HttpSession session) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
-		ArrayList<HashMap<String,Object>> list =bService.selectCategory(menu);
+		int userNo = loginUser.getUserNo(); 
+		ArrayList<HashMap<String,Object>> list =bService.selectCategory(menu,userNo);
 		System.out.println(list);
 		if(loginUser != null) {
 			return list;
@@ -47,7 +48,8 @@ public class BoardController {
 	@ResponseBody
 	public ArrayList<Content> selectCategoryMyProjects(@RequestParam("value") String menu,HttpSession session){
 		Users loginUser = (Users)session.getAttribute("loginUser");
-		ArrayList<Content> list = bService.selectCategoryMyProjects(menu);
+		int userNo = loginUser.getUserNo();
+		ArrayList<Content> list = bService.selectCategoryMyProjects(menu,userNo);
 		System.out.println(list);
 		if(loginUser != null) {
 			return list;

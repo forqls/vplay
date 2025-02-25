@@ -2,11 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pocopoco_vplay.board.model.mapper.BoardMapper">
 	<select id="selectCategory" resultType="map">
-		select content_no, content_title from content join board using(content_no) join menu using(menu_no) where menu_name = #{menu}
+		SELECT content.content_no,content.content_title,TO_CHAR(content.content_detail) as content_detail, menu.menu_name, likes.user_no as likesUser
+		FROM content 
+		JOIN board ON content.content_no = board.content_no 
+		JOIN menu ON board.menu_no = menu.menu_no 
+		JOIN likes ON content.content_no = likes.content_no 
+		WHERE menu.menu_name =#{menu} 
+		AND likes.user_no = #{userNo}
 	</select>
 	
 	<select id="selectCategoryMyProjects">
-		select * from content join board using(content_no) join menu using(menu_no) where menu_name=#{menu}
+		select * from content
+		join board using(content_no)
+		join menu using(menu_no)
+		where user_no=#{userNo}
+		and menu_name='video Templates'
 	</select>
 	
 </mapper>
