@@ -22,12 +22,19 @@
 	</insert>
 	
 	<select id="selectMyProject" resultType="map">
-		select content_title , content_no
-		from content c  join likes l using(content_no) where l.user_no = #{id}
+		SELECT 
+	    c.content_title, c.VIEWS,
+	    c.content_no, 
+	    (SELECT COUNT(*) FROM likes l2 WHERE l2.content_no = c.content_no) AS like_count
+		FROM content c  
+		JOIN likes l ON c.content_no = l.content_no
+		WHERE l.user_no =#{id}
+		GROUP BY c.content_no, c.content_title, c.views
 	</select>
 	
 	<select id="selectMyRealProjects">
-		select * from content where user_no=#{userNo}
+		select content.*,(SELECT COUNT(*) FROM likes WHERE likes.content_no = content.content_no) AS like_count
+		from content where user_no=#{userNo}
 	</select>
 
 	<select id="selectuserIdPhone">

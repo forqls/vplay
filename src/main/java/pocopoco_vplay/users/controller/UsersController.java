@@ -163,7 +163,7 @@ public class UsersController {
 		if(loginUser != null) {
 			int userNo = loginUser.getUserNo();
 			ArrayList<Content> list = uService.selectMyRealProjects(userNo); // ㄹㅇ 그냥 자기가 한 프로젝트 가져오기
-			System.out.println(list.size());
+			System.out.println("리스트 사이즈는 : " +list.size());
 			model.addAttribute("list",list);
 		}else {
 			throw new UsersException("로그인이 풀렸습니다.");
