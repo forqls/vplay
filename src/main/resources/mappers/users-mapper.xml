@@ -25,6 +25,10 @@
 		select content_title , content_no
 		from content c  join likes l using(content_no) where l.user_no = #{id}
 	</select>
+	
+	<select id="selectMyRealProjects">
+		select * from content where user_no=#{userNo}
+	</select>
 
 	<select id="selectuserIdPhone">
 		SELECT COUNT(*)

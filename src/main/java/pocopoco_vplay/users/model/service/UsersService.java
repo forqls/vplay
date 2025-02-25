@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.mapper.UsersMapper;
 import pocopoco_vplay.users.model.vo.Users;
 
@@ -31,6 +32,11 @@ public class UsersService {
 		return mapper.selectMyProject(id);
 	}
 
+	public ArrayList<Content> selectMyRealProjects(int userNo) {
+//		System.out.println(mapper.selectMyRealProjects(userNo));
+		return mapper.selectMyRealProjects(userNo);
+
 	public int selectIdPhone(String userName, String userPhone) { return mapper.selectuserIdPhone(userName, userPhone);
+
 	}
 }
