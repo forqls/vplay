@@ -132,7 +132,6 @@ public class UsersController {
 	public String findId(@RequestParam(required = false, value="name") String userName, @RequestParam(required = false, value="phoneNum")String userPhone) {
 		System.out.println(userName);
 		System.out.println(userPhone);
-		Users user = new Users();
 
 		int result = usersService.selectIdPhone(userName, userPhone);
 		System.out.println(result);
@@ -172,8 +171,7 @@ public class UsersController {
 		return "my_projects";
 	}
 
-	@GetMapping("my_favorites")
-	public String myFavorites() { return "my_favorites"; }
+
 
 	@GetMapping("my_downloads")
 	public String myDownloads() { return "my_downloads"; }
