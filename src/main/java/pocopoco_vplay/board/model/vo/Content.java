@@ -26,4 +26,6 @@ public class Content {
 	private String categoryName;
 	private String menuName;
 	private String hashtagName;
+	private int views;
+	private int likeCount;
 }

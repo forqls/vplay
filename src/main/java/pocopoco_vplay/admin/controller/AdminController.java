@@ -27,9 +27,31 @@ public class AdminController {
 	private final AdminService aService;
 	
 	@GetMapping("dashboard")
-	public String joinDashboard(){
-		return "dashboard";
+	public ModelAndView joinDashboard(ModelAndView mv){
+		
+		int userCount = aService.getUsersCount();
+		int templatesCount = aService.getTemplatesCount();
+		
+		mv.addObject("userCount", userCount).addObject("templatesCount", templatesCount);
+		mv.setViewName("dashboard");
+		return mv;
 	}
+	
+//	@GetMapping(value="drawChart", produces = "application/json; charset=UTF-8")
+//	@ResponseBody
+//	public String drawChart() {
+//		JSONArray array = new JSONArray();
+//		for(Board b : list) {
+//			JSONObject json = new JSONObject();
+//			json.put("boardId", b.getBoardId());
+//			json.put("boardTitle", b.getBoardTitle());
+//			json.put("nickName", b.getNickName());
+//			json.put("modifyDate", b.getModifyDate());
+//			json.put("boardCount", b.getBoardCount());
+//			
+//			array.put(json);
+//		}		
+//	}
 	
 	@GetMapping("users")
 	public ModelAndView joinUsers(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
@@ -126,5 +148,29 @@ public class AdminController {
 		}
 		
 		return aService.inquiryUpdate(content);
+	}
+	
+	@GetMapping("tupdate")
+	@ResponseBody
+	public int templatesUpdate(@ModelAttribute Content content) {
+		if(content.getContentStatus().equals("N")) {
+			content.setDeleteStatus("Y");
+		}else {
+			content.setDeleteStatus("N");
+		}
+		
+		return aService.templatesUpdate(content);
+	}
+	
+	@GetMapping("rupdate")
+	@ResponseBody
+	public int requestUpdate(@ModelAttribute Content content) {
+		if(content.getContentStatus().equals("N")) {
+			content.setDeleteStatus("Y");
+		}else {
+			content.setDeleteStatus("N");
+		}
+		
+		return aService.requestUpdate(content);
 	}
 }

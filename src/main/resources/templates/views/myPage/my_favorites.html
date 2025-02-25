@@ -21,6 +21,8 @@
 			</div>
 			<div class="filter-buttons">
 				<select class="filter-dropdown">
+					<option value="All">All</option>
+					<option value="video Templates">Video Templates</option>
 					<option value="Stock Video">Stock Video</option>
 					<option value="Graphic Templates">Graphic Templates</option>
 					<option value="Music">Music</option>
@@ -39,7 +41,7 @@
 					<div class="item-content">
 						<span class="item-title">[[${r.CONTENT_TITLE}]]</span> [[${r.CONTENT_NO}]]
 						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
+							<span>👁️[[${r.VIEWS}]]</span> <span>❤️[[${r.LIKE_COUNT}]]</span>
 						</div>
 					</div>
 				</div>
@@ -85,7 +87,7 @@
 			                            <div class="item-content">
 			                                <span class="item-title">${r.CONTENT_TITLE}</span> ${r.CONTENT_NO}
 			                                <div class="item-actions">
-			                                    <span>👁️ ${r.VIEW_COUNT}</span> <span>❤️ ${r.LIKE_COUNT}</span>
+			                                    <span>👁️ ${r.VIEWS}</span> <span>❤️ ${r.LIKE_COUNT}</span>
 			                                </div>
 			                            </div>
 			                        </div>
