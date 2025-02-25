@@ -39,4 +39,8 @@ public class UsersService {
 	public int selectIdPhone(String userName, String userPhone) { return mapper.selectuserIdPhone(userName, userPhone);
 
 	}
+
+	public int findfollow(Users user) {
+		return mapper.findfollow(user);
+	}
 }

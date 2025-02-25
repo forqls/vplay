@@ -191,7 +191,11 @@ public class UsersController {
 		return "price";
 	}
 	
-	
+	@GetMapping("findfollow")
+	@ResponseBody
+	public int findfollow(@ModelAttribute Users user) {
+		return uService.findfollow(user);
+	}
 	
 	
 

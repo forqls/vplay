@@ -35,5 +35,10 @@
 		FROM USERS
 		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone}
 	</select>
-
+	
+	<select id="findfollow">
+		select count(*)
+		from subscribe
+		where creater_no = #{userNo}
+	</select>
 </mapper>
