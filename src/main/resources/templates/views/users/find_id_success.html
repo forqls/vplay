@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <title>Find ID Success</title>
 <style>
 * {
@@ -98,24 +99,25 @@ body {
 </style>
 </head>
 <body>
-	<div class="breadcrumb">
-		<a href="/">Home</a> > <span class="current">Found ID</span>
+<div th:replace="~{views/common/topbar :: topbar}"></div>
+<div class="breadcrumb">
+	<a href="/">Home</a> > <span class="current">Found ID</span>
+</div>
+
+<main class="success-container">
+	<h1 class="success-title">아이디 찾기 성공</h1>
+
+	<div class="success-icon">
+		<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<polyline points="20 6 9 17 4 12"></polyline>
+		</svg>
 	</div>
 
-	<main class="success-container">
-		<h1 class="success-title">아이디 찾기 성공</h1>
-
-		<div class="success-icon">
-			<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-		</div>
-
-		<div class="success-message">
-			<p>이상윤 님의 아이디는</p>
-			<p class="user-id">dltkddbs5002</p>
-			<p>입니다.</p>
-		</div>
-	</main>
+	<div class="success-message">
+		<p><span class="user-name">[[${users.userName}]]</span> 님의 아이디는</p>
+		<p class="user-id">[[${usersId}]]</p>
+		<p>입니다.</p>
+	</div>
+</main>
 </body>
 </html>

@@ -136,15 +136,14 @@ public class UsersController {
 	@ResponseBody
 	public int findId(@RequestParam(required = false, value="userName") String userName, @RequestParam(required = false, value="userPhone")String userPhone) {
 		int result = uService.selectIdPhone(userName, userPhone);
-		System.out.println(userName);
-		System.out.println(userPhone);
-		System.out.println(result);
-
 		return result;
 	}
 
-	@GetMapping("findIdSuccess")
-	public String findIdSuccess(){
+	@PostMapping("findIdSuccess")
+	public String findIdSuccess(@ModelAttribute Users users, Model model) {
+		String usersId = uService.findId(users);
+		model.addAttribute("users", users);
+		model.addAttribute("usersId", usersId);
 		return "find_id_success";
 	}
 	

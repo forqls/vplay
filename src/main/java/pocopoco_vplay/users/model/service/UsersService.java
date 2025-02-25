@@ -43,4 +43,7 @@ public class UsersService {
 	public int findfollow(Users user) {
 		return mapper.findfollow(user);
 	}
+
+	public String findId(Users users) { return mapper.findId(users);
+	}
 }
