@@ -12,27 +12,25 @@
 </style>
 </head>
 <body>
-
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
-
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
 		<div class="content_wrap">
 			<div class="content-header">
 				<h1>My Favorite</h1>
-				<div class="filter-buttons">
-					<select class="filter-dropdown">
-						<option value="Stock Video">Stock Video</option>
-						<option value="Graphic Templates">Graphic Templates</option>
-						<option value="Music">Music</option>
-						<option value="Sound Effects">Sound Effects</option>
-						<option value="Photos">Photos</option>
-						<option value="Fonts">Fonts</option>
-					</select> <select class="filter-dropdown">
+			</div>
+			<div class="filter-buttons">
+				<select class="filter-dropdown">
+					<option value="Stock Video">Stock Video</option>
+					<option value="Graphic Templates">Graphic Templates</option>
+					<option value="Music">Music</option>
+					<option value="Sound Effects">Sound Effects</option>
+					<option value="Photos">Photos</option>
+					<option value="Fonts">Fonts</option>
+				</select> <select class="filter-dropdown">
 					<option value="newest">새로운순</option>
 					<option value="most-viewed">조회수 많은 순</option>
 				</select>
-				</div>
 			</div>
 
 			<div class="grid">
@@ -45,9 +43,9 @@
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
+	</div>
 
 	<script type="text/javascript">
 			document.querySelector('.filter-dropdown').addEventListener('change',(e)=>{

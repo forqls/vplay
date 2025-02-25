@@ -33,30 +33,29 @@
 				</select>
 			</div>
 
- 		<th:block th:if="${not #lists.isEmpty(list)}">
-			<div class="grid">
-				<div class="grid-item" th:each="r : ${list}">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title" th:text="${r.contentTitle}"></span> 
-                        <span th:text="${r.contentNo}"></span>
+			<th:block th:if="${not #lists.isEmpty(list)}">
+				<div class="grid">
+					<div class="grid-item" th:each="r : ${list}">
+						<button class="menu-dots">⋮</button>
+						<div class="item-content">
+							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}"></span>
 
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
+							<div class="item-actions">
+								<span>👁️ 157</span> <span>❤️</span>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</th:block>	
-		
- 		<th:block th:if="${#lists.isEmpty(list)}">
-			<p> 작성한 프로젝트가 없습니다!</p>
-		</th:block>
-		
+			</th:block>
+
+			<th:block th:if="${#lists.isEmpty(list)}">
+				<p>작성한 프로젝트가 없습니다!</p>
+			</th:block>
+
 		</div>
 	</div>
 
-<script type="text/javascript">
+	<script type="text/javascript">
  			document.querySelector('.filter-dropdown').addEventListener('change',(e)=>{
  				let value = e.target.value;
  				console.log(value);
