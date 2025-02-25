@@ -15,7 +15,7 @@ public interface UsersMapper {
 
 	int checkId(String id);
 
-  Users signIn(Users user);
+	Users signIn(Users user);
 
 	int insertUser(Users user);
 
@@ -26,5 +26,6 @@ public interface UsersMapper {
 	int selectuserIdPhone(String userName, String userPhone);
 
 	int findfollow(Users user);
-}
 
+	int updateInfo(Users user);
+}
