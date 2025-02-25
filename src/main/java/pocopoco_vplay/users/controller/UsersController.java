@@ -71,7 +71,7 @@ public class UsersController {
 
 
 		try {
-			mimeMessageHelper.setFrom("dongjunson0518@gmail.com");
+			mimeMessageHelper.setFrom("poco.vplay@gmail.com");
 			mimeMessageHelper.setSubject(random);
 			mimeMessageHelper.setTo(email);
 			mimeMessageHelper.setText("인증번호는 : "+ random + " 입니다.");

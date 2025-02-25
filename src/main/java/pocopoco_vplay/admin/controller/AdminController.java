@@ -2,6 +2,8 @@ package pocopoco_vplay.admin.controller;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,21 +39,24 @@ public class AdminController {
 		return mv;
 	}
 	
-//	@GetMapping(value="drawChart", produces = "application/json; charset=UTF-8")
-//	@ResponseBody
-//	public String drawChart() {
-//		JSONArray array = new JSONArray();
-//		for(Board b : list) {
-//			JSONObject json = new JSONObject();
-//			json.put("boardId", b.getBoardId());
-//			json.put("boardTitle", b.getBoardTitle());
-//			json.put("nickName", b.getNickName());
-//			json.put("modifyDate", b.getModifyDate());
-//			json.put("boardCount", b.getBoardCount());
-//			
-//			array.put(json);
-//		}		
-//	}
+	@GetMapping(value="drawChart", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String drawChart() {
+		
+		
+		
+		JSONArray array = new JSONArray();
+		for(Board b : list) {
+			JSONObject json = new JSONObject();
+			json.put("boardId", b.getBoardId());
+			json.put("boardTitle", b.getBoardTitle());
+			json.put("nickName", b.getNickName());
+			json.put("modifyDate", b.getModifyDate());
+			json.put("boardCount", b.getBoardCount());
+			
+			array.put(json);
+		}		
+	}
 	
 	@GetMapping("users")
 	public ModelAndView joinUsers(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
