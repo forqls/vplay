@@ -15,7 +15,7 @@ import pocopoco_vplay.users.model.vo.Users;
 public class UsersService {
 
 	private final UsersMapper mapper;
-	
+
 	public int checkId(String id) {
 		return mapper.checkId(id);
 	}
@@ -35,5 +35,8 @@ public class UsersService {
 	public ArrayList<Content> selectMyRealProjects(int userNo) {
 //		System.out.println(mapper.selectMyRealProjects(userNo));
 		return mapper.selectMyRealProjects(userNo);
+
+	public int selectIdPhone(String userName, String userPhone) { return mapper.selectuserIdPhone(userName, userPhone);
+
 	}
 }

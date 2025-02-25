@@ -3,6 +3,7 @@ package pocopoco_vplay.users.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.catalina.User;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,12 +36,11 @@ public class UsersController {
 
     private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
-	
-	
-	
-	
-	
-	
+	private final UsersService usersService;
+
+
+
+
 	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
@@ -97,59 +97,7 @@ public class UsersController {
 		return "signup_success";
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @GetMapping("signIn")
+	@GetMapping("signIn")
     public String signIn() {
         //System.out.println(bcrypt.encode("vplay"));
         return "signIn"; }
@@ -181,7 +129,13 @@ public class UsersController {
     }
 
 	@GetMapping("findId")
-	public String findId() {
+	public String findId(@RequestParam(required = false, value="name") String userName, @RequestParam(required = false, value="phoneNum")String userPhone) {
+		System.out.println(userName);
+		System.out.println(userPhone);
+		Users user = new Users();
+
+		int result = usersService.selectIdPhone(userName, userPhone);
+		System.out.println(result);
 		return "find_id";
 	}
 	

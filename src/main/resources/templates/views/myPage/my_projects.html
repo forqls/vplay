@@ -6,35 +6,33 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
-<link href="css/user/myPage.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Project</title>
 <style>
-
 </style>
 </head>
 <body>
-
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
-
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
 		<div class="container content_wrap">
 			<div class="content-header">
 				<h1>My Projects</h1>
-				<div class="filter-buttons">
-					<select class="filter-dropdown">
-						<option value="Stock Video">Stock Video</option>
-						<option value="Graphic Templates">Graphic Templates</option>
-						<option value="Music">Music</option>
-						<option value="Sound Effects">Sound Effects</option>
-						<option value="Photos">Photos</option>
-						<option value="Fonts">Fonts</option>
-					</select> <select class="filter-dropdown">
+			</div>
+			<div class="filter-buttons">
+				<select class="filter-dropdown">
+					<option value="Stock Video">Stock Video</option>
+					<option value="Graphic Templates">Graphic Templates</option>
+					<option value="Music">Music</option>
+					<option value="Sound Effects">Sound Effects</option>
+					<option value="Photos">Photos</option>
+					<option value="Fonts">Fonts</option>
+				</select> <select class="filter-dropdown">
 					<option value="newest">새로운순</option>
 					<option value="most-viewed">조회수 많은 순</option>
 				</select>
-				</div>
 			</div>
+
  		<th:block th:if="${not #lists.isEmpty(list)}">
 			<div class="grid" th:each="r : ${list}">
 				<div class="grid-item">
@@ -42,6 +40,7 @@
 					<div class="item-content">
 						<span class="item-title" th:text="${r.contentTitle}"></span> 
                         <span th:text="${r.contentNo}"></span>
+
 						<div class="item-actions">
 							<span>👁️ 157</span> <span>❤️</span>
 						</div>
@@ -55,7 +54,6 @@
 		</th:block>
 		
 		</div>
-
 	</div>
 
 <script type="text/javascript">

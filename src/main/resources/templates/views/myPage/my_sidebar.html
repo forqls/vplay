@@ -9,7 +9,6 @@
 </style>
 </head>
 <body>
-
 <div class="sidebar_wrap">
 	<div class="sidebar">
 		<div class="profile">
@@ -53,8 +52,7 @@
 			<a id="myAccount" class="menu-item" onclick="location.href='/users/my_account'">
 				<span>
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="currentColor">
-					<path d="M8.00007 8C8.42905 8 8.85383 7.90947 9.25016 7.73358C9.64649 7.55769 10.0066 7.29988 10.3099 6.97487C10.6133 6.64987 10.8539 6.26403 11.0181 5.83939C11.1822 5.41475 11.2667 4.95963 11.2667 4.5C11.2667 4.04037 11.1822 3.58525 11.0181 3.16061C10.8539 2.73597 10.6133 2.35013 10.3099 2.02513C10.0066 1.70012 9.64649 1.44231 9.25016 1.26642C8.85383 1.09053 8.42905 1 8.00007 1C7.13369 1 6.3028 1.36875 5.69018 2.02513C5.07756 2.6815 4.7334 3.57174 4.7334 4.5C4.7334 5.42826 5.07756 6.3185 5.69018 6.97487C6.3028 7.63125 7.13369 8 8.00007 8Z" fill="#6F757D" stroke="#6F757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-					<path d="M1 18.4V19H15V18.4C15 16.16 15 15.04 14.5931 14.184C14.2351 13.4314 13.664 12.8195 12.9616 12.436C12.1627 12 11.1173 12 9.02667 12H6.97333C4.88267 12 3.83733 12 3.0384 12.436C2.33596 12.8195 1.76486 13.4314 1.40693 14.184C1 15.04 1 16.16 1 18.4Z" fill="#6F757D" stroke="#6F757D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					  <path d="M8 10c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#6F757D"/>
 					</svg>
 				</span>
 				My Account
@@ -78,44 +76,47 @@
 		</nav>
 	</div>
 </div>
+	<script>
+	window.onload = () => {
+		  const currentAddress = window.location.pathname;
+		  const arr = currentAddress.split('/');
+		  console.log(arr[2]);
+		  let currentPage = null;
 
-<script>
-	window.onload =() => {
-		const currentAddress = window.location.pathname;/*pathname : 현재 주소*/
-		const arr = currentAddress.split('/');
-		console.log(arr[2]);
-		let currentPage = null;
+		  switch (arr[2]) {
+		    case "my_projects": currentPage = "My Projects"; break;
+		    case "my_favorites": currentPage = "My Favorites"; break;
+		    case "my_downloads": currentPage = "My Downloads"; break;
+		    case "my_account": currentPage = "My Account"; break;
+		    case "my_inquiry": currentPage = "My Inquiry"; break;
+		    case "my_payments": currentPage = "My Payments"; break;
+		  }
+		  console.log(currentPage);
 
-		switch(arr[2]){
-			case "my_projects": currentPage = "My Projects"; break;
-			case "my_favorites": currentPage = "My Favorites"; break;
-			case "my_downloads": currentPage = "My Downloads"; break;
-			case "my_account": currentPage = "My Account"; break;
-			case "my_inquiry": currentPage = "My Inquiry"; break;
-			case "my_payments": currentPage = "My Payments"; break;
+		  const aTags = document.querySelectorAll("a");
+		  aTags.forEach(aTag => {
+		    if (currentPage && aTag.innerText.includes(currentPage)) {
+		      aTag.classList.add("active");
+		      const svg = aTag.querySelector("svg");
+		      if (svg) {
+
+		        const paths = svg.querySelectorAll("path");
+		        paths.forEach(path => {
+		          path.setAttribute("fill", "#8137E9");
+		        });
+		      }
+		    } else {
+		      aTag.classList.remove("active");
+		      const svg = aTag.querySelector("svg");
+		      if (svg) {
+		        const paths = svg.querySelectorAll("path");
+		        paths.forEach(path => {
+		          path.setAttribute("fill", "#6F757D");
+		        });
+		      }
+		    }
+		  });
 		}
-		console.log(currentPage);
-
-		const aTags = document.querySelectorAll("a");
-		aTags.forEach(aTag => {
-			if (currentPage && aTag.innerText.includes(currentPage)) {
-				aTag.classList.add("active");
-				const svg = aTag.querySelector("svg");
-				if (svg) {
-					svg.querySelector("path").setAttribute("fill", "#8137E9");
-				}
-			} else {
-				aTag.classList.remove("active");
-				const svg = aTag.querySelector("svg");
-				if (svg) {
-					svg.querySelector("path").setAttribute("fill", "#6F757D");
-				}
-			}
-		});
-
-	}
-
-</script>
-
+	</script>
 </body>
 </html>
