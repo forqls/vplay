@@ -41,4 +41,11 @@
 		from subscribe
 		where creater_no = #{userNo}
 	</select>
+
+	<select id="findId">
+		SELECT USER_ID, USER_NAME
+		FROM users
+		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone} AND USER_EMAIL =#{userEmail}
+	</select>
+
 </mapper>

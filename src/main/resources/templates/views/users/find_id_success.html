@@ -2,11 +2,122 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<title>Find ID Success</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #191820;
+	color: #ffffff;
+	min-height: 100vh;
+}
+
+.breadcrumb {
+	padding: 1rem 2rem;
+	color: #949396;
+}
+
+.breadcrumb a {
+	color: #949396;
+	text-decoration: none;
+}
+
+.breadcrumb a:hover {
+	color: #5e37e9;
+}
+
+.breadcrumb .current {
+	color: #5e37e9;
+}
+
+.success-container {
+	max-width: 600px;
+	margin: 4rem auto;
+	text-align: center;
+}
+
+.success-title {
+	font-size: 2rem;
+	margin-bottom: 2rem;
+	color: #ffffff;
+}
+
+.success-icon {
+	width: 80px;
+	height: 80px;
+	background-color: #5e37e9;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto 2rem;
+}
+
+.success-message {
+	background-color: #1f1f2c;
+	border: 1px solid #28303f;
+	border-radius: 8px;
+	padding: 2rem;
+	margin: 2rem;
+}
+
+.success-message p {
+	font-size: 1.2rem;
+	line-height: 1.6;
+	margin-bottom: 1rem;
+}
+
+.user-id {
+	font-weight: bold;
+	text-decoration: underline;
+	color: #ffffff;
+}
+
+@media ( max-width : 768px) {
+	.success-container {
+		margin: 2rem 1rem;
+	}
+	.success-title {
+		font-size: 1.5rem;
+	}
+	.success-icon {
+		width: 60px;
+		height: 60px;
+	}
+	.success-message {
+		padding: 1.5rem;
+		margin: 1rem;
+	}
+}
+</style>
 </head>
 <body>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
-	<h1>아이디 찾기 성공</h1>
+<div class="breadcrumb">
+	<a href="/">Home</a> > <span class="current">Found ID</span>
+</div>
+
+<main class="success-container">
+	<h1 class="success-title">아이디 찾기 성공</h1>
+
+	<div class="success-icon">
+		<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<polyline points="20 6 9 17 4 12"></polyline>
+		</svg>
+	</div>
+
+	<div class="success-message">
+		<p><span class="user-name">[[${users.userName}]]</span> 님의 아이디는</p>
+		<p class="user-id">[[${usersId}]]</p>
+		<p>입니다.</p>
+	</div>
+</main>
 </body>
 </html>

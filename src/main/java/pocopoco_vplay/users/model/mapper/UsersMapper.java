@@ -26,5 +26,7 @@ public interface UsersMapper {
 	int selectuserIdPhone(String userName, String userPhone);
 
 	int findfollow(Users user);
+
+	String findId(Users users);
 }
 

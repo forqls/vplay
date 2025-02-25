@@ -123,28 +123,26 @@ body {
 
 	<main class="find-id-container">
 		<h1 class="find-id-title">아이디 찾기</h1>
-		<form id="findIdForm" method="POST">
+		<form id="findIdForm" onsubmit="return findIdBtn(event)">
 			<div class="input-group">
-				<input type="text" placeholder="User name" class="input-field user_name" id="userName">
+				<input type="text" placeholder="User name" class="input-field user_name" id="userName" name="userName">
 				<span class="alert_text"></span>
 			</div>
 			<div class="input-group">
-				<input type="tel" placeholder="Phone(-를 포함하여 작성해주세요.)" class="input-field user_phone" id="phone">
+				<input type="tel" placeholder="Phone(-를 포함하여 작성해주세요.)" class="input-field user_phone" id="phone" name="userPhone">
 				<span class="alert_text"></span>
 			</div>
 			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field" id="email">
+				<input type="email" placeholder="Email" class="input-field" id="email" name="userEmail">
 				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
 			</div>
-
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
 					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerify" id="confirmVerify">
 					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 				</div>
 			</div>
-
-			<button type="button" class="find-id-btn" onclick="findIdBtn()">아이디 찾기</button>
+			<button type="submit" class="find-id-btn">아이디 찾기</button>
 		</form>
 	</main>
 
@@ -249,12 +247,15 @@ body {
 			}
 		});
 
-		const findIdBtn = () =>{
-			if(!emailCheck){
+		const findIdBtn = (event) => {
+			const form = document.getElementById('findIdForm');
+			if (!emailCheck) {
 				alert("인증번호를 입력해주세요.");
-			}else{
-				window.location.href = "/users/findIdSuccess";
+				return false;
 			}
+			form.method = 'POST';
+			form.action = "/users/findIdSuccess";
+			return true;
 		};
 
 	</script>
