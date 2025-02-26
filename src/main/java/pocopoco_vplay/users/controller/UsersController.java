@@ -151,6 +151,56 @@ public class UsersController {
 		return "find_pw";
 	}
 
+	@PostMapping("findPw")
+	public int findPw(@ModelAttribute Users users, Model model) {
+		int result = Integer.parseInt(uService.findPw(users));
+		model.addAttribute("users", users);
+		return result;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	@GetMapping("my_favorites")
 	public String myFavorites(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");

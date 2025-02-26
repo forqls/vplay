@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FindPw</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <style>
 * {
@@ -33,14 +34,14 @@ body {
 	color: #5e37e9;
 }
 
-.find-pw-container {
+.find-id-container, .find-pw-container {
 	max-width: 400px;
 	margin: 2rem auto;
 	padding: 2rem;
 	text-align: center;
 }
 
-.find-pw-title {
+.find-id-title, .find-pw-title {
 	font-size: 1.5rem;
 	margin-bottom: 2rem;
 }
@@ -85,7 +86,7 @@ body {
 	display: block;
 }
 
-.find-pw-btn {
+.find-id-btn {
 	width: 100%;
 	padding: 0.8rem;
 	background-color: #5e37e9;
@@ -98,7 +99,7 @@ body {
 }
 
 @media ( max-width : 768px) {
-	.find-pw-container {
+	.find-id-container, .find-pw-container {
 		margin: 1rem;
 		padding: 1rem;
 	}
@@ -122,30 +123,90 @@ body {
 
 	<main class="find-pw-container">
 		<h1 class="find-pw-title">비밀번호 찾기</h1>
-		<form id="findPwForm">
+		<form id="findIdForm" onsubmit="return findIdBtn(event)">
 			<div class="input-group">
-				<input type="text" placeholder="ID" class="input-field">
+				<input type="text" placeholder="ID" class="input-field user_id" id="userId" name="userId">
+				<span class="alert_text"></span>
 			</div>
 			<div class="input-group">
-				<input type="tel" placeholder="Phone" class="input-field">
+				<input type="tel" placeholder="Phone" class="input-field user_phone" id="phone" name="userPhone">
+				<span class="alert_text"></span>
 			</div>
 			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field">
+				<input type="email" placeholder="Email" class="input-field" id="email" name="userEmail">
 				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
 			</div>
-
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
-					<input type="text" placeholder="인증번호 입력" class="input-field">
-					<button type="button" class="button verify-button">확인</button>
+					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerify" id="confirmVerify">
+					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 				</div>
 			</div>
-
-			<button type="submit" class="find-pw-btn">비밀번호 찾기</button>
+			<button type="submit" class="find-id-btn">비밀번호 찾기</button>
 		</form>
 	</main>
 
 	<script>
+		let flag = false;
+		window.onload = () => {
+			const alertText = document.querySelectorAll(".alert_text");
+
+			document.getElementById('userId').addEventListener('blur', function() {
+				if(this.value.trim() === ''){
+					alertText[0].innerHTML ='아이디를 입력해 주세요.';
+				}else{
+					alertText[0].innerHTML = '';
+				}
+			});
+
+
+			document.getElementById('phone').addEventListener('blur', function() {
+				// console.log(this.value);
+				let userName = document.getElementById('userName').value.trim();
+				let userPhone = this.value.replace(/[^0-9]/g, "");
+
+				if (userPhone.length > 10) {
+					userPhone = userPhone.substring(0, 11);
+				}
+
+				if (userPhone.length >= 3 && userPhone.length <= 7) {
+					userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3);
+				} else if (userPhone.length > 7 && userPhone.length <= 11) {
+					userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3, 7) + "-" + userPhone.substring(7);
+				} else {
+					userPhone = userPhone;
+				}
+
+				this.value = userPhone;
+
+				// console.log(this.value);
+
+				if(userPhone === ''){
+					alertText[1].innerHTML ='휴대폰 번호를 입력해 주세요.';
+				}else{
+					alertText[1].innerHTML ='';
+					$.ajax({
+						url:'/users/findPw',
+						type:'POST',
+						data: {userName: userId, userPhone: userPhone},
+						success: data => {
+							if(data === 0){
+								alertText[1].innerHTML = '아이디와 휴대폰 번호가 일치하지 않습니다';
+								flag = false;
+							}else{
+								alertText[1].innerHTML = '아이디와 휴대폰 번호가 일치합니다';
+								flag = true;
+							}
+						},
+						error: data => console.log(data)
+					});
+				}
+			});
+
+
+
+		}
+
 		function showVerification() {
 			document.getElementById('verificationSection').classList
 					.add('active');
