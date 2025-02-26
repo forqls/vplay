@@ -49,7 +49,16 @@ public class UsersService {
 		return mapper.updateInfo(user);
 	}
 	
-	public String findId(Users users) { return mapper.findId(users); }
+	public String findId(Users users) {
+    return mapper.findId(users);
+  }
 
-	public int findPw(Users users) { return mapper.findPw(users); }
+	public int changePw(Users user) {
+		return mapper.changePw(user);
+	}
+  
+	public int findPw(Users users) {
+    return mapper.findPw(users);
+  }
+
 }

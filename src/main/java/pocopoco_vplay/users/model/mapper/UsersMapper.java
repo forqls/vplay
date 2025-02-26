@@ -29,5 +29,7 @@ public interface UsersMapper {
 
 	int updateInfo(Users user);
 
+	int changePw(Users user);
+  
 	int findPw(Users Users);
 }
