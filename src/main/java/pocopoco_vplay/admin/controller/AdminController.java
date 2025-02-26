@@ -2,6 +2,8 @@ package pocopoco_vplay.admin.controller;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,6 +42,9 @@ public class AdminController {
 //	@GetMapping(value="drawChart", produces = "application/json; charset=UTF-8")
 //	@ResponseBody
 //	public String drawChart() {
+//		
+//		
+//		
 //		JSONArray array = new JSONArray();
 //		for(Board b : list) {
 //			JSONObject json = new JSONObject();
