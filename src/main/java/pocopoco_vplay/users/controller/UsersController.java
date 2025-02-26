@@ -2,8 +2,8 @@ package pocopoco_vplay.users.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
-import org.apache.catalina.User;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -151,6 +151,94 @@ public class UsersController {
 		return "find_pw";
 	}
 
+	@PostMapping("findPw")
+	@ResponseBody
+	public int findPw(@ModelAttribute Users users) {
+		System.out.println("Controller 실행됨: " + users);
+		int result = uService.findPw(users);
+		System.out.println("결과: " + result);
+		return result;
+	}
+
+	@PostMapping("findPwSuccess")
+	public String findPwSuccess(@ModelAttribute Users users, Model model) {
+		String tempPwd = tempPwdMk();
+
+		String encodePwd = bcrypt.encode(tempPwd);
+		String userName = uService.findName(users);
+		users.setUserPw(encodePwd);
+
+		int encodeUserPwd = uService.encodePwd(users);
+
+		System.out.println(userName);
+		if(encodeUserPwd == 1){
+			model.addAttribute("userName", userName);
+			model.addAttribute("tempPwd", tempPwd);
+			System.out.println("업데이트 완료");
+			return "find_pw_success";
+		}else{
+			throw new UsersException("비밀번호 업데이트 실패");
+		}
+
+	}
+
+
+	//임시 비번 생성 메소드
+	private String tempPwdMk() {
+		int length = 10;
+		String chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		StringBuilder password = new StringBuilder();
+		Random random = new Random();
+
+		for(int i=0;i<length;i++) {
+			password.append(chars.charAt(random.nextInt(chars.length())));
+		}
+
+
+		return password.toString();
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	@GetMapping("my_favorites")
 	public String myFavorites(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
@@ -211,15 +299,56 @@ public class UsersController {
 		return uService.findfollow(user);
 	}
 
+	@GetMapping("checkPw")
+	@ResponseBody
+	public int checkPassword(@RequestParam("password") String password, HttpSession session) {
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    if (bcrypt.matches(password, loginUser.getUserPw())) {
+	        return 1;
+	    } else {
+	    	throw new UsersException("회원수정을 실패하였습니다.");
+	    }
+	}
+
 	@PostMapping("updateInfo")
-	public String updateInfo(@ModelAttribute Users user, Model model) {
+	public String updateInfo(@ModelAttribute Users user, Model model, HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		user.setUserNo(loginUser.getUserNo());
 		int result = uService.updateInfo(user);
 		if (result > 0) {
-			model.addAttribute("loginUser", uService.signIn(user));
+			model.addAttribute("loginUser", uService.signIn(loginUser));
 			return "redirect:/users/my_account";
 		} else {
 			throw new UsersException("회원수정을 실패하였습니다.");
 		}
 	}
+	
+	@GetMapping("changeCheckPw")
+	@ResponseBody
+	public int changeCheckPw(@RequestParam("currentPwd") String password, HttpSession session) {
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    if (bcrypt.matches(password, loginUser.getUserPw())) {
+	        return 1;
+	    } else {
+	    	throw new UsersException("비밀번호 변경을 실패하였습니다.");
+	    }
+	}
+	
+	@PostMapping("changePw")
+	public String changePw(@RequestParam("newPwd") String newPassword, Model model, HttpSession session) {
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    String encodedPassword = bcrypt.encode(newPassword);
+	    Users user = new Users();
+	    user.setUserNo(loginUser.getUserNo());
+	    user.setUserPw(encodedPassword);
 
+	    int result = uService.changePw(user);
+
+	    if (result > 0) {
+	        model.addAttribute("loginUser", uService.signIn(loginUser));
+	    } else {
+	        throw new UsersException("비밀번호 변경을 실패하였습니다.");
+	    }
+	    return "redirect:/users/my_account";
+	}
 }

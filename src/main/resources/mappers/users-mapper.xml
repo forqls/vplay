@@ -58,17 +58,45 @@
 		where creater_no = #{userNo}
 	</select>
 
-	<update id="updateInfo">
-		update users
-		set user_name = #{userName}, user_nickname = #{userNickname}, user_phone = #{userPhone}, user_email = #{userEmail}, user_birth = #{userBirth}, user_gender = #{userGender}, user_comment = #{userComment}
-		where user_no = #{userNo}
-	</update>
-
-
 	<select id="findId">
 		SELECT USER_ID, USER_NAME
 		FROM users
 		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone} AND USER_EMAIL =#{userEmail}
 	</select>
 
+  <update id="updateInfo">
+      update users
+      set user_name = #{userName},
+          user_nickname = #{userNickname},
+          user_phone = #{userPhone},
+          user_email = #{userEmail},
+          user_birth = #{userBirth},
+          user_gender = #{userGender},
+          user_comment = #{userComment}
+      where user_no = #{userNo}
+  </update>
+  
+	<update id="changePw">
+	    update users
+	    set user_pw = #{userPw}
+	    where user_no = #{userNo}
+	</update>
+
+	<select id="findPw">
+		select count(*)
+		from users
+		where user_id =#{userId} and user_phone = #{userPhone}
+	</select>
+
+	<update id="tempPwd">
+		update users
+		set USER_PW =#{userPw}
+		where user_id =#{userId}
+	</update>
+
+	<select id="findName">
+		select USER_NAME
+		from users
+		where user_id =#{userId}
+	</select>
 </mapper>
