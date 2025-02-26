@@ -30,4 +30,8 @@ public interface UsersMapper {
 	int updateInfo(Users user);
 
 	int findPw(Users Users);
+
+	int tempPwd(Users Users);
+
+	String findName(Users users);
 }

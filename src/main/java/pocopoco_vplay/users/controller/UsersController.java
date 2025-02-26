@@ -2,6 +2,7 @@ package pocopoco_vplay.users.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import org.apache.catalina.User;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -162,14 +163,42 @@ public class UsersController {
 
 	@PostMapping("findPwSuccess")
 	public String findPwSuccess(@ModelAttribute Users users, Model model) {
-		String usersId = uService.findId(users);
-		model.addAttribute("users", users);
-		model.addAttribute("usersId", usersId);
-		return "find_pw_success";
+		String tempPwd = tempPwdMk();
+
+		String encodePwd = bcrypt.encode(tempPwd);
+		String userName = uService.findName(users);
+		users.setUserPw(encodePwd);
+
+		int encodeUserPwd = uService.encodePwd(users);
+
+		System.out.println(userName);
+		if(encodeUserPwd == 1){
+			model.addAttribute("userName", userName);
+			model.addAttribute("tempPwd", tempPwd);
+			System.out.println("업데이트 완료");
+			return "find_pw_success";
+		}else{
+			throw new UsersException("비밀번호 업데이트 실패");
+		}
+
 	}
 
 
+	//임시 비번 생성 메소드
+	private String tempPwdMk() {
+		int length = 10;
+		String chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		StringBuilder password = new StringBuilder();
+		Random random = new Random();
 
+		for(int i=0;i<length;i++) {
+			password.append(chars.charAt(random.nextInt(chars.length())));
+		}
+
+
+		return password.toString();
+
+	}
 
 
 

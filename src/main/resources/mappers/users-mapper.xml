@@ -67,4 +67,16 @@
 		from users
 		where user_id =#{userId} and user_phone = #{userPhone}
 	</select>
+
+	<update id="tempPwd">
+		update users
+		set USER_PW =#{userPw}
+		where user_id =#{userId}
+	</update>
+
+	<select id="findName">
+		select USER_NAME
+		from users
+		where user_id =#{userId}
+	</select>
 </mapper>

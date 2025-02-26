@@ -52,4 +52,8 @@ public class UsersService {
 	public String findId(Users users) { return mapper.findId(users); }
 
 	public int findPw(Users users) { return mapper.findPw(users); }
+
+	public int encodePwd(Users users) { return mapper.tempPwd(users);}
+
+	public String findName(Users users) { return mapper.findName(users);}
 }
