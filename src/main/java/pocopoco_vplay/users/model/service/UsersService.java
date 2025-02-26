@@ -23,7 +23,7 @@ public class UsersService {
 	public Users signIn(Users user) {
 		return mapper.signIn(user);
 	}
-  
+
 	public int insertUser(Users user) {
 		return mapper.insertUser(user);
 	}
@@ -36,7 +36,9 @@ public class UsersService {
 //		System.out.println(mapper.selectMyRealProjects(userNo));
 		return mapper.selectMyRealProjects(userNo);
 	}
-	public int selectIdPhone(String userName, String userPhone) { return mapper.selectuserIdPhone(userName, userPhone);
+
+	public int selectIdPhone(String userName, String userPhone) {
+		return mapper.selectuserIdPhone(userName, userPhone);
 
 	}
 
@@ -44,6 +46,10 @@ public class UsersService {
 		return mapper.findfollow(user);
 	}
 
+	public int updateInfo(Users user) {
+		return mapper.updateInfo(user);
+
 	public String findId(Users users) { return mapper.findId(users);
+
 	}
 }

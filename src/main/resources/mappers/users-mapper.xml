@@ -17,7 +17,7 @@
 
 	
 	<insert id="insertUser">
-		   insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL,USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE
+		   insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE
     ) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, 'DEFAULT_IMG.JPG')
 	</insert>
 	
@@ -48,6 +48,13 @@
 		from subscribe
 		where creater_no = #{userNo}
 	</select>
+
+	<update id="updateInfo">
+		update users
+		set user_name = #{userName}, user_nickname = #{userNickname}, user_phone = #{userPhone}, user_email = #{userEmail}, user_birth = #{userBirth}, user_gender = #{userGender}, user_comment = #{userComment}
+		where user_no = #{userNo}
+	</update>
+
 
 	<select id="findId">
 		SELECT USER_ID, USER_NAME
