@@ -164,9 +164,9 @@ public class UsersController {
 	@PostMapping("findPwSuccess")
 	public String findPwSuccess(@ModelAttribute Users users, Model model) {
 		String tempPwd = tempPwdMk();
-
 		String encodePwd = bcrypt.encode(tempPwd);
 		String userName = uService.findName(users);
+
 		users.setUserPw(encodePwd);
 
 		int encodeUserPwd = uService.encodePwd(users);
@@ -194,8 +194,6 @@ public class UsersController {
 		for(int i=0;i<length;i++) {
 			password.append(chars.charAt(random.nextInt(chars.length())));
 		}
-
-
 		return password.toString();
 
 	}
