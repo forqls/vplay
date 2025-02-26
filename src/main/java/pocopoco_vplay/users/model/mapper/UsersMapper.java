@@ -30,4 +30,6 @@ public interface UsersMapper {
 	String findId(Users users);
 
 	int updateInfo(Users user);
+
+	int changePw(Users user);
 }

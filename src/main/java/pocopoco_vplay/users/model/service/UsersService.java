@@ -53,4 +53,8 @@ public class UsersService {
 	public String findId(Users users) { return mapper.findId(users);
 
 	}
+
+	public int changePw(Users user) {
+		return mapper.changePw(user);
+	}
 }

@@ -49,17 +49,22 @@
 		where creater_no = #{userNo}
 	</select>
 
-	<update id="updateInfo">
-		update users
-		set user_name = #{userName}, user_nickname = #{userNickname}, user_phone = #{userPhone}, user_email = #{userEmail}, user_birth = #{userBirth}, user_gender = #{userGender}, user_comment = #{userComment}
-		where user_no = #{userNo}
-	</update>
-
-
 	<select id="findId">
 		SELECT USER_ID, USER_NAME
 		FROM users
 		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone} AND USER_EMAIL =#{userEmail}
 	</select>
+
+<update id="updateInfo">
+    update users
+    set user_name = #{userName},
+        user_nickname = #{userNickname},
+        user_phone = #{userPhone},
+        user_email = #{userEmail},
+        user_birth = #{userBirth},
+        user_gender = #{userGender},
+        user_comment = #{userComment}
+    where user_no = #{userNo}
+</update>
 
 </mapper>
