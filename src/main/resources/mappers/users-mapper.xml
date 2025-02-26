@@ -71,4 +71,9 @@
 		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone} AND USER_EMAIL =#{userEmail}
 	</select>
 
+	<select id="findPw">
+		select count(*)
+		from users
+		where user_id =#{userId} and user_phone = #{userPhone}
+	</select>
 </mapper>
