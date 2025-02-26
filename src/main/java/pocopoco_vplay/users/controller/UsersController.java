@@ -67,7 +67,7 @@ public class UsersController {
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
 		try {
-			mimeMessageHelper.setFrom("dongjunson0518@gmail.com");
+			mimeMessageHelper.setFrom("poco.vplay@gmail.com");
 			mimeMessageHelper.setSubject(random);
 			mimeMessageHelper.setTo(email);
 			mimeMessageHelper.setText("인증번호는 : " + random + " 입니다.");
@@ -133,15 +133,16 @@ public class UsersController {
 	@ResponseBody
 	public int findId(@RequestParam(required = false, value = "userName") String userName, @RequestParam(required = false, value = "userPhone") String userPhone) {
 		int result = uService.selectIdPhone(userName, userPhone);
-		System.out.println(userName);
-		System.out.println(userPhone);
-		System.out.println(result);
-
 		return result;
 	}
 
-	@GetMapping("findIdSuccess")
-	public String findIdSuccess() {
+
+	@PostMapping("findIdSuccess")
+	public String findIdSuccess(@ModelAttribute Users users, Model model) {
+		String usersId = uService.findId(users);
+		model.addAttribute("users", users);
+		model.addAttribute("usersId", usersId);
+
 		return "find_id_success";
 	}
 
@@ -170,9 +171,10 @@ public class UsersController {
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();
 			ArrayList<Content> list = uService.selectMyRealProjects(userNo); // ㄹㅇ 그냥 자기가 한 프로젝트 가져오기
-			System.out.println(list.size());
-			model.addAttribute("list", list);
-		} else {
+
+			System.out.println("리스트 사이즈는 : " +list.size());
+			model.addAttribute("list",list);
+		}else {
 			throw new UsersException("로그인이 풀렸습니다.");
 		}
 		return "my_projects";

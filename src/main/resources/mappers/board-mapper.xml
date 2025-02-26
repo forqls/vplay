@@ -2,21 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pocopoco_vplay.board.model.mapper.BoardMapper">
 	<select id="selectCategory" resultType="map">
-		SELECT content.content_no,content.content_title,TO_CHAR(content.content_detail) as content_detail, menu.menu_name, likes.user_no as likesUser
+		SELECT content.views,content.content_no,content.content_title,TO_CHAR(content.content_detail) as content_detail, menu.menu_name, likes.user_no as likesUser,
+		(select count(*) from likes l2 where l2.content_no = content.content_no) as like_count
 		FROM content 
 		JOIN board ON content.content_no = board.content_no 
 		JOIN menu ON board.menu_no = menu.menu_no 
 		JOIN likes ON content.content_no = likes.content_no 
-		WHERE menu.menu_name =#{menu} 
-		AND likes.user_no = #{userNo}
+		WHERE likes.user_no = #{userNo}
+		<if test="menu != 'All'">
+			AND menu.menu_name =#{menu}
+		</if>
+		<if test="sort == 'newest'">
+			order by content.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by content.views desc
+		</if>
+		
 	</select>
 	
 	<select id="selectCategoryMyProjects">
-		select * from content
-		join board using(content_no)
-		join menu using(menu_no)
-		where user_no=#{userNo}
-		and menu_name='video Templates'
+		SELECT 
+	    content.*, 
+	    (SELECT COUNT(*) FROM likes WHERE likes.content_no = content.content_no) AS like_count
+		FROM content
+		JOIN board ON content.content_no = board.content_no
+		JOIN menu ON board.menu_no = menu.menu_no
+		WHERE content.user_no =#{userNo}
+		<if test="menu != 'All'">
+			AND menu.menu_name =#{menu}
+		</if>
+		<if test="sort == 'newest'">
+			order by content.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by content.views desc
+		</if>
+		
+		
 	</select>
 	
 </mapper>

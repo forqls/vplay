@@ -20,16 +20,19 @@
 				<h1>My Favorite</h1>
 			</div>
 			<div class="filter-buttons">
-				<select class="filter-dropdown">
+				<select class="filter-dropdown" id="categorySelect">
+					<option value="All">All</option>
+					<option value="video Templates">Video Templates</option>
 					<option value="Stock Video">Stock Video</option>
 					<option value="Graphic Templates">Graphic Templates</option>
 					<option value="Music">Music</option>
 					<option value="Sound Effects">Sound Effects</option>
 					<option value="Photos">Photos</option>
 					<option value="Fonts">Fonts</option>
-				</select> <select class="filter-dropdown">
+				</select> 
+				<select class="filter-dropdown" id="sortSelect">
 					<option value="newest">새로운순</option>
-					<option value="most-viewed">조회수 많은 순</option>
+					<option value="mostView">조회수 많은 순</option>
 				</select>
 			</div>
 		<th:block th:if="${not #lists.isEmpty(list)}">
@@ -39,7 +42,7 @@
 					<div class="item-content">
 						<span class="item-title">[[${r.CONTENT_TITLE}]]</span> [[${r.CONTENT_NO}]]
 						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
+							<span>👁️[[${r.VIEWS}]]</span> <span>❤️[[${r.LIKE_COUNT}]]</span>
 						</div>
 					</div>
 				</div>
@@ -54,51 +57,73 @@
 	</div>
 
 	<script type="text/javascript">
-			document.querySelector('.filter-dropdown').addEventListener('change',(e)=>{
-				let value = e.target.value;
-				console.log(value);
-				$.ajax({
-					
-					url:'/board/selectCategory',
-					data:{value:value},
-					success:data=>{
-						console.log(data);
-						let grids = document.querySelectorAll('.grid');
+			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
+				dropdown.addEventListener('change',(e)=>{
+					let value = document.getElementById('categorySelect').value;
+					let sortValue = document.getElementById('sortSelect').value;
+					console.log(sortValue);
+					console.log(value);
+					$.ajax({
 						
-						grids.forEach(grid=>{
-							grid.innerHTML='';
-						});
-						
-						
-						if(!data || data.length == 0){
-							grids[0].innerHTML='<p>검색된 좋아요 목록이 없습니다! 좋아요를 눌러보세요!</p>';
-// 							grids.forEach(grid=>{
-// 								grid.innerHTML ='<p>검색된좋아요 목록이 없습니다! 좋아요를 눌러보세요!</p>';
-// 							}); 
-							return;
-						}
-// 						grids.forEach((grid)=>{
-							data.forEach((r)=>{
-								let gridItem = `
-									<div class="grid-item">
-			                            <button class="menu-dots">⋮</button>
-			                            <div class="item-content">
-			                                <span class="item-title">${r.CONTENT_TITLE}</span> ${r.CONTENT_NO}
-			                                <div class="item-actions">
-			                                    <span>👁️ ${r.VIEW_COUNT}</span> <span>❤️ ${r.LIKE_COUNT}</span>
-			                                </div>
-			                            </div>
-			                        </div>
-									`;
-								grids[0].innerHTML += gridItem;
+						url:'/board/selectCategory',
+						data:{value:value,sortValue:sortValue},
+						success:data=>{
+							console.log(data);
+							let grids = document.querySelectorAll('.grid');
+							
+							grids.forEach(grid=>{
+								grid.innerHTML='';
 							});
 							
-// 						});
-						
-					},
-					error:data=>console.log(data)
+							
+							if(!data || data.length == 0){
+								grids[0].innerHTML='<p>검색된 좋아요 목록이 없습니다! 좋아요를 눌러보세요!</p>';
+//	 							grids.forEach(grid=>{
+//	 								grid.innerHTML ='<p>검색된좋아요 목록이 없습니다! 좋아요를 눌러보세요!</p>';
+//	 							}); 
+								return;
+							}
+//	 						grids.forEach((grid)=>{
+								data.forEach((r)=>{
+									let gridItem = `
+										<div class="grid-item">
+				                            <button class="menu-dots">⋮</button>
+				                            <div class="item-content">
+				                                <span class="item-title">${r.CONTENT_TITLE}</span> ${r.CONTENT_NO}
+				                                <div class="item-actions">
+				                                    <span>👁️ ${r.VIEWS}</span> <span>❤️ ${r.LIKE_COUNT}</span>
+				                                </div>
+				                            </div>
+				                        </div>
+										`;
+									grids[0].innerHTML += gridItem;
+								});
+								
+//	 						});
+							
+						},
+						error:data=>console.log(data)
+					});
 				});
+				
+				
 			});
+			
+			
+
+			
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 	</script>
 </body>
 </html>

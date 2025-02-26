@@ -48,5 +48,8 @@ public class UsersService {
 
 	public int updateInfo(Users user) {
 		return mapper.updateInfo(user);
+
+	public String findId(Users users) { return mapper.findId(users);
+
 	}
 }

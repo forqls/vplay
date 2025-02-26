@@ -27,5 +27,7 @@ public interface UsersMapper {
 
 	int findfollow(Users user);
 
+	String findId(Users users);
+
 	int updateInfo(Users user);
 }
