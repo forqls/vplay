@@ -160,6 +160,14 @@ public class UsersController {
 		return result;
 	}
 
+	@PostMapping("findPwSuccess")
+	public String findPwSuccess(@ModelAttribute Users users, Model model) {
+		String usersId = uService.findId(users);
+		model.addAttribute("users", users);
+		model.addAttribute("usersId", usersId);
+		return "find_pw_success";
+	}
+
 
 
 
