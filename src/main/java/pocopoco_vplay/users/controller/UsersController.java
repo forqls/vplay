@@ -277,7 +277,7 @@ public class UsersController {
 	    if (bcrypt.matches(password, loginUser.getUserPw())) {
 	        return 1;
 	    } else {
-	        return 0;
+	    	throw new UsersException("회원수정을 실패하였습니다.");
 	    }
 	}
 
@@ -294,14 +294,32 @@ public class UsersController {
 		}
 	}
 	
-	@PostMapping("changeCheckPw")
+	@GetMapping("changeCheckPw")
 	@ResponseBody
 	public int changeCheckPw(@RequestParam("currentPwd") String password, HttpSession session) {
 	    Users loginUser = (Users) session.getAttribute("loginUser");
 	    if (bcrypt.matches(password, loginUser.getUserPw())) {
 	        return 1;
 	    } else {
-	        return 0;
+	    	throw new UsersException("비밀번호 변경을 실패하였습니다.");
 	    }
+	}
+	
+	@PostMapping("changePw")
+	public String changePw(@RequestParam("newPwd") String newPassword, Model model, HttpSession session) {
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    String encodedPassword = bcrypt.encode(newPassword);
+	    Users user = new Users();
+	    user.setUserNo(loginUser.getUserNo());
+	    user.setUserPw(encodedPassword);
+
+	    int result = uService.changePw(user);
+
+	    if (result > 0) {
+	        model.addAttribute("loginUser", uService.signIn(loginUser));
+	    } else {
+	        throw new UsersException("비밀번호 변경을 실패하였습니다.");
+	    }
+	    return "redirect:/users/my_account";
 	}
 }
