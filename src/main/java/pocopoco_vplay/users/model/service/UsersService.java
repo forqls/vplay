@@ -61,4 +61,10 @@ public class UsersService {
     return mapper.findPw(users);
   }
 
+	public int findPw(Users users) { return mapper.findPw(users); }
+
+	public int encodePwd(Users users) { return mapper.tempPwd(users);}
+
+	public String findName(Users users) { return mapper.findName(users);}
+
 }
