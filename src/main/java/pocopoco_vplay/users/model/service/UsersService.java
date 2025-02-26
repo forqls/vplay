@@ -51,5 +51,5 @@ public class UsersService {
 	
 	public String findId(Users users) { return mapper.findId(users); }
 
-	public String findPw(Users users) { return mapper.findPw(users); }
+	public int findPw(Users users) { return mapper.findPw(users); }
 }

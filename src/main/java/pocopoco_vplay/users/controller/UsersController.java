@@ -152,9 +152,11 @@ public class UsersController {
 	}
 
 	@PostMapping("findPw")
-	public int findPw(@ModelAttribute Users users, Model model) {
-		int result = Integer.parseInt(uService.findPw(users));
-		model.addAttribute("users", users);
+	@ResponseBody
+	public int findPw(@ModelAttribute Users users) {
+		System.out.println("Controller 실행됨: " + users);
+		int result = uService.findPw(users);
+		System.out.println("결과: " + result);
 		return result;
 	}
 
