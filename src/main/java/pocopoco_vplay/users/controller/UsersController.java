@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.apache.catalina.User;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -298,15 +297,38 @@ public class UsersController {
 		return uService.findfollow(user);
 	}
 
+	@GetMapping("checkPw")
+	@ResponseBody
+	public int checkPassword(@RequestParam("password") String password, HttpSession session) {
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    if (bcrypt.matches(password, loginUser.getUserPw())) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+	}
+
 	@PostMapping("updateInfo")
-	public String updateInfo(@ModelAttribute Users user, Model model) {
+	public String updateInfo(@ModelAttribute Users user, Model model, HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		user.setUserNo(loginUser.getUserNo());
 		int result = uService.updateInfo(user);
 		if (result > 0) {
-			model.addAttribute("loginUser", uService.signIn(user));
+			model.addAttribute("loginUser", uService.signIn(loginUser));
 			return "redirect:/users/my_account";
 		} else {
 			throw new UsersException("회원수정을 실패하였습니다.");
 		}
 	}
-
+	
+	@PostMapping("changeCheckPw")
+	@ResponseBody
+	public int changeCheckPw(@RequestParam("currentPwd") String password, HttpSession session) {
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    if (bcrypt.matches(password, loginUser.getUserPw())) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+	}
 }
