@@ -223,8 +223,10 @@ textarea.form-control {
 							type="password" id="password" class="form-control"
 							placeholder="비밀번호를 입력하세요.">
 					</div>
+
 					<div id="confirmPwText"></div>
 					<button type="button" class="btn" id="update">Update</button>
+
 				</form>
 			</section>
 
@@ -297,6 +299,8 @@ textarea.form-control {
             emailCheck = false;
          }
       });
+      
+      const password = document.getElementById('password').value;
 
       document.getElementById('update').addEventListener('click', () => {
     	    const password = document.getElementById('password').value;

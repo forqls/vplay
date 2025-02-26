@@ -79,5 +79,11 @@ public class AdminService {
 		return mapper.requestUpdate(content);
 	}
 
+	public int countMenuTemp(int i) {
+		return mapper.countMenuTemp(i);
+	}
+	
+
+
 
 }

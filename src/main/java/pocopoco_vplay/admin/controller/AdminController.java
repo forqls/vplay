@@ -1,6 +1,7 @@
 package pocopoco_vplay.admin.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,24 +40,46 @@ public class AdminController {
 		return mv;
 	}
 	
-//	@GetMapping(value="drawChart", produces = "application/json; charset=UTF-8")
-//	@ResponseBody
-//	public String drawChart() {
-//		
-//		
-//		
-//		JSONArray array = new JSONArray();
-//		for(Board b : list) {
-//			JSONObject json = new JSONObject();
-//			json.put("boardId", b.getBoardId());
-//			json.put("boardTitle", b.getBoardTitle());
-//			json.put("nickName", b.getNickName());
-//			json.put("modifyDate", b.getModifyDate());
-//			json.put("boardCount", b.getBoardCount());
-//			
-//			array.put(json);
-//		}		
-//	}
+	@GetMapping(value="drawChart", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public String drawChart() {
+		
+		int countVedio = 0;
+		int countMusic = 0;
+		int countSound = 0;
+		int countGraphic = 0;
+		int countStockV = 0;
+		int countPhoto = 0;
+		int countFont = 0;
+		
+		for(int i =1; i<=7 ; i++) {
+			int result = aService.countMenuTemp(i);
+			
+			switch(i) {
+			case 1: countVedio = result; break;
+			case 2: countMusic = result; break;
+			case 3: countSound = result; break;
+			case 4: countGraphic = result; break;
+			case 5: countStockV = result; break;
+			case 6: countPhoto = result; break;
+			case 7: countFont = result;
+			}
+		}
+		
+		List<JSONObject> dataList = new ArrayList<>();
+		
+		dataList.add(new JSONObject().put("menu", "Video Templates").put("count", countVedio));
+		dataList.add(new JSONObject().put("menu", "Music").put("count", countMusic));
+		dataList.add(new JSONObject().put("menu", "Sound Effects").put("count", countSound));
+		dataList.add(new JSONObject().put("menu", "Graphic Templates").put("count", countGraphic));
+		dataList.add(new JSONObject().put("menu", "Stock Video").put("count", countStockV));
+		dataList.add(new JSONObject().put("menu", "Photos").put("count", countPhoto));
+		dataList.add(new JSONObject().put("menu", "Fonts").put("count", countFont));
+		
+		JSONArray array = new JSONArray(dataList);
+
+		return array.toString();
+	}
 	
 	@GetMapping("users")
 	public ModelAndView joinUsers(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
@@ -178,4 +201,8 @@ public class AdminController {
 		
 		return aService.requestUpdate(content);
 	}
+	
+	
+	
+	
 }
