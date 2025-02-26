@@ -39,7 +39,6 @@ public class UsersService {
 
 	public int selectIdPhone(String userName, String userPhone) {
 		return mapper.selectuserIdPhone(userName, userPhone);
-
 	}
 
 	public int findfollow(Users user) {
@@ -50,11 +49,16 @@ public class UsersService {
 		return mapper.updateInfo(user);
 	}
 	
-	public String findId(Users users) { return mapper.findId(users);
-
-	}
+	public String findId(Users users) {
+    return mapper.findId(users);
+  }
 
 	public int changePw(Users user) {
 		return mapper.changePw(user);
 	}
+  
+	public int findPw(Users users) {
+    return mapper.findPw(users);
+  }
+
 }

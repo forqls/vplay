@@ -8,8 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.vo.Users;
 
-import pocopoco_vplay.users.model.vo.Users;
-
 @Mapper
 public interface UsersMapper {
 
@@ -32,4 +30,6 @@ public interface UsersMapper {
 	int updateInfo(Users user);
 
 	int changePw(Users user);
+  
+	int findPw(Users Users);
 }
