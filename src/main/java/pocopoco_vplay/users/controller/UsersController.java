@@ -304,7 +304,7 @@ public class UsersController {
 	    if (bcrypt.matches(password, loginUser.getUserPw())) {
 	        return 1;
 	    } else {
-	    	throw new UsersException("회원수정을 실패하였습니다.");
+	    	return 0;
 	    }
 	}
 
@@ -328,7 +328,7 @@ public class UsersController {
 	    if (bcrypt.matches(password, loginUser.getUserPw())) {
 	        return 1;
 	    } else {
-	    	throw new UsersException("비밀번호 변경을 실패하였습니다.");
+	    	return 0;
 	    }
 	}
 	
