@@ -148,7 +148,7 @@ body {
 
 	<script>
 		let flag = false;
-		let userId = document.getElementById('userId').value.trim();
+
 		window.onload = () => {
 			const alertText = document.querySelectorAll(".alert_text");
 
@@ -162,6 +162,8 @@ body {
 
 
 			document.getElementById('phone').addEventListener('blur', function() {
+
+				let userId = document.getElementById('userId').value.trim();
 				// console.log(this.value);
 
 				let userPhone = this.value.replace(/[^0-9]/g, "");
@@ -181,7 +183,7 @@ body {
 				this.value = userPhone;
 
 				// console.log(this.value);
-
+				console.log(userId);
 				if(userPhone === ''){
 					alertText[1].innerHTML ='휴대폰 번호를 입력해 주세요.';
 				}else{
@@ -192,7 +194,7 @@ body {
 						data: {userId: userId, userPhone: userPhone},
 						success: data => {
 							console.log(data);
-							if(data === 1){
+							if(data === 0){
 								alertText[1].innerHTML = '아이디와 휴대폰 번호가 일치하지 않습니다';
 								flag = false;
 							}else{
@@ -240,7 +242,6 @@ body {
 							verification.style.display = 'block';
 							console.log(data);
 							confirmEmail = data;
-							emailBtn.disabled = true;
 						}, error: data => console.log(data)
 					});
 				}
