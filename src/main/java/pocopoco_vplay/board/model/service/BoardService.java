@@ -23,4 +23,8 @@ public class BoardService {
 		return mapper.selectCategoryMyProjects(menu,userNo,sort);
 	}
 
+	public ArrayList<Content> selectMyInquiry(int userNo) {
+		return mapper.selectMyInquiry(userNo);
+	}
+
 }

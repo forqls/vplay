@@ -41,8 +41,16 @@
 		<if test="sort == 'mostView'">
 			order by c.views desc
 		</if>
-		
-		
 	</select>
+	
+	<select id="selectMyInquiry">
+		select * from content 
+        join board using(content_no)
+        where board_type=1 and user_no=#{userNo}
+	</select>
+	
+	
+	
+	
 	
 </mapper>

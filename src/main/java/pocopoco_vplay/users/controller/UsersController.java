@@ -22,6 +22,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
@@ -33,6 +34,7 @@ import pocopoco_vplay.users.model.vo.Users;
 @SessionAttributes("loginUser")
 public class UsersController {
 	private final UsersService uService;
+	private final BoardService bService;
 
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
@@ -278,7 +280,17 @@ public class UsersController {
 	}
 
 	@GetMapping("my_inquiry")
-	public String myInquiry() {
+	public String myInquiry(HttpSession session , Model model) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+//		System.out.println(userNo);
+		
+		ArrayList<Content> list = bService.selectMyInquiry(userNo);
+//		System.out.println(list);
+//		System.out.println(list.size());
+		
+		model.addAttribute("list",list);
+		
 		return "my_inquiry";
 	}
 

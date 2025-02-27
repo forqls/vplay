@@ -15,4 +15,6 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectCategoryMyProjects(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
 
+	ArrayList<Content> selectMyInquiry(int userNo);
+
 }
