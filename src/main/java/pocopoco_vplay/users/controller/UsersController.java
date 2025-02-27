@@ -170,6 +170,7 @@ public class UsersController {
 
 		int encodeUserPwd = uService.encodePwd(users);
 
+
 		System.out.println(userName);
 		if(encodeUserPwd == 1){
 			model.addAttribute("userName", userName);
