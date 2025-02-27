@@ -38,4 +38,10 @@ public interface AdminMapper {
 
 	int requestUpdate(Content content);
 
+	int countMenuTemp(int i);
+
+
+
+	
+
 }

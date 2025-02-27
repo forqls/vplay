@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+	crossorigin="anonymous"></script>
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
@@ -128,6 +130,11 @@ textarea.form-control {
 
 #ChangeConfirmPwText {
 	font-size: 13px;
+	margin-bottom: 15px;
+}
+
+#ChangeConfirmPwTextCheck {
+	font-size: 13px;
 }
 </style>
 </head>
@@ -143,46 +150,66 @@ textarea.form-control {
 			<section class="section">
 				<form action="updateInfo" method="post">
 					<div class="form-group">
-						<label class="form-label" for="id">아이디</label> <input type="text" id="id" class="form-control" th:value="${session.loginUser.userId}" readonly>
+						<label class="form-label" for="id">아이디</label> <input type="text"
+							id="id" class="form-control"
+							th:value="${session.loginUser.userId}" readonly>
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="name">이름</label> <input type="text" name="userName" id="name" class="form-control" th:value="${session.loginUser.userName}">
+						<label class="form-label" for="name">이름</label> <input type="text"
+							name="userName" id="name" class="form-control"
+							th:value="${session.loginUser.userName}">
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="nickname">닉네임</label> <input type="text" name="userNickname" id="nickname" class="form-control" th:value="${session.loginUser.userNickname}">
+						<label class="form-label" for="nickname">닉네임</label> <input
+							type="text" name="userNickname" id="nickname"
+							class="form-control" th:value="${session.loginUser.userNickname}">
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="phone">전화번호</label> <input type="tel" name="userPhone" id="tel" class="form-control" th:value="${session.loginUser.userPhone}">
+						<label class="form-label" for="phone">전화번호</label> <input
+							type="tel" name="userPhone" id="tel" class="form-control"
+							th:value="${session.loginUser.userPhone}">
 					</div>
 
 					<div class="form-group">
 						<label class="form-label" for="email">이메일</label>
 						<div class="email-container">
-							<input type="email" placeholder="Email" class="form-control" name="userEmail" id="email" th:value="${session.loginUser.userEmail}">
-							<button type="button" class="button verify-button" onclick="showVerification()" id="emailBtn">인증하기</button>
+							<input type="email" placeholder="Email" class="form-control"
+								name="userEmail" id="email"
+								th:value="${session.loginUser.userEmail}">
+							<button type="button" class="button verify-button"
+								onclick="showVerification()" id="emailBtn">인증하기</button>
 						</div>
 					</div>
 
 					<div class="verification-section" id="verificationSection">
 						<div class="form-group">
 							<div class="verification-container">
-								<input type="text" placeholder="인증번호 입력" class="form-control" name="confirmVerifi" id="confirmVerifi">
-								<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
+								<input type="text" placeholder="인증번호 입력" class="form-control"
+									name="confirmVerifi" id="confirmVerifi">
+								<button type="button" class="button verify-button"
+									id="confirmEmailBtn">확인</button>
 							</div>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="birthdate">생년월일</label> <input type="date" name="userBirth" id="birthdate" class="form-control" th:value="${session.loginUser.userBirth}">
+						<label class="form-label" for="birthdate">생년월일</label> <input
+							type="date" name="userBirth" id="birthdate" class="form-control"
+							th:value="${session.loginUser.userBirth}">
 					</div>
 
 					<div class="form-group">
 						<label class="form-label">성별</label>
 						<div class="radio-group">
-							<input type="radio" value="M" class="radio-input" name="userGender" id="male" th:checked="${session.loginUser.userGender == 'M'}"> <span>남자</span> <input type="radio" name="userGender" value="F" class="radio-input" id="female" th:checked="${session.loginUser.userGender == 'F'}"> <span>여자</span>
+							<input type="radio" value="M" class="radio-input"
+								name="userGender" id="male"
+								th:checked="${session.loginUser.userGender == 'M'}"> <span>남자</span>
+							<input type="radio" name="userGender" value="F"
+								class="radio-input" id="female"
+								th:checked="${session.loginUser.userGender == 'F'}"> <span>여자</span>
 						</div>
 					</div>
 
@@ -192,10 +219,14 @@ textarea.form-control {
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="password">비밀번호 *</label> <input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요.">
+						<label class="form-label" for="password">비밀번호 *</label> <input
+							type="password" id="password" class="form-control"
+							placeholder="비밀번호를 입력하세요.">
 					</div>
+
 					<div id="confirmPwText"></div>
 					<button type="button" class="btn" id="update">Update</button>
+
 				</form>
 			</section>
 
@@ -206,19 +237,25 @@ textarea.form-control {
 			<section class="section">
 				<form action="changePw" method="post">
 					<div class="form-group">
-						<label class="form-label" for="current-password">현재 비밀번호</label> <input type="password" name="currentPwd" id="currentPwd" class="form-control" placeholder="현재 비밀번호를 입력하세요.">
+						<label class="form-label" for="current-password">현재 비밀번호</label> <input
+							type="password" name="currentPwd" id="currentPwd"
+							class="form-control" placeholder="현재 비밀번호를 입력하세요.">
 					</div>
 					<div id="ChangeConfirmPwText"></div>
 					<div class="form-group">
-						<label class="form-label" for="new-password">새 비밀번호</label> <input type="password" name="newPwd" id="newPwd" class="form-control" placeholder="새로운 비밀번호를 입력하세요.">
+						<label class="form-label" for="new-password">새 비밀번호</label> <input
+							type="password" name="newPwd" id="newPwd" class="form-control"
+							placeholder="새로운 비밀번호를 입력하세요.">
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="confirm-password">새 비밀번호 확인</label> <input type="password" name="newPwdConfirm" id="newPwdConfirm" class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
+						<label class="form-label" for="confirm-password">새 비밀번호 확인</label>
+						<input type="password" name="newPwdConfirm" id="newPwdConfirm"
+							class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
 					</div>
 					<div id="ChangeConfirmPwTextCheck"></div>
-					
-					<button type="button" class="btn" id="changePw">Change Password</button>
+					<button type="button" class="btn" id="changePw">Change
+						Password</button>
 				</form>
 			</section>
 		</div>
@@ -263,8 +300,11 @@ textarea.form-control {
          }
       });
       
+      const password = document.getElementById('password').value;
+
       document.getElementById('update').addEventListener('click', () => {
     	    const password = document.getElementById('password').value;
+    	    const confirmPwText = document.getElementById('confirmPwText');
     	    $.ajax({
     	        url: '/users/checkPw',
     	        data: {password:password},
@@ -280,30 +320,35 @@ textarea.form-control {
     	        }
     	    });
     	});
-      
-      document.getElementById('changePw').addEventListener('click', () => {
-  	    const currentPwd = document.getElementById('currentPwd').value;
-  	  	const newPwd = document.getElementById('newPwd').value;
-  		const newPwdConfirm = document.getElementById('newPwdConfirm').value;
-	  	if(newPwd == newPwdConfirm){
-	  	    $.ajax({
-	  	        url: '/users/changeCheckPw',
-	  	        data: {currentPwd:currentPwd},
-	  	        success: data => {
-	  	            if (data == 1) {
-	  	            	ChangeconfirmPwText.innerText = '비밀번호가 일치합니다.';
-	  	            	ChangeconfirmPwText.style.color = 'green';
-	  	                document.querySelector('form[action="changePw"]').submit();
-	  	            } else {
-	  	            	ChangeconfirmPwText.innerText = '비밀번호가 일치하지 않습니다.';
-	  	            	ChangeconfirmPwText.style.color = 'red';
-	  	            }
-	  	        }
-	  	    });
-  		} else{
-  			// 여기에 newPwd랑 newPwdConfirm둘이 다릅니다 띄우기 "ChangeConfirmPwTextCheck"
-  		}
-  	});
+
+    	document.getElementById('changePw').addEventListener('click', () => {
+    	    const currentPwd = document.getElementById('currentPwd').value;
+    	    const newPwd = document.getElementById('newPwd').value;
+    	    const newPwdConfirm = document.getElementById('newPwdConfirm').value;
+    	    const ChangeConfirmPwText = document.getElementById('ChangeConfirmPwText');
+    	    const ChangeConfirmPwTextCheck = document.getElementById('ChangeConfirmPwTextCheck');
+
+    	    if(newPwd == newPwdConfirm){
+    	        $.ajax({
+    	            url: '/users/changeCheckPw',
+    	            data: {currentPwd:currentPwd},
+    	            success: data => {
+    	                if(data == 1) {
+    	                    ChangeConfirmPwText.innerText = '비밀번호가 일치합니다.';
+    	                    ChangeConfirmPwText.style.color = 'green';
+    	                    document.querySelector('form[action="changePw"]').submit();
+    	                }else {
+    	                    ChangeConfirmPwText.innerText = '비밀번호가 일치하지 않습니다.';
+    	                    ChangeConfirmPwText.style.color = 'red';
+    	                }
+    	            }
+    	        });
+    	    }else {
+    	        ChangeConfirmPwTextCheck.innerText = '새 비밀번호가 일치하지 않습니다.';
+    	        ChangeConfirmPwTextCheck.style.color = 'red';
+    	    }
+    	});
+
    </script>
 </body>
 </html>

@@ -158,34 +158,52 @@
       
       google.charts.setOnLoadCallback(drawChart);
       //차트 API가 로드되면 drawChart() 함수를 실행하여 차트를 그리도록 설정합니다.
-	  
-      function fetchDate(){
-    	  $.ajax({
-    		  url: "/admin/drawChart",
-    		  dataType: "json",
-    		  success: data=>{
-    			  
-    		  },
-    		  error: data=> console.log(data)
-    	  })
-      }
       
-      function drawChart() {
+//       window.onload=()=>{
+//     	  fetchDate()
+//       }
+      
+   	  function fetchDate(){
+       	  $.ajax({
+       		  url: "/admin/drawChart",
+       		  dataType: "json",
+       		  success: function(response){
+       			  drawChart(response);
+       		  },
+       		  error: function(response){
+       			  console.log(error);
+       		  }
+       	  });
+       }  
+   
+      
+      
+      function drawChart(chartData) {
+		
+//         var data = google.visualization.arrayToDataTable([
+//           ['templates', 'Count'],
+//           ['Video Templates',     11],
+//           ['Music', 2],
+//           ['Sound Effects',      2],
+//           ['Graphic Templates',  2],
+//           ['Stock Video', 2],
+//           ['Photos',    7],
+//           ['Fonts', 5]
+//         ]);
 
-        var data = google.visualization.arrayToDataTable([
-          ['templates', 'Count'],
-          ['Video Templates',     11],
-          ['Sound Effects',      2],
-          ['Graphic Templates',  2],
-          ['Stock Video', 2],
-          ['Photos',    7],
-          ['Fonts', 5]
-        ]);
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Menu');
+		data.addColumn('number', 'Count');
         //arrayToDataTable() 함수는 2차원 배열을 데이터 테이블로 변환합니다.
         //첫 번째 행 ['Task', 'Hours per Day']는 **헤더(컬럼명)**입니다.
         //나머지 행들은 데이터이며, 각각의 **카테고리(Task)와 값(Hours per Day)**을 나타냅니다.
 			//예) "Work"에 11시간, "Sleep"에 7시간 등.
-
+		
+		//ajax 응답 데이터를 반복문으로 추가
+		chartData.forEach(function(item) {
+		 data.addRow([item.menu, item.count]);
+		});
+		
 		//차트 제목을 설정합니다.
         var options = {
           title: ''
