@@ -17,4 +17,6 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectMyInquiry(int userNo);
 
+	int throwBoardTrash(int contentNo);
+
 }

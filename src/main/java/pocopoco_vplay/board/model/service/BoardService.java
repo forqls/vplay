@@ -27,4 +27,8 @@ public class BoardService {
 		return mapper.selectMyInquiry(userNo);
 	}
 
+	public int throwBoardTrash(int contentNo) {
+		return mapper.throwBoardTrash(contentNo);
+	}
+
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,5 +60,24 @@ public class BoardController {
 			throw new UsersException("로그인 하셈");
 		}
 	}
+	
+	@PostMapping("throwBoardTrash")
+	@ResponseBody
+	public int throwBoardTrash(@RequestParam("contentNo") int contentNo) {
+		System.out.println(contentNo);
+		int result = bService.throwBoardTrash(contentNo);
+		return 0;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

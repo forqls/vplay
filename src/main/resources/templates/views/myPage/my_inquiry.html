@@ -155,6 +155,7 @@
 			<div class="inquiry-list" id = "inquiry" th:each=" i : ${list}">
 				<div class="inquiry-item">
 					<div class="inquiry-date">[[${i.createDate}]]</div>
+					<div id="contentNo" hidden>[[${i.contentNo}]]</div>
 					<div class="inquiry-title">[[${i.contentTitle}]]</div>
 					<div class="inquiry-actions">
 						<span class="status-badge">답변대기 , 답변상태 등</span>
@@ -170,15 +171,69 @@
 				</div>
 			</div>
 			
-			
-			
-			
 		</div>
 	</div>
 
 	<script>
-        // 모든 옵션 버튼에 이벤트 리스너 추가
-
+	
+	
+        document.querySelectorAll('.options-btn').forEach(button => {
+        	button.addEventListener('click',function(event){
+        		event.stopPropagation();
+        		
+        		let dropdown = this.nextElementSibling;
+        		
+        		document.querySelectorAll('.dropdown').forEach(d=>{
+        			if(d != dropdown){
+        				d.classList.remove('show');
+        			}
+        		});
+        		
+        		dropdown.classList.toggle('show');
+        		
+        	});
+        });
+        
+        document.addEventListener('click',function(){
+        	document.querySelectorAll('.dropdown').forEach(d=>{
+        		d.classList.remove('show');
+        	});
+        });
+        
+        document.querySelectorAll('.dropdown').forEach(d=>{
+        	d.addEventListener('click',(e)=>{
+        		
+        		let board = e.target.closest('.inquiry-item');
+        		
+        		let contentNo = board.querySelector('#contentNo').textContent;
+        		
+        		e.stopPropagation();
+//         		console.log(contentNo);
+				$.ajax({
+					url:'/board/throwBoardTrash',
+					data:{contentNo,contentNo},
+					type:'POST',
+					success:data=>{
+						console.log(data);
+					}
+				});
+        		
+        	});
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     </script>
 </body>
 </html>
