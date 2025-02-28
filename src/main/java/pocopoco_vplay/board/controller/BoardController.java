@@ -78,6 +78,13 @@ public class BoardController {
         return "views/board/inquiry/inquiry_writer";
     }
 	
+
+	@PostMapping("write_inquiry")
+	@ResponseBody
+	public int writeInquiry(@RequestParam("value") int value) {
+		return value;
+  }
+
 	@GetMapping("selectCategoryMyTrash")
 	@ResponseBody
 	public ArrayList<Content> selectCategoryMyTrash(@RequestParam("value") String menu,HttpSession session , @RequestParam("sortValue") String sort){
@@ -92,13 +99,7 @@ public class BoardController {
 		}else {
 			throw new UsersException("로그인 하셈");
 		}
+
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 }
