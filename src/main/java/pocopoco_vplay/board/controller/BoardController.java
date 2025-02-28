@@ -73,9 +73,9 @@ public class BoardController {
 		}
 	}
 	
-    @GetMapping("/inquiry/inquiry_writer")
+    @GetMapping("inquiry_writer")
     public String inquiryWriter() {
-        return "views/board/inquiry/inquiry_writer";
+        return "inquiry_writer";
     }
 	
 
