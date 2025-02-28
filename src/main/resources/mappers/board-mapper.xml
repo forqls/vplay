@@ -20,7 +20,6 @@
 		<if test="sort == 'mostView'">
 			order by content.views desc
 		</if>
-		
 	</select>
 	
 	<select id="selectCategoryMyProjects">

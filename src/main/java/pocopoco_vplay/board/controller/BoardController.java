@@ -28,6 +28,9 @@ public class BoardController {
 	
 	@GetMapping("all_menu")
 	public String joinVideoTemplatesList() {
+		
+		
+		
 		return "all_menu";
 	}
 	
