@@ -1,10 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>제작 의뢰 게시판</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="/css/rBoard/requestBoard.css">
 </head>
 <body>
-	<h1>의뢰 게시판 리스트</h1>
+<div th:replace="~{views/common/topbar :: topbar}"></div>
+<div class="container">
+	<!-- Breadcrumb -->
+	<nav class="breadcrumb">
+		<a href="/">Home</a>
+		<span>&gt;</span>
+		<span class="active">Request Board List</span>
+	</nav>
+
+	<!-- Main Title -->
+	<h1>제작 의뢰 게시판</h1>
+
+	<!-- Description -->
+	<p class="description">
+		안녕하세요! 이곳은 영상 제작을 의뢰하고, 크리에이터와 협업할 수 있는 제작 의뢰 게시판입니다.
+	</p>
+	<p class="description">
+		기업 홍보, 유튜브 콘텐츠, 광고, 뮤직비디오, 웨딩 영상 등 다양한 영상 제작을 전문가들에게 요청할 수 있습니다.
+	</p>
+
+	<div class="divider"></div>
+
+	<!-- Search and Filter -->
+	<div class="search-filter">
+		<div class="search-bar">
+			<input type="text" placeholder="search">
+			<i data-lucide="search"></i>
+		</div>
+
+		<div class="filters">
+			<button class="filter-btn">
+				<span>Stock Video</span>
+				<i data-lucide="chevron-down"></i>
+			</button>
+			<button class="filter-btn">
+				<span>최신순</span>
+				<i data-lucide="chevron-down"></i>
+			</button>
+		</div>
+	</div>
+
+	<!-- Table -->
+	<div class="table-container">
+		<table>
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>Title</th>
+				<th>category</th>
+				<th>User</th>
+				<th>date</th>
+				<th>views</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="inquiry-list" th:each="item : ${requestList}">
+				<td>1</td>
+				<td>영상 제작 의뢰를 받기고 싶습니다</td>
+				<td>Video Templates</td>
+				<td>Handsomegwon</td>
+				<td>2025-02-01</td>
+				<td>100</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Pagination -->
+	<div class="pagination">
+		<ul>
+			<th:block th:if="${pi.currentPage >1}">
+				<li class="prev chevron-left">
+					<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+						<
+					</a>
+				</li>
+			</th:block>
+			<th:block th:if="${pi.currentPage <=1}">
+				<li class="prev chevron-left">
+					<a aria-label="Previous">
+						<
+					</a>
+				</li>
+			</th:block>
+
+			<!-- 숫자 -->
+			<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+				<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
+			</li>
+
+
+			<!-- 다음 -->
+			<th:block th:if="${pi.currentPage < pi.MaxPage}">
+				<li class="next chevron-right">
+					<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
+						>
+					</a>
+				</li>
+			</th:block>
+			<th:block th:if="${pi.currentPage >= pi.MaxPage}">
+				<li class="next chevron-right">
+					<a aria-label="Next">
+						>
+					</a>
+				</li>
+			</th:block>
+		</ul>
+	</div>
+
+	<!-- Create Button -->
+	<div class="create-button">
+		<button>의뢰 하러 가기</button>
+	</div>
+</div>
+
+<script>
+	lucide.createIcons();
+</script>
 </body>
 </html>
+
