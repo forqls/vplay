@@ -1,15 +1,14 @@
 package pocopoco_vplay.admin.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.admin.model.mapper.AdminMapper;
-import pocopoco_vplay.admin.model.vo.PageInfo;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.commom.model.vo.PageInfo;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Service
