@@ -23,4 +23,6 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectCategoryMyTrash(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
 
+	ArrayList<Content> videoTemplateList();
+
 }

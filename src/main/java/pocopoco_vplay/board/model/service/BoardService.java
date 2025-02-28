@@ -39,4 +39,8 @@ public class BoardService {
 		return mapper.selectCategoryMyTrash(menu,userNo,sort);
 	}
 
+	public ArrayList<Content> videoTemplateList() {
+		return mapper.videoTemplateList();
+	}
+
 }
