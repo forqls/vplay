@@ -286,8 +286,8 @@ public class UsersController {
 //		System.out.println(userNo);
 		
 		ArrayList<Content> list = bService.selectMyInquiry(userNo);
-//		System.out.println(list);
-//		System.out.println(list.size());
+		System.out.println(list);
+		System.out.println(list.size());
 		
 		model.addAttribute("list",list);
 		
