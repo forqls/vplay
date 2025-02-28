@@ -74,8 +74,8 @@
 
 .dropdown {
 	position: absolute;
-	top: 100%;
-	right: 0;
+	top: 80%;
+	left: 160px;
 	background-color: #252535;
 	border-radius: 0.5rem;
 	padding: 0.5rem;
@@ -211,11 +211,16 @@
 //         		console.log(contentNo);
 				$.ajax({
 					url:'/board/throwBoardTrash',
-					data:{contentNo,contentNo},
+					data:{contentNo:contentNo},
 					type:'POST',
 					success:data=>{
-						console.log(data);
-					}
+						if(data==1){
+							alert('문의가 성공적으로 삭제 되었습니다.');
+							board.remove();
+						}else{
+							alert('문의 삭제중 오류 발생.');
+						}
+					},error:data=>alert('서버오류')
 				});
         		
         	});

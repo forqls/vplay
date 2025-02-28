@@ -39,6 +39,7 @@
 			<div class="grid">
 				<div class="grid-item" th:each="r : ${list}">
 					<button class="menu-dots">⋮</button>
+
 					<div class="item-content">
 						<span class="item-title">[[${r.CONTENT_TITLE}]]</span> [[${r.CONTENT_NO}]]
 						<div class="item-actions">
@@ -57,6 +58,7 @@
 	</div>
 
 	<script type="text/javascript">
+
 			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
 				dropdown.addEventListener('change',(e)=>{
 					let value = document.getElementById('categorySelect').value;

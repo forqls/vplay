@@ -66,7 +66,11 @@ public class BoardController {
 	public int throwBoardTrash(@RequestParam("contentNo") int contentNo) {
 		System.out.println(contentNo);
 		int result = bService.throwBoardTrash(contentNo);
-		return 0;
+		if(result >0) {
+			return result;
+		}else {
+			throw new UsersException("ㅋㅋ");
+		}
 	}
 	
 	
