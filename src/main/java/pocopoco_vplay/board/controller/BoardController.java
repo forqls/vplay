@@ -78,7 +78,12 @@ public class BoardController {
         return "views/board/inquiry/inquiry_writer";
     }
 	
-	
+	@PostMapping("write_inquiry")
+	@ResponseBody
+	public int writeInquiry(@RequestParam("value") int value) {
+		return value;
+		
+	}
 	
 	
 	
