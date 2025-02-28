@@ -199,7 +199,25 @@ public class UsersController {
 		return password.toString();
 
 	}
-
+	
+	
+	@GetMapping("my_trash")
+	private String myTrashPage(HttpSession session , Model model) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+		
+		ArrayList<Content> list = bService.selectMyTrash(userNo);
+		
+		if(loginUser != null) {
+			model.addAttribute("list",list);
+			return "my_trash";
+		}else {
+			throw new UsersException("로그인 풀림");
+		}
+		
+		
+		
+	}
 
 
 

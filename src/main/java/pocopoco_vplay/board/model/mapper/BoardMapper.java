@@ -19,4 +19,8 @@ public interface BoardMapper {
 
 	int throwBoardTrash(int contentNo);
 
+	ArrayList<Content> selectMyTrash(int userNo);
+
+	ArrayList<Content> selectCategoryMyTrash(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
+
 }
