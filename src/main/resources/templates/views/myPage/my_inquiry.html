@@ -151,31 +151,17 @@
 			<div class="content-header">
 				<h1>My Inquiry</h1>
 			</div>
-			<div class="inquiry-list">
+			
+			<div class="inquiry-list" id = "inquiry" th:each=" i : ${list}">
 				<div class="inquiry-item">
-					<div class="inquiry-date">2023.03.07</div>
-					<div class="inquiry-title">라이센스 관련 문의 드립니다.</div>
+					<div class="inquiry-date">[[${i.createDate}]]</div>
+					<div id="contentNo" hidden>[[${i.contentNo}]]</div>
+					<div class="inquiry-title">[[${i.contentTitle}]]</div>
 					<div class="inquiry-actions">
-						<span class="status-badge">답변대기</span>
+						<span class="status-badge">답변대기 , 답변상태 등</span>
 						<div class="options-wrapper">
 							<button class="options-btn">⋮</button>
-							<div class="dropdown">
-								<div class="dropdown-item">
-									<span class="trash-icon"></span> Delete
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="inquiry-item">
-					<div class="inquiry-date">2023.02.27</div>
-					<div class="inquiry-title">영상 업로드 관련 문의 드립니다.</div>
-					<div class="inquiry-actions">
-						<span class="status-badge">답변완료</span>
-						<div class="options-wrapper">
-							<button class="options-btn">⋮</button>
-							<div class="dropdown">
+							<div class="dropdown" >
 								<div class="dropdown-item">
 									<span class="trash-icon"></span> Delete
 								</div>
@@ -184,48 +170,70 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
 	</div>
 
 	<script>
-        // 모든 옵션 버튼에 이벤트 리스너 추가
+	
+	
         document.querySelectorAll('.options-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); // 이벤트 버블링 방지
-                
-                // 현재 드롭다운 찾기
-                const dropdown = button.nextElementSibling;
-                
-                // 다른 모든 드롭다운 닫기
-                document.querySelectorAll('.dropdown').forEach(d => {
-                    if (d !== dropdown) {
-                        d.classList.remove('show');
-                    }
-                });
-                
-                // 현재 드롭다운 토글
-                dropdown.classList.toggle('show');
-            });
+        	button.addEventListener('click',function(event){
+        		event.stopPropagation();
+        		
+        		let dropdown = this.nextElementSibling;
+        		
+        		document.querySelectorAll('.dropdown').forEach(d=>{
+        			if(d != dropdown){
+        				d.classList.remove('show');
+        			}
+        		});
+        		
+        		dropdown.classList.toggle('show');
+        		
+        	});
         });
-
-        // 문서 클릭 시 모든 드롭다운 닫기
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                dropdown.classList.remove('show');
-            });
+        
+        document.addEventListener('click',function(){
+        	document.querySelectorAll('.dropdown').forEach(d=>{
+        		d.classList.remove('show');
+        	});
         });
-
-        // 드롭다운 아이템 클릭 이벤트
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // 여기에 삭제 로직 추가
-                const inquiryItem = item.closest('.inquiry-item');
-                if (inquiryItem) {
-                    inquiryItem.remove();
-                }
-            });
+        
+        document.querySelectorAll('.dropdown').forEach(d=>{
+        	d.addEventListener('click',(e)=>{
+        		
+        		let board = e.target.closest('.inquiry-item');
+        		
+        		let contentNo = board.querySelector('#contentNo').textContent;
+        		
+        		e.stopPropagation();
+//         		console.log(contentNo);
+				$.ajax({
+					url:'/board/throwBoardTrash',
+					data:{contentNo,contentNo},
+					type:'POST',
+					success:data=>{
+						console.log(data);
+					}
+				});
+        		
+        	});
         });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     </script>
 </body>
 </html>

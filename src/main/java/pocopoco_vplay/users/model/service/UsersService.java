@@ -56,6 +56,7 @@ public class UsersService {
 	public int changePw(Users user) {
 		return mapper.changePw(user);
 	}
+
   
 //	public int findPw(Users users) {
 //    return mapper.findPw(users);

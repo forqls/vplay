@@ -41,8 +41,18 @@
 		<if test="sort == 'mostView'">
 			order by c.views desc
 		</if>
-		
-		
 	</select>
+	
+	<select id="selectMyInquiry">
+		select * from content 
+        join board using(content_no)
+        where board_type=1 and user_no=#{userNo}
+	</select>
+	<update id="throwBoardTrash">
+		update content set content_status ='N' where content_no=#{contentNo}
+	</update>
+	
+	
+	
 	
 </mapper>
