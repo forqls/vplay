@@ -69,7 +69,10 @@ public class BoardController {
 		return 0;
 	}
 	
-	
+    @GetMapping("/inquiry/inquiry_writer")
+    public String inquiryWriter() {
+        return "views/board/inquiry/inquiry_writer";
+    }
 	
 	
 	

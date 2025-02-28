@@ -20,20 +20,6 @@ body {
 	min-height: 100vh;
 }
 
-.breadcrumb {
-	padding: 1rem 2rem;
-	color: #949396;
-}
-
-.breadcrumb a {
-	color: #949396;
-	text-decoration: none;
-}
-
-.breadcrumb .current {
-	color: #5e37e9;
-}
-
 .inquiryWrite-container {
 	max-width: 1200px;
 	margin: 2rem auto;
@@ -43,7 +29,7 @@ body {
 
 .inquiryWrite-title {
 	font-size: 1.5rem;
-	margin-bottom: 4rem;
+	margin-bottom: 3rem;
 }
 
 .form-group {
@@ -119,7 +105,7 @@ textarea {
 	height: 100%;
 }
 
-textarea{
+textarea {
 	min-height: 400px;
 	resize: none;
 }
@@ -127,18 +113,16 @@ textarea{
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
-	<div class="breadcrumb">
-		<a href="/">Home</a> > <span class="current">Sign Up</span>
-	</div>
 	<main class="inquiryWrite-container">
 		<h1 class="inquiryWrite-title">문의 작성</h1>
 		<form>
 			<div class="form-group">
 				<div class="form-label">
 					<span>문의 선택</span> <select class="filter-dropdown">
-						<option>시스템 오류 버그</option>
-						<option>기능 요청</option>
-						<option>일반 문의</option>
+						<option>시스템 문의</option>
+						<option>결제 문의</option>
+						<option>컨텐츠 문의</option>
+						<option>기타</option>
 					</select>
 				</div>
 			</div>
@@ -154,8 +138,8 @@ textarea{
 			</div>
 
 			<div class="button-group">
-				<button type="button" class="btn">목록으로</button>
-				<button type="submit" class="btn">작성 완료</button>
+				<button type="button" class="btn" onclick="history.back()">목록으로</button>
+				<button type="submit" class="btn">작성 하기</button>
 			</div>
 		</form>
 	</main>
