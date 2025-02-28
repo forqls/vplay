@@ -31,4 +31,12 @@ public class BoardService {
 		return mapper.throwBoardTrash(contentNo);
 	}
 
+	public ArrayList<Content> selectMyTrash(int userNo) {
+		return mapper.selectMyTrash(userNo);
+	}
+
+	public ArrayList<Content> selectCategoryMyTrash(String menu, int userNo, String sort) {
+		return mapper.selectCategoryMyTrash(menu,userNo,sort);
+	}
+
 }

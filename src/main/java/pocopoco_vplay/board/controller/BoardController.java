@@ -78,18 +78,28 @@ public class BoardController {
         return "views/board/inquiry/inquiry_writer";
     }
 	
+
 	@PostMapping("write_inquiry")
 	@ResponseBody
 	public int writeInquiry(@RequestParam("value") int value) {
 		return value;
-		
+  }
+
+	@GetMapping("selectCategoryMyTrash")
+	@ResponseBody
+	public ArrayList<Content> selectCategoryMyTrash(@RequestParam("value") String menu,HttpSession session , @RequestParam("sortValue") String sort){
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		System.out.println(sort);
+		System.out.println(menu);
+		int userNo = loginUser.getUserNo();
+		ArrayList<Content> list = bService.selectCategoryMyTrash(menu,userNo,sort);
+		System.out.println("리스트는 "  +list);
+		if(list != null) {
+			return list;
+		}else {
+			throw new UsersException("로그인 하셈");
+		}
+
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 }
