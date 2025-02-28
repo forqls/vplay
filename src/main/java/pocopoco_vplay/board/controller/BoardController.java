@@ -26,9 +26,9 @@ import pocopoco_vplay.users.model.vo.Users;
 public class BoardController {
 	private final BoardService bService;
 	
-	@GetMapping("video-templates-list")
+	@GetMapping("all_menu")
 	public String joinVideoTemplatesList() {
-		return "videoTemplates_list";
+		return "all_menu";
 	}
 	
 	@GetMapping("selectCategory")
