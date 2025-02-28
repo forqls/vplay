@@ -1,5 +1,7 @@
-.sidebar_wrap{
+.sidebar_wrap {
 	display: inline-block;
+	position: sticky;
+  top: 60px;
 }
 
 .sidebar {
@@ -22,7 +24,7 @@
 	position: relative;
 }
 
-.profile-image img{
+.profile-image img {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -71,7 +73,7 @@
 	margin-right: 8px;
 }
 
-.menu-item.active{
+.menu-item.active {
 	border: 1px solid #5e37e9;
 	color: #fff;
 	background: linear-gradient(45deg, #161840, #272A65);

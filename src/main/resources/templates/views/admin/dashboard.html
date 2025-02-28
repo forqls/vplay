@@ -156,12 +156,8 @@
       //현재 버전(current)의 Google Charts API를 로드합니다.
       //corechart 패키지를 불러오는데, 이는 파이 차트, 꺾은선 차트, 막대 차트 등 기본 차트를 포함하는 패키지입니다.
       
-      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(fetchDate);
       //차트 API가 로드되면 drawChart() 함수를 실행하여 차트를 그리도록 설정합니다.
-      
-//       window.onload=()=>{
-//     	  fetchDate()
-//       }
       
    	  function fetchDate(){
        	  $.ajax({
@@ -206,7 +202,10 @@
 		
 		//차트 제목을 설정합니다.
         var options = {
-          title: ''
+          title: '',
+          backgroundColor: 'transparent',
+          colors: ["#5E37E9", "#8137E9", "#ECDEFF"],
+          lineWidth : 0
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
