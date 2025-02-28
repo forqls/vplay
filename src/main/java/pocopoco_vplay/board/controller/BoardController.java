@@ -78,7 +78,7 @@ public class BoardController {
         return "views/board/inquiry/inquiry_writer";
     }
 	
-	@GetMapping("/request_list")
+	@GetMapping("request_list")
 	public String requestList() {
 		return "request_list";
 	}

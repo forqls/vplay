@@ -78,42 +78,42 @@
 	<!-- Pagination -->
 	<div class="pagination">
 		<ul>
-			<th:block th:if="${pi.currentPage >1}">
-				<li class="prev chevron-left">
-					<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-						<
-					</a>
-				</li>
-			</th:block>
-			<th:block th:if="${pi.currentPage <=1}">
-				<li class="prev chevron-left">
-					<a aria-label="Previous">
-						<
-					</a>
-				</li>
-			</th:block>
+<!--			<th:block th:if="${pi.currentPage >1}">-->
+<!--				<li class="prev chevron-left">-->
+<!--					<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">-->
+<!--						<-->
+<!--					</a>-->
+<!--				</li>-->
+<!--			</th:block>-->
+<!--			<th:block th:if="${pi.currentPage <=1}">-->
+<!--				<li class="prev chevron-left">-->
+<!--					<a aria-label="Previous">-->
+<!--						<-->
+<!--					</a>-->
+<!--				</li>-->
+<!--			</th:block>-->
 
-			<!-- 숫자 -->
-			<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-				<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
-			</li>
+<!--			&lt;!&ndash; 숫자 &ndash;&gt;-->
+<!--			<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">-->
+<!--				<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>-->
+<!--			</li>-->
 
 
-			<!-- 다음 -->
-			<th:block th:if="${pi.currentPage < pi.MaxPage}">
-				<li class="next chevron-right">
-					<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
-						>
-					</a>
-				</li>
-			</th:block>
-			<th:block th:if="${pi.currentPage >= pi.MaxPage}">
-				<li class="next chevron-right">
-					<a aria-label="Next">
-						>
-					</a>
-				</li>
-			</th:block>
+<!--			&lt;!&ndash; 다음 &ndash;&gt;-->
+<!--			<th:block th:if="${pi.currentPage < pi.MaxPage}">-->
+<!--				<li class="next chevron-right">-->
+<!--					<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">-->
+<!--						>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--			</th:block>-->
+<!--			<th:block th:if="${pi.currentPage >= pi.MaxPage}">-->
+<!--				<li class="next chevron-right">-->
+<!--					<a aria-label="Next">-->
+<!--						>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--			</th:block>-->
 		</ul>
 	</div>
 
