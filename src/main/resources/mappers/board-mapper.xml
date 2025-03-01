@@ -108,7 +108,7 @@
 		)
 	</insert>
 
-	<insert id="insertBoard" parameterType="Content">
+	<insert id="insertBoard">
 		INSERT INTO BOARD (
 		CONTENT_NO,
 		BOARD_TYPE,
@@ -119,5 +119,24 @@
 		#{menuNo}
 		)
 	</insert>
+
+	<select id="selectInquiry" resultType="Content">
+		SELECT
+		C.CONTENT_NO,
+		C.USER_NO,
+		C.CONTENT_TITLE,
+		C.CONTENT_DETAIL,
+		C.CREATE_DATE,
+		C.MODIFY_DATE,
+		C.CONTENT_STATUS,
+		C.VIEWS,
+		B.MENU_NO
+		FROM
+		CONTENT C
+		JOIN
+		BOARD B ON C.CONTENT_NO = B.CONTENT_NO
+		WHERE
+		C.CONTENT_NO = #{contentNo}
+	</select>
 
 </mapper>

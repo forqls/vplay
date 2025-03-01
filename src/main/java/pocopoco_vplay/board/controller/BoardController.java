@@ -35,8 +35,6 @@ public class BoardController {
 	@ResponseBody
 	public ArrayList<HashMap<String, Object>> selectCategory(@RequestParam("value") String menu, @RequestParam("sortValue") String sort, Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
-//		System.out.println("메뉴 : "+menu);
-//		System.out.println("정렬 : "+sort);
 		if (loginUser == null)
 			throw new UsersException("로그인하삼");
 
@@ -50,8 +48,6 @@ public class BoardController {
 	@ResponseBody
 	public ArrayList<Content> selectCategoryMyProjects(@RequestParam("value") String menu, HttpSession session, @RequestParam("sortValue") String sort) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
-//		System.out.println(sort);
-//		System.out.println(menu);
 		int userNo = loginUser.getUserNo();
 		ArrayList<Content> list = bService.selectCategoryMyProjects(menu, userNo, sort);
 		System.out.println("리스트는 " + list);
@@ -81,19 +77,29 @@ public class BoardController {
 
 	@PostMapping("write_inquiry")
 	public String writeInquiry(@RequestParam("userNo") int userNo, @RequestParam("menuNo") int menuNo, @RequestParam("contentTitle") String contentTitle, @RequestParam("contentDetail") String contentDetail) {
-
 		Content inquiry = new Content();
 		inquiry.setUserNo(userNo);
-		inquiry.setMenuNo(menuNo); // CONTENT 테이블과 BOARD 테이블에 모두 사용
+		inquiry.setMenuNo(menuNo);
 		inquiry.setContentTitle(contentTitle);
 		inquiry.setContentDetail(contentDetail);
-
 		int result = bService.insertInquiry(inquiry);
-
 		if (result > 0) {
 			return "redirect:/users/my_inquiry";
 		} else {
 			throw new UsersException("문의 작성 실패");
+		}
+	}
+
+	@GetMapping("/inquiryDetail")
+	public String selectInquiry(@RequestParam("contentNo") int contentNo, Model model) {
+		Content inquiry = bService.selectInquiry(contentNo);
+		if (inquiry != null) {
+			System.out.println("Inquiry Object: " + inquiry);
+			System.out.println("inquiry.getMenuNo(): " + inquiry.getMenuNo());
+			model.addAttribute("inquiry", inquiry);
+			return "inquiry_detail";
+		} else {
+			throw new UsersException("문의 불러오기 실패.");
 		}
 	}
 
@@ -111,7 +117,5 @@ public class BoardController {
 		} else {
 			throw new UsersException("로그인 하셈");
 		}
-
 	}
-
 }

@@ -27,4 +27,6 @@ public interface BoardMapper {
 
 	int insertBoard(Content inquiry);
 
+	Content selectInquiry(int contentNo);
+
 }

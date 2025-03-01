@@ -52,4 +52,8 @@ public class BoardService {
 		}
 	}
 
+	public Content selectInquiry(int contentNo) {
+		return mapper.selectInquiry(contentNo);
+	}
+
 }
