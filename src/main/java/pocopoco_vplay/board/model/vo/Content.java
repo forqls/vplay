@@ -28,4 +28,5 @@ public class Content {
 	private String hashtagName;
 	private int views;
 	private int likeCount;
+	private int menuNo;
 }
