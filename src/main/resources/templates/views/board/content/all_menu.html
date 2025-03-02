@@ -1,10 +1,378 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/board/all_menu.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	
+	    <!-- 메인 컨텐츠 -->
+    <main>
+        <!-- 히어로 섹션 -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2>수천개의 아티스트 제작 에셋을 만나보세요!</h2>
+                <p>영상, 오디오, 사진, 그래픽, 폰트 등 창작자들을 위한 프리미엄 콘텐츠 모든 것이 여기에 모여있습니다.</p>
+                <p>모든 에셋들 무제한 다운로드 크리에이터의 작업이 완벽해질 것입니다.</p>
+            </div>
+        </section>
 
+        <!-- 비디오 템플릿 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>비디오 템플릿</h2>
+                <a href="#" class="view-all">view all</a>
+            </div>
+            <div class="content-grid">
+                <div class="content-card">
+                    <div class="card-image">
+                        <img src="/placeholder.svg?height=200&width=300" alt="Big Game Grunge">
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 음악 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>음악</h2>
+                <a href="#" class="view-all">view all</a>
+            </div>
+            <div class="content-grid">
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image purple"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 효과음 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>효과음</h2>
+                <a href="#" class="view-all">view all</a>
+            </div>
+            <div class="content-grid">
+                <div class="sound-card">
+                    <div class="play-button"></div>
+                    <div class="sound-info">
+                        <h3>Flashback Thunder</h3>
+                        <p>0:12</p>
+                    </div>
+                    <div class="waveform"></div>
+                    <div class="sound-actions">
+                        <span class="duration">0:12</span>
+                        <div class="action-buttons">
+                            <button class="action-btn"></button>
+                            <button class="action-btn"></button>
+                            <button class="action-btn red"></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for other sound cards -->
+                <div class="sound-card">
+                    <div class="play-button"></div>
+                    <div class="sound-info">
+                        <h3>Flashback Thunder</h3>
+                        <p>0:12</p>
+                    </div>
+                    <div class="waveform"></div>
+                    <div class="sound-actions">
+                        <span class="duration">0:12</span>
+                        <div class="action-buttons">
+                            <button class="action-btn"></button>
+                            <button class="action-btn"></button>
+                            <button class="action-btn red"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="sound-card">
+                    <div class="play-button"></div>
+                    <div class="sound-info">
+                        <h3>Flashback Thunder</h3>
+                        <p>0:12</p>
+                    </div>
+                    <div class="waveform"></div>
+                    <div class="sound-actions">
+                        <span class="duration">0:12</span>
+                        <div class="action-buttons">
+                            <button class="action-btn"></button>
+                            <button class="action-btn"></button>
+                            <button class="action-btn red"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="sound-card">
+                    <div class="play-button"></div>
+                    <div class="sound-info">
+                        <h3>Flashback Thunder</h3>
+                        <p>0:12</p>
+                    </div>
+                    <div class="waveform"></div>
+                    <div class="sound-actions">
+                        <span class="duration">0:12</span>
+                        <div class="action-buttons">
+                            <button class="action-btn"></button>
+                            <button class="action-btn"></button>
+                            <button class="action-btn red"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="sound-card">
+                    <div class="play-button"></div>
+                    <div class="sound-info">
+                        <h3>Flashback Thunder</h3>
+                        <p>0:12</p>
+                    </div>
+                    <div class="waveform"></div>
+                    <div class="sound-actions">
+                        <span class="duration">0:12</span>
+                        <div class="action-buttons">
+                            <button class="action-btn"></button>
+                            <button class="action-btn"></button>
+                            <button class="action-btn red"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 그래픽 템플릿 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>그래픽 템플릿</h2>
+                <a href="#" class="view-all">view all</a>
+            </div>
+            <div class="content-grid">
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 스톡 비디오 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>스톡 비디오</h2>
+                <a href="#" class="view-all">view all</a>
+            </div>
+            <div class="content-grid">
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 사진 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>사진</h2>
+                <a href="#" class="view-all">view all</a>
+            </div>
+            <div class="content-grid">
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+                <div class="content-card dark">
+                    <div class="card-image">
+                        <!-- Empty placeholder -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Big Game Grunge</h3>
+                        <p>HandsomeDown</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn"></button>
+                        <button class="action-btn"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 폰트 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>폰트</h2>
+                <a href="#" class="view-all">view all</a>
+            </div>
+            <div class="content-grid">
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="font-image orange">
+                        <span class="font-sample">Gendy</span>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+                <div class="music-card">
+                    <div class="music-label">Authenticity Amplified</div>
+                    <div class="music-image gray"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+	
 </body>
 </html>

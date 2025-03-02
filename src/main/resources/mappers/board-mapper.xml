@@ -21,7 +21,6 @@
 		<if test="sort == 'mostView'">
 			order by content.views desc
 		</if>
-
 	</select>
 
 	<select id="selectCategoryMyProjects">
@@ -81,6 +80,17 @@
 		<if test="sort == 'mostView'">
 			order by c.views desc
 		</if>
+	</select>
+	
+	<select id="videoTemplateList">
+		select *
+		from content co
+		     left join board b on(co.content_no = b.content_no)
+		     left join content_category coa on(co.content_no = coa.content_no)
+		     left join category ca on(ca.category_no = coa.category_no)
+		     left outer join menu me on(ca.menu_no = me.menu_no)
+		where board_type is null
+		order by co.content_no
 	</select>
 
 	<insert id="insertInquiry" parameterType="Content" useGeneratedKeys="true" keyProperty="contentNo">

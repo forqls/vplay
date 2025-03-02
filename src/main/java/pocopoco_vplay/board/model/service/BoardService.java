@@ -56,4 +56,8 @@ public class BoardService {
 		return mapper.selectInquiry(contentNo);
 	}
 
+	public ArrayList<Content> videoTemplateList() {
+		return mapper.videoTemplateList();
+	}
+
 }

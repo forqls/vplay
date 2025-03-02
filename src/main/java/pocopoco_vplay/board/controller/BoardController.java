@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,13 @@ public class BoardController {
 	private final BoardService bService;
 
 	@GetMapping("all_menu")
-	public String joinVideoTemplatesList() {
-		return "all_menu";
+	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
+		
+		ArrayList<Content> videoTemplateList = bService.videoTemplateList();
+		
+		mv.setViewName("all_menu");
+		
+		return mv;
 	}
 
 	@GetMapping("selectCategory")

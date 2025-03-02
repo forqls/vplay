@@ -69,7 +69,8 @@ public class TemplateResolverConfig {
 		// templates/views/member/ 의 각 목록마다 한개씩 다 비교해서 찾아주게 하는 기능
 
 		return mResolver;
-	}
+
+	} 
 
 	@Bean
 	public ClassLoaderTemplateResolver inqueryResolver() {
@@ -113,6 +114,27 @@ public class TemplateResolverConfig {
 		return mResolver;
 	}
 
+	@Bean
+	public ClassLoaderTemplateResolver allMenuResolver() {
+		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
+		mResolver.setPrefix("templates/views/board/content/");
+		mResolver.setSuffix(".html");
+		
+		mResolver.setTemplateMode(TemplateMode.HTML);
+		//HTML 설정
+		
+		mResolver.setCharacterEncoding("UTF-8");
+		//한글이니깐 UTF-8
+		
+		mResolver.setCacheable(false);
+		//자동 새로고침 기능
+
+		mResolver.setCheckExistence(true);
+		//templates/views/member/ 의 각 목록마다 한개씩 다 비교해서 찾아주게 하는 기능
+		
+		return mResolver;
+	}
+	
 	@Bean
 	public ClassLoaderTemplateResolver fontsResolver() {
 		ClassLoaderTemplateResolver mResolver = new ClassLoaderTemplateResolver();
