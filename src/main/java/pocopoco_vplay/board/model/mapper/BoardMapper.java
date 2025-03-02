@@ -23,7 +23,6 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectCategoryMyTrash(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
 
-
 	ArrayList<Content> videoTemplateList();
 
 	int insertInquiry(Content inquiry);
@@ -32,5 +31,6 @@ public interface BoardMapper {
 
 	Content selectInquiry(int contentNo);
 
-}
+	int updateInquiry(Content inquiry);
 
+}

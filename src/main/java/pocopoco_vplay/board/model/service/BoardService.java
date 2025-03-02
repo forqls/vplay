@@ -40,7 +40,6 @@ public class BoardService {
 		return mapper.selectCategoryMyTrash(menu, userNo, sort);
 	}
 
-	@Transactional
 	public int insertInquiry(Content inquiry) {
 		int result1 = mapper.insertInquiry(inquiry);
 		int result2 = mapper.insertBoard(inquiry);
@@ -58,6 +57,10 @@ public class BoardService {
 
 	public ArrayList<Content> videoTemplateList() {
 		return mapper.videoTemplateList();
+	}
+
+	public int updateInquiry(Content inquiry) {
+		return mapper.updateInquiry(inquiry);
 	}
 
 }

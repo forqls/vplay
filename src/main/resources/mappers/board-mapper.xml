@@ -81,14 +81,14 @@
 			order by c.views desc
 		</if>
 	</select>
-	
+
 	<select id="videoTemplateList">
 		select *
 		from content co
-		     left join board b on(co.content_no = b.content_no)
-		     left join content_category coa on(co.content_no = coa.content_no)
-		     left join category ca on(ca.category_no = coa.category_no)
-		     left outer join menu me on(ca.menu_no = me.menu_no)
+		left join board b on(co.content_no = b.content_no)
+		left join content_category coa on(co.content_no = coa.content_no)
+		left join category ca on(ca.category_no = coa.category_no)
+		left outer join menu me on(ca.menu_no = me.menu_no)
 		where board_type is null
 		order by co.content_no
 	</select>
@@ -148,5 +148,15 @@
 		WHERE
 		C.CONTENT_NO = #{contentNo}
 	</select>
+
+	<update id="updateInquiry" parameterType="Content">
+		UPDATE CONTENT
+		SET
+		CONTENT_TITLE = #{contentTitle},
+		CONTENT_DETAIL = #{contentDetail},
+		MODIFY_DATE = SYSDATE
+		WHERE
+		CONTENT_NO = #{contentNo}
+	</update>
 
 </mapper>
