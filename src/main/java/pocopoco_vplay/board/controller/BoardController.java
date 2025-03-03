@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.commom.Pagination;
@@ -248,6 +249,26 @@ public class BoardController {
 		mv.setViewName("request_list");
 		return mv;
 	}
+
+	@GetMapping("writeRequest")
+	public String writeRequest(){
+		return "request_write";
+	}
+
+//	@PostMapping("writeRequest")
+//	public String writeRequest(@ModelAttribute Content content, HttpSession session) {
+//		Users loginUser = (Users) session.getAttribute("loginUser");
+//		int userNo = loginUser.getUserNo();
+//		content.setUserNo(userNo);
+//		System.out.println(content);
+//		int result = bService.insertRequest(content);
+//		int result2 = bService.insertRequestBoard(content);
+//		if (result + result2 == 2) {
+//			return "request_list";
+//		} else {
+//			throw new BoardException("제작 의뢰 게시글 작성 실패");
+//		}
+//	}
 
 
 
