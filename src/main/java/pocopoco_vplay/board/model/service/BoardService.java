@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
@@ -79,4 +78,14 @@ public class BoardService {
 		return mapper.selectUser(userNo);
 	}
 
+//	public int insertRequest(Content content, loginUser loginUser) {
+//		return mapper.insertRequest(content);
+//		return mapper.insertRequestBoard(content, loginUser.userNo());
+//	}
+
+
+
+//	public int insertRequestBoard(Content content) {
+//		return mapper.insertRequestBoard(content;
+//	}
 }
