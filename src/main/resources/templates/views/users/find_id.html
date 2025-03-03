@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FindId</title>
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <style>
 * {
 	margin: 0;
@@ -66,7 +66,7 @@ body {
 	color: #ffffff;
 	border: none;
 	border-radius: 4px;
-	padding: 0.8rem 1rem;
+	padding: 0.75rem 1rem;
 	cursor: pointer;
 	font-size: 0.9rem;
 	white-space: nowrap;
@@ -116,67 +116,160 @@ body {
 </style>
 </head>
 <body>
-<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<div class="breadcrumb">
 		<a href="/">Home</a> > <span class="current">Find ID</span>
 	</div>
 
 	<main class="find-id-container">
 		<h1 class="find-id-title">아이디 찾기</h1>
-		<form id="findIdForm">
+		<form id="findIdForm" onsubmit="return findIdBtn(event)">
 			<div class="input-group">
-				<input type="text" placeholder="User name" class="input-field">
+				<input type="text" placeholder="User name" class="input-field user_name" id="userName" name="userName"> <span class="alert_text"></span>
 			</div>
 			<div class="input-group">
-				<input type="tel" placeholder="Phone" class="input-field">
+				<input type="tel" placeholder="Phone" class="input-field user_phone" id="phone" name="userPhone"> <span class="alert_text"></span>
 			</div>
 			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field" id="email">
+				<input type="email" placeholder="Email" class="input-field" id="email" name="userEmail">
 				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
 			</div>
-
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
-					<input type="text" placeholder="인증번호 입력" class="input-field" name="userEmail" id="confirmVerifi">
-					<button type="button" class="button verify-button">확인</button>
+					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerify" id="confirmVerify">
+					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 				</div>
 			</div>
-
 			<button type="submit" class="find-id-btn">아이디 찾기</button>
 		</form>
 	</main>
 
 	<script>
-		let nameCheck = false;
-		let phoneCheck = false;
-		let emailCheck = false;
+	let flag = false;
+	window.onload = function () {
+		const alertText = document.querySelectorAll('.alert_text');
 
-		function showVerification() {
-
-			const email = document.getElementById('email').value.trim();
-			const verification  = document.getElementById('verificationSection');
-			const emailBtn = document.getElementById('emailBtn');
-			if(email == ''){
-				alert('이메일을 입력해주세요.');
+		document.getElementById('userName').addEventListener('blur', function() {
+			if(this.value.trim() === ''){
+				alertText[0].innerHTML ='이름을 입력해 주세요.';
 			}else{
+				alertText[0].innerHTML = '';
+			}
+		})
+
+		document.getElementById('phone').addEventListener('blur', function() {
+			// console.log(this.value);
+			let userName = document.getElementById('userName').value.trim();
+			let userPhone = this.value.replace(/[^0-9]/g, "");
+
+			if (userPhone.length > 10) {
+				userPhone = userPhone.substring(0, 11);
+			}
+
+			if (userPhone.length >= 3 && userPhone.length <= 7) {
+				userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3);
+			} else if (userPhone.length > 7 && userPhone.length <= 11) {
+				userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3, 7) + "-" + userPhone.substring(7);
+			} else {
+				userPhone = userPhone;
+			}
+
+			this.value = userPhone;
+
+			// console.log(this.value);
+
+			if(userPhone === ''){
+				alertText[1].innerHTML ='휴대폰 번호를 입력해 주세요.';
+			}else{
+				alertText[1].innerHTML ='';
 				$.ajax({
-					url:'/users/emailCheck',
-					data:{email:email},
-					success:data=>{
-						alert('이메일이 발송되었습니다.');
-						verification .style.display='block';
-						console.log(data);
-						confirmEmail = data;
-						emailBtn.disabled = true;
-					}, error:data=>console.log(data)
+					url:'/users/findId',
+					type:'POST',
+					data: {userName: userName, userPhone: userPhone},
+					success: data => {
+						if(data === 0){
+							alertText[1].innerHTML = '이름과 휴대폰 번호가 일치하지 않습니다';
+							flag = false;
+
+						}else{
+							alertText[1].innerHTML = '이름과 휴대폰 번호가 일치합니다';
+							flag = true;
+						}
+					},
+					error: data => console.log(data)
 				});
 			}
+		});
+
+	}
+		let idCheck = false;
+		let emailCheck = false;
+		let confirmEmail = '';
+
+		function showVerification() {
+			const userName = document.getElementById('userName').value.trim();
+			const userPhone = document.getElementById('phone').value.trim();
+			const email = document.getElementById('email').value.trim();
+			const verification = document.getElementById('verificationSection');
+			const emailBtn = document.getElementById('emailBtn');
+			if (email === '') {
+				alert('이메일을 입력해주세요.');
+				verification.style.display = 'none';
+			} else if (userName === '') {
+				alert('이름을 입력해 주세요.');
+				verification.style.display = 'none';
+			} else if (userPhone === '') {
+				alert('회원 정보에 등록된 전화번호를 입력해 주세요.');
+				verification.style.display = 'none';
+			} else if (flag === false) {
+				alert('등록된 회원 정보가 없습니다. 이름이나 전화번호를 확인해주세요.');
+				verification.style.display = 'none';
+			} else {
+				if (email !== '') {
+					$.ajax({
+						url: '/users/emailCheck',
+						data: {email: email},
+						success: data => {
+							alert('이메일이 발송되었습니다.');
+							verification.style.display = 'block';
+							console.log(data);
+							confirmEmail = data;
+						}, error: data => console.log(data)
+					});
+				}
+			}
+
 
 			document.getElementById('verificationSection').classList
 					.add('active');
 		}
+		const confirmEmailBtn =	document.getElementById('confirmEmailBtn');
 
+		confirmEmailBtn.addEventListener('click', () => {
+			const confirmVerify = document.getElementById('confirmVerify').value.trim();
+			const verification = document.getElementById('verificationSection');
+			if(confirmVerify === ''){
+				alert('인증번호를 입력해주세요.');
+			}else if(confirmVerify === confirmEmail){
+				alert('이메일 인증이 완료되었습니다.');
+				emailCheck = true;
+				verification.style.display='none';
+			}else{
+				alert('인증번호가 틀렸습니다. 다시 한번 확인해주세요.');
+				emailCheck = false;
+			}
+		});
 
+		const findIdBtn = (event) => {
+			const form = document.getElementById('findIdForm');
+			if (!emailCheck) { //emailCheck 값이 false 면 true 값이 반환되어 if문 안의 코드가 실행
+				alert("인증번호를 입력해주세요.");
+				return false;
+			}
+			form.method = 'POST';
+			form.action = "/users/findIdSuccess";
+			return true;
+		};
 	</script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 package pocopoco_vplay.commom;
 
-import pocopoco_vplay.admin.model.vo.PageInfo;
+import pocopoco_vplay.commom.model.vo.PageInfo;
 
 public class Pagination{
 	public static PageInfo getPageInfo(int currentPage, int listCount, int boardLimit) {

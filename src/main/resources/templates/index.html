@@ -6,6 +6,7 @@
 <title>크리에이티브 플랫폼</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+	<link href="/css/common.css" rel="stylesheet" type="text/css">
 <style>
 * {
 	margin: 0;
@@ -14,6 +15,7 @@
 }
 
 body {
+	margin-top: 30px;
 	background-color: #191820;
 	color: white;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -252,7 +254,7 @@ body {
 					지금 바로 크리에이터님의 무한 가능성을 경험해 보세요.<br> 디자인 자산을 자유롭게 활용하여 새로운 가능성을 발견할 수 있습니다.
 				</p>
 				<div class="hero-buttons">
-					<button class="button-primary" onclick="location.href='/board/video-templates-list'">비디오 메뉴로 이동</button>
+					<button class="button-primary" onclick="location.href='/board/all_menu'">모든 카테고리 이동</button>
 					<button class="button-secondary">프리뷰 및 워터마크</button>
 				</div>
 			</div>
@@ -376,6 +378,8 @@ body {
 				</div>
 			</div>
 		</section>
+		<div th:replace="~{views/common/floatingBtn}"></div>
 	</div>
+
 </body>
 </html>

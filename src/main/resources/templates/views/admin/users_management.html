@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="u : ${list}">
+                        <tr class="user-list" th:each="u : ${list}">
                             <td>[[${u.userNo}]]</td>
                             <td>[[${u.userId}]]</td>
                             <td>[[${u.userName}]]</td>
@@ -47,7 +47,9 @@
                             <td>[[${u.userEmail}]]</td>
                             <td>[[${u.userPhone}]]</td>
                             <td>[[${u.joinDate}]]</td>
-                            <td><span class="status active">[[${u.status}]]</span></td>
+                            <td>
+                            	<span class="status active">[[${u.status}]]</span>
+                            </td>
                             <td>
                                 <button class="action-btn">
                                     <svg viewBox="0 0 24 24" width="18" height="18">
@@ -122,5 +124,31 @@
             </div>
         </div>
     </main>
+    
+    <script>
+    
+    	[...document.querySelectorAll(".user-list")].map((user, index, array) =>{
+    		user.children[7].children[0].addEventListener('click', function(){
+    			
+    			const status = this.innerText == "Y" ? "N" : "Y";
+    			
+    			$.ajax({
+    				url: "/admin/mupdate",
+    				data: {userNo : user.children[0].innerText, status : status},
+    				success: data=>{
+    					if(data == 1){
+    						if(status == "Y"){
+    							this.innerText = "Y";
+    						}else{
+    							this.innerText = "N";
+    						}
+    					}
+    				},
+    				error: data=> console.log(data)
+    			})
+    		})
+    	})
+
+    </script>
 </body>
 </html>

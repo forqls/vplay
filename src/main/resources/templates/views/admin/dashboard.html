@@ -6,6 +6,7 @@
     <title>VPLAY Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="/css/admin/dashboard.css" rel="stylesheet">
+    
 </head>
 <body>
     <div th:replace="~{admin_sidebar}"></div>
@@ -26,7 +27,7 @@
                     </div>
                     <div>
                         <div class="stat-title">전체 회원수</div>
-                        <div class="stat-value">9,526명</div>
+                        <div class="stat-value">[[${userCount}]]명</div>
                     </div>
                 </div>
                 <div class="stat-change">
@@ -86,7 +87,8 @@
                     </div>
                     <div>
                         <div class="stat-title">전체 템플릿 수</div>
-                        <div class="stat-value">73,526</div>
+                        <div class="stat-value">[[${templatesCount}]]개</div>
+                        <div id="piechart" style="width: 900px; height: 500px;"></div>
                     </div>
                 </div>
                 <div class="stat-change">
@@ -143,6 +145,76 @@
                 }
             }
         });
+    </script>
+    
+    <!-- Google Charts 라이브러리를 불러옵니다. -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    <script type="text/javascript">
+      
+      google.charts.load('current', {'packages':['corechart']});
+      //현재 버전(current)의 Google Charts API를 로드합니다.
+      //corechart 패키지를 불러오는데, 이는 파이 차트, 꺾은선 차트, 막대 차트 등 기본 차트를 포함하는 패키지입니다.
+      
+      google.charts.setOnLoadCallback(fetchDate);
+      //차트 API가 로드되면 drawChart() 함수를 실행하여 차트를 그리도록 설정합니다.
+      
+   	  function fetchDate(){
+       	  $.ajax({
+       		  url: "/admin/drawChart",
+       		  dataType: "json",
+       		  success: function(response){
+       			  drawChart(response);
+       		  },
+       		  error: function(response){
+       			  console.log(error);
+       		  }
+       	  });
+       }  
+   
+      
+      
+      function drawChart(chartData) {
+		
+//         var data = google.visualization.arrayToDataTable([
+//           ['templates', 'Count'],
+//           ['Video Templates',     11],
+//           ['Music', 2],
+//           ['Sound Effects',      2],
+//           ['Graphic Templates',  2],
+//           ['Stock Video', 2],
+//           ['Photos',    7],
+//           ['Fonts', 5]
+//         ]);
+
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Menu');
+		data.addColumn('number', 'Count');
+        //arrayToDataTable() 함수는 2차원 배열을 데이터 테이블로 변환합니다.
+        //첫 번째 행 ['Task', 'Hours per Day']는 **헤더(컬럼명)**입니다.
+        //나머지 행들은 데이터이며, 각각의 **카테고리(Task)와 값(Hours per Day)**을 나타냅니다.
+			//예) "Work"에 11시간, "Sleep"에 7시간 등.
+		
+		//ajax 응답 데이터를 반복문으로 추가
+		chartData.forEach(function(item) {
+		 data.addRow([item.menu, item.count]);
+		});
+		
+		//차트 제목을 설정합니다.
+        var options = {
+          title: '',
+          backgroundColor: 'transparent',
+          colors: ["#5E37E9", "#8137E9", "#ECDEFF"],
+          lineWidth : 0
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        //HTML에서 <div id="piechart"></div>와 같은 요소를 찾아, 해당 영역에 차트를 삽입합니다.
+        //Google Charts의 PieChart(파이 차트) 객체를 생성합니다.
+
+        chart.draw(data, options);
+        //차트를 생성하고, 데이터를 적용하여 화면에 렌더링합니다.
+      }
     </script>
 </body>
 </html>

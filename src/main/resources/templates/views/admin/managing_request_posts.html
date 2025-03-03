@@ -37,13 +37,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Video Templates</td>
-                            <td>ditkddbs5002</td>
-                            <td>파란색 나무관련 영상</td>
-                            <td>2024-01-01</td>
-                            <td><span class="status active">Y</span></td>
+                        <tr class="request-list" th:each="t : ${list}">
+                            <td>[[${t.contentNo}]]</td>
+                            <td>[[${t.menuName}]]</td>
+                            <td>[[${t.userId}]]</td>
+                            <td>[[${t.contentTitle}]]</td>
+                            <td>[[${t.modifyDate}]]</td>
+                            <td><span class="status active">[[${t.contentStatus}]]</span></td>
                             <td>
                                 <button class="action-btn">
                                     <svg viewBox="0 0 24 24" width="18" height="18">
@@ -54,63 +54,92 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Music</td>
-                            <td>dongjunson</td>
-                            <td>잔잔한 음악</td>
-                            <td>2024-01-04</td>
-                            <td><span class="status active">Y</span></td>
-                            <td>
-                                <button class="action-btn">
-                                    <svg viewBox="0 0 24 24" width="18" height="18">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Sound Effects</td>
-                            <td>forqls123</td>
-                            <td>EDM기반의 잔잔한 음악</td>
-                            <td>2024-02-09</td>
-                            <td><span class="status active">Y</span></td>
-                            <td>
-                                <button class="action-btn">
-                                    <svg viewBox="0 0 24 24" width="18" height="18">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- 추가 행들... -->
                     </tbody>
                 </table>
             </div>
 
-            <div class="pagination">
-                <button class="prev">
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-                <button class="next">
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
+<!--             <div class="pagination"> -->
+<!--                 <button class="prev"> -->
+<!--                     <svg viewBox="0 0 24 24" width="16" height="16"> -->
+<!--                         <polyline points="15 18 9 12 15 6"></polyline> -->
+<!--                     </svg> -->
+<!--                 </button> -->
+<!--                 <button class="active">1</button> -->
+<!--                 <button>2</button> -->
+<!--                 <button>3</button> -->
+<!--                 <button>4</button> -->
+<!--                 <button>5</button> -->
+<!--                 <button class="next"> -->
+<!--                     <svg viewBox="0 0 24 24" width="16" height="16"> -->
+<!--                         <polyline points="9 18 15 12 9 6"></polyline> -->
+<!--                     </svg> -->
+<!--                 </button> -->
+<!--             </div> -->
+			<div class="pagination">
+            	<!-- 이전 -->
+            	<ul>
+            		<th:block th:if="${pi.currentPage >1}">
+	                <li class="prev">
+                    	<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+                        	<
+                    	</a>
+	               	</li>
+	               	</th:block>
+	               	<th:block th:if="${pi.currentPage <=1}">
+	                <li class="prev">
+                    	<a aria-label="Previous">
+                        	<
+                    	</a>
+	               	</li>
+	               	</th:block>
+	                
+	                <!-- 숫자 -->
+	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+	                	<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
+	                </li>
+	                
+	                
+	                <!-- 다음 -->
+	                <th:block th:if="${pi.currentPage < pi.MaxPage}">
+	                <li class="next">
+	                	<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
+	                		>
+	                	</a>
+	                </li>
+	                </th:block>
+	                <th:block th:if="${pi.currentPage >= pi.MaxPage}">
+	                <li class="next">
+	                	<a aria-label="Next">
+	                		>
+	                	</a>
+	                </li>
+	                </th:block>
+                </ul>
             </div>
         </div>
     </main>
+    <script>
+	    [...document.querySelectorAll(".request-list")].map((request, index, array) =>{
+	    			request.children[5].addEventListener('click', function(){
+	    			
+	    			const status = this.innerText == "Y" ? "N" : "Y";
+	    			
+	    			$.ajax({
+	    				url: "/admin/rupdate",
+	    				data: {contentNo : request.children[0].innerText, contentStatus : status},
+	    				success: data=>{
+	    					if(data == 1){
+	    						if(status == "Y"){
+	    							this.children[0].innerHTML = "Y";
+	    						}else{
+	    							this.children[0].innerHTML = "N";
+	    						}
+	    					}
+	    				},
+	    				error: data=> console.log(data)
+	    			})
+	    		})
+	    	})
+    </script>
 </body>
 </html>
