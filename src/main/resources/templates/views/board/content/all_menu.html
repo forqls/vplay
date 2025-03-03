@@ -48,10 +48,10 @@
         <section class="content-section">
             <div class="section-header">
                 <h2>음악</h2>
-                <a href="#" class="view-all">view all</a>
+                <a href="/board/music-list" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="music-card" th:each="m : ${musicTemplateList}">
+                <div class="music-card" th:each="m : ${musicList}">
                     <div class="music-label">[[${m.contentTitle}]]</div>
                     <div class="music-image purple"></div>
                 </div>
@@ -62,10 +62,10 @@
         <section class="content-section">
             <div class="section-header">
                 <h2>효과음</h2>
-                <a href="#" class="view-all">view all</a>
+                <a href="/board/sound-effects-list" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="sound-card" th:each="s : ${soundEffectsTemplateList}">
+                <div class="sound-card" th:each="s : ${soundEffectsList}">
                     <div class="play-button"></div>
                     <div class="sound-info">
                         <h3>[[${s.contentTitle}]]</h3>
@@ -88,7 +88,7 @@
         <section class="content-section">
             <div class="section-header">
                 <h2>그래픽 템플릿</h2>
-                <a href="#" class="view-all">view all</a>
+                <a href="/board/graphic-template-list" class="view-all">view all</a>
             </div>
             <div class="content-grid">
                 <div class="content-card dark" th:each="g : ${graphicTemplateList}">
@@ -111,10 +111,10 @@
         <section class="content-section">
             <div class="section-header">
                 <h2>스톡 비디오</h2>
-                <a href="#" class="view-all">view all</a>
+                <a href="/board/stock-video-list" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="content-card dark" th:each="st : ${stockVideoTemplateList}">
+                <div class="content-card dark" th:each="st : ${stockVideoList}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
@@ -134,10 +134,10 @@
         <section class="content-section">
             <div class="section-header">
                 <h2>사진</h2>
-                <a href="#" class="view-all">view all</a>
+                <a href="/board/photo-list" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="content-card dark" th:each="p : ${photosTemplateList}">
+                <div class="content-card dark" th:each="p : ${photosList}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
@@ -157,10 +157,10 @@
         <section class="content-section">
             <div class="section-header">
                 <h2>폰트</h2>
-                <a href="#" class="view-all">view all</a>
+                <a href="/board/font-list" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="music-card" th:each="f : ${fontTemplateList}">
+                <div class="music-card" th:each="f : ${fontList}">
                     <div class="music-label">[[${f.contentTitle}]]</div>
                     <div class="font-image orange">
                         <span class="font-sample">Gendy</span>
