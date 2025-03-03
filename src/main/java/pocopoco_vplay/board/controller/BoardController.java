@@ -40,8 +40,9 @@ public class BoardController {
 		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicTemplateList", musicTemplateList).addObject("soundEffectsTemplateList", soundEffectsTemplateList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoTemplateList", stockVideoTemplateList).addObject("photosTemplateList", photosTemplateList).addObject("fontTemplateList", fontTemplateList);
+
 		mv.setViewName("all_menu");
-		
+
 		return mv;
 	}
 
@@ -104,16 +105,44 @@ public class BoardController {
 		}
 	}
 
-	@GetMapping("/inquiryDetail")
+	@GetMapping("inquiryDetail")
 	public String selectInquiry(@RequestParam("contentNo") int contentNo, Model model) {
 		Content inquiry = bService.selectInquiry(contentNo);
 		if (inquiry != null) {
-			System.out.println("Inquiry Object: " + inquiry);
-			System.out.println("inquiry.getMenuNo(): " + inquiry.getMenuNo());
+//			System.out.println("Inquiry Object: " + inquiry);
+//			System.out.println("inquiry.getMenuNo(): " + inquiry.getMenuNo());
 			model.addAttribute("inquiry", inquiry);
 			return "inquiry_detail";
 		} else {
 			throw new UsersException("문의 불러오기 실패.");
+		}
+	}
+
+	@GetMapping("inquiryUpdate")
+	public String inquiryUpdateView(@RequestParam("contentNo") int contentNo, Model model) {
+		Content inquiry = bService.selectInquiry(contentNo);
+		if (inquiry != null) {
+			model.addAttribute("inquiry", inquiry);
+			return "inquiry_update";
+		} else {
+			throw new UsersException("문의 불러오기 실패.");
+		}
+	}
+
+	@PostMapping("update_inquiry")
+	public String updateInquiry(@RequestParam("contentNo") int contentNo, @RequestParam("menuNo") int menuNo, @RequestParam("contentTitle") String contentTitle, @RequestParam("contentDetail") String contentDetail) {
+		Content inquiry = new Content();
+		inquiry.setContentNo(contentNo);
+		inquiry.setMenuNo(menuNo);
+		inquiry.setContentTitle(contentTitle);
+		inquiry.setContentDetail(contentDetail);
+
+		int result = bService.updateInquiry(inquiry);
+
+		if (result > 0) {
+			return "redirect:/users/my_inquiry";
+		} else {
+			throw new UsersException("문의 수정 실패");
 		}
 	}
 

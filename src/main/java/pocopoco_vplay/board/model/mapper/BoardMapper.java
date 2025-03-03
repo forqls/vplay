@@ -31,5 +31,6 @@ public interface BoardMapper {
 
 	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
 
-}
+	int updateInquiry(Content inquiry);
 
+}
