@@ -162,6 +162,12 @@ public class BoardController {
 		}
 	}
 	
+	@GetMapping("request_list")
+	public String requestList() {
+		return "request_list";
+	}
+	
+
 	@GetMapping("video-template-list")
 	public ModelAndView videoTemplateList(ModelAndView mv) {
 		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
@@ -170,6 +176,7 @@ public class BoardController {
 		mv.setViewName("videoTemplates_list");
 		return mv;
 	}
+
 	
 	@GetMapping("sound-effects-list")
 	public ModelAndView soundEffectsList(ModelAndView mv) {
