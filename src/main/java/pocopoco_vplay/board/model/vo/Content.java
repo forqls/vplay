@@ -23,6 +23,7 @@ public class Content {
 	private String deleteStatus;
 	private int userNo;
 	private String userId;
+	private String userNickName;
 	private String categoryName;
 	private String menuName;
 	private String hashtagName;
