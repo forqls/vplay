@@ -24,42 +24,17 @@
         <section class="content-section">
             <div class="section-header">
                 <h2>비디오 템플릿</h2>
-                <a href="#" class="view-all">view all</a>
+                <a href="/board/video-template-list" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="content-card">
+                <div class="content-card dark" th:each="v : ${videoTemplateList}">
                     <div class="card-image">
                         <img src="/placeholder.svg?height=200&width=300" alt="Big Game Grunge">
                     </div>
                     <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
+                    	<input type="hidden" value="[[${v.contentNo}]]">
+                        <h3>[[${v.contentTitle}]]</h3>
+                        <p>[[${v.userNickName}]]</p>
                     </div>
                     <div class="card-actions">
                         <button class="action-btn"></button>
@@ -76,29 +51,9 @@
                 <a href="#" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
+                <div class="music-card" th:each="m : ${musicTemplateList}">
+                    <div class="music-label">[[${m.contentTitle}]]</div>
                     <div class="music-image purple"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
                 </div>
             </div>
         </section>
@@ -110,76 +65,11 @@
                 <a href="#" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="sound-card">
+                <div class="sound-card" th:each="s : ${soundEffectsTemplateList}">
                     <div class="play-button"></div>
                     <div class="sound-info">
-                        <h3>Flashback Thunder</h3>
-                        <p>0:12</p>
-                    </div>
-                    <div class="waveform"></div>
-                    <div class="sound-actions">
-                        <span class="duration">0:12</span>
-                        <div class="action-buttons">
-                            <button class="action-btn"></button>
-                            <button class="action-btn"></button>
-                            <button class="action-btn red"></button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Repeat for other sound cards -->
-                <div class="sound-card">
-                    <div class="play-button"></div>
-                    <div class="sound-info">
-                        <h3>Flashback Thunder</h3>
-                        <p>0:12</p>
-                    </div>
-                    <div class="waveform"></div>
-                    <div class="sound-actions">
-                        <span class="duration">0:12</span>
-                        <div class="action-buttons">
-                            <button class="action-btn"></button>
-                            <button class="action-btn"></button>
-                            <button class="action-btn red"></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="sound-card">
-                    <div class="play-button"></div>
-                    <div class="sound-info">
-                        <h3>Flashback Thunder</h3>
-                        <p>0:12</p>
-                    </div>
-                    <div class="waveform"></div>
-                    <div class="sound-actions">
-                        <span class="duration">0:12</span>
-                        <div class="action-buttons">
-                            <button class="action-btn"></button>
-                            <button class="action-btn"></button>
-                            <button class="action-btn red"></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="sound-card">
-                    <div class="play-button"></div>
-                    <div class="sound-info">
-                        <h3>Flashback Thunder</h3>
-                        <p>0:12</p>
-                    </div>
-                    <div class="waveform"></div>
-                    <div class="sound-actions">
-                        <span class="duration">0:12</span>
-                        <div class="action-buttons">
-                            <button class="action-btn"></button>
-                            <button class="action-btn"></button>
-                            <button class="action-btn red"></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="sound-card">
-                    <div class="play-button"></div>
-                    <div class="sound-info">
-                        <h3>Flashback Thunder</h3>
-                        <p>0:12</p>
+                        <h3>[[${s.contentTitle}]]</h3>
+                        <p>[[${s.userNickName}]]</p>
                     </div>
                     <div class="waveform"></div>
                     <div class="sound-actions">
@@ -201,39 +91,13 @@
                 <a href="#" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="content-card dark">
+                <div class="content-card dark" th:each="g : ${graphicTemplateList}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
                     <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
+                        <h3>[[${g.contentTitle}]]</h3>
+                        <p>[[${g.userNickName}]]</p>
                     </div>
                     <div class="card-actions">
                         <button class="action-btn"></button>
@@ -250,39 +114,13 @@
                 <a href="#" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="content-card dark">
+                <div class="content-card dark" th:each="st : ${stockVideoTemplateList}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
                     <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
+                        <h3>[[${st.contentTitle}]]</h3>
+                        <p>[[${st.userNickName}]]</p>
                     </div>
                     <div class="card-actions">
                         <button class="action-btn"></button>
@@ -299,39 +137,13 @@
                 <a href="#" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="content-card dark">
+                <div class="content-card dark" th:each="p : ${photosTemplateList}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
                     <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="action-btn"></button>
-                        <button class="action-btn"></button>
-                    </div>
-                </div>
-                <div class="content-card dark">
-                    <div class="card-image">
-                        <!-- Empty placeholder -->
-                    </div>
-                    <div class="card-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
+                        <h3>[[${p.contentTitle}]]</h3>
+                        <p>[[${p.userNickName}]]</p>
                     </div>
                     <div class="card-actions">
                         <button class="action-btn"></button>
@@ -348,31 +160,17 @@
                 <a href="#" class="view-all">view all</a>
             </div>
             <div class="content-grid">
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
+                <div class="music-card" th:each="f : ${fontTemplateList}">
+                    <div class="music-label">[[${f.contentTitle}]]</div>
                     <div class="font-image orange">
                         <span class="font-sample">Gendy</span>
                     </div>
                 </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
-                <div class="music-card">
-                    <div class="music-label">Authenticity Amplified</div>
-                    <div class="music-image gray"></div>
-                </div>
             </div>
         </section>
     </main>
-	
+	<script>
+		
+	</script>
 </body>
 </html>

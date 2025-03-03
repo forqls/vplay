@@ -30,8 +30,16 @@ public class BoardController {
 	@GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
 		
-		ArrayList<Content> videoTemplateList = bService.videoTemplateList();
+		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
+		ArrayList<Content> musicTemplateList = bService.allTemplateList("Music");
+		ArrayList<Content> soundEffectsTemplateList = bService.allTemplateList("Sound Effects");
+		ArrayList<Content> graphicTemplateList = bService.allTemplateList("Graphic Templates");
+		ArrayList<Content> stockVideoTemplateList = bService.allTemplateList("Stock Video");
+		ArrayList<Content> photosTemplateList = bService.allTemplateList("Photos");
+		ArrayList<Content> fontTemplateList = bService.allTemplateList("Fonts");
 		
+		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicTemplateList", musicTemplateList).addObject("soundEffectsTemplateList", soundEffectsTemplateList).addObject("graphicTemplateList", graphicTemplateList);
+		mv.addObject("stockVideoTemplateList", stockVideoTemplateList).addObject("photosTemplateList", photosTemplateList).addObject("fontTemplateList", fontTemplateList);
 		mv.setViewName("all_menu");
 		
 		return mv;

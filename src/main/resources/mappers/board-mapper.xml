@@ -82,15 +82,40 @@
 		</if>
 	</select>
 	
-	<select id="videoTemplateList">
+	<select id="allTemplateList" parameterType="string">
 		select *
-		from content co
+		from (select *
+			 from content co
+			 left join users u on(co.user_no = u.user_no)
 		     left join board b on(co.content_no = b.content_no)
 		     left join content_category coa on(co.content_no = coa.content_no)
 		     left join category ca on(ca.category_no = coa.category_no)
-		     left outer join menu me on(ca.menu_no = me.menu_no)
-		where board_type is null
-		order by co.content_no
+		     left join menu me on(ca.menu_no = me.menu_no)
+		where b.board_type is null and me.menu_name = #{menuName}
+		order by co.content_no desc) 
+		<if test="menuName == 'video Templates'">
+		where rownum <![CDATA[<]]>= 3
+		</if>
+		<if test="menuName == 'Music'">
+		where rownum <![CDATA[<]]>= 6
+		</if>
+		<if test="menuName == 'Sound Effects'">
+		where rownum <![CDATA[<]]>= 5
+		</if>
+		<if test="menuName == 'Graphic Templates'">
+		where rownum <![CDATA[<]]>= 3
+		</if>
+		<if test="menuName == 'Stock Video'">
+		where rownum <![CDATA[<]]>= 3
+		</if>
+		<if test="menuName == 'Photos'">
+		where rownum <![CDATA[<]]>= 3
+		</if>
+		<if test="menuName == 'Fonts'">
+		where rownum <![CDATA[<]]>= 5
+		</if>
+		
+		
 	</select>
 
 	<insert id="insertInquiry" parameterType="Content" useGeneratedKeys="true" keyProperty="contentNo">
