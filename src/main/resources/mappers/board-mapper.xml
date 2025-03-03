@@ -181,5 +181,18 @@
 		WHERE
 		CONTENT_NO = #{contentNo}
 	</update>
+	
+	<select id="allCategory">
+		select *
+		from category
+		where menu_no = #{menuNo}
+	</select>
+	
+	<!-- 일단은 기본 쿼리랑 동일 -->
+	<select id="allPopularCate">
+		select *
+		from category
+		where menu_no = #{menuNo}
+	</select>
 
 </mapper>

@@ -33,4 +33,8 @@ public interface BoardMapper {
 
 	int updateInquiry(Content inquiry);
 
+	ArrayList<Content> allCategory(@Param("menuNo") int i);
+
+	ArrayList<Content> allPopularCate(int i);
+
 }

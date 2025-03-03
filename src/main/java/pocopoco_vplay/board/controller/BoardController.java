@@ -171,8 +171,10 @@ public class BoardController {
 	@GetMapping("video-template-list")
 	public ModelAndView videoTemplateList(ModelAndView mv) {
 		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
+		ArrayList<Content> videoTempCategory = bService.allCategory(1);
+		ArrayList<Content> videoTempPopularCate = bService.allPopularCate(1);
 		
-		mv.addObject("videoTemplateList", videoTemplateList);
+		mv.addObject("videoTemplateList", videoTemplateList).addObject("videoTempCategory", videoTempCategory).addObject("videoTempPopularCate",videoTempPopularCate);
 		mv.setViewName("videoTemplates_list");
 		return mv;
 	}

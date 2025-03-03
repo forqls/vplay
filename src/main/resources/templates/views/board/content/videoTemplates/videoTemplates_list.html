@@ -1,39 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VPLAY - Stock Videos</title>
     <link href="/css/board/videoTemplates/list.css" rel="stylesheet">
+    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <div class="logo-circle"></div>
-            VPLAY
-        </div>
-        <nav class="nav-links">
-            <a href="#">License</a>
-            <a href="#">Pricing</a>
-            <a href="#">Sign in</a>
-        </nav>
-    </header>
-
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	
     <div class="main-content">
         <aside class="sidebar">
             <div class="category-title">Categories</div>
             <ul class="category-list">
-                <li>Logos</li>
-                <li>Typography & Titles</li>
-                <li>Slideshows</li>
-                <li>Lower Thirds</li>
-                <li>Intros</li>
-                <li>Infographics</li>
-                <li>Transitions</li>
-                <li>Mockups</li>
-                <li>Tools</li>
-                <li>Animated Letters</li>
-                <li>Overlays & Icons</li>
+            	<th:block th:each="vc : ${videoTempCategory}">
+            	<li>[[${vc.categoryName}]]</li>
+            	</th:block>
             </ul>
         </aside>
 
@@ -41,11 +24,9 @@
             <h1 class="title">Every Stock Video You Need, All in One Place!</h1>
             
             <div class="tags">
-                <span class="tag">3d render</span>
-                <span class="tag">background</span>
-                <span class="tag">particle</span>
-                <span class="tag">all</span>
-                <span class="tag">template</span>
+            	<th:block th:each="vp : ${videoTempPopularCate}">
+            	<span class="tag">[[${vp.categoryName}]]</span>
+            	</th:block>
             </div>
 
             <div class="search-bar">
@@ -53,23 +34,13 @@
             </div>
 
             <div class="video-grid">
-                <!-- Repeat this block for each video -->
-                <div class="video-card">
+                <div class="video-card" th:each="vl: ${videoTemplateList}">
                     <div class="video-thumbnail"></div>
                     <div class="video-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
+                        <h3>[[${vl.contentTitle}]]</h3>
+                        <p>[[${vl.userNickName}]]</p>
                     </div>
                 </div>
-                <!-- Repeat 8 more times for the grid -->
-                <div class="video-card">
-                    <div class="video-thumbnail"></div>
-                    <div class="video-info">
-                        <h3>Big Game Grunge</h3>
-                        <p>HandsomeDown</p>
-                    </div>
-                </div>
-                <!-- Add more video cards as needed -->
             </div>
         </main>
     </div>

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
@@ -61,6 +60,14 @@ public class BoardService {
 
 	public int updateInquiry(Content inquiry) {
 		return mapper.updateInquiry(inquiry);
+	}
+
+	public ArrayList<Content> allCategory(int i) {
+		return mapper.allCategory(i);
+	}
+
+	public ArrayList<Content> allPopularCate(int i) {
+		return mapper.allPopularCate(i);
 	}
 
 }

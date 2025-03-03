@@ -26,13 +26,13 @@
                 <h2>비디오 템플릿</h2>
                 <a href="/board/video-template-list" class="view-all">view all</a>
             </div>
-            <div class="content-grid">
+            <div class="content-grid video-template-list">
                 <div class="content-card dark" th:each="v : ${videoTemplateList}">
+                	<input type="hidden" th:value="${v.contentNo}">
                     <div class="card-image">
                         <img src="/placeholder.svg?height=200&width=300" alt="Big Game Grunge">
                     </div>
                     <div class="card-info">
-                    	<input type="hidden" value="[[${v.contentNo}]]">
                         <h3>[[${v.contentTitle}]]</h3>
                         <p>[[${v.userNickName}]]</p>
                     </div>
@@ -170,7 +170,16 @@
         </section>
     </main>
 	<script>
-		
+		window.onload = () =>{
+			const videoMenu = document.getElementsByClassName("content-grid")[0];
+			[...videoMenu.children].map((video, index, array) =>{
+				video.addEventListener('click', function(){
+					console.log(this.children[0].value);
+				})
+			})
+			
+			
+		}
 	</script>
 </body>
 </html>
