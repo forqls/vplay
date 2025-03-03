@@ -31,15 +31,15 @@ public class BoardController {
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
 		
 		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
-		ArrayList<Content> musicTemplateList = bService.allTemplateList("Music");
-		ArrayList<Content> soundEffectsTemplateList = bService.allTemplateList("Sound Effects");
+		ArrayList<Content> musicList = bService.allTemplateList("Music");
+		ArrayList<Content> soundEffectsList = bService.allTemplateList("Sound Effects");
 		ArrayList<Content> graphicTemplateList = bService.allTemplateList("Graphic Templates");
-		ArrayList<Content> stockVideoTemplateList = bService.allTemplateList("Stock Video");
-		ArrayList<Content> photosTemplateList = bService.allTemplateList("Photos");
-		ArrayList<Content> fontTemplateList = bService.allTemplateList("Fonts");
+		ArrayList<Content> stockVideoList = bService.allTemplateList("Stock Video");
+		ArrayList<Content> photosList = bService.allTemplateList("Photos");
+		ArrayList<Content> fontList = bService.allTemplateList("Fonts");
 		
-		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicTemplateList", musicTemplateList).addObject("soundEffectsTemplateList", soundEffectsTemplateList).addObject("graphicTemplateList", graphicTemplateList);
-		mv.addObject("stockVideoTemplateList", stockVideoTemplateList).addObject("photosTemplateList", photosTemplateList).addObject("fontTemplateList", fontTemplateList);
+		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
+		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
 
 		mv.setViewName("all_menu");
 
@@ -161,4 +161,68 @@ public class BoardController {
 			throw new UsersException("로그인 하셈");
 		}
 	}
+	
+	@GetMapping("video-template-list")
+	public ModelAndView videoTemplateList(ModelAndView mv) {
+		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
+		
+		mv.addObject("videoTemplateList", videoTemplateList);
+		mv.setViewName("videoTemplates_list");
+		return mv;
+	}
+	
+	@GetMapping("sound-effects-list")
+	public ModelAndView soundEffectsList(ModelAndView mv) {
+		ArrayList<Content> soundEffectsTemplateList = bService.allTemplateList("Sound Effects");
+		
+		mv.addObject("soundEffectsTemplateList", soundEffectsTemplateList);
+		mv.setViewName("soundEffects_list");
+		return mv;
+	}
+	
+	@GetMapping("music-list")
+	public ModelAndView musicList(ModelAndView mv) {
+		ArrayList<Content> musicList = bService.allTemplateList("Music");
+		
+		mv.addObject("musicList", musicList);
+		mv.setViewName("music_list");
+		return mv;
+	}
+	
+	@GetMapping("graphic-template-list")
+	public ModelAndView graphicTemplateList(ModelAndView mv) {
+		ArrayList<Content> graphicTemplateList = bService.allTemplateList("Graphic Templates");
+		
+		mv.addObject("graphicTemplateList", graphicTemplateList);
+		mv.setViewName("GraphicTemplates_list");
+		return mv;
+	}
+	
+	@GetMapping("stock-video-list")
+	public ModelAndView stockVideoList(ModelAndView mv) {
+		ArrayList<Content> stockVideoList = bService.allTemplateList("Stock Video");
+		
+		mv.addObject("stockVideoList", stockVideoList);
+		mv.setViewName("stock-video_list");
+		return mv;
+	}
+	
+	@GetMapping("photo-list")
+	public ModelAndView photoList(ModelAndView mv) {
+		ArrayList<Content> photosList = bService.allTemplateList("Photos");
+		
+		mv.addObject("photosList", photosList);
+		mv.setViewName("photo-list");
+		return mv;
+	}
+	
+	@GetMapping("font-list")
+	public ModelAndView fontList(ModelAndView mv) {
+		ArrayList<Content> fontList = bService.allTemplateList("Fonts");
+		
+		mv.addObject("fontList", fontList);
+		mv.setViewName("fonts_list");
+		return mv;
+	}
+	
 }
