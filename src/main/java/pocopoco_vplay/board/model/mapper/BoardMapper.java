@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.session.RowBounds;
 import pocopoco_vplay.board.model.vo.Content;
 
 @Mapper
@@ -32,5 +33,11 @@ public interface BoardMapper {
 	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
 
 	int updateInquiry(Content inquiry);
+
+    int getrequestPostCount();
+
+	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
+
+	String selectUser(int userNo);
 
 }

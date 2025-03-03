@@ -182,4 +182,28 @@
 		CONTENT_NO = #{contentNo}
 	</update>
 
+	<select id="getrequestPostCount">
+		select count(*)
+		from content
+				 join board using(content_no)
+		where board_type = 2
+	</select>
+
+	<select id="selectAllRequestPost">
+		select *
+		from content
+				 join board using(content_no)
+				 join menu using(menu_no)
+				 join users using(user_no)
+		where board_type = 2 and CONTENT_STATUS = 'Y'
+		order by content_no desc
+	</select>
+
+	<select id="selectUser">
+		select user_id
+		from users
+		where user_no = #{userNo}
+	</select>
+
+
 </mapper>

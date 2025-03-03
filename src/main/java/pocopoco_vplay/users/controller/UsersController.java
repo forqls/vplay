@@ -199,24 +199,24 @@ public class UsersController {
 		return password.toString();
 
 	}
-	
-	
+
+
 	@GetMapping("my_trash")
 	private String myTrashPage(HttpSession session , Model model) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
 		int userNo = loginUser.getUserNo();
-		
+
 		ArrayList<Content> list = bService.selectMyTrash(userNo);
-		
+
 		if(loginUser != null) {
 			model.addAttribute("list",list);
 			return "my_trash";
 		}else {
 			throw new UsersException("로그인 풀림");
 		}
-		
-		
-		
+
+
+
 	}
 
 
@@ -302,13 +302,13 @@ public class UsersController {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int userNo = loginUser.getUserNo();
 //		System.out.println(userNo);
-		
+
 		ArrayList<Content> list = bService.selectMyInquiry(userNo);
 		System.out.println(list);
 		System.out.println(list.size());
-		
+
 		model.addAttribute("list",list);
-		
+
 		return "my_inquiry";
 	}
 
@@ -351,7 +351,7 @@ public class UsersController {
 			throw new UsersException("회원수정을 실패하였습니다.");
 		}
 	}
-	
+
 	@GetMapping("changeCheckPw")
 	@ResponseBody
 	public int changeCheckPw(@RequestParam("currentPwd") String password, HttpSession session) {
@@ -362,7 +362,7 @@ public class UsersController {
 	    	return 0;
 	    }
 	}
-	
+
 	@PostMapping("changePw")
 	public String changePw(@RequestParam("newPwd") String newPassword, Model model, HttpSession session) {
 	    Users loginUser = (Users) session.getAttribute("loginUser");
