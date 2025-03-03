@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - Page Not Found</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Arial, sans-serif;
+}
+
+body {
+	background-color: #000000;
+	background: radial-gradient(circle at 70% 50%, #134e4a 0%, #0f172a 50%, #000000 100%);
+	color: #ffffff;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.container {
+	display: flex;
+	width: 100%;
+	max-width: 1200px;
+	padding: 0 20px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.error-content {
+	max-width: 500px;
+}
+
+.error-title {
+	font-size: 5rem;
+	font-weight: bold;
+	margin-bottom: 10px;
+	letter-spacing: 2px;
+}
+
+.error-subtitle {
+	font-size: 2rem;
+	margin-bottom: 40px;
+	letter-spacing: 1px;
+}
+
+.buttons {
+	display: flex;
+	gap: 20px;
+}
+
+.btn {
+	padding: 12px 30px;
+	border: 1px solid #ffffff;
+	border-radius: 30px;
+	background: transparent;
+	color: #ffffff;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-decoration: none;
+}
+
+.btn:hover {
+	background-color: #ffffff;
+	color: #000000;
+}
+
+.robot-container {
+	position: relative;
+	width: 300px;
+	height: 300px;
+}
+
+.glow {
+	position: absolute;
+	width: 300px;
+	height: 300px;
+	background: radial-gradient(circle, rgba(45, 212, 191, 0.3) 0%, rgba(15, 23, 42, 0) 70%);
+	border-radius: 50%;
+	z-index: 1;
+}
+
+.robot {
+	position: relative;
+	z-index: 2;
+	width: 250px;
+	height: 250px;
+	animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(3deg);
+            }
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+        }
+
+.circuit {
+	position: absolute;
+	background-color: rgba(45, 212, 191, 0.5);
+	border-radius: 50%;
+	z-index: 0;
+}
+
+.circuit-1 {
+	width: 8px;
+	height: 30px;
+	top: 25%;
+	right: 25%;
+}
+
+.circuit-2 {
+	width: 30px;
+	height: 8px;
+	bottom: 33%;
+	right: 33%;
+}
+
+.circuit-3 {
+	width: 12px;
+	height: 12px;
+	top: 33%;
+	left: 25%;
+}
+
+.circuit-4 {
+	width: 20px;
+	height: 20px;
+	bottom: 25%;
+	left: 33%;
+}
+
+.pixel {
+	position: absolute;
+	background-color: #ffffff;
+	z-index: 0;
+}
+
+.pixel-1 {
+	width: 8px;
+	height: 8px;
+	top: 10%;
+	right: 10%;
+}
+
+.pixel-2 {
+	width: 4px;
+	height: 4px;
+	top: 50%;
+	right: 5%;
+}
+
+.pixel-3 {
+	width: 12px;
+	height: 12px;
+	bottom: 10%;
+	right: 20%;
+	opacity: 0.5;
+}
+
+.pixel-4 {
+	width: 8px;
+	height: 8px;
+	bottom: 33%;
+	left: 10%;
+	opacity: 0.7;
+}
+
+@media ( max-width : 768px) {
+	.container {
+		flex-direction: column;
+		text-align: center;
+	}
+	.error-content {
+		margin-bottom: 50px;
+	}
+	.error-title {
+		font-size: 3.5rem;
+	}
+	.error-subtitle {
+		font-size: 1.5rem;
+	}
+	.robot-container {
+		width: 200px;
+		height: 200px;
+	}
+	.robot {
+		width: 200px;
+		height: 200px;
+	}
+	.buttons {
+		justify-content: center;
+	}
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="error-content">
+			<h1 class="error-title">404-error</h1>
+			<h2 class="error-subtitle">Page Not Found</h2>
+			<p th:text="${message}"></p>
+			<br /> <br />
+			<div class="buttons">
+				<a href="/" class="btn">Go Home</a> <a href="javascript:history.back()" class="btn">Go Back</a>
+			</div>
+		</div>
+		<div class="robot-container">
+			<div class="glow"></div>
+			<svg class="robot" id="robot" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Robot Body -->
+                <rect x="60" y="80" width="80" height="90" rx="10" fill="#2dd4bf" />
+                
+                <!-- Robot Head -->
+                <rect x="70" y="40" width="60" height="50" rx="8" fill="#2dd4bf" />
+                
+                <!-- Robot Face -->
+                <rect x="75" y="50" width="50" height="30" rx="4" fill="#0f172a" />
+                
+                <!-- Robot Eyes -->
+                <circle id="leftEye" cx="85" cy="65" r="5" fill="#ffffff" />
+                <circle id="rightEye" cx="115" cy="65" r="5" fill="#ffffff" />
+                
+                <!-- Robot Mouth -->
+                <rect x="85" y="75" width="30" height="3" rx="1" fill="#ffffff" />
+                
+                <!-- Robot Antenna -->
+                <rect x="98" y="30" width="4" height="10" fill="#2dd4bf" />
+                <circle id="antenna" cx="100" cy="25" r="5" fill="#64748b" />
+                
+                <!-- Robot Arms -->
+                <rect x="40" y="100" width="20" height="10" rx="5" fill="#2dd4bf" />
+                <rect x="140" y="100" width="20" height="10" rx="5" fill="#2dd4bf" />
+                
+                <!-- Robot Legs -->
+                <rect x="70" y="170" width="15" height="20" rx="3" fill="#2dd4bf" />
+                <rect x="115" y="170" width="15" height="20" rx="3" fill="#2dd4bf" />
+                
+                <!-- Robot Details -->
+                <circle cx="100" cy="110" r="8" fill="#0f172a" />
+                <circle id="centerLight" cx="100" cy="110" r="4" fill="#64748b" />
+                <rect x="85" y="130" width="30" height="10" rx="2" fill="#0f172a" />
+                <rect x="90" y="135" width="20" height="3" rx="1" fill="#64748b" />
+            </svg>
+			<div class="circuit circuit-1"></div>
+			<div class="circuit circuit-2"></div>
+			<div class="circuit circuit-3"></div>
+			<div class="circuit circuit-4"></div>
+			<div class="pixel pixel-1"></div>
+			<div class="pixel pixel-2"></div>
+			<div class="pixel pixel-3"></div>
+			<div class="pixel pixel-4"></div>
+		</div>
+	</div>
+
+	<script>
+        // Add interactivity to the robot
+        const robot = document.getElementById('robot');
+        const leftEye = document.getElementById('leftEye');
+        const rightEye = document.getElementById('rightEye');
+        const antenna = document.getElementById('antenna');
+        const centerLight = document.getElementById('centerLight');
+
+        robot.addEventListener('mouseenter', () => {
+            leftEye.setAttribute('r', '8');
+            rightEye.setAttribute('r', '8');
+            leftEye.setAttribute('fill', '#f43f5e');
+            rightEye.setAttribute('fill', '#f43f5e');
+            antenna.setAttribute('fill', '#f43f5e');
+            centerLight.setAttribute('fill', '#f43f5e');
+        });
+
+        robot.addEventListener('mouseleave', () => {
+            leftEye.setAttribute('r', '5');
+            rightEye.setAttribute('r', '5');
+            leftEye.setAttribute('fill', '#ffffff');
+            rightEye.setAttribute('fill', '#ffffff');
+            antenna.setAttribute('fill', '#64748b');
+            centerLight.setAttribute('fill', '#64748b');
+        });
+    </script>
+</body>
+</html>
