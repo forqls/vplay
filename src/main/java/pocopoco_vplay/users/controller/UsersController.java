@@ -149,7 +149,7 @@ public class UsersController {
 
     @GetMapping("signIn")
     public String signIn() {
-        //System.out.println(bcrypt.encode("vplay"));
+        System.out.println(bcrypt.encode("Dongjun"));
         return "signIn"; }
 	
 	//로그인
