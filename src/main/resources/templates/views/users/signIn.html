@@ -148,7 +148,9 @@ body {
 		<div class="social-divider">------------------- Or Sign In with Social -------------------</div>
 		
 		<div class="social-buttons">
-			<button class="social-btn kakao-btn">카카오 로그인</button>
+			<a th:href="@{/oauth/kakao}" style="width:50%">
+				<img th:src="@{/img/123.png} " style="width:100%">
+			</a>
 			<button class="social-btn google-btn">Sign in with Google</button>
 		</div>
 	</main>
