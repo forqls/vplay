@@ -271,6 +271,12 @@ public class BoardController {
 			throw new BoardException("제작 의뢰 게시글 작성 실패");
 		}
 	}
+	@GetMapping("/{id}/{page}")
+	public ModelAndView show(@PathVariable("id") int id, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+
+
+	}
 
 
 
