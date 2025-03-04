@@ -21,7 +21,7 @@
 			order by content.views desc
 		</if>
 	</select>
-
+	
 	<select id="selectCategoryMyProjects">
 		SELECT c.*,
 		(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count
@@ -230,6 +230,14 @@
 		values (#{contentNo}, 2, #{menuNo})
 	</insert>
 
-
+	<select id="allMenuDetail" parameterType="int">
+		select *
+		from content c
+		     join users u on(c.user_no = u.user_no)
+		     join content_category cc on(c.content_no = cc.content_no)
+		     join category cg on(cc.category_no = cg.category_no)
+		     join menu m on(cg.menu_no = m.menu_no)
+		where c.content_no = #{contentNo}
+	</select>
 
 </mapper>

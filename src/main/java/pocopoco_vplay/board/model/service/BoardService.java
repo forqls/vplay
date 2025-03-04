@@ -98,4 +98,8 @@ public class BoardService {
 	public int insertRequestBoard(Content content) {
 		return mapper.insertRequestBoard(content);
 	}
+
+	public Content allMenuDetail(int contentNo) {
+		return mapper.allMenuDetail(contentNo);
+	}
 }
