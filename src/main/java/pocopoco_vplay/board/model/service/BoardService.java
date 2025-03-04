@@ -42,8 +42,11 @@ public class BoardService {
 	}
 
 	public int insertInquiry(Content inquiry) {
+		System.out.println(inquiry);
 		int result1 = mapper.insertInquiry(inquiry);
+		System.out.println(inquiry);
 		int result2 = mapper.insertBoard(inquiry);
+		System.out.println(inquiry);
 
 		if (result1 > 0 && result2 > 0) {
 			return result1;
