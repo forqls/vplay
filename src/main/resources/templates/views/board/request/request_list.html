@@ -11,12 +11,6 @@
 <body>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
 <div class="container">
-	<!-- Breadcrumb -->
-	<nav class="breadcrumb">
-		<a href="/">Home</a>
-		<span>&gt;</span>
-		<span class="active">Request Board List</span>
-	</nav>
 
 	<!-- Main Title -->
 	<h1>제작 의뢰 게시판</h1>
@@ -64,13 +58,13 @@
 			</tr>
 			</thead>
 			<tbody>
-			<tr class="inquiry-list" th:each="item : ${list}">
-				<td>[[${item.contentNo}]]</td>
-				<td>[[${item.contentTitle}]]</td>
-				<td>[[${item.menuName}]]</td>
-				<td>[[${item.userNickName}]]</td>
-				<td>[[${item.modifyDate}]]</td>
-				<td>[[${item.views}]]</td>
+			<tr class="inquiry-list" th:each="c : ${list}">
+				<td>[[${c.contentNo}]]</td>
+				<td>[[${c.contentTitle}]]</td>
+				<td>[[${c.menuName}]]</td>
+				<td>[[${c.userNickName}]]</td>
+				<td>[[${c.modifyDate}]]</td>
+				<td>[[${c.views}]]</td>
 			</tr>
 			</tbody>
 		</table>

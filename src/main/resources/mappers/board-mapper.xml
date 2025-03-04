@@ -218,18 +218,18 @@
 		where user_no = #{userNo}
 	</select>
 
-<!--	<insert id="insertRequest">-->
-<!--		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">-->
-<!--			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL-->
-<!--		</selectKey>-->
-<!--		INSERT INTO content (content_no, content_title, content_detail, create_date, modify_date, content_status, delete_status, user_no, views)-->
-<!--		VALUES (#{contentNo}, #{contentTitle}, #{contentDetail}, SYSDATE, SYSDATE, DEFAULT, DEFAULT, #{userNo}, DEFAULT)-->
-<!--	</insert>-->
+	<insert id="insertRequest">
+		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">
+			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO content (content_no, content_title, content_detail, create_date, modify_date, content_status, delete_status, user_no, views)
+		VALUES (#{contentNo}, #{contentTitle}, #{contentDetail}, SYSDATE, SYSDATE, DEFAULT, DEFAULT, #{userNo}, DEFAULT)
+	</insert>
 
-<!--	<insert id="insertRequestBoard">-->
-<!--		insert into board (CONTENT_NO, BOARD_TYPE, MENU_NO)-->
-<!--		values (, 2, #{menuNo})-->
-<!--	</insert>-->
+	<insert id="insertRequestBoard">
+		insert into board (CONTENT_NO, BOARD_TYPE, MENU_NO)
+		values (#{contentNo}, 2, #{menuNo})
+	</insert>
 
 
 
