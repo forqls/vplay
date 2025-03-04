@@ -45,7 +45,7 @@ public interface BoardMapper {
 
 	String selectUser(int userNo);
 
-//	int insertRequest(Content content);
-//
-//	int insertRequestBoard(Content content);
+    int insertRequest(Content content);
+
+	int insertRequestBoard(Content content);
 }

@@ -257,20 +257,20 @@ public class BoardController {
 		return "request_write";
 	}
 
-//	@PostMapping("writeRequest")
-//	public String writeRequest(@ModelAttribute Content content, HttpSession session) {
-//		Users loginUser = (Users) session.getAttribute("loginUser");
-//		int userNo = loginUser.getUserNo();
-//		content.setUserNo(userNo);
-//		System.out.println(content);
-//		int result = bService.insertRequest(content);
-//		int result2 = bService.insertRequestBoard(content);
-//		if (result + result2 == 2) {
-//			return "request_list";
-//		} else {
-//			throw new BoardException("제작 의뢰 게시글 작성 실패");
-//		}
-//	}
+	@PostMapping("writeRequest")
+	public String writeRequest(@ModelAttribute Content content, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+		content.setUserNo(userNo);
+		System.out.println(content);
+		int result = bService.insertRequest(content);
+		int result2 = bService.insertRequestBoard(content);
+		if (result + result2 == 2) {
+			return "redirect:/board/request_list";
+		} else {
+			throw new BoardException("제작 의뢰 게시글 작성 실패");
+		}
+	}
 
 
 

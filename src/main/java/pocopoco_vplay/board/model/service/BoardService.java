@@ -90,15 +90,12 @@ public class BoardService {
 		return mapper.selectUser(userNo);
 	}
 
-//	public int insertRequest(Content content, loginUser loginUser) {
-//		return mapper.insertRequest(content);
-//		return mapper.insertRequestBoard(content, loginUser.userNo());
-//	}
+	public int insertRequest(Content content) {
+		return mapper.insertRequest(content);
+	}
 
 
-
-//	public int insertRequestBoard(Content content) {
-//		return mapper.insertRequestBoard(content;
-//	}
-
+	public int insertRequestBoard(Content content) {
+		return mapper.insertRequestBoard(content);
+	}
 }

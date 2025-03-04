@@ -114,12 +114,15 @@ textarea {
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<main class="inquiryWrite-container">
-		<h1 class="inquiryWrite-title">문의 작성</h1>
+		<h1 class="inquiryWrite-title">[[${c.contentTitle}]]</h1>
 		<form id="inquiryForm" action="write_inquiry" method="post">
+			<input type="hidden" name="boardId" th:value="${c.boardId}">
+
+			<input type="hidden" name="page" th:value="${page}">
 			<input type="hidden" name="userNo" th:value="${session.loginUser.userNo}" />
 			<div class="form-group">
 				<div class="form-label">
-					<span>문의 선택</span> <select class="filter-dropdown" name="menuNo">
+					<span>[[${c.menuName}]]</span> <select class="filter-dropdown" name="menuNo">
 						<option value="11">시스템 문의</option>
 						<option value="12">결제 문의</option>
 						<option value="13">컨텐츠 문의</option>
