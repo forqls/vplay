@@ -195,4 +195,42 @@
 		where menu_no = #{menuNo}
 	</select>
 
+	<select id="getrequestPostCount">
+		select count(*)
+		from content
+				 join board using(content_no)
+		where board_type = 2
+	</select>
+
+	<select id="selectAllRequestPost">
+		select *
+		from content
+				 join board using(content_no)
+				 join menu using(menu_no)
+				 join users using(user_no)
+		where board_type = 2 and CONTENT_STATUS = 'Y'
+		order by content_no desc
+	</select>
+
+	<select id="selectUser">
+		select user_id
+		from users
+		where user_no = #{userNo}
+	</select>
+
+<!--	<insert id="insertRequest">-->
+<!--		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">-->
+<!--			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL-->
+<!--		</selectKey>-->
+<!--		INSERT INTO content (content_no, content_title, content_detail, create_date, modify_date, content_status, delete_status, user_no, views)-->
+<!--		VALUES (#{contentNo}, #{contentTitle}, #{contentDetail}, SYSDATE, SYSDATE, DEFAULT, DEFAULT, #{userNo}, DEFAULT)-->
+<!--	</insert>-->
+
+<!--	<insert id="insertRequestBoard">-->
+<!--		insert into board (CONTENT_NO, BOARD_TYPE, MENU_NO)-->
+<!--		values (, 2, #{menuNo})-->
+<!--	</insert>-->
+
+
+
 </mapper>

@@ -3,11 +3,13 @@ package pocopoco_vplay.board.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.commom.model.vo.PageInfo;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +64,7 @@ public class BoardService {
 		return mapper.updateInquiry(inquiry);
 	}
 
+
 	public ArrayList<Content> allCategory(int i) {
 		return mapper.allCategory(i);
 	}
@@ -69,5 +72,30 @@ public class BoardService {
 	public ArrayList<Content> allPopularCate(int i) {
 		return mapper.allPopularCate(i);
 	}
+
+  public int getrequestPostCount() {
+  return mapper.getrequestPostCount();
+  }
+
+	public ArrayList<Content> selectAllRequestPost(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectAllRequestPost(rowBounds);
+	}
+
+	public String selectUser(int userNo) {
+		return mapper.selectUser(userNo);
+	}
+
+//	public int insertRequest(Content content, loginUser loginUser) {
+//		return mapper.insertRequest(content);
+//		return mapper.insertRequestBoard(content, loginUser.userNo());
+//	}
+
+
+
+//	public int insertRequestBoard(Content content) {
+//		return mapper.insertRequestBoard(content;
+//	}
 
 }

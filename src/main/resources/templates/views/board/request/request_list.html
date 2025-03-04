@@ -6,6 +6,7 @@
 	<title>제작 의뢰 게시판</title>
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="/css/rBoard/requestBoard.css">
+	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
@@ -63,13 +64,13 @@
 			</tr>
 			</thead>
 			<tbody>
-			<tr class="inquiry-list" th:each="item : ${requestList}">
-				<td>1</td>
-				<td>영상 제작 의뢰를 받기고 싶습니다</td>
-				<td>Video Templates</td>
-				<td>Handsomegwon</td>
-				<td>2025-02-01</td>
-				<td>100</td>
+			<tr class="inquiry-list" th:each="item : ${list}">
+				<td>[[${item.contentNo}]]</td>
+				<td>[[${item.contentTitle}]]</td>
+				<td>[[${item.menuName}]]</td>
+				<td>[[${item.userNickName}]]</td>
+				<td>[[${item.modifyDate}]]</td>
+				<td>[[${item.views}]]</td>
 			</tr>
 			</tbody>
 		</table>
@@ -78,53 +79,52 @@
 	<!-- Pagination -->
 	<div class="pagination">
 		<ul>
-<!--			<th:block th:if="${pi.currentPage >1}">-->
-<!--				<li class="prev chevron-left">-->
-<!--					<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">-->
-<!--						<-->
-<!--					</a>-->
-<!--				</li>-->
-<!--			</th:block>-->
-<!--			<th:block th:if="${pi.currentPage <=1}">-->
-<!--				<li class="prev chevron-left">-->
-<!--					<a aria-label="Previous">-->
-<!--						<-->
-<!--					</a>-->
-<!--				</li>-->
-<!--			</th:block>-->
+			<th:block th:if="${pi.currentPage >1}">
+				<li class="prev chevron-left">
+					<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+						<
+					</a>
+				</li>
+			</th:block>
+			<th:block th:if="${pi.currentPage <=1}">
+				<li class="prev chevron-left">
+					<a aria-label="Previous">
+						<
+					</a>
+				</li>
+			</th:block>
 
-<!--			&lt;!&ndash; 숫자 &ndash;&gt;-->
-<!--			<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">-->
-<!--				<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>-->
-<!--			</li>-->
+			<!-- 숫자 -->
+			<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+				<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
+			</li>
 
 
-<!--			&lt;!&ndash; 다음 &ndash;&gt;-->
-<!--			<th:block th:if="${pi.currentPage < pi.MaxPage}">-->
-<!--				<li class="next chevron-right">-->
-<!--					<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">-->
-<!--						>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--			</th:block>-->
-<!--			<th:block th:if="${pi.currentPage >= pi.MaxPage}">-->
-<!--				<li class="next chevron-right">-->
-<!--					<a aria-label="Next">-->
-<!--						>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--			</th:block>-->
+			<!-- 다음 -->
+			<th:block th:if="${pi.currentPage < pi.MaxPage}">
+				<li class="next chevron-right">
+					<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
+						>
+					</a>
+				</li>
+			</th:block>
+			<th:block th:if="${pi.currentPage >= pi.MaxPage}">
+				<li class="next chevron-right">
+					<a aria-label="Next">
+						>
+					</a>
+				</li>
+			</th:block>
 		</ul>
 	</div>
 
 	<!-- Create Button -->
 	<div class="create-button">
-		<button>의뢰 하러 가기</button>
+		<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
 	</div>
 </div>
 
 <script>
-	lucide.createIcons();
 </script>
 </body>
 </html>

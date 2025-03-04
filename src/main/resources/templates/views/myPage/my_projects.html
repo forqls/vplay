@@ -117,7 +117,7 @@
 								</div>
 							</div>
 						<div class="item-content">
-							<span class="item-title" th:text="${r.contentTitle}"></span> 
+							<span class="item-title" th:text="${r.contentTitle}"></span>
 							<span th:text="${r.contentNo}"></span>
 
 							<div class="item-actions">
@@ -136,32 +136,32 @@
 	</div>
 
 	<script type="text/javascript">
-				
-	
+
+
 			document.querySelectorAll('.menu-dots').forEach(button=>{
 				button.addEventListener('click',function(){
 // 					console.log(this);
 
 					event.stopPropagation();
-					
+
 					let dropdown = this.nextElementSibling;
-					
+
 					document.querySelectorAll('.dropdown').forEach(d=>{
 						if(d != dropdown){
 							d.classList.remove('show');
 						}
 					});
 					dropdown.classList.toggle('show');
-					
+
 				});
 			});
-			
+
 			document.addEventListener('click',()=>{
 				document.querySelectorAll('.dropdown').forEach(d=>{
 					d.classList.remove('show');
 				});
 			});
-			
+
 			document.querySelectorAll('.dropdown-item').forEach(d=>{
 				d.addEventListener('click',(e)=>{
 					console.log(e.target);
@@ -171,7 +171,7 @@
 // 					console.log(span);
 					let contentNo = span[2].textContent.trim();
 					console.log(contentNo);
-					
+
 					$.ajax({
 						url:'/board/throwBoardTrash',
 						data:{contentNo:contentNo},
@@ -183,14 +183,14 @@
 							}else{
 								alert('게시글 삭제에 실패했습니다.');
 							}
-							
+
 
 						},error:data=>alert('서버오류')
 					})
 				});
 			});
-			
-	
+
+
  			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
  				dropdown.addEventListener('change',(e)=>{
  	 				let value = document.getElementById('categorySelect').value;
@@ -198,23 +198,23 @@
  	 				console.log(value);
  	 				console.log(sortValue);
  	 				$.ajax({
- 						
+
  	 					url:'/board/selectCategoryMyProjects',
  	 					data:{value:value , sortValue:sortValue},
  	 					success:data=>{
 // 	  						console.log(data);
  	 						let grids = document.querySelectorAll('.grid');
- 	 						
+
  	 						grids.forEach(grid=>{
  	 							grid.innerHTML='';
  	 						});
- 	 						
+
  	 						if(!data || data.length ==0){
  	 							grids[0].innerHTML='<p>검색된 목록이 없습니다!</p>';
  	 							return;
  	 						}
- 	 						
- 	 						
+
+
  	 						data.forEach((r)=>{
  	 							console.log(r.contentTitle);
  								let gridItem = `
@@ -230,16 +230,16 @@
  									`;
  								grids[0].innerHTML += gridItem;
  							});
- 	 						
+
  	 						console.log(data);
- 							
+
  	 					},
  	 					error:data=>console.log(data)
  	 				});
  	 			});
- 				
+
  			});
- 				
+
  		</script>
 
 </body>

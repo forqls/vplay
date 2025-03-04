@@ -5,18 +5,16 @@ import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.commom.Pagination;
+import pocopoco_vplay.commom.model.vo.PageInfo;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.vo.Users;
 
@@ -162,10 +160,10 @@ public class BoardController {
 		}
 	}
 	
-	@GetMapping("request_list")
-	public String requestList() {
-		return "request_list";
-	}
+//	@GetMapping("request_list")
+//	public String requestList() {
+//		return "request_list";
+//	}
 	
 
 	@GetMapping("video-template-list")
@@ -233,5 +231,47 @@ public class BoardController {
 		mv.setViewName("fonts_list");
 		return mv;
 	}
-	
+
+	@GetMapping("request_list")
+	public ModelAndView joinrequestPost(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
+
+		int listCount = bService.getrequestPostCount();
+
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+
+		ArrayList<Content> list = bService.selectAllRequestPost(pi);
+
+		System.out.println("리스트 개수: " + list.size());
+
+		for(Content c : list) {
+			c.setUserId(bService.selectUser(c.getUserNo()));
+		}
+
+		mv.addObject("list", list).addObject("pi", pi);
+		mv.setViewName("request_list");
+		return mv;
+	}
+
+	@GetMapping("writeRequest")
+	public String writeRequest(){
+		return "request_write";
+	}
+
+//	@PostMapping("writeRequest")
+//	public String writeRequest(@ModelAttribute Content content, HttpSession session) {
+//		Users loginUser = (Users) session.getAttribute("loginUser");
+//		int userNo = loginUser.getUserNo();
+//		content.setUserNo(userNo);
+//		System.out.println(content);
+//		int result = bService.insertRequest(content);
+//		int result2 = bService.insertRequestBoard(content);
+//		if (result + result2 == 2) {
+//			return "request_list";
+//		} else {
+//			throw new BoardException("제작 의뢰 게시글 작성 실패");
+//		}
+//	}
+
+
+
 }
