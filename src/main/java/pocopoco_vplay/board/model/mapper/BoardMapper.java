@@ -34,7 +34,12 @@ public interface BoardMapper {
 
 	int updateInquiry(Content inquiry);
 
-    int getrequestPostCount();
+
+	ArrayList<Content> allCategory(@Param("menuNo") int i);
+
+	ArrayList<Content> allPopularCate(int i);
+
+  int getrequestPostCount();
 
 	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
 

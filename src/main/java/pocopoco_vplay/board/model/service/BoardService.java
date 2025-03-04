@@ -64,9 +64,18 @@ public class BoardService {
 		return mapper.updateInquiry(inquiry);
 	}
 
-    public int getrequestPostCount() {
-		return mapper.getrequestPostCount();
-    }
+
+	public ArrayList<Content> allCategory(int i) {
+		return mapper.allCategory(i);
+	}
+
+	public ArrayList<Content> allPopularCate(int i) {
+		return mapper.allPopularCate(i);
+	}
+
+  public int getrequestPostCount() {
+  return mapper.getrequestPostCount();
+  }
 
 	public ArrayList<Content> selectAllRequestPost(PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
@@ -88,4 +97,5 @@ public class BoardService {
 //	public int insertRequestBoard(Content content) {
 //		return mapper.insertRequestBoard(content;
 //	}
+
 }
