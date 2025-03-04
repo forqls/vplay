@@ -17,7 +17,6 @@
 		<if test="sort == 'newest'">
 			order by content.create_date
 		</if>
-		t
 		<if test="sort == 'mostView'">
 			order by content.views desc
 		</if>
