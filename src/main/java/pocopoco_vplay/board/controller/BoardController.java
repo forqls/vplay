@@ -271,6 +271,15 @@ public class BoardController {
 			throw new BoardException("제작 의뢰 게시글 작성 실패");
 		}
 	}
+	
+	@GetMapping("video-templates/{no}")
+	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
+		
+		Content content = bService.allMenuDetail(contentNo);
+		model.addAttribute("content", content);
+		System.out.println(content);
+		return "videoTemplates_detail";
+	}
 
 
 

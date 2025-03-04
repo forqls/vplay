@@ -48,4 +48,6 @@ public interface BoardMapper {
     int insertRequest(Content content);
 
 	int insertRequestBoard(Content content);
+
+	Content allMenuDetail(@Param("contentNo") int contentNo);
 }

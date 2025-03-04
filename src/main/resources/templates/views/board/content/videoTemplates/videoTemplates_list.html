@@ -37,6 +37,7 @@
                 <div class="video-card" th:each="vl: ${videoTemplateList}">
                     <div class="video-thumbnail"></div>
                     <div class="video-info">
+                    	<input type="hidden" th:value="${vl.contentNo}"/>
                         <h3>[[${vl.contentTitle}]]</h3>
                         <p>[[${vl.userNickName}]]</p>
                     </div>
@@ -44,5 +45,18 @@
             </div>
         </main>
     </div>
+    <script>
+    window.onload=()=>{
+    	const divs = document.querySelector('.video-grid');
+    	
+    	[...divs.children].map((video, index, array) =>{
+    		video.addEventListener('click', function(){
+    			const contentNo = video.children[1].children[0].value;
+    			console.log(contentNo);
+    			location.href = "/board/video-templates/" + contentNo;
+    		})
+    	})
+    }
+    </script>
 </body>
 </html>
