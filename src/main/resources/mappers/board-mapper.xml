@@ -116,7 +116,7 @@
 		</if>
 	</select>
 
-	<insert id="insertInquiry" parameterType="Content" useGeneratedKeys="true" keyProperty="contentNo">
+	<insert id="insertInquiry" parameterType="Content">
 		<selectKey resultType="int" keyProperty="contentNo" order="BEFORE">
 			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
