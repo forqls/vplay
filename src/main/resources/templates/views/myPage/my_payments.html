@@ -9,84 +9,112 @@
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Payments</title>
 <style>
-.subscription-card {
-	background: linear-gradient(135deg, #2a2a40 0%, #1f1f2c 100%);
-	border-radius: 1rem;
-	padding: 2rem;
-	position: relative;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		Oxygen, Ubuntu, Cantarell, sans-serif;
+	background-color: #191820;
+	color: white;
+	line-height: 1.5;
+}
+
+.pricing {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.card {
+	background-color: #1f1f2c;
 	border: 1px solid rgba(129, 55, 233, 0.2);
-	max-width: 22rem;
+	border-radius: 0.5rem;
+	padding: 1.5rem;
 }
 
-.badge {
-	position: absolute;
-	top: 1.5rem;
-	right: 1.5rem;
-	background-color: rgba(129, 55, 233, 0.2);
-	color: #8137e9;
-	padding: 0.25rem 0.75rem;
-	border-radius: 1rem;
-	font-size: 0.875rem;
+.current-plan {
+	background-color: #2a2936; /* 배경색 변경 */
+	border: 2px solid #8137e9; /* 테두리 강조 */
 }
 
-.plan-name {
-	font-size: 1.5rem;
-	font-weight: 600;
-	margin-bottom: 1rem;
+/* 나머지 카드들을 감싸는 영역 */
+.remaining-cards {
+	display: flex;
+	gap: 1.5rem;
+	width: 100%;
+}
+
+/* 나머지 카드들의 스타일 */
+.remaining-cards .card {
+	width: calc(50% - 0.75rem); /* 두 개의 카드가 한 줄에 나타나도록 너비 설정 */
+}
+
+.card h3 {
+	font-size: 1.25rem;
+	margin-bottom: 0.5rem;
 }
 
 .price {
-	font-size: 2rem;
-	font-weight: 700;
-	margin-bottom: 2rem;
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 1.5rem;
 }
 
-.price-period {
-	font-size: 1rem;
-	color: #6f757d;
-}
-
-.features-list {
-	list-style: none;
-	space: 1rem;
-}
-
-.feature-item {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	margin-bottom: 1rem;
-	color: #fff;
-}
-
-.feature-icon {
-	width: 18px;
-	height: 18px;
-	border: 2px solid rgba(129, 55, 233, 0.5);
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-}
-
-.feature-icon::after {
-	content: '';
-	width: 8px;
-	height: 8px;
-	background-color: #8137e9;
-	border-radius: 50%;
-}
-
-.feature-text {
+.price span {
 	font-size: 0.875rem;
+	color: #9ca3af;
 }
 
-.feature-description {
-	font-size: 0.75rem;
-	color: #6f757d;
-	margin-left: 1.75rem;
-	margin-top: 0.25rem;
+.start-button {
+	width: 100%;
+	background-color: #8137e9;
+	color: white;
+	border: none;
+	padding: 0.75rem;
+	border-radius: 0.25rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.start-button:hover {
+	background-color: #6c2bd9;
+}
+
+.features {
+	list-style: none;
+	color: #9ca3af;
+	margin-bottom: 1.5rem;
+}
+
+.features li {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.features li::before {
+	content: "•";
+	margin-right: 0.5rem;
+}
+
+.content_wrap {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	gap: 1rem;
+}
+
+@media ( max-width : 768px) {
+	.remaining-cards {
+		flex-direction: column; /* 화면이 좁아지면 세로로 나열 */
+	}
+	.remaining-cards .card {
+		width: 100%; /* 화면이 좁아지면 전체 너비 사용 */
+	}
 }
 </style>
 </head>
@@ -94,34 +122,54 @@
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
-		<div class=" container content_wrap flex_custom_wrap">
-					<div class="content-header">
+		<div class="container content_wrap flex_custom_wrap">
+			<div class="content-header">
 				<h1>My Payments</h1>
 			</div>
-			<div class="subscription-card">
-				<span class="badge">26</span>
-				<h2 class="plan-name">Frame Pro</h2>
-				<div class="price">
-					16,500<span class="price-period">/30</span>
+
+			<div class="pricing">
+				<!-- 현재 요금제 카드 -->
+				<div class="card current-plan">
+					<h3 th:text="${loginUser.userPlan}"></h3>
+					<div class="price">
+						26,000<span>/30</span>
+					</div>
+					<ul class="features">
+						<li>Enjoy All Content for Free on VPLAY</li>
+						<li>FREE Stock Video</li>
+						<li>FREE Graphic Templates & Photo</li>
+						<li>FREE Sound Effects</li>
+						<li>FREE Fonts</li>
+					</ul>
 				</div>
 
-				<ul class="features-list">
-					<li>
-						<div class="feature-item">
-							<span class="feature-icon"></span> <span class="feature-text">FREE Stock Video</span>
+				<div class="remaining-cards">
+					<div class="card">
+						<h3>Graphic Pro</h3>
+						<div class="price">
+							12,500<span>/30</span>
 						</div>
-					</li>
-					<li>
-						<div class="feature-item">
-							<span class="feature-icon"></span> <span class="feature-text">FREE Sound Effects</span>
+						<ul class="features">
+							<li>FREE Graphic Templates & Photo</li>
+							<li>FREE Sound Effects</li>
+							<li>FREE Fonts</li>
+						</ul>
+						<button class="start-button">Start now</button>
+					</div>
+
+					<div class="card">
+						<h3>Frame Pro</h3>
+						<div class="price">
+							16,500<span>/30</span>
 						</div>
-					</li>
-					<li>
-						<div class="feature-item">
-							<span class="feature-icon"></span> <span class="feature-text">FREE Fonts</span>
-						</div>
-					</li>
-				</ul>
+						<ul class="features">
+							<li>FREE Stock Video</li>
+							<li>FREE Sound Effects</li>
+							<li>FREE Fonts</li>
+						</ul>
+						<button class="start-button">Start now</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
