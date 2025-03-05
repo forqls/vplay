@@ -289,6 +289,7 @@ public class BoardController {
 		}else{
 			throw new BoardException("의뢰 게시글 상세조회를 실패했습니다.");
 		}
+	}
 	
 	@GetMapping("video-templates/{no}")
 	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
