@@ -83,15 +83,17 @@
 	
 	<select id="allTemplateList" parameterType="string">
 		select *
-		from (select *
-			 from content co
-			 left join users u on(co.user_no = u.user_no)
-		     left join board b on(co.content_no = b.content_no)
-		     left join content_category coa on(co.content_no = coa.content_no)
-		     left join category ca on(ca.category_no = coa.category_no)
-		     left join menu me on(ca.menu_no = me.menu_no)
-		where b.board_type is null and me.menu_name = #{menuName}
-		order by co.content_no desc) 
+		from (select c.content_no, c.content_title, u.user_nickname, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
+		        from content c
+		             left join users u on(c.user_no = u.user_no)
+		             left join board b on(c.content_no = b.content_no)
+		             left join content_category cc on(c.content_no = cc.content_no)
+		             left join category cg on(cc.category_no = cg.category_no)
+		             left join menu m on(cg.menu_no = m.menu_no)
+		             left join likes lk2 on (c.content_no = lk2.content_no)
+	          where b.board_type is null and m.menu_name = #{menuName}
+	          group by c.content_no, c.content_title, u.user_nickname
+	          order by c.content_no desc)
 		<if test="menuName == 'video Templates'">
 		where rownum <![CDATA[<]]>= 3
 		</if>
@@ -229,6 +231,20 @@
 		insert into board (CONTENT_NO, BOARD_TYPE, MENU_NO)
 		values (#{contentNo}, 2, #{menuNo})
 	</insert>
+
+	<select id="selectRequest">
+		select *
+		from content
+		    join board using(content_no)
+			join menu using(menu_no)
+		where content_status ='Y' and content_no =#{fgdgfdgf}
+	</select>
+
+	<update id="updateCount">
+		update content
+		set views = views+1
+		where content_no = #{fgdgfdgf}
+	</update>
 
 	<select id="allMenuDetail" parameterType="int">
 		select *

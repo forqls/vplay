@@ -114,28 +114,20 @@
 <body>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
 <main class="inquiryWrite-container">
-	<h1 class="inquiryWrite-title">문의 작성</h1>
+	<h1 class="inquiryWrite-title"></h1>
 	<form id="inquiryForm" action="write_inquiry" method="post">
-		<input type="hidden" name="userNo" th:value="${session.loginUser.userNo}" />
 		<div class="form-group">
 			<div class="form-label">
-				<span>문의 선택</span> <select class="filter-dropdown" name="menuNo">
-				<option value="11">시스템 문의</option>
-				<option value="12">결제 문의</option>
-				<option value="13">컨텐츠 문의</option>
-				<option value="14">기타</option>
-			</select>
+				<span></span>
 			</div>
 		</div>
 
 		<div class="form-group">
-			<div class="form-label">제목</div>
-			<input type="text" placeholder="제목을 입력하세요." name="contentTitle">
+			<div class="form-label">[[${c.contentTitle}]]</div>
 		</div>
 
 		<div class="form-group">
-			<div class="form-label">내용</div>
-			<textarea placeholder="내용을 입력하세요." name="contentDetail"></textarea>
+			<div class="form-label">[[${c.contentDetail}]]</div>
 		</div>
 
 		<div class="button-group">
