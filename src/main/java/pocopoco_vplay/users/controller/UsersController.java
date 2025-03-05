@@ -39,9 +39,23 @@ public class UsersController {
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 
+	@GetMapping("price")
+	public String price() {
+		return "price";
+	}
+
 	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
+	}
+
+	@PostMapping("signUp")
+	public String joinUser(@ModelAttribute Users user) {
+		user.setUserPw(bcrypt.encode(user.getUserPw()));
+		System.out.println(user);
+		int result = uService.insertUser(user);
+		System.out.println("결과 값은 : " + result);
+		return "signup_success";
 	}
 
 	@PostMapping("idCheck")
@@ -60,14 +74,11 @@ public class UsersController {
 		System.out.println("email");
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		System.out.println("email은 " + email);
-		String subject = "인증번호 입니다.";
 		String random = "";
 		for (int i = 0; i < 5; i++) {
 			random += (int) (Math.random() * 10);
 		}
-
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-
 		try {
 			mimeMessageHelper.setFrom("poco.vplay@gmail.com");
 			mimeMessageHelper.setSubject(random);
@@ -79,47 +90,32 @@ public class UsersController {
 		mailSender.send(mimeMessage);
 		System.out.println(random);
 		return random;
-
-	}
-
-	@PostMapping("signUp")
-	public String joinUser(@ModelAttribute Users user) {
-		user.setUserPw(bcrypt.encode(user.getUserPw()));
-
-		System.out.println(user);
-
-		int result = uService.insertUser(user);
-		System.out.println("결과 값은 : " + result);
-
-		return "signup_success";
 	}
 
 	@GetMapping("signIn")
 	public String signIn() {
-		// System.out.println(bcrypt.encode("vplay"));
 		return "signIn";
 	}
 
-	// 로그인
 	@PostMapping("signIn")
-	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL) {
+	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL, HttpSession session) {
 		Users loginUser = uService.signIn(user);
-
 		if (loginUser != null && bcrypt.matches(user.getUserPw(), loginUser.getUserPw())) {
-
-			model.addAttribute("loginUser", loginUser);
+			session.setAttribute("loginUser", loginUser);
 			if (loginUser.getIsAdmin().equals("Y")) {
 				return "redirect:/admin/dashboard";
 			} else {
-				return "redirect:" + beforeURL;
-
+				if (beforeURL.contains("/signIn") || beforeURL.isEmpty()) {
+					return "redirect:/";
+				} else {
+					return "redirect:" + beforeURL;
+				}
 			}
 		} else {
 			throw new UsersException("로그인을 실패하였습니다.");
 		}
 	}
 
-	// 로그아웃
 	@GetMapping("logout")
 	public String logout(SessionStatus session) {
 		session.setComplete();
@@ -143,7 +139,6 @@ public class UsersController {
 		String usersId = uService.findId(users);
 		model.addAttribute("users", users);
 		model.addAttribute("usersId", usersId);
-
 		return "find_id_success";
 	}
 
@@ -166,11 +161,8 @@ public class UsersController {
 		String tempPwd = tempPwdMk();
 		String encodePwd = bcrypt.encode(tempPwd);
 		String userName = uService.findName(users);
-
 		users.setUserPw(encodePwd);
-
 		int encodeUserPwd = uService.encodePwd(users);
-
 		System.out.println(userName);
 		if (encodeUserPwd == 1) {
 			model.addAttribute("userName", userName);
@@ -180,7 +172,6 @@ public class UsersController {
 		} else {
 			throw new UsersException("비밀번호 업데이트 실패");
 		}
-
 	}
 
 	// 임시 비번 생성 메소드
@@ -189,28 +180,30 @@ public class UsersController {
 		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		StringBuilder password = new StringBuilder();
 		Random random = new Random();
-
 		for (int i = 0; i < length; i++) {
 			password.append(chars.charAt(random.nextInt(chars.length())));
 		}
 		return password.toString();
-
 	}
 
-	@GetMapping("my_trash")
-	private String myTrashPage(HttpSession session, Model model) {
+	@GetMapping("findfollow")
+	@ResponseBody
+	public int findfollow(@ModelAttribute Users user) {
+		return uService.findfollow(user);
+	}
+
+	@GetMapping("my_projects")
+	public String myProjects(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
-		int userNo = loginUser.getUserNo();
-
-		ArrayList<Content> list = bService.selectMyTrash(userNo);
-
 		if (loginUser != null) {
+			int userNo = loginUser.getUserNo();
+			ArrayList<Content> list = uService.selectMyRealProjects(userNo); // 자기가 한 프로젝트 가져오기
+			System.out.println("리스트 사이즈는 : " + list.size());
 			model.addAttribute("list", list);
-			return "my_trash";
 		} else {
-			throw new UsersException("로그인 풀림");
+			throw new UsersException("로그인이 풀렸습니다.");
 		}
-
+		return "my_projects";
 	}
 
 	@GetMapping("my_favorites")
@@ -227,66 +220,24 @@ public class UsersController {
 		return "my_favorites";
 	}
 
-	@GetMapping("my_projects")
-	public String myProjects(Model model, HttpSession session) {
+	@GetMapping("my_downloads")
+	public String myDownloads(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
-			int userNo = loginUser.getUserNo();
-			ArrayList<Content> list = uService.selectMyRealProjects(userNo); // ㄹㅇ 그냥 자기가 한 프로젝트 가져오기
-
-			System.out.println("리스트 사이즈는 : " + list.size());
-			model.addAttribute("list", list);
+			return "my_downloads";
 		} else {
 			throw new UsersException("로그인이 풀렸습니다.");
 		}
-		return "my_projects";
-	}
-
-	@GetMapping("my_downloads")
-	public String myDownloads() {
-		return "my_downloads";
 	}
 
 	@GetMapping("my_account")
-	public String myAccount() {
-		return "my_account";
-	}
-
-	@GetMapping("my_inquiry")
-	public String myInquiry(HttpSession session, Model model) {
-		Users loginUser = (Users) session.getAttribute("loginUser");
-		int userNo = loginUser.getUserNo();
-//		System.out.println(userNo);
-
-		ArrayList<Content> list = bService.selectMyInquiry(userNo);
-		System.out.println(list);
-		System.out.println(list.size());
-
-		model.addAttribute("list", list);
-
-		return "my_inquiry";
-	}
-
-	@GetMapping("/my_payments")
-	public String myPayments(Model model, HttpSession session) {
+	public String myAccount(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
-			model.addAttribute("loginUser", loginUser);
-			return "my_payments";
+			return "my_account";
 		} else {
-			throw new UsersException("로그인이 필요합니다.");
+			throw new UsersException("로그인이 풀렸습니다.");
 		}
-	}
-
-	@GetMapping("price")
-	public String price() {
-		return "price";
-	}
-
-	@GetMapping("findfollow")
-	@ResponseBody
-	public int findfollow(@ModelAttribute Users user) {
-		return uService.findfollow(user);
 	}
 
 	@GetMapping("checkPw")
@@ -331,9 +282,7 @@ public class UsersController {
 		Users user = new Users();
 		user.setUserNo(loginUser.getUserNo());
 		user.setUserPw(encodedPassword);
-
 		int result = uService.changePw(user);
-
 		if (result > 0) {
 			model.addAttribute("loginUser", uService.signIn(loginUser));
 		} else {
@@ -341,4 +290,55 @@ public class UsersController {
 		}
 		return "redirect:/users/my_account";
 	}
+
+	@GetMapping("my_payments")
+	public String myPayments(Model model, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			model.addAttribute("loginUser", loginUser);
+			return "my_payments";
+		} else {
+			throw new UsersException("로그인이 필요합니다.");
+		}
+	}
+
+	@GetMapping("my_inquiry")
+	public String myInquiry(HttpSession session, Model model) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			int userNo = loginUser.getUserNo();
+			ArrayList<Content> list = bService.selectMyInquiry(userNo);
+			System.out.println(list);
+			System.out.println(list.size());
+			model.addAttribute("list", list);
+			return "my_inquiry";
+		} else {
+			throw new UsersException("로그인이 필요합니다.");
+		}
+	}
+
+	@GetMapping("my_commission")
+	public String myCommission(HttpSession session, Model model) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			model.addAttribute("loginUser", loginUser);
+			return "my_commission";
+		} else {
+			throw new UsersException("로그인이 필요합니다.");
+		}
+	}
+
+	@GetMapping("my_trash")
+	private String myTrashPage(HttpSession session, Model model) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			int userNo = loginUser.getUserNo();
+			ArrayList<Content> list = bService.selectMyTrash(userNo);
+			model.addAttribute("list", list);
+			return "my_trash";
+		} else {
+			throw new UsersException("로그인이 풀렸습니다.");
+		}
+	}
+
 }
