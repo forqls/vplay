@@ -105,6 +105,10 @@ body {
     overflow: hidden;
 }
 
+.video-card:hover{
+	cursor : pointer;
+}
+
 .video-thumbnail {
     width: 100%;
     aspect-ratio: 16/9;

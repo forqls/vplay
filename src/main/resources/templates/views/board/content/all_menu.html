@@ -174,7 +174,8 @@
 			const videoMenu = document.getElementsByClassName("content-grid")[0];
 			[...videoMenu.children].map((video, index, array) =>{
 				video.addEventListener('click', function(){
-					console.log(this.children[0].value);
+					const contentNo = this.children[0].value
+					location.href = "/board/video-templates/" + contentNo;
 				})
 			})
 			

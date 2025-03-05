@@ -17,12 +17,11 @@
 		<if test="sort == 'newest'">
 			order by content.create_date
 		</if>
-		t
 		<if test="sort == 'mostView'">
 			order by content.views desc
 		</if>
 	</select>
-
+	
 	<select id="selectCategoryMyProjects">
 		SELECT c.*,
 		(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count
@@ -116,7 +115,7 @@
 		</if>
 	</select>
 
-	<insert id="insertInquiry" parameterType="Content" useGeneratedKeys="true" keyProperty="contentNo">
+	<insert id="insertInquiry" parameterType="Content">
 		<selectKey resultType="int" keyProperty="contentNo" order="BEFORE">
 			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
@@ -245,5 +244,14 @@
 		where content_no = #{fgdgfdgf}
 	</update>
 
+	<select id="allMenuDetail" parameterType="int">
+		select *
+		from content c
+		     join users u on(c.user_no = u.user_no)
+		     join content_category cc on(c.content_no = cc.content_no)
+		     join category cg on(cc.category_no = cg.category_no)
+		     join menu m on(cg.menu_no = m.menu_no)
+		where c.content_no = #{contentNo}
+	</select>
 
 </mapper>
