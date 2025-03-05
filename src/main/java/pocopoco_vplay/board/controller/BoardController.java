@@ -272,9 +272,22 @@ public class BoardController {
 		}
 	}
 	@GetMapping("/{id}/{page}")
-	public ModelAndView show(@PathVariable("id") int id, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
+	public ModelAndView show(@PathVariable("id") int bId, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
+		int id = 0;
+		if(loginUser != null){
+			id = loginUser.getUserNo();
+		}
+		Content c = bService.selectRequest(bId, id);
 
+
+		if(c != null){
+			mv.addObject("c", c);
+			mv.addObject("page", page).setViewName("request_detail");
+			return mv;
+		}else{
+			throw new BoardException("의뢰 게시글 상세조회를 실패했습니다.");
+		}
 
 	}
 
