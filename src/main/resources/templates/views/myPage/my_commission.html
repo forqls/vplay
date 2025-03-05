@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+<title>My Commission</title>
+<style>
+.content-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.content-header h1 {
+	color: #fff;
+	font-size: 24px;
+}
+
+.button {
+	background-color: #5e37e9;
+	color: white;
+	border: none;
+	border-radius: 0.375rem;
+	padding: 0.75rem;
+	font-size: 0.875rem;
+	cursor: pointer;
+	margin-left: 0.5rem;
+}
+
+.button:hover {
+	background-color: #8137e9;
+}
+
+.commission-list {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.commission-item {
+	background-color: #252535;
+	border-radius: 0.5rem;
+	padding: 1.5rem;
+	position: relative;
+	transition: background-color 0.2s;
+	cursor: pointer;
+	margin-bottom: 20px;
+}
+
+.commission-item:hover {
+	background-color: #2a2a3a;
+}
+
+.commission-date {
+	font-size: 0.875rem;
+	color: #6f757d;
+	margin-bottom: 0.5rem;
+}
+
+.commission-title {
+	font-size: 1rem;
+	color: #fff;
+}
+
+.commission-actions {
+	position: absolute;
+	right: 1.5rem;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.status-badge {
+	background-color: rgba(129, 55, 233, 0.1);
+	color: #8137e9;
+	padding: 0.25rem 0.75rem;
+	border-radius: 1rem;
+	font-size: 0.75rem;
+}
+
+.options-btn {
+	background: none;
+	border: none;
+	color: #6f757d;
+	cursor: pointer;
+	padding: 1rem;
+	font-size: 1.25rem;
+	position: relative;
+}
+
+.options-btn:hover {
+	color: #fff;
+}
+
+.dropdown {
+	position: absolute;
+	top: 95%;
+	right: 5px;
+	background-color: #252535;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	min-width: 120px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	display: none;
+	z-index: 100;
+	background-color: #252535;
+}
+
+.dropdown.show {
+	display: block;
+}
+
+.dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	color: #fff;
+	text-decoration: none;
+	font-size: 0.875rem;
+	border-radius: 0.25rem;
+	cursor: pointer;
+}
+
+.dropdown-item:hover {
+	background-color: #2a2a3a;
+}
+
+.dropdown-item i {
+	font-size: 1rem;
+	color: #6f757d;
+}
+
+/* 휴지통 아이콘 스타일 */
+.trash-icon {
+	width: 14px;
+	height: 14px;
+	display: inline-block;
+	position: relative;
+	border: 2px solid #6f757d;
+	border-top: none;
+	border-radius: 0 0 2px 2px;
+	margin-right: 4px;
+}
+
+.trash-icon::before {
+	content: '';
+	position: absolute;
+	width: 8px;
+	height: 2px;
+	background: #6f757d;
+	top: -4px;
+	left: 1px;
+}
+
+.trash-icon::after {
+	content: '';
+	position: absolute;
+	width: 14px;
+	height: 2px;
+	background: #6f757d;
+	top: -2px;
+	left: -2px;
+}
+</style>
+</head>
+<body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="main-content">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class="container content_wrap flex_custom_wrap">
+			<div class="content-header">
+				<h1>My commission</h1>
+				<button class="button" onclick="location.href='/board/commission_writer'">작성하기</button>
+			</div>
+
+			<div class="commission-list" id="commission">
+				<div class="commission-item" th:each="i : ${list}" th:data-content-no="${i.contentNo}" style="cursor: pointer;">
+					<div class="commission-date" th:text="${i.createDate}"></div>
+					<div class="commission-title" th:text="${i.contentTitle}"></div>
+					<div class="commission-actions">
+						<span class="status-badge">답변대기 , 답변상태 등</span>
+						<div class="options-wrapper">
+							<button class="options-btn">⋮</button>
+							<div class="dropdown">
+								<div class="dropdown-item delete-commission">
+									<span class="trash-icon"></span> Delete
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const commissionList = document.getElementById('commission');
+
+			commissionList.addEventListener('click', function(event) {
+				const target = event.target;
+				const commissionItem = target.closest('.commission-item');
+
+				if (target.classList.contains('options-btn')) {
+					const optionsWrapper = target.closest('.options-wrapper');
+					const dropdown = optionsWrapper.querySelector('.dropdown');
+
+					document.querySelectorAll('.dropdown.show').forEach(
+							openDropdown => {
+								if (openDropdown !== dropdown) {
+									openDropdown.classList.remove('show');
+								}
+							});
+
+					dropdown.classList.toggle('show');
+					event.stopPropagation();
+				}
+
+				else if (commissionItem && !target.closest('.dropdown-item')) {
+					const contentNo = commissionItem.dataset.contentNo;
+					location.href = '/board/commissionDetail?contentNo=' + contentNo;
+				}
+
+				if (target.closest('.delete-commission')) {
+					const contentNo = commissionItem.dataset.contentNo;
+					deletecommission(contentNo, commissionItem);
+				}
+			});
+
+			document.addEventListener('click', function(event) {
+				if (!event.target.closest('.options-wrapper')) {
+					document.querySelectorAll('.dropdown.show').forEach(
+							function(dropdown) {
+								dropdown.classList.remove('show');
+							});
+				}
+			});
+
+			function deletecommission(contentNo, commissionItem) {
+				$.ajax({
+					url : '/board/throwBoardTrash',
+					data : {
+						contentNo : contentNo
+					},
+					type : 'POST',
+					success : function(data) {
+						if (data == 1) {
+							alert('문의가 성공적으로 삭제되었습니다.');
+							commissionItem.remove();
+						} else {
+							alert('문의 삭제 중 오류 발생.');
+						}
+					},
+					error : function(data) {
+						alert('서버 오류');
+					}
+				});
+			}
+		});
+	</script>
+</body>
+</html>
