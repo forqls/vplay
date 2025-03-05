@@ -16,9 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.admin.model.service.AdminService;
-import pocopoco_vplay.admin.model.vo.PageInfo;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.commom.Pagination;
+import pocopoco_vplay.commom.model.vo.PageInfo;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Controller

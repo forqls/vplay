@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.session.RowBounds;
 import pocopoco_vplay.board.model.vo.Content;
 
 @Mapper
@@ -23,4 +24,30 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectCategoryMyTrash(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
 
+	int insertInquiry(Content inquiry);
+
+	int insertBoard(Content inquiry);
+
+	Content selectInquiry(int contentNo);
+
+	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
+
+	int updateInquiry(Content inquiry);
+
+
+	ArrayList<Content> allCategory(@Param("menuNo") int i);
+
+	ArrayList<Content> allPopularCate(int i);
+
+  int getrequestPostCount();
+
+	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
+
+	String selectUser(int userNo);
+
+    int insertRequest(Content content);
+
+	int insertRequestBoard(Content content);
+
+	Content allMenuDetail(@Param("contentNo") int contentNo);
 }
