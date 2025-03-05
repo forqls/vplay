@@ -52,4 +52,7 @@ public interface BoardMapper {
 	Content selectRequest(int bId);
 
 	int updateCount(int bId);
+
+	Content allMenuDetail(@Param("contentNo") int contentNo);
+
 }

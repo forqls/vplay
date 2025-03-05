@@ -138,7 +138,6 @@ public class UsersController {
 		return result;
 	}
 
-
 	@PostMapping("findIdSuccess")
 	public String findIdSuccess(@ModelAttribute Users users, Model model) {
 		String usersId = uService.findId(users);
@@ -172,91 +171,47 @@ public class UsersController {
 
 		int encodeUserPwd = uService.encodePwd(users);
 
-
 		System.out.println(userName);
-		if(encodeUserPwd == 1){
+		if (encodeUserPwd == 1) {
 			model.addAttribute("userName", userName);
 			model.addAttribute("tempPwd", tempPwd);
 			System.out.println("업데이트 완료");
 			return "find_pw_success";
-		}else{
+		} else {
 			throw new UsersException("비밀번호 업데이트 실패");
 		}
 
 	}
 
-
-	//임시 비번 생성 메소드
+	// 임시 비번 생성 메소드
 	private String tempPwdMk() {
 		int length = 10;
-		String chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		StringBuilder password = new StringBuilder();
 		Random random = new Random();
 
-		for(int i=0;i<length;i++) {
+		for (int i = 0; i < length; i++) {
 			password.append(chars.charAt(random.nextInt(chars.length())));
 		}
 		return password.toString();
 
 	}
 
-
 	@GetMapping("my_trash")
-	private String myTrashPage(HttpSession session , Model model) {
-		Users loginUser = (Users)session.getAttribute("loginUser");
+	private String myTrashPage(HttpSession session, Model model) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
 		int userNo = loginUser.getUserNo();
 
 		ArrayList<Content> list = bService.selectMyTrash(userNo);
 
-		if(loginUser != null) {
-			model.addAttribute("list",list);
+		if (loginUser != null) {
+			model.addAttribute("list", list);
 			return "my_trash";
-		}else {
+		} else {
 			throw new UsersException("로그인 풀림");
 		}
 
-
-
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	@GetMapping("my_favorites")
 	public String myFavorites(Model model, HttpSession session) {
@@ -279,9 +234,9 @@ public class UsersController {
 			int userNo = loginUser.getUserNo();
 			ArrayList<Content> list = uService.selectMyRealProjects(userNo); // ㄹㅇ 그냥 자기가 한 프로젝트 가져오기
 
-			System.out.println("리스트 사이즈는 : " +list.size());
-			model.addAttribute("list",list);
-		}else {
+			System.out.println("리스트 사이즈는 : " + list.size());
+			model.addAttribute("list", list);
+		} else {
 			throw new UsersException("로그인이 풀렸습니다.");
 		}
 		return "my_projects";
@@ -298,7 +253,7 @@ public class UsersController {
 	}
 
 	@GetMapping("my_inquiry")
-	public String myInquiry(HttpSession session , Model model) {
+	public String myInquiry(HttpSession session, Model model) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int userNo = loginUser.getUserNo();
 //		System.out.println(userNo);
@@ -307,14 +262,20 @@ public class UsersController {
 		System.out.println(list);
 		System.out.println(list.size());
 
-		model.addAttribute("list",list);
+		model.addAttribute("list", list);
 
 		return "my_inquiry";
 	}
 
-	@GetMapping("my_payments")
-	public String myPayments() {
-		return "my_payments";
+	@GetMapping("/my_payments")
+	public String myPayments(Model model, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			model.addAttribute("loginUser", loginUser);
+			return "my_payments";
+		} else {
+			throw new UsersException("로그인이 필요합니다.");
+		}
 	}
 
 	@GetMapping("price")
@@ -331,17 +292,17 @@ public class UsersController {
 	@GetMapping("checkPw")
 	@ResponseBody
 	public int checkPassword(@RequestParam("password") String password, HttpSession session) {
-	    Users loginUser = (Users) session.getAttribute("loginUser");
-	    if (bcrypt.matches(password, loginUser.getUserPw())) {
-	        return 1;
-	    } else {
-	    	return 0;
-	    }
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (bcrypt.matches(password, loginUser.getUserPw())) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	@PostMapping("updateInfo")
 	public String updateInfo(@ModelAttribute Users user, Model model, HttpSession session) {
-		Users loginUser = (Users)session.getAttribute("loginUser");
+		Users loginUser = (Users) session.getAttribute("loginUser");
 		user.setUserNo(loginUser.getUserNo());
 		int result = uService.updateInfo(user);
 		if (result > 0) {
@@ -355,29 +316,32 @@ public class UsersController {
 	@GetMapping("changeCheckPw")
 	@ResponseBody
 	public int changeCheckPw(@RequestParam("currentPwd") String password, HttpSession session) {
-	    Users loginUser = (Users) session.getAttribute("loginUser");
-	    if (bcrypt.matches(password, loginUser.getUserPw())) {
-	        return 1;
-	    } else {
-	    	return 0;
-	    }
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (bcrypt.matches(password, loginUser.getUserPw())) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	@PostMapping("changePw")
 	public String changePw(@RequestParam("newPwd") String newPassword, Model model, HttpSession session) {
-	    Users loginUser = (Users) session.getAttribute("loginUser");
-	    String encodedPassword = bcrypt.encode(newPassword);
-	    Users user = new Users();
-	    user.setUserNo(loginUser.getUserNo());
-	    user.setUserPw(encodedPassword);
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		String encodedPassword = bcrypt.encode(newPassword);
+		Users user = new Users();
+		user.setUserNo(loginUser.getUserNo());
+		user.setUserPw(encodedPassword);
 
-	    int result = uService.changePw(user);
+		int result = uService.changePw(user);
 
-	    if (result > 0) {
-	        model.addAttribute("loginUser", uService.signIn(loginUser));
-	    } else {
-	        throw new UsersException("비밀번호 변경을 실패하였습니다.");
-	    }
-	    return "redirect:/users/my_account";
+		if (result > 0) {
+			model.addAttribute("loginUser", uService.signIn(loginUser));
+		} else {
+			throw new UsersException("비밀번호 변경을 실패하였습니다.");
+		}
+		return "redirect:/users/my_account";
 	}
+	
+	
+	
 }
