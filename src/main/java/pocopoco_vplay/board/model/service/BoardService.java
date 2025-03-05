@@ -99,6 +99,18 @@ public class BoardService {
 		return mapper.insertRequestBoard(content);
 	}
 
+
+	public Content selectRequest(int bId, int id) {
+		Content c = mapper.selectRequest(bId);
+		if(c != null && id != 0 && c.getUserNo() != id) {
+			int result =mapper.updateCount(bId);
+			if(result >0) {
+				c.setViews(c.getViews() +1 );
+			}
+		}
+		return c;
+  }
+  
 	public Content allMenuDetail(int contentNo) {
 		return mapper.allMenuDetail(contentNo);
 	}

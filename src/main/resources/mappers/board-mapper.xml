@@ -230,6 +230,20 @@
 		values (#{contentNo}, 2, #{menuNo})
 	</insert>
 
+	<select id="selectRequest">
+		select *
+		from content
+		    join board using(content_no)
+			join menu using(menu_no)
+		where content_status ='Y' and content_no =#{fgdgfdgf}
+	</select>
+
+	<update id="updateCount">
+		update content
+		set views = views+1
+		where content_no = #{fgdgfdgf}
+	</update>
+
 	<select id="allMenuDetail" parameterType="int">
 		select *
 		from content c

@@ -39,7 +39,7 @@ public interface BoardMapper {
 
 	ArrayList<Content> allPopularCate(int i);
 
-  int getrequestPostCount();
+  	int getrequestPostCount();
 
 	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
 
@@ -49,5 +49,10 @@ public interface BoardMapper {
 
 	int insertRequestBoard(Content content);
 
+	Content selectRequest(int bId);
+
+	int updateCount(int bId);
+
 	Content allMenuDetail(@Param("contentNo") int contentNo);
+
 }

@@ -271,6 +271,24 @@ public class BoardController {
 			throw new BoardException("제작 의뢰 게시글 작성 실패");
 		}
 	}
+
+	@GetMapping("/{id}/{page}")
+	public ModelAndView show(@PathVariable("id") int bId, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int id = 0;
+		if(loginUser != null){
+			id = loginUser.getUserNo();
+		}
+		Content c = bService.selectRequest(bId, id);
+
+
+		if(c != null){
+			mv.addObject("c", c);
+			mv.addObject("page", page).setViewName("request_detail");
+			return mv;
+		}else{
+			throw new BoardException("의뢰 게시글 상세조회를 실패했습니다.");
+		}
 	
 	@GetMapping("video-templates/{no}")
 	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
@@ -279,8 +297,7 @@ public class BoardController {
 		model.addAttribute("content", content);
 		System.out.println(content);
 		return "videoTemplates_detail";
+
 	}
-
-
 
 }
