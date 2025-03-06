@@ -235,15 +235,18 @@
 	<select id="selectRequest">
 		select *
 		from content
-		    join board using(content_no)
-			join menu using(menu_no)
-		where content_status ='Y' and content_no =#{fgdgfdgf}
+				 left join users using(user_no)
+				 left join board using(content_no)
+				 left join menu using(menu_no)
+				 left join content_category using(content_no)
+				 left join category using(CATEGORY_NO)
+		where content_status ='Y' and content_no =#{bId}
 	</select>
 
 	<update id="updateCount">
 		update content
 		set views = views+1
-		where content_no = #{fgdgfdgf}
+		where content_no = #{bId}
 	</update>
 
 	<select id="allMenuDetail" parameterType="int">
@@ -254,6 +257,15 @@
 		     join category cg on(cc.category_no = cg.category_no)
 		     join menu m on(cg.menu_no = m.menu_no)
 		where c.content_no = #{contentNo}
+	</select>
+
+	<select id="selectReplyList">
+		select *
+		from reply
+				 join content using(content_no)
+				 join users using(user_no)
+		where content_no = #{bId} and reply_status ='Y'
+		order by reply_no desc
 	</select>
 
 </mapper>

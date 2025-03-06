@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.Pagination;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 import pocopoco_vplay.users.exception.UsersException;
@@ -280,9 +281,12 @@ public class BoardController {
 			id = loginUser.getUserNo();
 		}
 		Content c = bService.selectRequest(bId, id);
+		ArrayList<Reply> replyList = bService.selectReplyList(bId);/*글 번호에 해당하는 댓글을 들고와야하기 때문*/
 
+		System.out.println(replyList);
 
 		if(c != null){
+			mv.addObject("replyList", replyList);
 			mv.addObject("c", c);
 			mv.addObject("page", page).setViewName("request_detail");
 			return mv;

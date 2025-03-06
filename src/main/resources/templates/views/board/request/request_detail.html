@@ -82,7 +82,7 @@
 		}
 
 		textarea {
-			min-height: 300px;
+
 			resize: vertical;
 		}
 
@@ -105,59 +105,103 @@
 			background-color: #8137e9;
 		}
 
-		textarea {
-			min-height: 400px;
-			resize: none;
-		}
 	</style>
 </head>
 <body>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
 <main class="inquiryWrite-container">
-	<h1 class="inquiryWrite-title"></h1>
-	<form id="inquiryForm" action="write_inquiry" method="post">
+	<h1 class="inquiryWrite-title">[[${c.contentTitle}]]</h1>
+	<form id="inquiryForm" action="write_request" method="post">
 		<div class="form-group">
 			<div class="form-label">
 				<span></span>
 			</div>
 		</div>
+		<!--<img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> 사진-->
+		<div class="form-group">
+			<div class="form-label">[[${c.userNickName}]]</div>
+		</div>
+		<div class="form-group">
+			<div class="form-label">조회수 : [[${c.views}]]</div>
+		</div>
 
 		<div class="form-group">
-			<div class="form-label">[[${c.contentTitle}]]</div>
+			<div class="form-label">[[${c.modifyDate}]]</div>
+		</div>
+
+
+		<div class="form-group">
+			<div class="form-label">[[${c.menuName}]]</div>
 		</div>
 
 		<div class="form-group">
 			<div class="form-label">[[${c.contentDetail}]]</div>
 		</div>
 
+		<div class="form-group">
+			<div class="form-label">[[${c.modifyDate}]]</div>
+		</div>
+
+		<div style="margin-bottom: 20px;">
+			<p style="color: #999;">크리에이터 답변</p>
+		</div>
+
+		<table class="table"><!--원래있는 댓글부분-->
+			<thead>
+			<tr>
+				<th width="130px">작성자</th>
+				<th>작성내용</th>
+				<th width="130px">작성일자</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="r:${replyList}"><!--있는댓글 가져오기-->
+				<td>[[${r.writer}]]</td>
+				<td>[[${r.replyDetail}]]</td>
+				<td>[[${r.modifyDate}]]</td>
+				<td width="80px">
+					<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
+						<input type="hidden" <!--th:value="${r.replyId}"--> name="replyId">
+						<span class="updel">수정하기</span>
+						&nbsp;
+						<span class="updel">삭제하기</span>
+						<input type="hidden" <!--th:value="${r.replyDetail}"-->> <!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
+					</th:block>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+
+		<div class="content"><!--댓글부분-->
+			<p>수정</p><p>삭제</p>
+			<div style="margin-bottom: 20px;">
+<!--				<img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> 프로필 사진-->
+				<span style="margin-left: 10px;">와장창</span>
+				<span style="font-size: 12px; color: #999; display: block; margin-left: 60px;">팔로워</span>
+				<span style="font-size: 12px; color: #999; float: right;">날짜</span>
+			</div>
+			<textarea class="reply_detail" rows="8" id="replyContent" style="resize:none"></textarea>
+
+			<button class="btn btn-outline-success" id="replySubmit" type="button" th:disabled="${session.loginUser == null}">SUBMIT</button>
+
+		</div>
+
+		<div style="text-align: center; margin-top: 20px;">
+<!--			<button class="button">답글달기</button>-->
+		</div>
+
 		<div class="button-group">
 			<button type="button" class="button" onclick="javascript:history.back();">목록으로</button>
-			<button type="button" id="submitButton" class="button">작성 하기</button>
+			<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
+			<button class="w-100 btn btn-secondary btn-lg" type="button" id="deleteModal">DELETE</button>
+			</th:block>
 		</div>
+
 	</form>
 </main>
 <script>
-	document.getElementById('submitButton').addEventListener('click', function() {
-		var form = document.getElementById('inquiryForm');
-		var formData = new FormData(form);
 
-		fetch(form.action, {
-			method: 'POST',
-			body: formData
-		})
-				.then(response => {
-					if(response.ok) {
-						alert('작성이 완료되었습니다!');
-						window.location.href = '/users/my_inquiry';
-					} else {
-						alert('작성 중 오류가 발생했습니다.');
-					}
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					alert('작성 중 오류가 발생했습니다.');
-				});
-	});
 </script>
 </body>
 </html>
