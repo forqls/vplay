@@ -267,5 +267,10 @@
 		where content_no = #{bId} and reply_status ='Y'
 		order by reply_no desc
 	</select>
+	
+	<insert id="allTempLike">
+		insert into likes
+		values(#{userNo},#{contentNo})
+	</insert>
 
 </mapper>

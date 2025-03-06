@@ -183,9 +183,26 @@
 		window.onload = () =>{
 			const videoMenu = document.getElementsByClassName("content-grid")[0];
 			[...videoMenu.children].map((video, index, array) =>{
-				video.addEventListener('click', function(){
-					const contentNo = this.children[0].value
+				const like = video.children[3].children[1].children[0];
+				const contentNo = video.children[0].value
+				video.addEventListener('click', function(event){
 					location.href = "/board/video-templates/" + contentNo;
+				})
+				
+				like.addEventListener('click', function(event){
+					fetch('/board/like', {
+						method : 'put',
+						headers : {'content-type':'application/json; charset=UTF-8'},
+						body: JSON.stringify({
+							contentNo: contentNo
+		    			})
+					})
+					.then(response => response.json())
+					.then(data =>{
+						console.log(data);
+					})
+					
+					event.stopPropagation();
 				})
 			})
 			

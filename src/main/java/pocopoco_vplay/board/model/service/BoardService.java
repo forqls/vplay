@@ -119,4 +119,8 @@ public class BoardService {
 	public ArrayList<Reply> selectReplyList(int bId) {
 		return mapper.selectReplyList(bId);
 	}
+
+	public int allTempLike(HashMap<String, String> map) {
+		return mapper.allTempLike(map);
+	}
 }

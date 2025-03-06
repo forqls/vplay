@@ -57,4 +57,6 @@ public interface BoardMapper {
 	Content allMenuDetail(@Param("contentNo") int contentNo);
 
 	ArrayList<Reply> selectReplyList(int bId);
+
+	int allTempLike(HashMap<String, String> map);
 }
