@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import org.apache.ibatis.session.RowBounds;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 
 @Mapper
 public interface BoardMapper {
@@ -55,4 +56,5 @@ public interface BoardMapper {
 
 	Content allMenuDetail(@Param("contentNo") int contentNo);
 
+	ArrayList<Reply> selectReplyList(int bId);
 }
