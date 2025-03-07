@@ -120,7 +120,8 @@ public class BoardService {
 		return mapper.selectReplyList(bId);
 	}
 
-	public int allTempLike(HashMap<String, String> map) {
+	public int allTempLike(HashMap<String, Integer> map) {
+		System.out.println(map);
 		return mapper.allTempLike(map);
 	}
 }
