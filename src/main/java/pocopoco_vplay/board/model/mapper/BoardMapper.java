@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import org.apache.ibatis.session.RowBounds;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 
 @Mapper
 public interface BoardMapper {
@@ -39,7 +40,7 @@ public interface BoardMapper {
 
 	ArrayList<Content> allPopularCate(int i);
 
-  int getrequestPostCount();
+  	int getrequestPostCount();
 
 	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
 
@@ -49,5 +50,13 @@ public interface BoardMapper {
 
 	int insertRequestBoard(Content content);
 
+	Content selectRequest(int bId);
+
+	int updateCount(int bId);
+
 	Content allMenuDetail(@Param("contentNo") int contentNo);
+
+	ArrayList<Reply> selectReplyList(int bId);
+
+	int allTempLike(HashMap<String, String> map);
 }

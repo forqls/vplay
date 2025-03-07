@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 
 @Service
@@ -99,7 +100,27 @@ public class BoardService {
 		return mapper.insertRequestBoard(content);
 	}
 
+
+	public Content selectRequest(int bId, int id) {
+		Content c = mapper.selectRequest(bId);
+		if(c != null && id != 0 && c.getUserNo() != id) {
+			int result =mapper.updateCount(bId);
+			if(result >0) {
+				c.setViews(c.getViews() +1 );
+			}
+		}
+		return c;
+  }
+  
 	public Content allMenuDetail(int contentNo) {
 		return mapper.allMenuDetail(contentNo);
+	}
+
+	public ArrayList<Reply> selectReplyList(int bId) {
+		return mapper.selectReplyList(bId);
+	}
+
+	public int allTempLike(HashMap<String, String> map) {
+		return mapper.allTempLike(map);
 	}
 }
