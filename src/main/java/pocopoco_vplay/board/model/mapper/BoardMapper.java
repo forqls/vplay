@@ -29,24 +29,26 @@ public interface BoardMapper {
 
 	int insertBoard(Content inquiry);
 
+	int updateInquiry(Content inquiry);
+	
+	int updateBoard(Content inquiry);
+	
 	Content selectInquiry(int contentNo);
 
 	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
-
-	int updateInquiry(Content inquiry);
 
 
 	ArrayList<Content> allCategory(@Param("menuNo") int i);
 
 	ArrayList<Content> allPopularCate(int i);
 
-  	int getrequestPostCount();
+	int getrequestPostCount();
 
 	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
 
 	String selectUser(int userNo);
 
-    int insertRequest(Content content);
+	int insertRequest(Content content);
 
 	int insertRequestBoard(Content content);
 
@@ -59,4 +61,5 @@ public interface BoardMapper {
 	ArrayList<Reply> selectReplyList(int bId);
 
 	int allTempLike(HashMap<String, Integer> map);
+
 }
