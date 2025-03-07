@@ -57,6 +57,10 @@ public class BoardService {
 		return mapper.selectInquiry(contentNo);
 	}
 
+	public Reply selectReply(int contentNo) {
+		return mapper.selectReply(contentNo);
+	}
+
 	public ArrayList<Content> allTemplateList(String menuName) {
 		return mapper.allTemplateList(menuName);
 	}
@@ -125,4 +129,5 @@ public class BoardService {
 		System.out.println(map);
 		return mapper.allTempLike(map);
 	}
+
 }

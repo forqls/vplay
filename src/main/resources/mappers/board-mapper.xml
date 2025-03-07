@@ -199,6 +199,12 @@
 		C.CONTENT_NO = #{contentNo}
 	</select>
 
+	<select id="selectReply">
+		SELECT REPLY_DETAIL
+		FROM REPLY
+		WHERE CONTENT_NO = #{contentNo}
+	</select>
+	
 	<select id="allCategory">
 		select *
 		from category
