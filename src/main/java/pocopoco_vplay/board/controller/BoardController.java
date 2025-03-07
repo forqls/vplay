@@ -5,7 +5,15 @@ import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
@@ -13,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.Pagination;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 import pocopoco_vplay.users.exception.UsersException;
@@ -28,13 +37,21 @@ public class BoardController {
 	@GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
 		
-		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
-		ArrayList<Content> musicList = bService.allTemplateList("Music");
-		ArrayList<Content> soundEffectsList = bService.allTemplateList("Sound Effects");
-		ArrayList<Content> graphicTemplateList = bService.allTemplateList("Graphic Templates");
-		ArrayList<Content> stockVideoList = bService.allTemplateList("Stock Video");
-		ArrayList<Content> photosList = bService.allTemplateList("Photos");
-		ArrayList<Content> fontList = bService.allTemplateList("Fonts");
+		String[] menuName = {"video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts"};
+		
+		ArrayList<Content> videoTemplateList = bService.allTemplateList(menuName[0]);
+		ArrayList<Content> musicList = bService.allTemplateList(menuName[1]);
+		ArrayList<Content> soundEffectsList = bService.allTemplateList(menuName[2]);
+		ArrayList<Content> graphicTemplateList = bService.allTemplateList(menuName[3]);
+		ArrayList<Content> stockVideoList = bService.allTemplateList(menuName[4]);
+		ArrayList<Content> photosList = bService.allTemplateList(menuName[5]);
+		ArrayList<Content> fontList = bService.allTemplateList(menuName[6]);
+		
+//		for(int i =0; i<menuName.length ; i++) {
+//			for(int j =0; j<videoTemplateList.size(); j++) {
+//				
+//			}
+//		}
 		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
@@ -134,9 +151,7 @@ public class BoardController {
 		inquiry.setMenuNo(menuNo);
 		inquiry.setContentTitle(contentTitle);
 		inquiry.setContentDetail(contentDetail);
-
 		int result = bService.updateInquiry(inquiry);
-
 		if (result > 0) {
 			return "redirect:/users/my_inquiry";
 		} else {
@@ -271,6 +286,28 @@ public class BoardController {
 			throw new BoardException("제작 의뢰 게시글 작성 실패");
 		}
 	}
+
+	@GetMapping("/{id}/{page}")
+	public ModelAndView show(@PathVariable("id") int bId, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int id = 0;
+		if(loginUser != null){
+			id = loginUser.getUserNo();
+		}
+		Content c = bService.selectRequest(bId, id);
+		ArrayList<Reply> replyList = bService.selectReplyList(bId);/*글 번호에 해당하는 댓글을 들고와야하기 때문*/
+
+		System.out.println(replyList);
+
+		if(c != null){
+			mv.addObject("replyList", replyList);
+			mv.addObject("c", c);
+			mv.addObject("page", page).setViewName("request_detail");
+			return mv;
+		}else{
+			throw new BoardException("의뢰 게시글 상세조회를 실패했습니다.");
+		}
+	}
 	
 	@GetMapping("video-templates/{no}")
 	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
@@ -279,8 +316,7 @@ public class BoardController {
 		model.addAttribute("content", content);
 		System.out.println(content);
 		return "videoTemplates_detail";
+
 	}
-
-
-
+	
 }

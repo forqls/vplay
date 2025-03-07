@@ -113,12 +113,25 @@
 	</div>
 
 	<!-- Create Button -->
-	<div class="create-button">
+	<div class="create-button" th:if="${session.loginUser}">
 		<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
 	</div>
 </div>
 
-<script>
+<script th:inline="javascript">
+	window.onload = () =>{
+		const tbody = document.querySelector('tbody');
+		const tds = tbody.querySelectorAll('td');
+		for(const td of tds){
+			td.addEventListener('click', function(){
+				const trTds = this.parentElement.querySelectorAll('td');
+				const boardId = trTds[0].innerText;/*네추럴 템플릿 적용 : 서버가 없는 상태에서 파일을 열었을때 에러가 안나게 하기 위해(1이 보임 +로 끝나서 에러가 나는것을 방지)*/
+				location.href="/board/"+boardId + "/" +/*<![CDATA[*//*[[${pi.currentPage}]]*/1/*]]>*/;
+				// /board/10/2 - 글번호/페이지번호
+			});
+		}
+
+	}
 </script>
 </body>
 </html>

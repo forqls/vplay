@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 
 @Service
@@ -42,11 +43,8 @@ public class BoardService {
 	}
 
 	public int insertInquiry(Content inquiry) {
-		System.out.println(inquiry);
 		int result1 = mapper.insertInquiry(inquiry);
-		System.out.println(inquiry);
 		int result2 = mapper.insertBoard(inquiry);
-		System.out.println(inquiry);
 
 		if (result1 > 0 && result2 > 0) {
 			return result1;
@@ -64,9 +62,15 @@ public class BoardService {
 	}
 
 	public int updateInquiry(Content inquiry) {
-		return mapper.updateInquiry(inquiry);
-	}
+		int result1 = mapper.updateInquiry(inquiry);
+		int result2 = mapper.updateBoard(inquiry);
 
+		if (result1 > 0 && result2 > 0) {
+			return result1;
+		} else {
+			throw new RuntimeException("문의 작성 실패: CONTENT 또는 BOARD 테이블 UPDATE 실패");
+		}
+	}
 
 	public ArrayList<Content> allCategory(int i) {
 		return mapper.allCategory(i);
@@ -76,12 +80,12 @@ public class BoardService {
 		return mapper.allPopularCate(i);
 	}
 
-  public int getrequestPostCount() {
-  return mapper.getrequestPostCount();
-  }
+	public int getrequestPostCount() {
+		return mapper.getrequestPostCount();
+	}
 
 	public ArrayList<Content> selectAllRequestPost(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectAllRequestPost(rowBounds);
 	}
@@ -94,12 +98,31 @@ public class BoardService {
 		return mapper.insertRequest(content);
 	}
 
-
 	public int insertRequestBoard(Content content) {
 		return mapper.insertRequestBoard(content);
 	}
 
+	public Content selectRequest(int bId, int id) {
+		Content c = mapper.selectRequest(bId);
+		if (c != null && id != 0 && c.getUserNo() != id) {
+			int result = mapper.updateCount(bId);
+			if (result > 0) {
+				c.setViews(c.getViews() + 1);
+			}
+		}
+		return c;
+	}
+
 	public Content allMenuDetail(int contentNo) {
 		return mapper.allMenuDetail(contentNo);
+	}
+
+	public ArrayList<Reply> selectReplyList(int bId) {
+		return mapper.selectReplyList(bId);
+	}
+
+	public int allTempLike(HashMap<String, Integer> map) {
+		System.out.println(map);
+		return mapper.allTempLike(map);
 	}
 }

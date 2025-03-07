@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import org.apache.ibatis.session.RowBounds;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 
 @Mapper
 public interface BoardMapper {
@@ -28,26 +29,37 @@ public interface BoardMapper {
 
 	int insertBoard(Content inquiry);
 
+	int updateInquiry(Content inquiry);
+	
+	int updateBoard(Content inquiry);
+	
 	Content selectInquiry(int contentNo);
 
 	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
-
-	int updateInquiry(Content inquiry);
 
 
 	ArrayList<Content> allCategory(@Param("menuNo") int i);
 
 	ArrayList<Content> allPopularCate(int i);
 
-  int getrequestPostCount();
+	int getrequestPostCount();
 
 	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
 
 	String selectUser(int userNo);
 
-    int insertRequest(Content content);
+	int insertRequest(Content content);
 
 	int insertRequestBoard(Content content);
 
+	Content selectRequest(int bId);
+
+	int updateCount(int bId);
+
 	Content allMenuDetail(@Param("contentNo") int contentNo);
+
+	ArrayList<Reply> selectReplyList(int bId);
+
+	int allTempLike(HashMap<String, Integer> map);
+
 }
