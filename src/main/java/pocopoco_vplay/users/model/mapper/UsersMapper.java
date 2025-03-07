@@ -36,4 +36,6 @@ public interface UsersMapper {
 	int tempPwd(Users Users);
 
 	String findName(Users users);
+
+	Users existUsers(String kakaoId);
 }

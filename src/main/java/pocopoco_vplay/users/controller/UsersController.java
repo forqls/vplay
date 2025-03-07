@@ -39,6 +39,14 @@ public class UsersController {
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 
+	@GetMapping("home")
+	public String goHome(HttpSession session) {
+		session.removeAttribute("kakaoUser");
+		return "redirect:/";
+	}
+	
+	
+	
 	@GetMapping("signUp")
 	public String singUp() {
 		return "signup";
@@ -85,7 +93,7 @@ public class UsersController {
 	@PostMapping("signUp")
 	public String joinUser(@ModelAttribute Users user) {
 		user.setUserPw(bcrypt.encode(user.getUserPw()));
-
+		
 		System.out.println(user);
 
 		int result = uService.insertUser(user);

@@ -32,4 +32,6 @@ public class Users {
     private String userCreatorRank;
     private String userPlan;
     private String userProfile;
+    private String kakaoId;
+    private String loginType;
 }

@@ -73,4 +73,8 @@ public class UsersService {
 		return mapper.findName(users);
 	}
 
+	public Users existUsers(String kakaoId) {
+		return mapper.existUsers(kakaoId);
+	}
+
 }
