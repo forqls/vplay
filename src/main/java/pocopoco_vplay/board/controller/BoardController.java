@@ -320,5 +320,10 @@ public class BoardController {
 		return "videoTemplates_detail";
 
 	}
-	
+
+	@PostMapping("updateRequest")
+	public String updateRequest(@RequestParam("boardId") int bId, @RequestParam("page"), Model model){
+		Content c = bService.selectBoard("bId", bId);
+
+	}
 }
