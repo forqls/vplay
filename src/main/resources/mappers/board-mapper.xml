@@ -116,6 +116,13 @@
 		where rownum <![CDATA[<]]>= 5
 		</if>
 	</select>
+	
+	<select id="menuLikeTo">
+		select count(*)
+		from likes
+		where user_no = #{userNo} and content_no = #{contentNo}
+		order by content_no desc
+	</select>
 
 	<insert id="insertInquiry" parameterType="Content">
 		<selectKey resultType="int" keyProperty="contentNo" order="BEFORE">
@@ -272,5 +279,10 @@
 		insert into likes
 		values(#{userNo},#{contentNo})
 	</insert>
+	
+	<delete id="unAllTempLike">
+		delete from likes
+		where user_no = #{userNo} and content_no = #{}
+	</delete>
 
 </mapper>

@@ -124,4 +124,12 @@ public class BoardService {
 		System.out.println(map);
 		return mapper.allTempLike(map);
 	}
+
+	public int menuLikeTo(int num, int userNo) {
+		return mapper.menuLikeTo(num, userNo);
+	}
+
+	public int unAllTempLike(HashMap<String, Integer> map) {
+		return mapper.unAllTempLike(map);
+	}
 }

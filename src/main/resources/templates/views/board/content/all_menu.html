@@ -44,9 +44,16 @@
 							값 안넣음
 						</span>
 						<span>
+							<th:block th:if="${v.likeTo == 1}">
+	                        <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+							</svg>
+							</th:block>
+							<th:block th:unless="${v.likeTo == 1}">
 	                        <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
 							</svg>
+							</th:block>
 							[[${v.likeCount}]]
 						</span>
                     </div>
@@ -185,29 +192,39 @@
 			[...videoMenu.children].map((video, index, array) =>{
 				const like = video.children[3].children[1].children[0];
 				const contentNo = video.children[0].value
-				video.addEventListener('click', function(event){
+				video.addEventListener('click', function(){
 					location.href = "/board/video-templates/" + contentNo;
 				})
 				
 				like.addEventListener('click', function(event){
-					fetch('/board/like', {
-						method : 'put',
-						headers : {'content-type':'application/json; charset=UTF-8'},
-						body: JSON.stringify({
-							contentNo: contentNo
-		    			})
-					})
-					.then(response => response.json())
-					.then(data =>{
-						console.log(data);
-					})
+					if(this.children[0].getAttribute("fill") == 'white'){
+						fetch('/board/like', {
+							method : 'put',
+							headers : {'content-type':'application/json; charset=UTF-8'},
+							body: JSON.stringify({
+								contentNo: contentNo
+			    			})
+						})
+						.then(response => response.json())
+						.then(data =>{
+							this.children[0].setAttribute("fill", "red");
+						})
+					}else if(this.children[0].getAttribute("fill") == 'red'){
+						fetch('/board/like', {
+							method : 'delete',
+							headers : {'content-type':'application/json; charset=UTF-8'},
+							body: JSON.stringify({
+								contentNo: contentNo
+			    			})
+						})
+						.then(response => response.json())
+						.then(data =>{
+							this.children[0].setAttribute("fill", "white");
+						})
+					}
+					
 					
 					event.stopPropagation();
-				})
-				video.addEventListener('click', function(){
-					const contentNo = this.children[0].value
-// 					location.href = "/board/video-templates/" + contentNo;
-					console.log(video.children[3].children[1]);
 				})
 				
 			})
