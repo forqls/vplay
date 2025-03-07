@@ -91,8 +91,14 @@ public class UsersController {
 	}
 
 	@PostMapping("signUp")
-	public String joinUser(@ModelAttribute Users user) {
+	public String joinUser(@ModelAttribute Users user , HttpSession session) {
 		user.setUserPw(bcrypt.encode(user.getUserPw()));
+		
+		Users kakaoUser = (Users)session.getAttribute("kakaoUser"); 
+		if(kakaoUser !=null) {
+			user.setKakaoId(kakaoUser.getKakaoId());
+			user.setLoginType(kakaoUser.getLoginType());
+		}
 		
 		System.out.println(user);
 
