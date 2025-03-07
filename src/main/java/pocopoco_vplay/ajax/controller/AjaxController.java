@@ -20,14 +20,14 @@ import pocopoco_vplay.users.model.vo.Users;
 @RequiredArgsConstructor
 public class AjaxController {
 	
-	private BoardService bService;
+	private final BoardService bService;
 	
 	@PutMapping("like")
-	public int likeAllTemp(@RequestBody HashMap<String, String> map, HttpSession session){
+	public int likeAllTemp(@RequestBody HashMap<String, Integer> map, HttpSession session){
 		System.out.println(map);
 
 		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
-//		map.put("userNo", );
+		map.put("userNo", userNo);
 		
 		System.out.println(map);
 		

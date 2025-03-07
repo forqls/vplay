@@ -183,7 +183,6 @@
 		window.onload = () =>{
 			const videoMenu = document.getElementsByClassName("content-grid")[0];
 			[...videoMenu.children].map((video, index, array) =>{
-<<<<<<< HEAD
 				const like = video.children[3].children[1].children[0];
 				const contentNo = video.children[0].value
 				video.addEventListener('click', function(event){
@@ -205,15 +204,12 @@
 					
 					event.stopPropagation();
 				})
-=======
 				video.addEventListener('click', function(){
 					const contentNo = this.children[0].value
 // 					location.href = "/board/video-templates/" + contentNo;
 					console.log(video.children[3].children[1]);
 				})
 				
-				
->>>>>>> 5d0d81b (250305 올메뉴 편집중)
 			})
 			
 			

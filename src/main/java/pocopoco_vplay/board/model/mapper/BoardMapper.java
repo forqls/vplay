@@ -58,5 +58,5 @@ public interface BoardMapper {
 
 	ArrayList<Reply> selectReplyList(int bId);
 
-	int allTempLike(HashMap<String, String> map);
+	int allTempLike(HashMap<String, Integer> map);
 }

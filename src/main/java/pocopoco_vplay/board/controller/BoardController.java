@@ -37,13 +37,21 @@ public class BoardController {
 	@GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
 		
-		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
-		ArrayList<Content> musicList = bService.allTemplateList("Music");
-		ArrayList<Content> soundEffectsList = bService.allTemplateList("Sound Effects");
-		ArrayList<Content> graphicTemplateList = bService.allTemplateList("Graphic Templates");
-		ArrayList<Content> stockVideoList = bService.allTemplateList("Stock Video");
-		ArrayList<Content> photosList = bService.allTemplateList("Photos");
-		ArrayList<Content> fontList = bService.allTemplateList("Fonts");
+		String[] menuName = {"video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts"};
+		
+		ArrayList<Content> videoTemplateList = bService.allTemplateList(menuName[0]);
+		ArrayList<Content> musicList = bService.allTemplateList(menuName[1]);
+		ArrayList<Content> soundEffectsList = bService.allTemplateList(menuName[2]);
+		ArrayList<Content> graphicTemplateList = bService.allTemplateList(menuName[3]);
+		ArrayList<Content> stockVideoList = bService.allTemplateList(menuName[4]);
+		ArrayList<Content> photosList = bService.allTemplateList(menuName[5]);
+		ArrayList<Content> fontList = bService.allTemplateList(menuName[6]);
+		
+//		for(int i =0; i<menuName.length ; i++) {
+//			for(int j =0; j<videoTemplateList.size(); j++) {
+//				
+//			}
+//		}
 		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
