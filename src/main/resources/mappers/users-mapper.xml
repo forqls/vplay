@@ -99,4 +99,12 @@
 		from users
 		where user_id =#{userId}
 	</select>
+	
+	
+	<select id="existUsers">
+		SELECT *
+		FROM USERS
+		WHERE LOGIN_TYPE='K' AND USER_ID IS NULL AND KAKAO_ID=#{KAKAOID}
+	</select>
+	
 </mapper>

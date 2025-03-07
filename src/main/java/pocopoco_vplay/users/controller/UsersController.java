@@ -39,6 +39,13 @@ public class UsersController {
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 
+
+	@GetMapping("home")
+	public String goHome(HttpSession session) {
+		session.removeAttribute("kakaoUser");
+		return "redirect:/";
+	}
+
 	@GetMapping("price")
 	public String price() {
 		return "price";
@@ -48,16 +55,7 @@ public class UsersController {
 	public String singUp() {
 		return "signup";
 	}
-
-	@PostMapping("signUp")
-	public String joinUser(@ModelAttribute Users user) {
-		user.setUserPw(bcrypt.encode(user.getUserPw()));
-		System.out.println(user);
-		int result = uService.insertUser(user);
-		System.out.println("결과 값은 : " + result);
-		return "signup_success";
-	}
-
+  
 	@PostMapping("idCheck")
 	@ResponseBody
 	public int checkId(@RequestParam("id") String id) {
@@ -90,6 +88,19 @@ public class UsersController {
 		mailSender.send(mimeMessage);
 		System.out.println(random);
 		return random;
+  }
+
+	@PostMapping("signUp")
+	public String joinUser(@ModelAttribute Users user) {
+		user.setUserPw(bcrypt.encode(user.getUserPw()));
+		
+		System.out.println(user);
+
+		int result = uService.insertUser(user);
+		System.out.println("결과 값은 : " + result);
+
+		return "signup_success";
+
 	}
 
 	@GetMapping("signIn")

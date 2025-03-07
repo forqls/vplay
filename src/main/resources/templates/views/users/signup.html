@@ -171,17 +171,17 @@ body {
 	</div>
 	<!-- VO 완성되면 아이디 중복확인 버튼 구현하기 (비동기) -->
 	<main class="signup-container">
-		<h1 class="signup-title">VPLAY 회원가입</h1>
+		<h1 class="signup-title" th:text="${session.kakaoUser != null ? ' 카카오 유저 회원가입' : '회원가입'}"></h1>
 		<form id="signupForm" method="post" action="/users/signUp">
-			<div class="input-group">
+			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
 				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID">
 				<button type="button" id="checkIdBtn" class="button verify-button">중복확인</button>
 			</div>
 			<div id="confirmIdText"></div>
-			<div class="input-group">
+			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
 				<input type="password" placeholder="Password" class="input-field" name="userPw" id="password">
 			</div>
-			<div class="input-group">
+			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
 				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword">
 			</div>
 			<div id="confirmPwText"></div>
@@ -189,14 +189,14 @@ body {
 				<input type="text" placeholder="User name" class="input-field" name="userName" id="name">
 			</div>
 			<div class="input-group">
-				<input type="text" placeholder="Nick name" class="input-field" name="userNickname" id="nickName">
+			    <input type="text" class="input-field" name="userNickname" id="nickName" th:value="${session.kakaoUser != null ? session.kakaoUser.userNickname : ''}" placeholder="Nick name">
 			</div>
 			<div class="input-group">
 				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel">
 			</div>
 			<div class="input-group">
 				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email">
-				<button type="button" class="button verify-button" onclick="showVerification()" id="emailBtn">인증하기</button>
+				<button type="button" class="button verify-button"  id="emailBtn">인증하기</button>
 			</div>
 			<div class="verification-section" id="verificationSection">
 				<div class="input-group">
@@ -221,7 +221,7 @@ body {
 			</div>
 		</div>
 	</main>
-	<script>
+	<script th:inline="javascript">
 		let idCheck = false;
 		let pwdCheck = false;
 		let emailCheck = false;
@@ -229,11 +229,20 @@ body {
 		let nickNameCheck = false;
 		let phoneCheck = false;
 		let confirmEmail = '';
-		
+		/*<![CDATA[*/
+		let kakaoUser = /*[[${session.kakaoUser != null}]]*/false; 
+		/*]]>*/
 		window.onload = () => {
 		    const nameInput = document.getElementById('name');
 		    const nickNameInput = document.getElementById('nickName');
 		    const telInput = document.getElementById('tel');
+		    
+		    
+		    if(kakaoUser){
+		    	idCheck = true;
+		    	pwdCheck = true;
+		    }
+		    
 		    
 		    nameInput.addEventListener('input', () => {
 		        const name = nameInput.value.trim();
@@ -250,6 +259,13 @@ body {
 		        phoneCheck = tel !== '';
 		    });
 		};
+		
+
+		
+		
+		
+		
+		
 		
 		document.getElementById('checkIdBtn').addEventListener('click',()=>{
 			const id = document.getElementById('ID').value;
@@ -314,6 +330,19 @@ body {
 				});
 			}
 		}
+		
+		document.addEventListener("DOMContentLoaded", function () {
+		    const emailBtn = document.getElementById("emailBtn");
+
+		    if (emailBtn) {
+		        emailBtn.addEventListener("click", showVerification);
+		    }else{
+		    	console.log("하");
+		    }
+		});
+		
+		
+		
 		
 		confirmEmailBtn.addEventListener('click',()=> {
 			const confirmEmailBtn = document.getElementById('confirmEmailBtn');
