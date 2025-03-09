@@ -202,9 +202,7 @@ public class BoardController {
 		inquiry.setMenuNo(menuNo);
 		inquiry.setContentTitle(contentTitle);
 		inquiry.setContentDetail(contentDetail);
-
 		int result = bService.updateInquiry(inquiry);
-
 		if (result > 0) {
 			return "redirect:/users/my_inquiry";
 		} else {
