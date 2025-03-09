@@ -298,7 +298,7 @@
 	
 	<delete id="unAllTempLike">
 		delete from likes
-		where user_no = #{userNo} and content_no = #{}
+		where user_no = #{userNo} and content_no = #{contentNo}
 	</delete>
 
 </mapper>
