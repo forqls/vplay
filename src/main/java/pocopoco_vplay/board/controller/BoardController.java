@@ -47,8 +47,12 @@ public class BoardController {
 		ArrayList<Content> fontList = bService.allTemplateList(menuName[6]);
 		
 		Users u = (Users)session.getAttribute("loginUser");
+		int userNo = 0;
 		
-		int userNo = u.getUserNo();
+		if(u != null) {
+			userNo = u.getUserNo();
+		}
+		
 		int num = 0;
 		
 		int result=0;
