@@ -65,4 +65,6 @@ public interface BoardMapper {
 	int menuLikeTo(@Param("contentNo")int num, @Param("userNo") int userNo);
 
 	int unAllTempLike(HashMap<String, Integer> map);
+
+//	ArrayList<Content> selectOrderByViews();
 }

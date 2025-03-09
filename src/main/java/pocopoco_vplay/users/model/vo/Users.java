@@ -34,4 +34,5 @@ public class Users {
     private String userProfile;
     private String kakaoId;
     private String loginType;
+    private int subscriber;
 }
