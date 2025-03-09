@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,7 +34,7 @@ public class BoardController {
 	private final BoardService bService;
 
 	@GetMapping("all_menu")
-	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
+	public ModelAndView joinVideoTemplatesList(ModelAndView mv, HttpSession session) {
 		
 		String[] menuName = {"video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts"};
 		
@@ -47,11 +46,63 @@ public class BoardController {
 		ArrayList<Content> photosList = bService.allTemplateList(menuName[5]);
 		ArrayList<Content> fontList = bService.allTemplateList(menuName[6]);
 		
-//		for(int i =0; i<menuName.length ; i++) {
-//			for(int j =0; j<videoTemplateList.size(); j++) {
-//				
-//			}
-//		}
+		Users u = (Users)session.getAttribute("loginUser");
+		
+		int userNo = u.getUserNo();
+		int num = 0;
+		
+		int result=0;
+		
+		
+		for(int v =0; v<videoTemplateList.size(); v++) {
+			num = videoTemplateList.get(v).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			videoTemplateList.get(v).setLikeTo(result);
+		}
+		
+		for(int m =0; m<musicList.size(); m++) {
+			num = musicList.get(m).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			musicList.get(m).setLikeTo(result);
+		}
+		
+		for(int s =0; s<soundEffectsList.size(); s++) {
+			num = soundEffectsList.get(s).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			soundEffectsList.get(s).setLikeTo(result);
+		}
+		
+		for(int g =0; g<graphicTemplateList.size(); g++) {
+			num = graphicTemplateList.get(g).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			graphicTemplateList.get(g).setLikeTo(result);
+		}
+		
+		for(int s =0; s<stockVideoList.size(); s++) {
+			num = stockVideoList.get(s).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			stockVideoList.get(s).setLikeTo(result);
+		}
+		
+		for(int p =0; p<photosList.size(); p++) {
+			num = photosList.get(p).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			photosList.get(p).setLikeTo(result);
+		}
+		
+		for(int f =0; f<fontList.size(); f++) {
+			num = fontList.get(f).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			fontList.get(f).setLikeTo(result);
+
+		}
 		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
