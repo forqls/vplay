@@ -65,4 +65,10 @@ public interface BoardMapper {
 	int menuLikeTo(@Param("contentNo")int num, @Param("userNo") int userNo);
 
 	int unAllTempLike(HashMap<String, Integer> map);
+
+	int updateRequest(Content c);
+
+	int updateRequestMenu(Content c);
+
+	int deleteBoard(int bId);
 }

@@ -3,7 +3,6 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 	<title>의뢰 게시판 작성</title>
 	<style>
@@ -111,12 +110,12 @@
 <div th:replace="~{views/common/topbar :: topbar}"></div>
 <main class="inquiryWrite-container">
 	<h1 class="inquiryWrite-title">[[${c.contentTitle}]]</h1>
-	<form method="post" id="requestDetailForm">
+	<form method="post" action="/board/updateRequest">
 		<input type="hidden" name="contentNo" th:value="${c.contentNo}">
 		<input type="hidden" name="page" th:value="${page}">
 		<div class="form-group">
 			<div class="form-label">
-				<span>[[${c.contentTitle}]]</span>
+				<input type="text" placeholder="제목을 입력하세요." name="contentTitle" th:value="${c.contentTitle}">
 			</div>
 		</div>
 		<!--<img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> 사진-->
@@ -133,70 +132,32 @@
 
 
 		<div class="form-group">
-			<div class="form-label">[[${c.menuName}]]</div>
+			<div class="form-label">
+				<span>카테고리 선택</span>
+				<select class="filter-dropdown" name="menuNo">
+					<option value="1" th:selected="${c.menuNo == 1}">Video Templates</option>
+					<option value="4" th:selected="${c.menuNo == 4}">Graphic Templates</option>
+					<option value="5" th:selected="${c.menuNo == 5}">Stock Video</option>
+					<option value="6" th:selected="${c.menuNo == 6}">Photos</option>
+					<option value="2" th:selected="${c.menuNo == 2}">Music</option>
+					<option value="3" th:selected="${c.menuNo == 3}">Sound Effects</option>
+					<option value="7" th:selected="${c.menuNo == 7}">Fonts</option>
+				</select>
+			</div>
 		</div>
 
 		<div class="form-group">
-			<textarea class="form-label" readonly th:text="${c.contentDetail}"></textarea>
+			<textarea class="form-label" th:text="${c.contentDetail}" name="contentDetail"></textarea>
 		</div>
 
 		<div class="button-group">
-			<button type="button" class="button" onclick="javascript:history.back();">목록으로</button>
-			<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
-				<button type="button" id="updateRequest">수정하기</button>
-				<button type="button" id="deleteModal">삭제하기</button>
-			</th:block>
-		</div>
-
-		<div class="modal" tabindex="-1" role="dialog" id="modalChoice">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-body p-4 text-center">
-						<h3 class="mb-0">정말로 삭제하시겠습니까?</h3>
-						<p class="mb-0">삭제 후 게시글은 복구할 수 없습니다.</p>
-					</div>
-					<div class="modal-footer flex-nowrap p-0">
-						<button type="button" id="delete">
-							<strong>네</strong>
-						</button>
-						<button type="button" data-bs-dismiss="modal">아니오</button>
-					</div>
-				</div>
-			</div>
+			<button class="submit">UPDATE</button>
+			<button type="button" class="button" onclick="javascript:history.back();">뒤로가기</button>
+			<button type="button" class="button" th:onclick="|location.href='/board/request_list?page=${page}'|">목록으로</button>
 		</div>
 
 	</form>
 </main>
-<script th:inline="javascript">
 
-	window.onload = () => {
-
-		const udr = document.getElementById('updateRequest');
-		const form = document.getElementById('requestDetailForm');
-		if(udr != null){
-			udr.addEventListener('click', () =>{
-				form.action = '/board/updateRequestForm';
-				form.submit();
-			});
-		}
-
-		document.getElementById('deleteModal').addEventListener('click' ,  () =>{
-			$('#modalChoice').modal('show');
-		})
-
-		document.getElementById('delete').addEventListener('click', () =>{
-			form.action = '/board/deleteRequest';
-			form.submit();
-		})
-
-
-
-	}
-
-
-
-
-
-</script>
 </body>
 </html>

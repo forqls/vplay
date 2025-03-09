@@ -133,4 +133,16 @@ public class BoardService {
 	public int unAllTempLike(HashMap<String, Integer> map) {
 		return mapper.unAllTempLike(map);
 	}
+
+	public int updateRequest(Content c) {
+		return mapper.updateRequest(c);
+	}
+
+	public int updateRequestMenu(Content c) {
+		return mapper.updateRequestMenu(c);
+	}
+
+	public int deleteBoard(int bId) {
+		return mapper.deleteBoard(bId);
+	}
 }
