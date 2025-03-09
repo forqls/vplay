@@ -342,7 +342,7 @@ public class BoardController {
 		}
 	}
 
-	@GetMapping("/{id}/{page}")
+	@GetMapping("/{id:\\d+}/{page:\\d+}")
 	public ModelAndView show(@PathVariable("id") int bId, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int id = 0;
@@ -364,14 +364,28 @@ public class BoardController {
 		}
 	}
 	
-	@GetMapping("video-templates/{no}")
-	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
+	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
+	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model) {
 		
 		Content content = bService.allMenuDetail(contentNo);
 		model.addAttribute("content", content);
-		System.out.println(content);
-		return "videoTemplates_detail";
-
+		
+		String joinURL = null;
+		
+		switch(menuName) {
+		case "video-templates": joinURL = "videoTemplates_detail"; break;
+		case "music" : joinURL = "music_detail"; break;
+		case "sound-effect" : joinURL = "soundEffects_detail"; break;
+		case "graphic-templates" : joinURL = "graphicTemplates_detail"; break;
+		case "stock-video" : joinURL = "stock-video_detail"; break;
+		case "photo" : joinURL = "photo_detail"; break;
+		default: joinURL = "font_detail"; break;
+		}
+		
+		System.out.println(menuName);
+		
+		
+		return joinURL;
 	}
 	
 }
