@@ -38,4 +38,6 @@ public interface UsersMapper {
 	String findName(Users users);
 
 	Users existUsers(String kakaoId);
+
+	ArrayList<Users> selectTopUser();
 }

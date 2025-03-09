@@ -436,18 +436,18 @@ body {
 	</div>
 	
     <h2>탑 크리에이터 추천</h2>
-    <div class="grid-container">
+    <div class="grid-container" th:each="l,rank : ${ulist}">
         <!-- 크리에이터 카드 반복 (12개) -->
         <!-- 1행 -->
         <div class="top-creator-card">
             <div class="top-creator-info">
                 <div class="top-creator-avatar"></div>
                 <div class="top-creator-details">
-                    <div class="top-creator-name">Handsomegwon</div>
-                    <div class="top-creator-followers">1.5k follower</div>
+                    <div class="top-creator-name">[[${l.userName}]]</div>
+                    <div class="top-creator-followers">[[${l.subscriber}]]</div>
                 </div>
             </div>
-            <div class="top-creator-rank">#1</div>
+            <div class="top-creator-rank">#[[${rank.index + 1}]]</div>
             <button class="add-button">+</button>
         </div>
     </div>
@@ -478,6 +478,40 @@ body {
             </div>
         </div>
     </div>
+	
+	
+	<script>
+		window.onload=()=>{
+			document.querySelectorAll('.container')
+		}
+		
+		
+	</script>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 </body>
 </html>

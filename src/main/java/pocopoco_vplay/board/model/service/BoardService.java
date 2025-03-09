@@ -133,4 +133,8 @@ public class BoardService {
 	public int unAllTempLike(HashMap<String, Integer> map) {
 		return mapper.unAllTempLike(map);
 	}
+
+//	public ArrayList<Content> selectOrderByViews() {
+//		return mapper.selectOrderByViews();
+//	}
 }
