@@ -17,8 +17,8 @@
 
 	
 	<insert id="insertUser">
-		   insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE
-    ) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, 'DEFAULT_IMG.JPG')
+		  insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE,LOGIN_TYPE,KAKAO_ID
+    ) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, 'DEFAULT_IMG.JPG',#{loginType},#{kakaoId})
 	</insert>
 	
 	<select id="selectMyProject" resultType="map">
@@ -106,5 +106,30 @@
 		FROM USERS
 		WHERE LOGIN_TYPE='K' AND USER_ID IS NULL AND KAKAO_ID=#{KAKAOID}
 	</select>
+	
+	<select id="selectTopUser">
+		select     U.USER_NO, 
+	    U.USER_ID, 
+	    U.USER_NICKNAME, 
+	    U.USER_NAME, 
+	    U.USER_PHONE, 
+	    U.USER_EMAIL, 
+	    U.USER_COMMENT, count(s.subscribe_no) as subscriber
+		from users u 
+		join subscribe s on u.user_no = s.creater_no
+		group by U.USER_NO, 
+	    U.USER_ID, 
+	    U.USER_NICKNAME, 
+	    U.USER_NAME, 
+	    U.USER_PHONE, 
+	    U.USER_EMAIL, 
+	    U.USER_COMMENT
+		order by subscriber desc
+		fetch first 12 rows only
+	</select>
+	
+	
+	
+	
 	
 </mapper>

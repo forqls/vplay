@@ -77,4 +77,8 @@ public class UsersService {
 		return mapper.existUsers(kakaoId);
 	}
 
+	public ArrayList<Users> selectTopUser() {
+		return mapper.selectTopUser();
+	}
+
 }

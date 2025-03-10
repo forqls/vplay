@@ -35,9 +35,10 @@ public class BoardController {
 
 	@GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
-
 		String[] menuName = { "video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts" };
-
+    
+	public ModelAndView joinVideoTemplatesList(ModelAndView mv, HttpSession session) {
+		String[] menuName = {"video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts"};
 		ArrayList<Content> videoTemplateList = bService.allTemplateList(menuName[0]);
 		ArrayList<Content> musicList = bService.allTemplateList(menuName[1]);
 		ArrayList<Content> soundEffectsList = bService.allTemplateList(menuName[2]);
@@ -51,7 +52,68 @@ public class BoardController {
 //				
 //			}
 //		}
+		Users u = (Users)session.getAttribute("loginUser");
+		int userNo = 0;
+		
+		if(u != null) {
+			userNo = u.getUserNo();
+		}
+		
+		int num = 0;
+		
+		int result=0;
+		
+		
+		for(int v =0; v<videoTemplateList.size(); v++) {
+			num = videoTemplateList.get(v).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			videoTemplateList.get(v).setLikeTo(result);
+		}
+		
+		for(int m =0; m<musicList.size(); m++) {
+			num = musicList.get(m).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			musicList.get(m).setLikeTo(result);
+		}
+		
+		for(int s =0; s<soundEffectsList.size(); s++) {
+			num = soundEffectsList.get(s).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			soundEffectsList.get(s).setLikeTo(result);
+		}
+		
+		for(int g =0; g<graphicTemplateList.size(); g++) {
+			num = graphicTemplateList.get(g).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			graphicTemplateList.get(g).setLikeTo(result);
+		}
+		
+		for(int s =0; s<stockVideoList.size(); s++) {
+			num = stockVideoList.get(s).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			stockVideoList.get(s).setLikeTo(result);
+		}
+		
+		for(int p =0; p<photosList.size(); p++) {
+			num = photosList.get(p).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			photosList.get(p).setLikeTo(result);
+		}
+		
+		for(int f =0; f<fontList.size(); f++) {
+			num = fontList.get(f).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			fontList.get(f).setLikeTo(result);
 
+		}
+		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
 
@@ -284,7 +346,7 @@ public class BoardController {
 		}
 	}
 
-	@GetMapping("/{id}/{page}")
+	@GetMapping("/{id:\\d+}/{page:\\d+}")
 	public ModelAndView show(@PathVariable("id") int bId, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int id = 0;
@@ -309,11 +371,29 @@ public class BoardController {
 	@GetMapping("video-templates/{no}")
 	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
 
+	
+	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
+	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model) {
+		
 		Content content = bService.allMenuDetail(contentNo);
 		model.addAttribute("content", content);
-		System.out.println(content);
-		return "videoTemplates_detail";
-
+		
+		String joinURL = null;
+		
+		switch(menuName) {
+		case "video-templates": joinURL = "videoTemplates_detail"; break;
+		case "music" : joinURL = "music_detail"; break;
+		case "sound-effect" : joinURL = "soundEffects_detail"; break;
+		case "graphic-templates" : joinURL = "graphicTemplates_detail"; break;
+		case "stock-video" : joinURL = "stock-video_detail"; break;
+		case "photo" : joinURL = "photo_detail"; break;
+		default: joinURL = "font_detail"; break;
+		}
+		
+		System.out.println(menuName);
+		
+		
+		return joinURL;
 	}
 
 }

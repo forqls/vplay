@@ -130,4 +130,15 @@ public class BoardService {
 		return mapper.allTempLike(map);
 	}
 
+	public int menuLikeTo(int num, int userNo) {
+		return mapper.menuLikeTo(num, userNo);
+	}
+
+	public int unAllTempLike(HashMap<String, Integer> map) {
+		return mapper.unAllTempLike(map);
+	}
+
+//	public ArrayList<Content> selectOrderByViews() {
+//		return mapper.selectOrderByViews();
+//	}
 }

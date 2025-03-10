@@ -2,6 +2,7 @@ package pocopoco_vplay.ajax.controller;
 
 import java.util.HashMap;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.service.BoardService;
-import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.vo.Users;
 
 @RestController
@@ -31,6 +31,17 @@ public class AjaxController {
 		
 		System.out.println(map);
 		
+		
 		return bService.allTempLike(map);
 	}
+	
+	@DeleteMapping("like")
+	public int unLikeAllTemp(@RequestBody HashMap<String, Integer> map, HttpSession session) {
+		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
+		map.put("userNo", userNo);
+		
+		return bService.unAllTempLike(map);
+	}
+	
+		
 }
