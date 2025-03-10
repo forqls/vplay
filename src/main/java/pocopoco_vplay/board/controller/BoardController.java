@@ -33,10 +33,10 @@ import pocopoco_vplay.users.model.vo.Users;
 public class BoardController {
 	private final BoardService bService;
 
-    @GetMapping("all_menu")
+	@GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv, HttpSession session) {
-		String[] menuName = {"video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts"};
-		
+		String[] menuName = { "video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts" };
+
 		ArrayList<Content> videoTemplateList = bService.allTemplateList(menuName[0]);
 		ArrayList<Content> musicList = bService.allTemplateList(menuName[1]);
 		ArrayList<Content> soundEffectsList = bService.allTemplateList(menuName[2]);
@@ -50,68 +50,67 @@ public class BoardController {
 //
 //			}
 //		}
-		Users u = (Users)session.getAttribute("loginUser");
+		Users u = (Users) session.getAttribute("loginUser");
 		int userNo = 0;
-		
-		if(u != null) {
+
+		if (u != null) {
 			userNo = u.getUserNo();
 		}
-		
+
 		int num = 0;
-		
-		int result=0;
-		
-		
-		for(int v =0; v<videoTemplateList.size(); v++) {
+
+		int result = 0;
+
+		for (int v = 0; v < videoTemplateList.size(); v++) {
 			num = videoTemplateList.get(v).getContentNo();
 			result = bService.menuLikeTo(num, userNo);
-			
+
 			videoTemplateList.get(v).setLikeTo(result);
 		}
-		
-		for(int m =0; m<musicList.size(); m++) {
+
+		for (int m = 0; m < musicList.size(); m++) {
 			num = musicList.get(m).getContentNo();
 			result = bService.menuLikeTo(num, userNo);
-			
+
 			musicList.get(m).setLikeTo(result);
 		}
-		
-		for(int s =0; s<soundEffectsList.size(); s++) {
+
+		for (int s = 0; s < soundEffectsList.size(); s++) {
 			num = soundEffectsList.get(s).getContentNo();
 			result = bService.menuLikeTo(num, userNo);
-			
+
 			soundEffectsList.get(s).setLikeTo(result);
 		}
-		
-		for(int g =0; g<graphicTemplateList.size(); g++) {
+
+		for (int g = 0; g < graphicTemplateList.size(); g++) {
 			num = graphicTemplateList.get(g).getContentNo();
 			result = bService.menuLikeTo(num, userNo);
-			
+
 			graphicTemplateList.get(g).setLikeTo(result);
 		}
-		
-		for(int s =0; s<stockVideoList.size(); s++) {
+
+		for (int s = 0; s < stockVideoList.size(); s++) {
 			num = stockVideoList.get(s).getContentNo();
 			result = bService.menuLikeTo(num, userNo);
-			
+
 			stockVideoList.get(s).setLikeTo(result);
 		}
-		
-		for(int p =0; p<photosList.size(); p++) {
+
+		for (int p = 0; p < photosList.size(); p++) {
 			num = photosList.get(p).getContentNo();
 			result = bService.menuLikeTo(num, userNo);
-			
+
 			photosList.get(p).setLikeTo(result);
 		}
-		
-		for(int f =0; f<fontList.size(); f++) {
+
+		for (int f = 0; f < fontList.size(); f++) {
 			num = fontList.get(f).getContentNo();
 			result = bService.menuLikeTo(num, userNo);
-			
+
 			fontList.get(f).setLikeTo(result);
 
 		}
-		
+
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
 
@@ -233,81 +232,79 @@ public class BoardController {
 			throw new UsersException("로그인 하셈");
 		}
 	}
-	
+
 //	@GetMapping("request_list")
 //	public String requestList() {
 //		return "request_list";
 //	}
-	
 
 	@GetMapping("video-template-list")
 	public ModelAndView videoTemplateList(ModelAndView mv) {
 		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
 		ArrayList<Content> videoTempCategory = bService.allCategory(1);
 		ArrayList<Content> videoTempPopularCate = bService.allPopularCate(1);
-		
-		mv.addObject("videoTemplateList", videoTemplateList).addObject("videoTempCategory", videoTempCategory).addObject("videoTempPopularCate",videoTempPopularCate);
+
+		mv.addObject("videoTemplateList", videoTemplateList).addObject("videoTempCategory", videoTempCategory).addObject("videoTempPopularCate", videoTempPopularCate);
 		mv.setViewName("videoTemplates_list");
 		return mv;
 	}
 
-	
 	@GetMapping("sound-effects-list")
 	public ModelAndView soundEffectsList(ModelAndView mv) {
 		ArrayList<Content> soundEffectsTemplateList = bService.allTemplateList("Sound Effects");
-		
+
 		mv.addObject("soundEffectsTemplateList", soundEffectsTemplateList);
 		mv.setViewName("soundEffects_list");
 		return mv;
 	}
-	
+
 	@GetMapping("music-list")
 	public ModelAndView musicList(ModelAndView mv) {
 		ArrayList<Content> musicList = bService.allTemplateList("Music");
-		
+
 		mv.addObject("musicList", musicList);
 		mv.setViewName("music_list");
 		return mv;
 	}
-	
+
 	@GetMapping("graphic-template-list")
 	public ModelAndView graphicTemplateList(ModelAndView mv) {
 		ArrayList<Content> graphicTemplateList = bService.allTemplateList("Graphic Templates");
-		
+
 		mv.addObject("graphicTemplateList", graphicTemplateList);
 		mv.setViewName("GraphicTemplates_list");
 		return mv;
 	}
-	
+
 	@GetMapping("stock-video-list")
 	public ModelAndView stockVideoList(ModelAndView mv) {
 		ArrayList<Content> stockVideoList = bService.allTemplateList("Stock Video");
-		
+
 		mv.addObject("stockVideoList", stockVideoList);
 		mv.setViewName("stock-video_list");
 		return mv;
 	}
-	
+
 	@GetMapping("photo-list")
 	public ModelAndView photoList(ModelAndView mv) {
 		ArrayList<Content> photosList = bService.allTemplateList("Photos");
-		
+
 		mv.addObject("photosList", photosList);
 		mv.setViewName("photo-list");
 		return mv;
 	}
-	
+
 	@GetMapping("font-list")
 	public ModelAndView fontList(ModelAndView mv) {
 		ArrayList<Content> fontList = bService.allTemplateList("Fonts");
-		
+
 		mv.addObject("fontList", fontList);
 		mv.setViewName("fonts_list");
 		return mv;
 	}
 
 	@GetMapping("request_list")
-	public ModelAndView joinrequestPost(@RequestParam(value="page", defaultValue="1") int currentPage, ModelAndView mv) {
+	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
 
 		int listCount = bService.getrequestPostCount();
 
@@ -317,7 +314,7 @@ public class BoardController {
 
 		System.out.println("리스트 개수: " + list.size());
 
-		for(Content c : list) {
+		for (Content c : list) {
 			c.setUserId(bService.selectUser(c.getUserNo()));
 		}
 
@@ -327,7 +324,7 @@ public class BoardController {
 	}
 
 	@GetMapping("writeRequest")
-	public String writeRequest(){
+	public String writeRequest() {
 		return "request_write";
 	}
 
@@ -350,53 +347,66 @@ public class BoardController {
 	public ModelAndView show(@PathVariable("id") int bId, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int id = 0;
-		if(loginUser != null){
+		if (loginUser != null) {
 			id = loginUser.getUserNo();
 		}
 		Content c = bService.selectRequest(bId, id);
-		ArrayList<Reply> replyList = bService.selectReplyList(bId);/*글 번호에 해당하는 댓글을 들고와야하기 때문*/
+		ArrayList<Reply> replyList = bService.selectReplyList(bId);/* 글 번호에 해당하는 댓글을 들고와야하기 때문 */
 
 		System.out.println(replyList);
 
-		if(c != null){
+		if (c != null) {
 			mv.addObject("replyList", replyList);
 			mv.addObject("c", c);
 			mv.addObject("page", page).setViewName("request_detail");
 			return mv;
-		}else{
+		} else {
 			throw new BoardException("의뢰 게시글 상세조회를 실패했습니다.");
 		}
 	}
-	
+
 	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
 	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model) {
-		
+
 		Content content = bService.allMenuDetail(contentNo);
 		model.addAttribute("content", content);
-		
+
 		String joinURL = null;
-		
-		switch(menuName) {
-		case "video-templates": joinURL = "videoTemplates_detail"; break;
-		case "music" : joinURL = "music_detail"; break;
-		case "sound-effect" : joinURL = "soundEffects_detail"; break;
-		case "graphic-templates" : joinURL = "graphicTemplates_detail"; break;
-		case "stock-video" : joinURL = "stock-video_detail"; break;
-		case "photo" : joinURL = "photo_detail"; break;
-		default: joinURL = "font_detail"; break;
+
+		switch (menuName) {
+		case "video-templates":
+			joinURL = "videoTemplates_detail";
+			break;
+		case "music":
+			joinURL = "music_detail";
+			break;
+		case "sound-effect":
+			joinURL = "soundEffects_detail";
+			break;
+		case "graphic-templates":
+			joinURL = "graphicTemplates_detail";
+			break;
+		case "stock-video":
+			joinURL = "stock-video_detail";
+			break;
+		case "photo":
+			joinURL = "photo_detail";
+			break;
+		default:
+			joinURL = "font_detail";
+			break;
 		}
-		
+
 		System.out.println(menuName);
-		
-		
+
 		return joinURL;
 	}
 
 	@PostMapping("updateRequestForm")
-	public String updateRequestForm(@RequestParam("contentNo") int bId, @RequestParam("page")int page,HttpSession session, Model model){
+	public String updateRequestForm(@RequestParam("contentNo") int bId, @RequestParam("page") int page, HttpSession session, Model model) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int id = 0;
-		if(loginUser != null){
+		if (loginUser != null) {
 			id = loginUser.getUserNo();
 		}
 		Content content = bService.selectRequest(bId, id);
@@ -405,14 +415,14 @@ public class BoardController {
 	}
 
 	@PostMapping("updateRequest")
-	public String updateRequest(@ModelAttribute Content c, @RequestParam("page") int page){
+	public String updateRequest(@ModelAttribute Content c, @RequestParam("page") int page) {
 		int result1 = bService.updateRequest(c);
 		int result2 = bService.updateRequestMenu(c);
 		System.out.println(c);
-		if (result1 + result2 == 2){
-			//return "redirect:/board/"+c.getContentNo()+ "/"+ page;
+		if (result1 + result2 == 2) {
+			// return "redirect:/board/"+c.getContentNo()+ "/"+ page;
 			return String.format("redirect:/board/%d/%d", c.getContentNo(), page);
-		}else{
+		} else {
 			throw new BoardException("게시글 수정을 실패하였습니다.");
 		}
 	}
@@ -420,6 +430,9 @@ public class BoardController {
 	@PostMapping("deleteRequest")
 	public String deleteRequest(@RequestParam("contentNo") int bId) {
 		int result = bService.deleteBoard(bId);
+		if (result > 0) {
+			return "redirect:/board/list";
+		} else {
 		if(result > 0){
 			return "redirect:/board/request_list";
 		}else{

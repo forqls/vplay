@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://code.jquery.com/jquery-3.7.1.js"
-	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
@@ -35,6 +33,7 @@
 	border-radius: 0.375rem;
 	color: white;
 	font-size: 0.875rem;
+	font-family: sans-serif;
 }
 
 .form-control:focus {
@@ -150,66 +149,46 @@ textarea.form-control {
 			<section class="section">
 				<form action="updateInfo" method="post">
 					<div class="form-group">
-						<label class="form-label" for="id">아이디</label> <input type="text"
-							id="id" class="form-control"
-							th:value="${session.loginUser.userId}" readonly>
+						<label class="form-label" for="id">아이디</label> <input type="text" id="id" class="form-control" th:value="${session.loginUser.userId}" readonly>
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="name">이름</label> <input type="text"
-							name="userName" id="name" class="form-control"
-							th:value="${session.loginUser.userName}">
+						<label class="form-label" for="name">이름</label> <input type="text" name="userName" id="name" class="form-control" th:value="${session.loginUser.userName}">
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="nickname">닉네임</label> <input
-							type="text" name="userNickname" id="nickname"
-							class="form-control" th:value="${session.loginUser.userNickname}">
+						<label class="form-label" for="nickname">닉네임</label> <input type="text" name="userNickname" id="nickname" class="form-control" th:value="${session.loginUser.userNickname}">
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="phone">전화번호</label> <input
-							type="tel" name="userPhone" id="tel" class="form-control"
-							th:value="${session.loginUser.userPhone}">
+						<label class="form-label" for="phone">전화번호</label> <input type="tel" name="userPhone" id="tel" class="form-control" th:value="${session.loginUser.userPhone}">
 					</div>
 
 					<div class="form-group">
 						<label class="form-label" for="email">이메일</label>
 						<div class="email-container">
-							<input type="email" placeholder="Email" class="form-control"
-								name="userEmail" id="email"
-								th:value="${session.loginUser.userEmail}">
-							<button type="button" class="button verify-button"
-								onclick="showVerification()" id="emailBtn">인증하기</button>
+							<input type="email" placeholder="Email" class="form-control" name="userEmail" id="email" th:value="${session.loginUser.userEmail}">
+							<button type="button" class="button verify-button" onclick="showVerification()" id="emailBtn">인증하기</button>
 						</div>
 					</div>
 
 					<div class="verification-section" id="verificationSection">
 						<div class="form-group">
 							<div class="verification-container">
-								<input type="text" placeholder="인증번호 입력" class="form-control"
-									name="confirmVerifi" id="confirmVerifi">
-								<button type="button" class="button verify-button"
-									id="confirmEmailBtn">확인</button>
+								<input type="text" placeholder="인증번호 입력" class="form-control" name="confirmVerifi" id="confirmVerifi">
+								<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 							</div>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="birthdate">생년월일</label> <input
-							type="date" name="userBirth" id="birthdate" class="form-control"
-							th:value="${session.loginUser.userBirth}">
+						<label class="form-label" for="birthdate">생년월일</label> <input type="date" name="userBirth" id="birthdate" class="form-control" th:value="${session.loginUser.userBirth}">
 					</div>
 
 					<div class="form-group">
 						<label class="form-label">성별</label>
 						<div class="radio-group">
-							<input type="radio" value="M" class="radio-input"
-								name="userGender" id="male"
-								th:checked="${session.loginUser.userGender == 'M'}"> <span>남자</span>
-							<input type="radio" name="userGender" value="F"
-								class="radio-input" id="female"
-								th:checked="${session.loginUser.userGender == 'F'}"> <span>여자</span>
+							<input type="radio" value="M" class="radio-input" name="userGender" id="male" th:checked="${session.loginUser.userGender == 'M'}"> <span>남자</span> <input type="radio" name="userGender" value="F" class="radio-input" id="female" th:checked="${session.loginUser.userGender == 'F'}"> <span>여자</span>
 						</div>
 					</div>
 
@@ -219,9 +198,7 @@ textarea.form-control {
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="password">비밀번호 *</label> <input
-							type="password" id="password" class="form-control"
-							placeholder="비밀번호를 입력하세요.">
+						<label class="form-label" for="password">비밀번호 *</label> <input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요.">
 					</div>
 
 					<div id="confirmPwText"></div>
@@ -237,25 +214,18 @@ textarea.form-control {
 			<section class="section">
 				<form action="changePw" method="post">
 					<div class="form-group">
-						<label class="form-label" for="current-password">현재 비밀번호</label> <input
-							type="password" name="currentPwd" id="currentPwd"
-							class="form-control" placeholder="현재 비밀번호를 입력하세요.">
+						<label class="form-label" for="current-password">현재 비밀번호</label> <input type="password" name="currentPwd" id="currentPwd" class="form-control" placeholder="현재 비밀번호를 입력하세요.">
 					</div>
 					<div id="ChangeConfirmPwText"></div>
 					<div class="form-group">
-						<label class="form-label" for="new-password">새 비밀번호</label> <input
-							type="password" name="newPwd" id="newPwd" class="form-control"
-							placeholder="새로운 비밀번호를 입력하세요.">
+						<label class="form-label" for="new-password">새 비밀번호</label> <input type="password" name="newPwd" id="newPwd" class="form-control" placeholder="새로운 비밀번호를 입력하세요.">
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="confirm-password">새 비밀번호 확인</label>
-						<input type="password" name="newPwdConfirm" id="newPwdConfirm"
-							class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
+						<label class="form-label" for="confirm-password">새 비밀번호 확인</label> <input type="password" name="newPwdConfirm" id="newPwdConfirm" class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
 					</div>
 					<div id="ChangeConfirmPwTextCheck"></div>
-					<button type="button" class="btn" id="changePw">Change
-						Password</button>
+					<button type="button" class="btn" id="changePw">Change Password</button>
 				</form>
 			</section>
 		</div>
