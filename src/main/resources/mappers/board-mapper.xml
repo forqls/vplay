@@ -345,7 +345,12 @@
 	<select id="selectOrderByViews">
 	    select * from content order by views desc
 	    fetch first 12 rows only 
-	</select>	
+	</select>
+
+	<insert id="insertReply">
+		insert into reply
+		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
+	</insert>
 	
 	
 	
