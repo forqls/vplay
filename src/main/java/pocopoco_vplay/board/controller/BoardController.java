@@ -33,10 +33,7 @@ import pocopoco_vplay.users.model.vo.Users;
 public class BoardController {
 	private final BoardService bService;
 
-	@GetMapping("all_menu")
-	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
-		String[] menuName = { "video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts" };
-    
+    @GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv, HttpSession session) {
 		String[] menuName = {"video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts"};
 		ArrayList<Content> videoTemplateList = bService.allTemplateList(menuName[0]);
@@ -368,10 +365,6 @@ public class BoardController {
 		}
 	}
 
-	@GetMapping("video-templates/{no}")
-	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
-
-	
 	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
 	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model) {
 		
