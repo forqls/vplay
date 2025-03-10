@@ -54,12 +54,13 @@ body {
 	border: 1px solid #28303f;
 	border-radius: 4px;
 	color: #ffffff;
+	font-family: sans-serif;
 }
 
 .links {
 	display: flex;
 	justify-content: right;
-	gap:0.5rem;
+	gap: 0.5rem;
 	margin-bottom: 1rem;
 	font-size: 0.9rem;
 }
@@ -131,14 +132,9 @@ body {
 	<main class="signin-container">
 		<h1 class="signin-title">로그인</h1>
 		<form action="/users/signIn" method="post">
-			<input type="text" placeholder="ID" class="input-field" name="userId" required>
-			<input type="password" placeholder="Password" class="input-field" name="userPw" required>
+			<input type="text" placeholder="ID" class="input-field" name="userId" required> <input type="password" placeholder="Password" class="input-field" name="userPw" required>
 			<div class="links">
-				<a onclick="location.href='/users/signUp'">Sign Up</a>
-				<a>/</a>
-				<a onclick="location.href='/users/findId'">Find ID</a>
-				<a>/</a>
-				<a onclick="location.href='/users/findPw'">Find PW</a>
+				<a onclick="location.href='/users/signUp'">Sign Up</a> <a>/</a> <a onclick="location.href='/users/findId'">Find ID</a> <a>/</a> <a onclick="location.href='/users/findPw'">Find PW</a>
 			</div>
 
 			<button type="submit" class="signin-btn">로그인</button>
@@ -146,10 +142,9 @@ body {
 		</form>
 
 		<div class="social-divider">------------------- Or Sign In with Social -------------------</div>
-		
+
 		<div class="social-buttons">
-			<a href="https://kauth.kakao.com/oauth/authorize?client_id=ffd6b91df4ad805e542c6a8a450195b3&redirect_uri=http://localhost:8080/oauth/kakao&response_type=code&prompt=login" style="width:50%">
-			    <img src="/img/123.png" style="width:100%">
+			<a href="https://kauth.kakao.com/oauth/authorize?client_id=ffd6b91df4ad805e542c6a8a450195b3&redirect_uri=http://localhost:8080/oauth/kakao&response_type=code&prompt=login" style="width: 50%"> <img src="/img/123.png" style="width: 100%">
 			</a>
 			<button class="social-btn google-btn">Sign in with Google</button>
 		</div>

@@ -75,6 +75,7 @@ input[type="text"], textarea {
 	border-radius: 4px;
 	background-color: #1f1f2c;
 	color: #ffffff;
+	font-family: sans-serif;
 }
 
 input[type="text"]::placeholder, textarea::placeholder {
@@ -82,8 +83,8 @@ input[type="text"]::placeholder, textarea::placeholder {
 }
 
 textarea {
-	min-height: 300px;
-	resize: vertical;
+	min-height: 400px;
+	resize: none;
 }
 
 .button-group {
@@ -99,30 +100,24 @@ textarea {
 	padding: 0.75rem;
 	font-size: 0.875rem;
 	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
 }
 
 .button:hover {
 	background-color: #8137e9;
-}
-
-textarea {
-	min-height: 400px;
-	resize: none;
 }
 </style>
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<main class="inquiryWrite-container">
-		<h1 class="inquiryWrite-title">[[${c.contentTitle}]]</h1>
+		<h1 class="inquiryWrite-title">문의 작성</h1>
 		<form id="inquiryForm" action="write_inquiry" method="post">
-			<input type="hidden" name="boardId" th:value="${c.boardId}">
-
-			<input type="hidden" name="page" th:value="${page}">
 			<input type="hidden" name="userNo" th:value="${session.loginUser.userNo}" />
 			<div class="form-group">
 				<div class="form-label">
-					<span>[[${c.menuName}]]</span> <select class="filter-dropdown" name="menuNo">
+					<span>문의 선택</span> <select class="filter-dropdown" name="menuNo">
 						<option value="11">시스템 문의</option>
 						<option value="12">결제 문의</option>
 						<option value="13">컨텐츠 문의</option>

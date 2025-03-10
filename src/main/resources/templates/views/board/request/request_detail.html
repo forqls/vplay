@@ -166,6 +166,55 @@
 				</div>
 			</div>
 		</div>
+		<div class="reply_wrap">
+			<div style="margin-bottom: 20px;">
+				<p style="color: #999;">크리에이터 답변</p>
+			</div>
+
+			<table class="table"><!--원래있는 댓글부분-->
+				<thead>
+				<tr>
+					<th width="130px">작성자</th>
+					<th>작성내용</th>
+					<th width="130px">작성일자</th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="r:${replyList}"><!--있는댓글 가져오기-->
+					<td>[[${r.writer}]]</td>
+					<td>[[${r.replyDetail}]]</td>
+					<td>[[${r.modifyDate}]]</td>
+					<td width="80px">
+						<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
+							<input type="hidden" th:value="${r.replyNo}" name="replyId"><!--th:value="${r.replyId}"-->
+							<span class="updel">수정하기</span>
+							&nbsp;
+							<span class="updel">삭제하기</span>
+							<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"> <!--th:value="${r.replyDetail}"--><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
+						</th:block>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+			<div class="content"><!--댓글부분-->
+				<div style="margin-bottom: 20px;">
+					<!--            <img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> 프로필 사진-->
+					<span style="margin-left: 10px;">와장창</span>
+					<span style="font-size: 12px; color: #999; display: block; margin-left: 60px;">팔로워</span>
+					<span style="font-size: 12px; color: #999; float: right;">날짜</span>
+				</div>
+				<textarea class="reply_detail" rows="8" id="replyContent" style="resize:none"></textarea>
+
+				<button class="btn btn-outline-success" id="replySubmit" type="button" th:disabled="${session.loginUser == null}">SUBMIT</button>
+
+			</div>
+
+			<div style="text-align: center; margin-top: 20px;">
+				<!--         <button class="button">답글달기</button>-->
+			</div>
+		</div>
 
 	</form>
 </main>
