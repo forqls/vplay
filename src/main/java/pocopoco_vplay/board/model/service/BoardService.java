@@ -150,8 +150,8 @@ public class BoardService {
 		return mapper.deleteBoard(bId);
 	}
 
-	public ArrayList<Content> selectOrderByViews() {
-		return mapper.selectOrderByViews();
+	public ArrayList<Content> selectContentTop() {
+		return mapper.selectContentTop();
 	}
 
 

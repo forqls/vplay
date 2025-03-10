@@ -74,5 +74,5 @@ public interface BoardMapper {
 
 	int deleteBoard(int bId);
 
-	ArrayList<Content> selectOrderByViews();
+	ArrayList<Content> selectContentTop();
 }
