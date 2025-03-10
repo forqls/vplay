@@ -206,11 +206,11 @@
 				<td>[[${r.modifyDate}]]</td>
 				<td width="80px">
 					<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
-						<input type="hidden" th:value="${r.replyNo}" name="replyId"><!--th:value="${r.replyId}"-->
+						<input type="hidden" th:value="${r.replyNo}" name="replyId">
 						<span class="updel">수정하기</span>
 						&nbsp;
 						<span class="updel">삭제하기</span>
-						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"> <!--th:value="${r.replyDetail}"--><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
+						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
 					</th:block>
 				</td>
 			</tr>
