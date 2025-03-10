@@ -73,4 +73,6 @@ public interface BoardMapper {
 	int updateRequestMenu(Content c);
 
 	int deleteBoard(int bId);
+
+	ArrayList<Content> selectOrderByViews();
 }

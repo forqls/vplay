@@ -145,131 +145,131 @@ body {
 	</main>
 
 	<script>
-	let flag = false;
-	window.onload = function () {
-		const alertText = document.querySelectorAll('.alert_text');
-
-		document.getElementById('userName').addEventListener('blur', function() {
-			if(this.value.trim() === ''){
-				alertText[0].innerHTML ='이름을 입력해 주세요.';
-			}else{
-				alertText[0].innerHTML = '';
-			}
-		})
-
-		document.getElementById('phone').addEventListener('blur', function() {
-			// console.log(this.value);
-			let userName = document.getElementById('userName').value.trim();
-			let userPhone = this.value.replace(/[^0-9]/g, "");
-
-			if (userPhone.length > 10) {
-				userPhone = userPhone.substring(0, 11);
-			}
-
-			if (userPhone.length >= 3 && userPhone.length <= 7) {
-				userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3);
-			} else if (userPhone.length > 7 && userPhone.length <= 11) {
-				userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3, 7) + "-" + userPhone.substring(7);
-			} else {
-				userPhone = userPhone;
-			}
-
-			this.value = userPhone;
-
-			// console.log(this.value);
-
-			if(userPhone === ''){
-				alertText[1].innerHTML ='휴대폰 번호를 입력해 주세요.';
-			}else{
-				alertText[1].innerHTML ='';
-				$.ajax({
-					url:'/users/findId',
-					type:'POST',
-					data: {userName: userName, userPhone: userPhone},
-					success: data => {
-						if(data === 0){
-							alertText[1].innerHTML = '이름과 휴대폰 번호가 일치하지 않습니다';
-							flag = false;
-
-						}else{
-							alertText[1].innerHTML = '이름과 휴대폰 번호가 일치합니다';
-							flag = true;
-						}
-					},
-					error: data => console.log(data)
-				});
-			}
-		});
-
-	}
-		let idCheck = false;
-		let emailCheck = false;
-		let confirmEmail = '';
-
-		function showVerification() {
-			const userName = document.getElementById('userName').value.trim();
-			const userPhone = document.getElementById('phone').value.trim();
-			const email = document.getElementById('email').value.trim();
-			const verification = document.getElementById('verificationSection');
-			const emailBtn = document.getElementById('emailBtn');
-			if (email === '') {
-				alert('이메일을 입력해주세요.');
-				verification.style.display = 'none';
-			} else if (userName === '') {
-				alert('이름을 입력해 주세요.');
-				verification.style.display = 'none';
-			} else if (userPhone === '') {
-				alert('회원 정보에 등록된 전화번호를 입력해 주세요.');
-				verification.style.display = 'none';
-			} else if (flag === false) {
-				alert('등록된 회원 정보가 없습니다. 이름이나 전화번호를 확인해주세요.');
-				verification.style.display = 'none';
-			} else {
-				if (email !== '') {
+		let flag = false;
+		window.onload = function () {
+			const alertText = document.querySelectorAll('.alert_text');
+	
+			document.getElementById('userName').addEventListener('blur', function() {
+				if(this.value.trim() === ''){
+					alertText[0].innerHTML ='이름을 입력해 주세요.';
+				}else{
+					alertText[0].innerHTML = '';
+				}
+			})
+	
+			document.getElementById('phone').addEventListener('blur', function() {
+				// console.log(this.value);
+				let userName = document.getElementById('userName').value.trim();
+				let userPhone = this.value.replace(/[^0-9]/g, "");
+	
+				if (userPhone.length > 10) {
+					userPhone = userPhone.substring(0, 11);
+				}
+	
+				if (userPhone.length >= 3 && userPhone.length <= 7) {
+					userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3);
+				} else if (userPhone.length > 7 && userPhone.length <= 11) {
+					userPhone = userPhone.substring(0, 3) + "-" + userPhone.substring(3, 7) + "-" + userPhone.substring(7);
+				} else {
+					userPhone = userPhone;
+				}
+	
+				this.value = userPhone;
+	
+				// console.log(this.value);
+	
+				if(userPhone === ''){
+					alertText[1].innerHTML ='휴대폰 번호를 입력해 주세요.';
+				}else{
+					alertText[1].innerHTML ='';
 					$.ajax({
-						url: '/users/emailCheck',
-						data: {email: email},
+						url:'/users/findId',
+						type:'POST',
+						data: {userName: userName, userPhone: userPhone},
 						success: data => {
-							alert('이메일이 발송되었습니다.');
-							verification.style.display = 'block';
-							console.log(data);
-							confirmEmail = data;
-						}, error: data => console.log(data)
+							if(data === 0){
+								alertText[1].innerHTML = '이름과 휴대폰 번호가 일치하지 않습니다';
+								flag = false;
+	
+							}else{
+								alertText[1].innerHTML = '이름과 휴대폰 번호가 일치합니다';
+								flag = true;
+							}
+						},
+						error: data => console.log(data)
 					});
 				}
-			}
-
-
-			document.getElementById('verificationSection').classList
-					.add('active');
+			});
+	
 		}
-		const confirmEmailBtn =	document.getElementById('confirmEmailBtn');
-
-		confirmEmailBtn.addEventListener('click', () => {
-			const confirmVerify = document.getElementById('confirmVerify').value.trim();
-			const verification = document.getElementById('verificationSection');
-			if(confirmVerify === ''){
-				alert('인증번호를 입력해주세요.');
-			}else if(confirmVerify === confirmEmail){
-				alert('이메일 인증이 완료되었습니다.');
-				emailCheck = true;
-				verification.style.display='none';
-			}else{
-				alert('인증번호가 틀렸습니다. 다시 한번 확인해주세요.');
-				emailCheck = false;
+			let idCheck = false;
+			let emailCheck = false;
+			let confirmEmail = '';
+	
+			function showVerification() {
+				const userName = document.getElementById('userName').value.trim();
+				const userPhone = document.getElementById('phone').value.trim();
+				const email = document.getElementById('email').value.trim();
+				const verification = document.getElementById('verificationSection');
+				const emailBtn = document.getElementById('emailBtn');
+				if (email === '') {
+					alert('이메일을 입력해주세요.');
+					verification.style.display = 'none';
+				} else if (userName === '') {
+					alert('이름을 입력해 주세요.');
+					verification.style.display = 'none';
+				} else if (userPhone === '') {
+					alert('회원 정보에 등록된 전화번호를 입력해 주세요.');
+					verification.style.display = 'none';
+				} else if (flag === false) {
+					alert('등록된 회원 정보가 없습니다. 이름이나 전화번호를 확인해주세요.');
+					verification.style.display = 'none';
+				} else {
+					if (email !== '') {
+						$.ajax({
+							url: '/users/emailCheck',
+							data: {email: email},
+							success: data => {
+								alert('이메일이 발송되었습니다.');
+								verification.style.display = 'block';
+								console.log(data);
+								confirmEmail = data;
+							}, error: data => console.log(data)
+						});
+					}
+				}
+	
+	
+				document.getElementById('verificationSection').classList
+						.add('active');
 			}
-		});
-
-		const findIdBtn = (event) => {
-			const form = document.getElementById('findIdForm');
-			if (!emailCheck) { //emailCheck 값이 false 면 true 값이 반환되어 if문 안의 코드가 실행
-				alert("인증번호를 입력해주세요.");
-				return false;
-			}
-			form.method = 'POST';
-			form.action = "/users/findIdSuccess";
-			return true;
-		};
+			const confirmEmailBtn =	document.getElementById('confirmEmailBtn');
+	
+			confirmEmailBtn.addEventListener('click', () => {
+				const confirmVerify = document.getElementById('confirmVerify').value.trim();
+				const verification = document.getElementById('verificationSection');
+				if(confirmVerify === ''){
+					alert('인증번호를 입력해주세요.');
+				}else if(confirmVerify === confirmEmail){
+					alert('이메일 인증이 완료되었습니다.');
+					emailCheck = true;
+					verification.style.display='none';
+				}else{
+					alert('인증번호가 틀렸습니다. 다시 한번 확인해주세요.');
+					emailCheck = false;
+				}
+			});
+	
+			const findIdBtn = (event) => {
+				const form = document.getElementById('findIdForm');
+				if (!emailCheck) { //emailCheck 값이 false 면 true 값이 반환되어 if문 안의 코드가 실행
+					alert("인증번호를 입력해주세요.");
+					return false;
+				}
+				form.method = 'POST';
+				form.action = "/users/findIdSuccess";
+				return true;
+			};
 	</script>
 </body>
 </html>

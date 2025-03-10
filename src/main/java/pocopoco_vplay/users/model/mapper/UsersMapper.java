@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.vo.Users;
@@ -21,7 +22,7 @@ public interface UsersMapper {
 
 	ArrayList<Content> selectMyRealProjects(int userNo);
 
-	int selectuserIdPhone(String userName, String userPhone);
+	int selectuserIdPhone(@Param("userName") String userName, @Param("userPhone") String userPhone);
 
 	int findfollow(Users user);
 

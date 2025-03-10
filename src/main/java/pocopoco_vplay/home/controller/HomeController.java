@@ -23,9 +23,11 @@ public class HomeController {
 	public String goIndex(Model model) {
 		ArrayList<Users> user = uService.selectTopUser();
 		System.out.println(user);
-		model.addAttribute("ulist",user);
-//		ArrayList<Content> content = bService.selectOrderByViews();
 		
+		model.addAttribute("ulist",user);
+		ArrayList<Content> content = bService.selectOrderByViews();
+//		System.out.println("컨텐츠 보드의 조회수 뷰 12개 보드 : " + content + content.size());
+		model.addAttribute("clist",content);
 		return "index";
 	}
 }
