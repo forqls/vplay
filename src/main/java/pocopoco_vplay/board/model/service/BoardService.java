@@ -30,6 +30,10 @@ public class BoardService {
 		return mapper.selectMyInquiry(userNo);
 	}
 
+	public ArrayList<Content> selectMyCommission(int userNo) {
+		return mapper.selectMyCommission(userNo);
+	}
+
 	public int throwBoardTrash(int contentNo) {
 		return mapper.throwBoardTrash(contentNo);
 	}
@@ -153,7 +157,4 @@ public class BoardService {
 	public ArrayList<Content> selectOrderByViews() {
 		return mapper.selectOrderByViews();
 	}
-
-
 }
-

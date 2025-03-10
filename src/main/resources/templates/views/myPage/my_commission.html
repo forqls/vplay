@@ -178,30 +178,34 @@
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
 		<div class="container content_wrap flex_custom_wrap">
 			<div class="content-header">
-				<h1>My commission</h1>
+				<h1>My Commission</h1>
 				<button class="button" onclick="location.href='/board/commission_writer'">작성하기</button>
 			</div>
 
 			<div class="commission-list" id="commission">
-				<div class="commission-item" th:each="i : ${list}" th:data-content-no="${i.contentNo}" style="cursor: pointer;">
-					<div class="commission-date" th:text="${i.createDate}"></div>
-					<div class="commission-title" th:text="${i.contentTitle}"></div>
-					<div class="commission-actions">
-						<span class="status-badge">답변대기 , 답변상태 등</span>
-						<div class="options-wrapper">
-							<button class="options-btn">⋮</button>
-							<div class="dropdown">
-								<div class="dropdown-item delete-commission">
-									<span class="trash-icon"></span> Delete
+				<th:block th:if="${not #lists.isEmpty(list)}">
+					<div class="commission-item" th:each="i : ${list}" th:data-content-no="${i.contentNo}" style="cursor: pointer;">
+						<div class="commission-date" th:text="${i.createDate}"></div>
+						<div class="commission-title" th:text="${i.contentTitle}"></div>
+						<div class="commission-actions">
+							<span class="status-badge">답변대기 , 답변상태 등</span>
+							<div class="options-wrapper">
+								<button class="options-btn">⋮</button>
+								<div class="dropdown">
+									<div class="dropdown-item delete-commission">
+										<span class="trash-icon"></span> Delete
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</th:block>
+				<th:block th:if="${#lists.isEmpty(list)}">
+					<p>작성된 문의가 없습니다.</p>
+				</th:block>
 			</div>
 		</div>
 	</div>
-
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const commissionList = document.getElementById('commission');
