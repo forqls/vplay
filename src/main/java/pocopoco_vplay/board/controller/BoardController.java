@@ -391,5 +391,39 @@ public class BoardController {
 		
 		return joinURL;
 	}
-	
+
+	@PostMapping("updateRequestForm")
+	public String updateRequestForm(@RequestParam("contentNo") int bId, @RequestParam("page")int page,HttpSession session, Model model){
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int id = 0;
+		if(loginUser != null){
+			id = loginUser.getUserNo();
+		}
+		Content content = bService.selectRequest(bId, id);
+		model.addAttribute("c", content).addAttribute("page", page);
+		return "edit_request";
+	}
+
+	@PostMapping("updateRequest")
+	public String updateRequest(@ModelAttribute Content c, @RequestParam("page") int page){
+		int result1 = bService.updateRequest(c);
+		int result2 = bService.updateRequestMenu(c);
+		System.out.println(c);
+		if (result1 + result2 == 2){
+			//return "redirect:/board/"+c.getContentNo()+ "/"+ page;
+			return String.format("redirect:/board/%d/%d", c.getContentNo(), page);
+		}else{
+			throw new BoardException("게시글 수정을 실패하였습니다.");
+		}
+	}
+
+	@PostMapping("deleteRequest")
+	public String deleteRequest(@RequestParam("contentNo") int bId) {
+		int result = bService.deleteBoard(bId);
+		if(result > 0){
+			return "redirect:/board/list";
+		}else{
+			throw new BoardException("게시글 삭제를 실패했습니다.");
+		}
+	}
 }

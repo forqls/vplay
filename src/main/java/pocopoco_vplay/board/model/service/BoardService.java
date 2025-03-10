@@ -149,4 +149,6 @@ public class BoardService {
 	public int deleteBoard(int bId) {
 		return mapper.deleteBoard(bId);
 	}
+
+
 }
