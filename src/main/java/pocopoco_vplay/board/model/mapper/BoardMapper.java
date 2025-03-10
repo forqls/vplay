@@ -35,6 +35,8 @@ public interface BoardMapper {
 	
 	Content selectInquiry(int contentNo);
 
+	Reply selectReply(int contentNo);
+
 	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
 
 
