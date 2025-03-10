@@ -341,4 +341,16 @@
 		set content_status = 'N'
 		where content_no =#{bId}
 	</update>
+	
+	<select id="selectOrderByViews">
+	    select * from content order by views desc
+	    fetch first 12 rows only 
+	</select>	
+	
+	
+	
+	
+	
+	
+	
 </mapper>

@@ -147,7 +147,10 @@ public class UsersController {
 	@PostMapping("findId")
 	@ResponseBody
 	public int findId(@RequestParam(required = false, value = "userName") String userName, @RequestParam(required = false, value = "userPhone") String userPhone) {
+		System.out.println(userPhone);
+		System.out.println(userName);
 		int result = uService.selectIdPhone(userName, userPhone);
+		System.out.println(result);
 		return result;
 	}
 
