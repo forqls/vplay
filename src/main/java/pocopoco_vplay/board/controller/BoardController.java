@@ -421,7 +421,7 @@ public class BoardController {
 	public String deleteRequest(@RequestParam("contentNo") int bId) {
 		int result = bService.deleteBoard(bId);
 		if(result > 0){
-			return "redirect:/board/list";
+			return "redirect:/board/request_list";
 		}else{
 			throw new BoardException("게시글 삭제를 실패했습니다.");
 		}
