@@ -37,10 +37,28 @@ body {
 	position: relative;
 }
 
+.card h3 {
+	font-size: 1.25rem;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+}
+
 .current-plan {
   background-color: #2a2936;
   border: 2px solid #8137e9;
   animation: border-animation 2s ease-in-out infinite;
+}
+
+.current-plan::after {
+	content: "사용 중";
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	background-color: #5e37e9;
+	color: white;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.25rem;
+	font-size: 0.75rem;
 }
 
 @keyframes border-animation {
@@ -53,12 +71,6 @@ body {
   100% {
     border-color: #8137e9;
   }
-}
-
-.card h3 {
-	font-size: 1.25rem;
-	margin-top: 1rem;
-	margin-bottom: 0.5rem;
 }
 
 .price {
@@ -103,18 +115,6 @@ body {
 	.card {
 		width: 100%;
 	}
-}
-
-.current-plan::after {
-	content: "사용 중";
-	position: absolute;
-	top: 0.5rem;
-	right: 0.5rem;
-	background-color: #5e37e9;
-	color: white;
-	padding: 0.25rem 0.5rem;
-	border-radius: 0.25rem;
-	font-size: 0.75rem;
 }
 </style>
 </head>

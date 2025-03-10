@@ -36,7 +36,6 @@ import pocopoco_vplay.users.model.vo.Users;
 public class UsersController {
 	private final UsersService uService;
 	private final BoardService bService;
-
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 
@@ -99,12 +98,9 @@ public class UsersController {
 			user.setKakaoId(kakaoUser.getKakaoId());
 			user.setLoginType(kakaoUser.getLoginType());
 		}
-
 		System.out.println(user);
-
 		int result = uService.insertUser(user);
 		System.out.println("결과 값은 : " + result);
-
 		return "signup_success";
 
 	}
@@ -341,14 +337,21 @@ public class UsersController {
 
 	@GetMapping("my_commission")
 	public String myCommission(HttpSession session, Model model) {
-		Users loginUser = (Users) session.getAttribute("loginUser");
-		if (loginUser != null) {
-			model.addAttribute("loginUser", loginUser);
-			return "my_commission";
-		} else {
-			throw new UsersException("로그인이 필요합니다.");
-		}
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        int userNo = loginUser.getUserNo();
+	        ArrayList<Content> list = bService.selectMyCommission(userNo);
+	        for (Content content : list) {
+	            Reply reply = bService.selectReply(content.getContentNo());
+	            content.setReply(reply);
+	        }
+	        model.addAttribute("list", list);
+	        return "my_commission";
+	    } else {
+	        throw new UsersException("로그인이 필요합니다.");
+	    }
 	}
+
 
 	@GetMapping("my_trash")
 	private String myTrashPage(HttpSession session, Model model) {

@@ -157,7 +157,6 @@
 				<h1>My Inquiry</h1>
 				<button class="button" onclick="location.href='/board/inquiry_writer'">작성하기</button>
 			</div>
-
 			<div class="inquiry-list" id="inquiry">
 				<div class="inquiry-item" th:each="i : ${list}" th:data-content-no="${i.contentNo}" style="cursor: pointer;">
 					<div class="inquiry-date" th:text="${i.createDate}"></div>
