@@ -30,13 +30,14 @@ public interface BoardMapper {
 	int insertBoard(Content inquiry);
 
 	int updateInquiry(Content inquiry);
-	
+
 	int updateBoard(Content inquiry);
-	
+
 	Content selectInquiry(int contentNo);
 
-	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
+	Reply selectReply(int contentNo);
 
+	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
 
 	ArrayList<Content> allCategory(@Param("menuNo") int i);
 
