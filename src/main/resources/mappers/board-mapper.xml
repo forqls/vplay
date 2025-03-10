@@ -322,4 +322,23 @@
 		where user_no = #{userNo} and content_no = #{contentNo}
 	</delete>
 
+	<update id="updateRequest">
+		UPDATE content
+		SET content_title = #{contentTitle},
+			modify_date = SYSDATE,
+			content_detail = #{contentDetail}
+		WHERE content_no = #{contentNo}
+	</update>
+
+	<update id="updateRequestMenu">
+		update board
+		set menu_no = #{menuNo}
+		where content_no = #{contentNo}
+	</update>
+
+	<update id="deleteBoard">
+		update content
+		set content_status = 'N'
+		where content_no =#{bId}
+	</update>
 </mapper>

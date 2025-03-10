@@ -138,7 +138,17 @@ public class BoardService {
 		return mapper.unAllTempLike(map);
 	}
 
-//	public ArrayList<Content> selectOrderByViews() {
-//		return mapper.selectOrderByViews();
-//	}
+	public int updateRequest(Content c) {
+		return mapper.updateRequest(c);
+	}
+
+	public int updateRequestMenu(Content c) {
+		return mapper.updateRequestMenu(c);
+	}
+
+	public int deleteBoard(int bId) {
+		return mapper.deleteBoard(bId);
+	}
+
+
 }

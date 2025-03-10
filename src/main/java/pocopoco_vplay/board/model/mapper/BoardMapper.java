@@ -30,14 +30,15 @@ public interface BoardMapper {
 	int insertBoard(Content inquiry);
 
 	int updateInquiry(Content inquiry);
-
+	
 	int updateBoard(Content inquiry);
-
+	
 	Content selectInquiry(int contentNo);
 
 	Reply selectReply(int contentNo);
 
 	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
+
 
 	ArrayList<Content> allCategory(@Param("menuNo") int i);
 
@@ -67,5 +68,9 @@ public interface BoardMapper {
 
 	int unAllTempLike(HashMap<String, Integer> map);
 
-//	ArrayList<Content> selectOrderByViews();
+	int updateRequest(Content c);
+
+	int updateRequestMenu(Content c);
+
+	int deleteBoard(int bId);
 }
