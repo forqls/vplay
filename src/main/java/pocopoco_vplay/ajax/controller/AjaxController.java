@@ -1,8 +1,10 @@
 package pocopoco_vplay.ajax.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.service.BoardService;
+import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.vo.Users;
 
 @RestController
@@ -43,5 +46,11 @@ public class AjaxController {
 		return bService.unAllTempLike(map);
 	}
 	
+	@GetMapping("category")
+	public ArrayList<Content> selectCategory(@RequestBody String[] checkboxVal){
+		System.out.println(checkboxVal);
+		ArrayList<Content> list = null;
+		return list;
+	}
 		
 }

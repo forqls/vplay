@@ -15,7 +15,10 @@
             <div class="category-title">Categories</div>
             <ul class="category-list">
             	<th:block th:each="vc : ${videoTempCategory}">
-            	<li>[[${vc.categoryName}]]</li>
+            	<li>
+            	<input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}">
+            	<a>[[${vc.categoryName}]]</a>
+            	</li>
             	</th:block>
             </ul>
         </aside>
@@ -55,6 +58,41 @@
     			console.log(contentNo);
     			location.href = "/board/video-templates/" + contentNo;
     		})
+    	})
+    	
+    	const categoryList = document.querySelector('.category-list');
+//     	console.log(categoryList);
+    	const checkboxArr = [];
+    	[...categoryList.children].map((category, index, array) =>{
+    		const checkbox = category.children[0];
+    		checkbox.addEventListener('click', ()=>{
+    			
+    			for(const c of categoryList.children){
+    				if(c.children[0].checked){
+    					checkboxArr.push(c.children[0].value);
+    				}
+    			}
+    			
+    			console.log(checkboxArr);
+    			let checkboxValue = checkboxArr.join("+");
+    			checkboxArr.length = 0;
+    			console.log(checkboxValue);
+// 				fetch('/board/category/' + checkboxValue , {
+// 					method : 'get',
+// 					headers : {'content-type' : 'application/json; charset=UTF-8'},
+// 					body: JSON.stringify({
+// 						checkboxVal : checkboxVal
+// 					})
+// 				})
+// 				.then(response => response.json())
+// 				.then(data =>{
+// 					console.log(data);
+// 				})
+
+    			
+    		})
+    		
+    		
     	})
     }
     </script>
