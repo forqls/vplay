@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
@@ -38,7 +39,6 @@ public class UsersController {
 
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
-
 
 	@GetMapping("home")
 	public String goHome(HttpSession session) {
@@ -55,7 +55,7 @@ public class UsersController {
 	public String singUp() {
 		return "signup";
 	}
-  
+
 	@PostMapping("idCheck")
 	@ResponseBody
 	public int checkId(@RequestParam("id") String id) {
@@ -88,18 +88,18 @@ public class UsersController {
 		mailSender.send(mimeMessage);
 		System.out.println(random);
 		return random;
-  }
+	}
 
 	@PostMapping("signUp")
-	public String joinUser(@ModelAttribute Users user , HttpSession session) {
+	public String joinUser(@ModelAttribute Users user, HttpSession session) {
 		user.setUserPw(bcrypt.encode(user.getUserPw()));
-		
-		Users kakaoUser = (Users)session.getAttribute("kakaoUser"); 
-		if(kakaoUser !=null) {
+
+		Users kakaoUser = (Users) session.getAttribute("kakaoUser");
+		if (kakaoUser != null) {
 			user.setKakaoId(kakaoUser.getKakaoId());
 			user.setLoginType(kakaoUser.getLoginType());
 		}
-		
+
 		System.out.println(user);
 
 		int result = uService.insertUser(user);
@@ -325,8 +325,10 @@ public class UsersController {
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();
 			ArrayList<Content> list = bService.selectMyInquiry(userNo);
-			System.out.println(list);
-			System.out.println(list.size());
+			for (Content content : list) {
+				Reply reply = bService.selectReply(content.getContentNo());
+				content.setReply(reply);
+			}
 			model.addAttribute("list", list);
 			return "my_inquiry";
 		} else {

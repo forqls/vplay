@@ -80,7 +80,15 @@
 
 .status-badge {
 	background-color: rgba(129, 55, 233, 0.1);
-	color: #8137e9;
+	color: #A57AEF;
+	padding: 0.25rem 0.75rem;
+	border-radius: 1rem;
+	font-size: 0.75rem;
+}
+
+.status-badge.completed {
+	background-color: rgba(76, 175, 80, 0.1);
+	color: #4CAF50;
 	padding: 0.25rem 0.75rem;
 	border-radius: 1rem;
 	font-size: 0.75rem;
@@ -139,7 +147,6 @@
 	color: #6f757d;
 }
 
-/* 휴지통 아이콘 스타일 */
 .trash-icon {
 	width: 14px;
 	height: 14px;
@@ -187,7 +194,7 @@
 					<div class="inquiry-date" th:text="${i.createDate}"></div>
 					<div class="inquiry-title" th:text="${i.contentTitle}"></div>
 					<div class="inquiry-actions">
-						<span class="status-badge">답변대기 , 답변상태 등</span>
+						<span class="status-badge" th:text="${i.reply != null ? '답변 완료' : '답변 대기'}" th:classappend="${i.reply != null ? 'completed' : ''}"> </span>
 						<div class="options-wrapper">
 							<button class="options-btn">⋮</button>
 							<div class="dropdown">
