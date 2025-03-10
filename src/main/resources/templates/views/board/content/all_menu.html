@@ -44,10 +44,17 @@
 							값 안넣음
 						</span>
 						<span>
+							<th:block th:if="${v.likeTo == 1}">
+	                        <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+							</svg>
+							</th:block>
+							<th:block th:unless="${v.likeTo == 1}">
 	                        <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
 							</svg>
-							[[${v.likeCount}]]
+							</th:block>
+							<a>[[${v.likeCount}]]</a>
 						</span>
                     </div>
                 </div>
@@ -62,6 +69,7 @@
             </div>
             <div class="content-grid">
                 <div class="music-card" th:each="m : ${musicList}">
+                	<input type="hidden" th:value="${m.contentNo}">
                     <div class="music-label">[[${m.contentTitle}]]</div>
                     <div class="music-image purple"></div>
                 </div>
@@ -76,6 +84,7 @@
             </div>
             <div class="content-grid">
                 <div class="sound-card" th:each="s : ${soundEffectsList}">
+                	<input type="hidden" th:value="${s.contentNo}">
                     <div class="play-button"></div>
                     <div class="sound-info">
                         <h3>[[${s.contentTitle}]]</h3>
@@ -102,6 +111,7 @@
             </div>
             <div class="content-grid">
                 <div class="content-card dark" th:each="g : ${graphicTemplateList}">
+                	<input type="hidden" th:value="${g.contentNo}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
@@ -125,6 +135,7 @@
             </div>
             <div class="content-grid">
                 <div class="content-card dark" th:each="st : ${stockVideoList}">
+               		<input type="hidden" th:value="${st.contentNo}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
@@ -148,6 +159,7 @@
             </div>
             <div class="content-grid">
                 <div class="content-card dark" th:each="p : ${photosList}">
+                	<input type="hidden" th:value="${p.contentNo}">
                     <div class="card-image">
                         <!-- Empty placeholder -->
                     </div>
@@ -171,6 +183,7 @@
             </div>
             <div class="content-grid">
                 <div class="music-card" th:each="f : ${fontList}">
+                	<input type="hidden" th:value="${f.contentNo}">
                     <div class="music-label">[[${f.contentTitle}]]</div>
                     <div class="font-image orange">
                         <span class="font-sample">Gendy</span>
@@ -179,39 +192,115 @@
             </div>
         </section>
     </main>
-	<script>
+	<script th:inline="javascript">
 		window.onload = () =>{
+			
+			const loginUser = /*[[${session.loginUser}]]*/'loginUser';
+			
+			//비디오 메뉴 기능
 			const videoMenu = document.getElementsByClassName("content-grid")[0];
 			[...videoMenu.children].map((video, index, array) =>{
 				const like = video.children[3].children[1].children[0];
+				const view = (like.nextElementSibling);
+				
 				const contentNo = video.children[0].value
-				video.addEventListener('click', function(event){
+				video.addEventListener('click', function(){
 					location.href = "/board/video-templates/" + contentNo;
 				})
 				
 				like.addEventListener('click', function(event){
-					fetch('/board/like', {
-						method : 'put',
-						headers : {'content-type':'application/json; charset=UTF-8'},
-						body: JSON.stringify({
-							contentNo: contentNo
-		    			})
-					})
-					.then(response => response.json())
-					.then(data =>{
-						console.log(data);
-					})
-					
+					if(loginUser != null){
+						if(this.children[0].getAttribute("fill") == 'white'){
+							fetch('/board/like', {
+								method : 'put',
+								headers : {'content-type':'application/json; charset=UTF-8'},
+								body: JSON.stringify({
+									contentNo: contentNo
+				    			})
+							})
+							.then(response => response.json())
+							.then(data =>{
+								this.children[0].setAttribute("fill", "red");
+								view.innerText = Number((view.innerText)) + 1;
+							})
+						}else if(this.children[0].getAttribute("fill") == 'red'){
+							fetch('/board/like', {
+								method : 'delete',
+								headers : {'content-type':'application/json; charset=UTF-8'},
+								body: JSON.stringify({
+									contentNo: contentNo
+				    			})
+							})
+							.then(response => response.json())
+							.then(data =>{
+								this.children[0].setAttribute("fill", "white");
+								view.innerText = Number((view.innerText)) - 1;
+							})
+						}
+					}else{
+						alert('로그인 후 이용해주세요');
+					}
 					event.stopPropagation();
-				})
-				video.addEventListener('click', function(){
-					const contentNo = this.children[0].value
-// 					location.href = "/board/video-templates/" + contentNo;
-					console.log(video.children[3].children[1]);
 				})
 				
 			})
 			
+			//음악 메뉴 기능
+			const musicMenu = document.getElementsByClassName("content-grid")[1];
+			[...musicMenu.children].map((music, index, array)=>{
+				
+				const contentNo = music.children[0].value
+				music.addEventListener('click', function(){
+					location.href = "/board/music/" + contentNo;
+				})
+			})
+			
+			//효과음 메뉴 기능
+			const soundEffectMenu = document.getElementsByClassName("content-grid")[2];
+			[...soundEffectMenu.children].map((sound, index, array)=>{
+				
+				const contentNo = sound.children[0].value
+				sound.addEventListener('click', function(){
+					location.href = "/board/sound-effect/" + contentNo;
+				})
+			})
+			
+			//그래픽 템플릿 기능
+			const graphicTemplateMenu = document.getElementsByClassName("content-grid")[3];
+			[...graphicTemplateMenu.children].map((graphic, index, array)=>{
+				console.log(graphic);
+				const contentNo = graphic.children[0].value
+				graphic.addEventListener('click', function(){
+					location.href = "/board/graphic-templates/" + contentNo;
+				})
+			})
+			
+			//스톡 비디오 기능
+			const stockVideoMenu = document.getElementsByClassName("content-grid")[4];
+			[...stockVideoMenu.children].map((stockV, index, array)=>{
+				const contentNo = stockV.children[0].value
+				stockV.addEventListener('click', function(){
+					location.href = "/board/stock-video/" + contentNo;
+				})
+			})
+			
+			//스톡 비디오 기능
+			const photoMenu = document.getElementsByClassName("content-grid")[5];
+			[...photoMenu.children].map((photo, index, array)=>{
+				const contentNo = photo.children[0].value
+				photo.addEventListener('click', function(){
+					location.href = "/board/photo/" + contentNo;
+				})
+			})
+			
+			//폰트 기능
+			const fontMenu = document.getElementsByClassName("content-grid")[6];
+			[...fontMenu.children].map((font, index, array)=>{
+				const contentNo = font.children[0].value
+				font.addEventListener('click', function(){
+					location.href = "/board/font/" + contentNo;
+				})
+			})
 			
 		}
 	</script>

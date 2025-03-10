@@ -107,4 +107,29 @@
 		WHERE LOGIN_TYPE='K' AND USER_ID IS NULL AND KAKAO_ID=#{KAKAOID}
 	</select>
 	
+	<select id="selectTopUser">
+		select     U.USER_NO, 
+	    U.USER_ID, 
+	    U.USER_NICKNAME, 
+	    U.USER_NAME, 
+	    U.USER_PHONE, 
+	    U.USER_EMAIL, 
+	    U.USER_COMMENT, count(s.subscribe_no) as subscriber
+		from users u 
+		join subscribe s on u.user_no = s.creater_no
+		group by U.USER_NO, 
+	    U.USER_ID, 
+	    U.USER_NICKNAME, 
+	    U.USER_NAME, 
+	    U.USER_PHONE, 
+	    U.USER_EMAIL, 
+	    U.USER_COMMENT
+		order by subscriber desc
+		fetch first 12 rows only
+	</select>
+	
+	
+	
+	
+	
 </mapper>

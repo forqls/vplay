@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,9 +33,8 @@ import pocopoco_vplay.users.model.vo.Users;
 public class BoardController {
 	private final BoardService bService;
 
-	@GetMapping("all_menu")
-	public ModelAndView joinVideoTemplatesList(ModelAndView mv) {
-		
+    @GetMapping("all_menu")
+	public ModelAndView joinVideoTemplatesList(ModelAndView mv, HttpSession session) {
 		String[] menuName = {"video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts"};
 		
 		ArrayList<Content> videoTemplateList = bService.allTemplateList(menuName[0]);
@@ -46,12 +44,73 @@ public class BoardController {
 		ArrayList<Content> stockVideoList = bService.allTemplateList(menuName[4]);
 		ArrayList<Content> photosList = bService.allTemplateList(menuName[5]);
 		ArrayList<Content> fontList = bService.allTemplateList(menuName[6]);
-		
+
 //		for(int i =0; i<menuName.length ; i++) {
 //			for(int j =0; j<videoTemplateList.size(); j++) {
-//				
+//
 //			}
 //		}
+		Users u = (Users)session.getAttribute("loginUser");
+		int userNo = 0;
+		
+		if(u != null) {
+			userNo = u.getUserNo();
+		}
+		
+		int num = 0;
+		
+		int result=0;
+		
+		
+		for(int v =0; v<videoTemplateList.size(); v++) {
+			num = videoTemplateList.get(v).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			videoTemplateList.get(v).setLikeTo(result);
+		}
+		
+		for(int m =0; m<musicList.size(); m++) {
+			num = musicList.get(m).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			musicList.get(m).setLikeTo(result);
+		}
+		
+		for(int s =0; s<soundEffectsList.size(); s++) {
+			num = soundEffectsList.get(s).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			soundEffectsList.get(s).setLikeTo(result);
+		}
+		
+		for(int g =0; g<graphicTemplateList.size(); g++) {
+			num = graphicTemplateList.get(g).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			graphicTemplateList.get(g).setLikeTo(result);
+		}
+		
+		for(int s =0; s<stockVideoList.size(); s++) {
+			num = stockVideoList.get(s).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			stockVideoList.get(s).setLikeTo(result);
+		}
+		
+		for(int p =0; p<photosList.size(); p++) {
+			num = photosList.get(p).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			photosList.get(p).setLikeTo(result);
+		}
+		
+		for(int f =0; f<fontList.size(); f++) {
+			num = fontList.get(f).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			
+			fontList.get(f).setLikeTo(result);
+
+		}
 		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
@@ -100,6 +159,19 @@ public class BoardController {
 		}
 	}
 
+	@GetMapping("inquiryDetail")
+	public String selectInquiry(@RequestParam("contentNo") int contentNo, Model model) {
+		Content inquiry = bService.selectInquiry(contentNo);
+		Reply reply = bService.selectReply(contentNo);
+		if (inquiry != null) {
+			model.addAttribute("inquiry", inquiry);
+			model.addAttribute("reply", reply);
+			return "inquiry_detail";
+		} else {
+			throw new UsersException("문의 불러오기 실패.");
+		}
+	}
+
 	@GetMapping("inquiry_writer")
 	public String inquiryWriter() {
 		return "inquiry_writer";
@@ -117,19 +189,6 @@ public class BoardController {
 			return "redirect:/users/my_inquiry";
 		} else {
 			throw new UsersException("문의 작성 실패");
-		}
-	}
-
-	@GetMapping("inquiryDetail")
-	public String selectInquiry(@RequestParam("contentNo") int contentNo, Model model) {
-		Content inquiry = bService.selectInquiry(contentNo);
-		if (inquiry != null) {
-//			System.out.println("Inquiry Object: " + inquiry);
-//			System.out.println("inquiry.getMenuNo(): " + inquiry.getMenuNo());
-			model.addAttribute("inquiry", inquiry);
-			return "inquiry_detail";
-		} else {
-			throw new UsersException("문의 불러오기 실패.");
 		}
 	}
 
@@ -287,7 +346,7 @@ public class BoardController {
 		}
 	}
 
-	@GetMapping("/{id}/{page}")
+	@GetMapping("/{id:\\d+}/{page:\\d+}")
 	public ModelAndView show(@PathVariable("id") int bId, @PathVariable("page") int page, HttpSession session, ModelAndView mv) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int id = 0;
@@ -309,14 +368,62 @@ public class BoardController {
 		}
 	}
 	
-	@GetMapping("video-templates/{no}")
-	public String videoTempDetail(@PathVariable("no") int contentNo, Model model) {
+	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
+	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model) {
 		
 		Content content = bService.allMenuDetail(contentNo);
 		model.addAttribute("content", content);
-		System.out.println(content);
-		return "videoTemplates_detail";
-
+		
+		String joinURL = null;
+		
+		switch(menuName) {
+		case "video-templates": joinURL = "videoTemplates_detail"; break;
+		case "music" : joinURL = "music_detail"; break;
+		case "sound-effect" : joinURL = "soundEffects_detail"; break;
+		case "graphic-templates" : joinURL = "graphicTemplates_detail"; break;
+		case "stock-video" : joinURL = "stock-video_detail"; break;
+		case "photo" : joinURL = "photo_detail"; break;
+		default: joinURL = "font_detail"; break;
+		}
+		
+		System.out.println(menuName);
+		
+		
+		return joinURL;
 	}
-	
+
+	@PostMapping("updateRequestForm")
+	public String updateRequestForm(@RequestParam("contentNo") int bId, @RequestParam("page")int page,HttpSession session, Model model){
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int id = 0;
+		if(loginUser != null){
+			id = loginUser.getUserNo();
+		}
+		Content content = bService.selectRequest(bId, id);
+		model.addAttribute("c", content).addAttribute("page", page);
+		return "edit_request";
+	}
+
+	@PostMapping("updateRequest")
+	public String updateRequest(@ModelAttribute Content c, @RequestParam("page") int page){
+		int result1 = bService.updateRequest(c);
+		int result2 = bService.updateRequestMenu(c);
+		System.out.println(c);
+		if (result1 + result2 == 2){
+			//return "redirect:/board/"+c.getContentNo()+ "/"+ page;
+			return String.format("redirect:/board/%d/%d", c.getContentNo(), page);
+		}else{
+			throw new BoardException("게시글 수정을 실패하였습니다.");
+		}
+	}
+
+	@PostMapping("deleteRequest")
+	public String deleteRequest(@RequestParam("contentNo") int bId) {
+		int result = bService.deleteBoard(bId);
+		if(result > 0){
+			return "redirect:/board/list";
+		}else{
+			throw new BoardException("게시글 삭제를 실패했습니다.");
+		}
+	}
 }

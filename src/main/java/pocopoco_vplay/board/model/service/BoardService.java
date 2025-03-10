@@ -57,6 +57,10 @@ public class BoardService {
 		return mapper.selectInquiry(contentNo);
 	}
 
+	public Reply selectReply(int contentNo) {
+		return mapper.selectReply(contentNo);
+	}
+
 	public ArrayList<Content> allTemplateList(String menuName) {
 		return mapper.allTemplateList(menuName);
 	}
@@ -125,4 +129,26 @@ public class BoardService {
 		System.out.println(map);
 		return mapper.allTempLike(map);
 	}
+
+	public int menuLikeTo(int num, int userNo) {
+		return mapper.menuLikeTo(num, userNo);
+	}
+
+	public int unAllTempLike(HashMap<String, Integer> map) {
+		return mapper.unAllTempLike(map);
+	}
+
+	public int updateRequest(Content c) {
+		return mapper.updateRequest(c);
+	}
+
+	public int updateRequestMenu(Content c) {
+		return mapper.updateRequestMenu(c);
+	}
+
+	public int deleteBoard(int bId) {
+		return mapper.deleteBoard(bId);
+	}
+
+
 }
