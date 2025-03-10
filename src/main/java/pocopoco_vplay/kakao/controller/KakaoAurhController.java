@@ -38,6 +38,8 @@ public class KakaoAurhController {
     	
     	if(accessToken == null) {
     		throw new UsersException("토큰 못가져옴 ㅋㅋ");
+    	}else {
+    		System.out.println("토큰받기 성공");
     	}
     	
     	Map<String,Object> userInfo = getUserInfo(accessToken);
@@ -93,6 +95,7 @@ public class KakaoAurhController {
         // RestTemplate로 10가능 ㅋㅋ 
         ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, request, Map.class);
         Map<String, Object> responseBody = response.getBody();
+        
 
         return responseBody != null ? (String) responseBody.get("access_token") : null;
     }
