@@ -433,6 +433,9 @@ public class BoardController {
 		if (result > 0) {
 			return "redirect:/board/list";
 		} else {
+		if(result > 0){
+			return "redirect:/board/request_list";
+		}else{
 			throw new BoardException("게시글 삭제를 실패했습니다.");
 		}
 	}
