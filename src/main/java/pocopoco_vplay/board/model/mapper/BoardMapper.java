@@ -76,4 +76,6 @@ public interface BoardMapper {
 	int deleteBoard(int bId);
 
 	ArrayList<Content> selectOrderByViews();
+
+	int insertReply(Reply reply);
 }

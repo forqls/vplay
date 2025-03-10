@@ -157,4 +157,8 @@ public class BoardService {
 	public ArrayList<Content> selectOrderByViews() {
 		return mapper.selectOrderByViews();
 	}
+  
+	public int insertReply(Reply reply) {
+		return mapper.insertReply(reply);
+	}
 }

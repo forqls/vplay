@@ -362,10 +362,8 @@
 		fetch first 12 rows only
 	</select>
 
-
-
-
-
-
-
+	<insert id="insertReply">
+		insert into reply
+		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
+	</insert>
 </mapper>
