@@ -92,33 +92,39 @@
 		left join menu m on(cg.menu_no = m.menu_no)
 		left join likes lk2 on (c.content_no = lk2.content_no)
 		where b.board_type is null and m.menu_name = #{menuName}
+		<if test="categoryArray != null">
+			and cg.category_name in 
+			<foreach item="category" collection="categoryArray" open="(" separator="," close=")">
+				#{category}
+			</foreach>
+		</if>
 		group by c.content_no, c.content_title, u.user_nickname
 		order by c.content_no desc)
-		<if test="menuName == 'video Templates'">
+		<if test="menuNameNum == 'video Templates'">
 			where rownum <![CDATA[<]]>=
 			3
 		</if>
-		<if test="menuName == 'Music'">
+		<if test="menuNameNum == 'Music'">
 			where rownum <![CDATA[<]]>=
 			6
 		</if>
-		<if test="menuName == 'Sound Effects'">
+		<if test="menuNameNum == 'Sound Effects'">
 			where rownum <![CDATA[<]]>=
 			5
 		</if>
-		<if test="menuName == 'Graphic Templates'">
+		<if test="menuNameNum == 'Graphic Templates'">
 			where rownum <![CDATA[<]]>=
 			3
 		</if>
-		<if test="menuName == 'Stock Video'">
+		<if test="menuNameNum == 'Stock Video'">
 			where rownum <![CDATA[<]]>=
 			3
 		</if>
-		<if test="menuName == 'Photos'">
+		<if test="menuNameNum == 'Photos'">
 			where rownum <![CDATA[<]]>=
 			3
 		</if>
-		<if test="menuName == 'Fonts'">
+		<if test="menuNameNum == 'Fonts'">
 			where rownum <![CDATA[<]]>=
 			5
 		</if>
@@ -346,7 +352,6 @@
 	    select * from content order by views desc
 	    fetch first 12 rows only 
 	</select>	
-	
 	
 	
 	

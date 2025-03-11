@@ -37,9 +37,6 @@ public interface BoardMapper {
 
 	Reply selectReply(int contentNo);
 
-	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
-
-
 	ArrayList<Content> allCategory(@Param("menuNo") int i);
 
 	ArrayList<Content> allPopularCate(int i);
@@ -75,4 +72,8 @@ public interface BoardMapper {
 	int deleteBoard(int bId);
 
 	ArrayList<Content> selectOrderByViews();
+
+	ArrayList<Content> TempselectCategory(String[] result);
+
+	ArrayList<Content> allTemplateList(HashMap<String, Object> map);
 }

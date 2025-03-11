@@ -61,10 +61,6 @@ public class BoardService {
 		return mapper.selectReply(contentNo);
 	}
 
-	public ArrayList<Content> allTemplateList(String menuName) {
-		return mapper.allTemplateList(menuName);
-	}
-
 	public int updateInquiry(Content inquiry) {
 		int result1 = mapper.updateInquiry(inquiry);
 		int result2 = mapper.updateBoard(inquiry);
@@ -152,6 +148,14 @@ public class BoardService {
 
 	public ArrayList<Content> selectOrderByViews() {
 		return mapper.selectOrderByViews();
+	}
+
+	public ArrayList<Content> TempselectCategory(String[] result) {
+		return mapper.TempselectCategory(result);
+	}
+
+	public ArrayList<Content> allTemplateList(HashMap<String, Object> map) {
+		return mapper.allTemplateList(map);
 	}
 
 

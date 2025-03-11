@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,11 +47,51 @@ public class AjaxController {
 		return bService.unAllTempLike(map);
 	}
 	
-	@GetMapping("category")
-	public ArrayList<Content> selectCategory(@RequestBody String[] checkboxVal){
-		System.out.println(checkboxVal);
-		ArrayList<Content> list = null;
-		return list;
+	@GetMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\+\\s&]+}")
+	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName){
+		System.out.println(categoryTagName);
+		System.out.println("수정 전 : " + menuName);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		String[] result = {};
+		
+		switch(menuName) {
+		case "video-template-list": menuName = "video Templates"; break;
+		case "sound-effects-list": menuName = "Sound Effects"; break;
+		case "music-list": menuName = "Music"; break;
+		case "graphic-template-list": menuName = "Graphic Templates"; break;
+		case "stock-video-list": menuName = "Stock Video"; break;
+		case "photo-list": menuName = "Photos"; break;
+		case "font-list": menuName = "Fonts";
+		}
+		
+		System.out.println("수정 후 : " + menuName);
+		
+		map.put("menuName", menuName);
+		
+		if(!categoryTagName.equals("empty")) {
+			if(categoryTagName.contains("+")) {
+				System.out.println("문자열에 +가 포함");
+				result = categoryTagName.split("\\+");
+			}else {
+				System.out.println("문자열에 +가 안포함");
+				result = new String[] {categoryTagName};
+			}
+			
+			map.put("categoryArray", result);
+		}else {
+			System.out.println("empty 맞음");
+		}
+
+		
+		
+		ArrayList<Content> cList = bService.allTemplateList(map);
+		
+		for(Content c : cList) {
+			System.out.println(c);
+		}
+		
+		return cList;
 	}
 		
 }

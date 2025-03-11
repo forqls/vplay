@@ -36,15 +36,47 @@ public class BoardController {
 	@GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv, HttpSession session) {
 		String[] menuName = { "video Templates", "Music", "Sound Effects", "Graphic Templates", "Stock Video", "Photos", "Fonts" };
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		ArrayList<Content> videoTemplateList = new ArrayList<>();
+		ArrayList<Content> musicList = new ArrayList<>();
+		ArrayList<Content> soundEffectsList = new ArrayList<>();
+		ArrayList<Content> graphicTemplateList = new ArrayList<>();
+		ArrayList<Content> stockVideoList = new ArrayList<>();
+		ArrayList<Content> photosList = new ArrayList<>();
+		ArrayList<Content> fontList = new ArrayList<>();
 
-		ArrayList<Content> videoTemplateList = bService.allTemplateList(menuName[0]);
-		ArrayList<Content> musicList = bService.allTemplateList(menuName[1]);
-		ArrayList<Content> soundEffectsList = bService.allTemplateList(menuName[2]);
-		ArrayList<Content> graphicTemplateList = bService.allTemplateList(menuName[3]);
-		ArrayList<Content> stockVideoList = bService.allTemplateList(menuName[4]);
-		ArrayList<Content> photosList = bService.allTemplateList(menuName[5]);
-		ArrayList<Content> fontList = bService.allTemplateList(menuName[6]);
+		
+		for(int i = 0; i< menuName.length ; i++) {
+			map.put("menuName", menuName[i]); 
+			map.put("menuNameNum", menuName[i]);
+			switch(menuName[i]) {
+			case "video Templates": 
+				videoTemplateList = bService.allTemplateList(map); 
+				break;
+			case "Music":
+				musicList = bService.allTemplateList(map); 
+				break;
+			case "Sound Effects":
+				soundEffectsList = bService.allTemplateList(map); 
+				break;
+			case "Graphic Templates":
+				graphicTemplateList = bService.allTemplateList(map); 
+				break;
+			case "Stock Video":
+				stockVideoList = bService.allTemplateList(map); 
+				break;
+			case "Photos":
+				photosList = bService.allTemplateList(map); 
+				break;
+			case "Fonts": 
+				fontList = bService.allTemplateList(map); 
+				break;
+			}
+		}
 
+		
 //		for(int i =0; i<menuName.length ; i++) {
 //			for(int j =0; j<videoTemplateList.size(); j++) {
 //
@@ -237,71 +269,35 @@ public class BoardController {
 //	public String requestList() {
 //		return "request_list";
 //	}
-
-	@GetMapping("video-template-list")
-	public ModelAndView videoTemplateList(ModelAndView mv) {
-		ArrayList<Content> videoTemplateList = bService.allTemplateList("video Templates");
-		ArrayList<Content> videoTempCategory = bService.allCategory(1);
-		ArrayList<Content> videoTempPopularCate = bService.allPopularCate(1);
-
-		mv.addObject("videoTemplateList", videoTemplateList).addObject("videoTempCategory", videoTempCategory).addObject("videoTempPopularCate", videoTempPopularCate);
-		mv.setViewName("videoTemplates_list");
-		return mv;
+	
+	@GetMapping("{menuName:[a-zA-Z-]+}")
+	public String templateList(@PathVariable("menuName") String menuName ,Model model) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		String joinURL = null;
+		int menuNum = 0;
+		
+		switch(menuName) {
+		case "video-template-list": menuName = "video Templates"; joinURL="video-templates_list"; menuNum=1; break;
+		case "sound-effects-list": menuName = "Sound Effects"; joinURL="sound-effects_list"; menuNum=3; break;
+		case "music-list": menuName = "Music"; joinURL="music_list"; menuNum=2; break;
+		case "graphic-template-list": menuName = "Graphic Templates"; joinURL="graphic-templates_list"; menuNum=4; break;
+		case "stock-video-list": menuName = "Stock Video"; joinURL="stock-video_list"; menuNum=5; break;
+		case "photo-list": menuName = "Photos"; joinURL="photo_list"; menuNum=6; break;
+		case "font-list": menuName = "Fonts"; joinURL="font_list"; menuNum=7;
+		}
+		
+		map.put("menuName", menuName);
+		ArrayList<Content> cList = bService.allTemplateList(map);
+		ArrayList<Content> cCategory = bService.allCategory(menuNum);
+		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
+		
+		model.addAttribute("cList", cList).addAttribute("cCategory", cCategory).addAttribute("cPopularCategory", cPopularCategory);
+		
+		return joinURL;
 	}
 
-	@GetMapping("sound-effects-list")
-	public ModelAndView soundEffectsList(ModelAndView mv) {
-		ArrayList<Content> soundEffectsTemplateList = bService.allTemplateList("Sound Effects");
-
-		mv.addObject("soundEffectsTemplateList", soundEffectsTemplateList);
-		mv.setViewName("soundEffects_list");
-		return mv;
-	}
-
-	@GetMapping("music-list")
-	public ModelAndView musicList(ModelAndView mv) {
-		ArrayList<Content> musicList = bService.allTemplateList("Music");
-
-		mv.addObject("musicList", musicList);
-		mv.setViewName("music_list");
-		return mv;
-	}
-
-	@GetMapping("graphic-template-list")
-	public ModelAndView graphicTemplateList(ModelAndView mv) {
-		ArrayList<Content> graphicTemplateList = bService.allTemplateList("Graphic Templates");
-
-		mv.addObject("graphicTemplateList", graphicTemplateList);
-		mv.setViewName("GraphicTemplates_list");
-		return mv;
-	}
-
-	@GetMapping("stock-video-list")
-	public ModelAndView stockVideoList(ModelAndView mv) {
-		ArrayList<Content> stockVideoList = bService.allTemplateList("Stock Video");
-
-		mv.addObject("stockVideoList", stockVideoList);
-		mv.setViewName("stock-video_list");
-		return mv;
-	}
-
-	@GetMapping("photo-list")
-	public ModelAndView photoList(ModelAndView mv) {
-		ArrayList<Content> photosList = bService.allTemplateList("Photos");
-
-		mv.addObject("photosList", photosList);
-		mv.setViewName("photo-list");
-		return mv;
-	}
-
-	@GetMapping("font-list")
-	public ModelAndView fontList(ModelAndView mv) {
-		ArrayList<Content> fontList = bService.allTemplateList("Fonts");
-
-		mv.addObject("fontList", fontList);
-		mv.setViewName("fonts_list");
-		return mv;
-	}
 
 	@GetMapping("request_list")
 	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
@@ -375,16 +371,16 @@ public class BoardController {
 
 		switch (menuName) {
 		case "video-templates":
-			joinURL = "videoTemplates_detail";
+			joinURL = "video-templates_detail";
 			break;
 		case "music":
 			joinURL = "music_detail";
 			break;
 		case "sound-effect":
-			joinURL = "soundEffects_detail";
+			joinURL = "sound-effects_detail";
 			break;
 		case "graphic-templates":
-			joinURL = "graphicTemplates_detail";
+			joinURL = "graphic-templates_detail";
 			break;
 		case "stock-video":
 			joinURL = "stock-video_detail";
