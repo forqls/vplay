@@ -57,10 +57,6 @@ public class UsersService {
 		return mapper.changePw(user);
 	}
 
-//	public int findPw(Users users) {
-//    return mapper.findPw(users);
-//  }
-
 	public int findPw(Users users) {
 		return mapper.findPw(users);
 	}
@@ -79,6 +75,10 @@ public class UsersService {
 
 	public ArrayList<Users> selectTopUser() {
 		return mapper.selectTopUser();
+	}
+
+	public int updateProfile(HashMap<String, String> map) {
+		return mapper.updateProfile(map);
 	}
 
 }
