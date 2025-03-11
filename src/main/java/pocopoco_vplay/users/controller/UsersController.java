@@ -324,7 +324,7 @@ public class UsersController {
 	}
 
 	@GetMapping("my_inquiry")
-	public String myInquiry(HttpSession session, Model model) {
+	public String myInquiry(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();
@@ -341,7 +341,7 @@ public class UsersController {
 	}
 
 	@GetMapping("my_commission")
-	public String myCommission(HttpSession session, Model model) {
+	public String myCommission(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();
@@ -358,7 +358,7 @@ public class UsersController {
 	}
 
 	@GetMapping("my_trash")
-	private String myTrashPage(HttpSession session, Model model) {
+	private String myTrashPage(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();
@@ -372,17 +372,18 @@ public class UsersController {
 
 	@PostMapping("profile")
 	@ResponseBody
-	public int updateProfile(@RequestParam(value = "profile", required = false) MultipartFile profile, Model model) {
-//		System.out.println(profile);
-
-		Users loginUser = (Users) model.getAttribute("loginUser");
+	public int updateProfile(@RequestParam(value = "profile", required = false) MultipartFile profile, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
 		String savePath = "c:\\profiles";
 		File folder = new File(savePath);
 		if (!folder.exists())
 			folder.mkdirs();
-		if (loginUser.getUserProfile() != null) {
+
+		if (loginUser.getUserProfile() != null && profile != null) {
 			File f = new File(savePath + "\\" + loginUser.getUserProfile());
-			f.delete();
+			if (f.exists()) {
+				f.delete();
+			}
 		}
 
 		String renameFileName = null;
@@ -395,17 +396,21 @@ public class UsersController {
 				profile.transferTo(new File(folder + "\\" + renameFileName));
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
+				return 0;
 			}
+		} else {
+			renameFileName = null;
 		}
-		
+
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("id", loginUser.getUserId());
-		map.put("profile", renameFileName);
+		map.put("userId", loginUser.getUserId());
+		map.put("userProfile", renameFileName);
 		int result = uService.updateProfile(map);
 		if (result > 0) {
 			loginUser.setUserProfile(renameFileName);
-			model.addAttribute("loginUser", loginUser);
+			session.setAttribute("loginUser", loginUser);
 		}
 		return result;
 	}
+
 }
