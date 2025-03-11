@@ -460,4 +460,11 @@ public class BoardController {
 
 	}
 
+	@PostMapping("updateReply")
+	@ResponseBody
+	public int updateReply(@ModelAttribute Reply r){
+		return bService.updateReply(r);
+	}
+
+
 }

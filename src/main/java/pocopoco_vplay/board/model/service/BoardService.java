@@ -165,5 +165,7 @@ public class BoardService {
 	public Reply countReply(int contentNo) {
 		return mapper.countReply(contentNo);
 	}
+
+	public int updateReply(Reply r) { return mapper.updateReply(r);}
 }
 
