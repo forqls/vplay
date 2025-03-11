@@ -342,7 +342,7 @@ public class UsersController {
 	        int userNo = loginUser.getUserNo();
 	        ArrayList<Content> list = bService.selectMyCommission(userNo);
 	        for (Content content : list) {
-	            Reply reply = bService.selectReply(content.getContentNo());
+	            Reply reply = bService.countReply(content.getContentNo());
 	            content.setReply(reply);
 	        }
 	        model.addAttribute("list", list);

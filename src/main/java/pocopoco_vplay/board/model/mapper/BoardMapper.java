@@ -78,4 +78,6 @@ public interface BoardMapper {
 	ArrayList<Content> selectOrderByViews();
 
 	int insertReply(Reply reply);
+
+	Reply countReply(int contentNo);
 }
