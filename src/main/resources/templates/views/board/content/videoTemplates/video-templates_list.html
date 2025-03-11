@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPLAY - Stock Videos</title>
+    <link href="/css/board/videoTemplates/list.css" rel="stylesheet">
+    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	
+    <div class="main-content">
+        <aside class="sidebar">
+            <div class="category-title">Categories</div>
+            <ul class="category-list">
+            	<th:block th:each="vc : ${cCategory}">
+            	<li>
+            	<input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}">
+            	<a>[[${vc.categoryName}]]</a>
+            	</li>
+            	</th:block>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <h1 class="title">Every Stock Video You Need, All in One Place!</h1>
+            
+            <div class="tags">
+            	<th:block th:each="vp : ${cPopularCategory}">
+            	<span class="tag">[[${vp.categoryName}]]</span>
+            	</th:block>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Search">
+            </div>
+
+            <div class="video-grid">
+                <div class="video-card" th:each="vl: ${cList}">
+                    <div class="video-thumbnail"></div>
+                    <div class="video-info">
+                    	<input type="hidden" th:value="${vl.contentNo}"/>
+                        <h3>[[${vl.contentTitle}]]</h3>
+                        <p>[[${vl.userNickName}]]</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+    window.onload=()=>{
+    	const divs = document.querySelector('.video-grid');
+    	console.log(divs);
+    	
+    	[...divs.children].map((video, index, array) =>{
+    		video.addEventListener('click', function(){
+    			const contentNo = video.children[1].children[0].value;
+    			console.log(contentNo);
+    			location.href = "/board/video-templates/" + contentNo;
+    		})
+    	})
+    	
+    	const categoryList = document.querySelector('.category-list');
+//     	console.log(categoryList);
+    	const checkboxArr = [];
+    	[...categoryList.children].map((category, index, array) =>{
+    		const checkbox = category.children[0];
+    		checkbox.addEventListener('click', ()=>{
+    			
+    			for(const c of categoryList.children){
+    				if(c.children[0].checked){
+    					checkboxArr.push(c.children[0].value);
+    				}
+    			}
+    			
+    			console.log(checkboxArr);
+    			if(checkboxArr.length == 0){
+    				checkboxArr.length = 0;
+    				fetch('/board/video-template-list/empty' ,{
+						method : 'get',
+						headers : {'content-type' : 'application/json; charset=UTF-8'},
+					})
+					.then(response => response.json())
+					.then(data =>{
+						if(data.length == 0){
+							divs.innerHTML = '';
+						}else{
+							divs.innerHTML = '';
+							for(const i of data){
+								const div1 = document.createElement("div");
+								div1.className = "video-card";
+								
+								const div2 = document.createElement("div");
+								div2.className = "video-thumbnail";
+								
+								const div3 = document.createElement("div");
+								div3.className = "video-info";
+								
+								const input = document.createElement("input");
+								input.setAttribute("type", "hidden");
+								input.setAttribute("value", i.contentNo);
+								
+								const h3 = document.createElement("h3");
+								h3.innerText = i.contentTitle;
+								
+								const p = document.createElement("p");
+								p.innerText = i.userNickName;
+								
+								div1.appendChild(div2);
+								div1.appendChild(div3);
+								
+								div3.appendChild(input);
+								div3.appendChild(h3);
+								div3.appendChild(p);
+								
+								divs.appendChild(div1);
+							}
+						}
+					})
+    			}else{
+	    			let checkboxValue = checkboxArr.join("+");
+	    			checkboxArr.length = 0;
+	    			console.log(checkboxValue);
+					fetch('/board/video-template-list/' + checkboxValue , {
+						method : 'get',
+						headers : {'content-type' : 'application/json; charset=UTF-8'},
+					})
+					.then(response => response.json())
+					.then(data =>{
+						if(data.length == 0){
+							divs.innerHTML = '';
+						}else{
+							divs.innerHTML = '';
+							for(const i of data){
+								const div1 = document.createElement("div");
+								div1.className = "video-card";
+								
+								const div2 = document.createElement("div");
+								div2.className = "video-thumbnail";
+								
+								const div3 = document.createElement("div");
+								div3.className = "video-info";
+								
+								const input = document.createElement("input");
+								input.setAttribute("type", "hidden");
+								input.setAttribute("value", i.contentNo);
+								
+								const h3 = document.createElement("h3");
+								h3.innerText = i.contentTitle;
+								
+								const p = document.createElement("p");
+								p.innerText = i.userNickName;
+								
+								div1.appendChild(div2);
+								div1.appendChild(div3);
+								
+								div3.appendChild(input);
+								div3.appendChild(h3);
+								div3.appendChild(p);
+								
+								divs.appendChild(div1);
+							}
+						}
+					})
+    			}
+
+    		})
+    		
+    		
+    	})
+    }
+    </script>
+</body>
+</html>

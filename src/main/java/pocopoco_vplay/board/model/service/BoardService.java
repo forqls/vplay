@@ -65,10 +65,6 @@ public class BoardService {
 		return mapper.selectReply(contentNo);
 	}
 
-	public ArrayList<Content> allTemplateList(String menuName) {
-		return mapper.allTemplateList(menuName);
-	}
-
 	public int updateInquiry(Content inquiry) {
 		int result1 = mapper.updateInquiry(inquiry);
 		int result2 = mapper.updateBoard(inquiry);
@@ -162,7 +158,12 @@ public class BoardService {
 		return mapper.insertReply(reply);
 	}
 
+	public ArrayList<Content> allTemplateList(HashMap<String, Object> map) {
+		return mapper.allTemplateList(map);
+	}
+
 	public Reply countReply(int contentNo) {
 		return mapper.countReply(contentNo);
 	}
 }
+
