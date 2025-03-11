@@ -342,7 +342,7 @@
 		where content_no =#{bId}
 	</update>
 	
-<<<<<<< HEAD
+
 	<select id="selectContentTop">
 	    SELECT 
 	    c.content_no, 
@@ -361,7 +361,7 @@
 		ORDER BY c.views DESC
 		fetch first 12 rows only
 	</select>	
-=======
+
 	<select id="selectOrderByViews">
 	    select * from content order by views desc
 	    fetch first 12 rows only 
@@ -371,7 +371,7 @@
 		insert into reply
 		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
 	</insert>
->>>>>>> e1acf3a8b5d09f83ac9505c5ac77626ef306fac5
+
 	
 	
 	
