@@ -202,12 +202,12 @@
 			<tbody>
 			<tr th:each="r:${replyList}"><!--있는댓글 가져오기-->
 				<td>[[${r.writer}]]</td>
-				<td>[[${r.replyDetail}]]</td>
+				<td><textarea readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea></td>
 				<td>[[${r.modifyDate}]]</td>
 				<td width="80px">
 					<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
 						<input type="hidden" th:value="${r.replyNo}" name="replyId">
-						<span class="updel">수정하기</span>
+						<span class="updel updateReply">수정하기</span>
 						&nbsp;
 						<span class="updel">삭제하기</span>
 						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
@@ -244,6 +244,8 @@
 			document.getElementById('deleteModal').addEventListener('click' ,  () =>{
 				$('#modalChoice').modal('show');
 			})
+		}else{
+			console.log('모달없음');
 		}
 
 
@@ -258,13 +260,26 @@
 
 			window.location.href = "/board/request_list?page=" + pageNo;
 		})
-
+		console.log(document.querySelectorAll('.updateReply'));
 
 
 
 
 	}
+	document.querySelectorAll('.updateReply').forEach(button => {
+		button.addEventListener('click', (event)=>{
+			const replyRow = event.target.closest('tr');
+			const replyDetailTextarea = replyRow.querySelector('td textarea');
 
+			replyDetailTextarea.removeAttribute('readonly');
+			replyDetailTextarea.focus();
+
+			event.target.textContent ='저장하기';
+			event.target.classList.add("saveReply");
+
+
+		});
+	});
 
 
 
