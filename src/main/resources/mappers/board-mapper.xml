@@ -377,5 +377,10 @@
 		insert into reply
 		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
 	</insert>
+
+	<update id="updateReply">
+		update reply
+		set reply_detail =#{replyDetail} where reply_no =#{replyNo}
+	</update>
   
 </mapper>

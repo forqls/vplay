@@ -80,4 +80,6 @@ public interface BoardMapper {
 	int insertReply(Reply reply);
 
 	Reply countReply(int contentNo);
+
+	int updateReply(Reply r);
 }
