@@ -42,11 +42,6 @@
 		</if>
 	</select>
 
-	<select id="selectMyInquiry">
-		select * from content
-		join board using(content_no)
-		where board_type=1 and user_no=#{userNo} and content_status='Y'
-	</select>
 	<update id="throwBoardTrash">
 		update content set content_status ='N' where content_no=#{contentNo}
 	</update>
@@ -129,7 +124,7 @@
 			5
 		</if>
 	</select>
-	
+
 	<select id="menuLikeTo">
 		select count(*)
 		from likes
@@ -137,13 +132,32 @@
 		order by content_no desc
 	</select>
 
+	<select id="selectMyInquiry">
+		SELECT *
+		FROM content
+		JOIN board USING(content_no)
+		WHERE board_type = 1
+		AND user_no = #{userNo}
+		AND content_status = 'Y'
+		ORDER BY create_date DESC
+	</select>
+
+	<select id="selectMyCommission">
+		SELECT *
+		FROM content
+		JOIN board USING(content_no)
+		WHERE board_type = 2
+		AND user_no = #{userNo}
+		AND content_status = 'Y'
+		ORDER BY create_date DESC
+	</select>
+
 	<insert id="insertInquiry" parameterType="Content">
 		<selectKey resultType="int" keyProperty="contentNo" order="BEFORE">
 			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
 		INSERT INTO CONTENT (
-		CONTENT_NO,
-		USER_NO,
+		CONTENT_NO,USER_NO,
 		CONTENT_TITLE,
 		CONTENT_DETAIL,
 		CREATE_DATE,
@@ -217,7 +231,13 @@
 		FROM REPLY
 		WHERE CONTENT_NO = #{contentNo}
 	</select>
-	
+
+	<select id="countReply">
+		SELECT count(*)
+		FROM REPLY
+		WHERE CONTENT_NO = #{contentNo}
+	</select>
+
 	<select id="allCategory">
 		select *
 		from category
@@ -285,9 +305,9 @@
 	</update>
 
 	<select id="allMenuDetail" parameterType="int">
-		select c.content_no, c.content_title, to_char(c.content_detail) as content_detail, c.create_date, 
-        c.modify_date, c.content_status, u.user_no, u.user_id,
-       	u.user_nickname, u.user_email,u.user_profile, listagg(category_name, ',') within group(order by category_name) as category_name, m.menu_name
+		select c.content_no, c.content_title, to_char(c.content_detail) as content_detail, c.create_date,
+		c.modify_date, c.content_status, u.user_no, u.user_id,
+		u.user_nickname, u.user_email,u.user_profile, listagg(category_name, ',') within group(order by category_name) as category_name, m.menu_name
 		from content c
 		join users u on(c.user_no = u.user_no)
 		join content_category cc on(c.content_no = cc.content_no)
@@ -295,17 +315,17 @@
 		join menu m on(cg.menu_no = m.menu_no)
 		where c.content_no = #{contentNo}
 		group by
-		c.content_no, 
-		c.content_title, 
-		to_char(c.content_detail), 
-		c.create_date, 
-		c.modify_date, 
-		c.content_status, 
-		u.user_no, 
-		u.user_id, 
-		u.user_nickname, 
-		u.user_email, 
-		u.user_profile, 
+		c.content_no,
+		c.content_title,
+		to_char(c.content_detail),
+		c.create_date,
+		c.modify_date,
+		c.content_status,
+		u.user_no,
+		u.user_id,
+		u.user_nickname,
+		u.user_email,
+		u.user_profile,
 		m.menu_name
 	</select>
 
@@ -322,7 +342,7 @@
 		insert into likes
 		values(#{userNo},#{contentNo})
 	</insert>
-	
+
 	<delete id="unAllTempLike">
 		delete from likes
 		where user_no = #{userNo} and content_no = #{contentNo}
@@ -331,8 +351,8 @@
 	<update id="updateRequest">
 		UPDATE content
 		SET content_title = #{contentTitle},
-			modify_date = SYSDATE,
-			content_detail = #{contentDetail}
+		modify_date = SYSDATE,
+		content_detail = #{contentDetail}
 		WHERE content_no = #{contentNo}
 	</update>
 
@@ -347,15 +367,15 @@
 		set content_status = 'N'
 		where content_no =#{bId}
 	</update>
-	
+
 	<select id="selectOrderByViews">
 	    select * from content order by views desc
 	    fetch first 12 rows only 
 	</select>	
-	
-	
-	
-	
-	
-	
+  
+	<insert id="insertReply">
+		insert into reply
+		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
+	</insert>
+  
 </mapper>

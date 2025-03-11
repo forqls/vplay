@@ -203,9 +203,9 @@ public class BoardController {
 		}
 	}
 
-	@GetMapping("inquiry_writer")
-	public String inquiryWriter() {
-		return "inquiry_writer";
+	@GetMapping("inquiry_write")
+	public String inquiryWrite() {
+		return "inquiry_write";
 	}
 
 	@PostMapping("write_inquiry")
@@ -345,11 +345,13 @@ public class BoardController {
 		int id = 0;
 		if (loginUser != null) {
 			id = loginUser.getUserNo();
+			System.out.println(loginUser.getUserNickname());
+			mv.addObject("userNickname", loginUser.getUserNickname());
 		}
 		Content c = bService.selectRequest(bId, id);
 		ArrayList<Reply> replyList = bService.selectReplyList(bId);/* 글 번호에 해당하는 댓글을 들고와야하기 때문 */
 
-		System.out.println(replyList);
+		// System.out.println(replyList);
 
 		if (c != null) {
 			mv.addObject("replyList", replyList);
@@ -436,4 +438,26 @@ public class BoardController {
 			}
 		}
 	}
+
+	@PostMapping("insertReply")
+	public String insertReply(@RequestParam(value = "page", defaultValue = "1") int currentPage, @ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") String contentNo) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			reply.setWriter(loginUser.getUserNickname());
+			reply.setContentNo(contentNo);
+		}
+
+		int result = bService.insertReply(reply);
+
+		if (result > 0) {
+			ArrayList<Reply> replyList = bService.selectReplyList(Integer.parseInt(contentNo));
+			model.addAttribute("replyList", replyList);
+			return "redirect:/board/" + contentNo + "/" + currentPage;
+
+		} else {
+			throw new BoardException("댓글 등록에 실패하였습니다.");
+		}
+
+	}
+
 }

@@ -7,7 +7,7 @@
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
-<title>My Commission</title>
+<title>My commission</title>
 <style>
 .content-header {
 	display: flex;
@@ -80,7 +80,15 @@
 
 .status-badge {
 	background-color: rgba(129, 55, 233, 0.1);
-	color: #8137e9;
+	color: #A57AEF;
+	padding: 0.25rem 0.75rem;
+	border-radius: 1rem;
+	font-size: 0.75rem;
+}
+
+.status-badge.completed {
+	background-color: rgba(76, 175, 80, 0.1);
+	color: #4CAF50;
 	padding: 0.25rem 0.75rem;
 	border-radius: 1rem;
 	font-size: 0.75rem;
@@ -138,38 +146,6 @@
 	font-size: 1rem;
 	color: #6f757d;
 }
-
-/* 휴지통 아이콘 스타일 */
-.trash-icon {
-	width: 14px;
-	height: 14px;
-	display: inline-block;
-	position: relative;
-	border: 2px solid #6f757d;
-	border-top: none;
-	border-radius: 0 0 2px 2px;
-	margin-right: 4px;
-}
-
-.trash-icon::before {
-	content: '';
-	position: absolute;
-	width: 8px;
-	height: 2px;
-	background: #6f757d;
-	top: -4px;
-	left: 1px;
-}
-
-.trash-icon::after {
-	content: '';
-	position: absolute;
-	width: 14px;
-	height: 2px;
-	background: #6f757d;
-	top: -2px;
-	left: -2px;
-}
 </style>
 </head>
 <body>
@@ -179,20 +155,19 @@
 		<div class="container content_wrap flex_custom_wrap">
 			<div class="content-header">
 				<h1>My commission</h1>
-				<button class="button" onclick="location.href='/board/commission_writer'">작성하기</button>
+				<button class="button" onclick="location.href='/board/writeRequest'">작성하기</button>
 			</div>
-
 			<div class="commission-list" id="commission">
-				<div class="commission-item" th:each="i : ${list}" th:data-content-no="${i.contentNo}" style="cursor: pointer;">
-					<div class="commission-date" th:text="${i.createDate}"></div>
-					<div class="commission-title" th:text="${i.contentTitle}"></div>
+				<div class="commission-item" th:each="c : ${list}" th:data-content-no="${c.contentNo}" style="cursor: pointer;">
+					<div class="commission-date" th:text="${c.createDate}"></div>
+					<div class="commission-title" th:text="${c.contentTitle}"></div>
 					<div class="commission-actions">
-						<span class="status-badge">답변대기 , 답변상태 등</span>
+						<span class="status-badge" th:text="${c.reply != null ? '답변 완료' : '답변 대기'}" th:classappend="${c.reply != null ? 'completed' : ''}"> </span>
 						<div class="options-wrapper">
 							<button class="options-btn">⋮</button>
 							<div class="dropdown">
 								<div class="dropdown-item delete-commission">
-									<span class="trash-icon"></span> Delete
+									<span>🗑️ Delete</span>
 								</div>
 							</div>
 						</div>
@@ -254,10 +229,10 @@
 					type : 'POST',
 					success : function(data) {
 						if (data == 1) {
-							alert('문의가 성공적으로 삭제되었습니다.');
+							alert('의뢰가 성공적으로 삭제되었습니다.');
 							commissionItem.remove();
 						} else {
-							alert('문의 삭제 중 오류 발생.');
+							alert('의뢰 삭제 중 오류 발생.');
 						}
 					},
 					error : function(data) {

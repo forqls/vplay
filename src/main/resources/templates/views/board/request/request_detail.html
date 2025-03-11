@@ -145,11 +145,12 @@
 		<div class="button-group">
 			<button type="button" class="button">목록으로</button>
 			<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
-				<button type="button" id="updateRequest">수정하기</button>
-				<button type="button" id="deleteModal">삭제하기</button>
+				<button type="button" id="updateRequest" class="button">수정하기</button>
+				<button type="button" id="deleteModal" class="button">삭제하기</button>
 			</th:block>
 		</div>
 
+		<!-- 삭제하기 모달 -->
 		<div class="modal" tabindex="-1" role="dialog" id="modalChoice">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -166,57 +167,61 @@
 				</div>
 			</div>
 		</div>
-		<div class="reply_wrap">
+		<br><br><br><br><br><br>
+	</form>
+	<form class="reply_wrap" method="post" id="replyForm" action="/board/insertReply">
+		<input type="hidden" name="contentNo" th:value="${c.contentNo}">
+		<input type="hidden" name="page" th:value="${page}">
+		<div style="margin-bottom: 20px;">
+			<p style="color: #999;">크리에이터 답변</p>
+		</div>
+		<div class="content"><!--댓글 작성부분-->
 			<div style="margin-bottom: 20px;">
-				<p style="color: #999;">크리에이터 답변</p>
+
+				<th:block th:if="${session.loginUser != null}">
+					<span>[[${session.loginUser.userNickname}]]</span>
+					<!--프로필 사진부분--><!--<img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> -->
+				</th:block>
+				<th:block th:if="${session.loginUser == null}">
+					<span>로그인을 하여 자유롭게 의견을 남겨보세요.</span>
+				</th:block>
 			</div>
+			<textarea class="reply_detail" rows="8" id="replyContent" style="resize:none" name="replyDetail"></textarea>
+			<button class="btn btn-outline-success" id="replySubmit" type="submit" th:disabled="${session.loginUser == null}">SUBMIT</button>
+		</div>
+	</form>
+		<table class="table"><!--원래있는 댓글부분-->
+			<thead>
+			<tr>
+				<th width="130px">작성자</th>
+				<th>작성내용</th>
+				<th width="130px">작성일자</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="r:${replyList}"><!--있는댓글 가져오기-->
+				<td>[[${r.writer}]]</td>
+				<td><textarea readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea></td>
+				<td>[[${r.modifyDate}]]</td>
+				<td width="80px">
+					<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
+						<input type="hidden" th:value="${r.replyNo}" name="replyId">
+						<span class="updel updateReply">수정하기</span>
+						&nbsp;
+						<span class="updel">삭제하기</span>
+						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
+					</th:block>
+				</td>
+			</tr>
+			</tbody>
+		</table>
 
-			<table class="table"><!--원래있는 댓글부분-->
-				<thead>
-				<tr>
-					<th width="130px">작성자</th>
-					<th>작성내용</th>
-					<th width="130px">작성일자</th>
-					<th></th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr th:each="r:${replyList}"><!--있는댓글 가져오기-->
-					<td>[[${r.writer}]]</td>
-					<td>[[${r.replyDetail}]]</td>
-					<td>[[${r.modifyDate}]]</td>
-					<td width="80px">
-						<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
-							<input type="hidden" th:value="${r.replyNo}" name="replyId"><!--th:value="${r.replyId}"-->
-							<span class="updel">수정하기</span>
-							&nbsp;
-							<span class="updel">삭제하기</span>
-							<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"> <!--th:value="${r.replyDetail}"--><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
-						</th:block>
-					</td>
-				</tr>
-				</tbody>
-			</table>
 
-			<div class="content"><!--댓글부분-->
-				<div style="margin-bottom: 20px;">
-					<!--            <img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> 프로필 사진-->
-					<span style="margin-left: 10px;">와장창</span>
-					<span style="font-size: 12px; color: #999; display: block; margin-left: 60px;">팔로워</span>
-					<span style="font-size: 12px; color: #999; float: right;">날짜</span>
-				</div>
-				<textarea class="reply_detail" rows="8" id="replyContent" style="resize:none"></textarea>
-
-				<button class="btn btn-outline-success" id="replySubmit" type="button" th:disabled="${session.loginUser == null}">SUBMIT</button>
-
-			</div>
-
-			<div style="text-align: center; margin-top: 20px;">
-				<!--         <button class="button">답글달기</button>-->
-			</div>
+		<div style="text-align: center; margin-top: 20px;">
+			<!--         <button class="button">답글달기</button>-->
 		</div>
 
-	</form>
 </main>
 <script th:inline="javascript">
 
@@ -239,6 +244,8 @@
 			document.getElementById('deleteModal').addEventListener('click' ,  () =>{
 				$('#modalChoice').modal('show');
 			})
+		}else{
+			console.log('모달없음');
 		}
 
 
@@ -253,11 +260,26 @@
 
 			window.location.href = "/board/request_list?page=" + pageNo;
 		})
+		console.log(document.querySelectorAll('.updateReply'));
+
 
 
 
 	}
+	document.querySelectorAll('.updateReply').forEach(button => {
+		button.addEventListener('click', (event)=>{
+			const replyRow = event.target.closest('tr');
+			const replyDetailTextarea = replyRow.querySelector('td textarea');
 
+			replyDetailTextarea.removeAttribute('readonly');
+			replyDetailTextarea.focus();
+
+			event.target.textContent ='저장하기';
+			event.target.classList.add("saveReply");
+
+
+		});
+	});
 
 
 

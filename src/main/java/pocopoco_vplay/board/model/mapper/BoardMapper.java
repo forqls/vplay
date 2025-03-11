@@ -19,6 +19,8 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectMyInquiry(int userNo);
 
+	ArrayList<Content> selectMyCommission(int userNo);
+
 	int throwBoardTrash(int contentNo);
 
 	ArrayList<Content> selectMyTrash(int userNo);
@@ -30,9 +32,9 @@ public interface BoardMapper {
 	int insertBoard(Content inquiry);
 
 	int updateInquiry(Content inquiry);
-	
+
 	int updateBoard(Content inquiry);
-	
+
 	Content selectInquiry(int contentNo);
 
 	Reply selectReply(int contentNo);
@@ -61,7 +63,7 @@ public interface BoardMapper {
 
 	int allTempLike(HashMap<String, Integer> map);
 
-	int menuLikeTo(@Param("contentNo")int num, @Param("userNo") int userNo);
+	int menuLikeTo(@Param("contentNo") int num, @Param("userNo") int userNo);
 
 	int unAllTempLike(HashMap<String, Integer> map);
 
@@ -73,7 +75,9 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectOrderByViews();
 
-	ArrayList<Content> TempselectCategory(String[] result);
-
 	ArrayList<Content> allTemplateList(HashMap<String, Object> map);
+
+	int insertReply(Reply reply);
+
+	Reply countReply(int contentNo);
 }
