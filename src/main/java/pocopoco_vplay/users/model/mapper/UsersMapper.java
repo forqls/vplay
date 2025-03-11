@@ -41,4 +41,6 @@ public interface UsersMapper {
 	Users existUsers(String kakaoId);
 
 	ArrayList<Users> selectTopUser();
+
+	int updateProfile(HashMap<String, String> map);
 }

@@ -1,6 +1,10 @@
 package pocopoco_vplay.users.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -337,21 +342,20 @@ public class UsersController {
 
 	@GetMapping("my_commission")
 	public String myCommission(HttpSession session, Model model) {
-	    Users loginUser = (Users) session.getAttribute("loginUser");
-	    if (loginUser != null) {
-	        int userNo = loginUser.getUserNo();
-	        ArrayList<Content> list = bService.selectMyCommission(userNo);
-	        for (Content content : list) {
-	            Reply reply = bService.countReply(content.getContentNo());
-	            content.setReply(reply);
-	        }
-	        model.addAttribute("list", list);
-	        return "my_commission";
-	    } else {
-	        throw new UsersException("로그인이 필요합니다.");
-	    }
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			int userNo = loginUser.getUserNo();
+			ArrayList<Content> list = bService.selectMyCommission(userNo);
+			for (Content content : list) {
+				Reply reply = bService.countReply(content.getContentNo());
+				content.setReply(reply);
+			}
+			model.addAttribute("list", list);
+			return "my_commission";
+		} else {
+			throw new UsersException("로그인이 필요합니다.");
+		}
 	}
-
 
 	@GetMapping("my_trash")
 	private String myTrashPage(HttpSession session, Model model) {
@@ -366,4 +370,42 @@ public class UsersController {
 		}
 	}
 
+	@PostMapping("profile")
+	@ResponseBody
+	public int updateProfile(@RequestParam(value = "profile", required = false) MultipartFile profile, Model model) {
+//		System.out.println(profile);
+
+		Users loginUser = (Users) model.getAttribute("loginUser");
+		String savePath = "c:\\profiles";
+		File folder = new File(savePath);
+		if (!folder.exists())
+			folder.mkdirs();
+		if (loginUser.getUserProfile() != null) {
+			File f = new File(savePath + "\\" + loginUser.getUserProfile());
+			f.delete();
+		}
+
+		String renameFileName = null;
+		if (profile != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			int ranNum = (int) (Math.random() * 100000);
+			String originFileName = profile.getOriginalFilename();
+			renameFileName = sdf.format(new Date()) + ranNum + originFileName.substring(originFileName.lastIndexOf("."));
+			try {
+				profile.transferTo(new File(folder + "\\" + renameFileName));
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", loginUser.getUserId());
+		map.put("profile", renameFileName);
+		int result = uService.updateProfile(map);
+		if (result > 0) {
+			loginUser.setUserProfile(renameFileName);
+			model.addAttribute("loginUser", loginUser);
+		}
+		return result;
+	}
 }
