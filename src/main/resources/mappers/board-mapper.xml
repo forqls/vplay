@@ -382,5 +382,10 @@
 		update reply
 		set reply_detail =#{replyDetail} where reply_no =#{replyNo}
 	</update>
+
+	<delete id="deleteReply">
+		delete from reply
+		where reply_no =#{replyNo}
+	</delete>
   
 </mapper>

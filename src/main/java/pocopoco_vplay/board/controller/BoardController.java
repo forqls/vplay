@@ -429,7 +429,7 @@ public class BoardController {
 	public String deleteRequest(@RequestParam("contentNo") int bId) {
 		int result = bService.deleteBoard(bId);
 		if (result > 0) {
-			return "redirect:/board/list";
+			return "redirect:/board/request_list";
 		} else {
 			if (result > 0) {
 				return "redirect:/board/request_list";
@@ -464,6 +464,12 @@ public class BoardController {
 	@ResponseBody
 	public int updateReply(@ModelAttribute Reply r){
 		return bService.updateReply(r);
+	}
+
+	@GetMapping("deleteReply")
+	@ResponseBody
+	public int deleteReply(@RequestParam("replyNo") int replyNo) {
+		return bService.deleteReply(replyNo);
 	}
 
 

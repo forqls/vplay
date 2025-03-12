@@ -82,4 +82,6 @@ public interface BoardMapper {
 	Reply countReply(int contentNo);
 
 	int updateReply(Reply r);
+
+	int deleteReply(int replyNo);
 }
