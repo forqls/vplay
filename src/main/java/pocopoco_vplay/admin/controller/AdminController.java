@@ -99,7 +99,7 @@ public class AdminController {
 		for (Users u : list) {
 			System.out.println(u.getJoinDate());
 		}
-		mv.addObject("list", list).addObject("pi", pi).setViewName("users_management");
+		mv.addObject("list", list).addObject("pi", pi).setViewName("management_users");
 		return mv;
 	}
 
@@ -108,18 +108,14 @@ public class AdminController {
 	    int listCount = aService.getInquiryCount();
 	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 	    ArrayList<Content> list = aService.selectAllQuiry(pi);
-
-	    // 2. 각 문의글에 댓글 정보 추가
 	    for (Content c : list) {
 	        c.setUserId(aService.selectUser(c.getUserNo()));
 	        Reply reply = bService.selectReply(c.getContentNo());
 	        c.setReply(reply);
 	    }
-
 	    mv.addObject("list", list)
 	      .addObject("pi", pi)
-	      .setViewName("Inquiry_management");
-	    
+	      .setViewName("management_inquiry");
 	    return mv;
 	}
 
@@ -135,12 +131,12 @@ public class AdminController {
 			c.setUserId(aService.selectUser(c.getUserNo()));
 		}
 		mv.addObject("list", list).addObject("pi", pi);
-		mv.setViewName("managing_templates");
+		mv.setViewName("management_templates");
 		return mv;
 	}
 
-	@GetMapping("requestPost")
-	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
+	@GetMapping("request")
+	public ModelAndView joinRequest(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
 		int listCount = aService.getrequestPostCount();
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllRequestPost(pi);
@@ -148,7 +144,7 @@ public class AdminController {
 			c.setUserId(aService.selectUser(c.getUserNo()));
 		}
 		mv.addObject("list", list).addObject("pi", pi);
-		mv.setViewName("Managing_request_posts");
+		mv.setViewName("management_request");
 		return mv;
 	}
 
