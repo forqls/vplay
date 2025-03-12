@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPLAY - 문의 관리</title>
-    <link href="/css/admin/inquiry_management.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPLAY - 문의 관리</title>
+<link href="/css/admin/admin_post.css" rel="stylesheet">
 </head>
 <body>
-	<div th:replace="~{admin_sidebar}"></div>
+    <div th:replace="~{admin_sidebar}"></div>
     <main class="main-content">
         <h1 class="page-title">문의 관리</h1>
-        
         <div class="content-card">
             <div class="search-bar">
                 <input type="text" placeholder="Search">
@@ -31,98 +30,80 @@
                             <th>User ID</th>
                             <th>title</th>
                             <th>inquiry date</th>
+                            <th>Reply</th>
                             <th>Status</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="inquiry-list" th:each="I : ${list}">
-                            <td>[[${I.contentNo}]]</td>
-                            <td>[[${I.menuName}]]</td>
-                            <td>[[${I.userId}]]</td>
-                            <td>[[${I.contentTitle}]]</td>
-                            <td>[[${I.modifyDate}]]</td>
-                            <td><span class="status active">[[${I.contentStatus}]]</span></td>
-                            <td>
-                                <button class="action-btn">
-                                    <svg viewBox="0 0 24 24" width="18" height="18">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="19" cy="12" r="1"></circle>
-                                        <circle cx="5" cy="12" r="1"></circle>
-                                    </svg>
-                                </button>
-                            </td>
+                        <tr class="inquiry-list" th:each="i : ${list}">
+                            <td>[[${i.contentNo}]]</td>
+                            <td>[[${i.menuName}]]</td>
+                            <td>[[${i.userId}]]</td>
+                            <td>[[${i.contentTitle}]]</td>
+                            <td>[[${i.modifyDate}]]</td>
+                            <td><span class="status-badge" th:text="${i.reply != null ? '완료' : '대기'}" th:classappend="${i.reply != null ? 'completed' : ''}"></span></td>
+                            <td><span class="status" th:data-contentno="${i.contentNo}" th:onclick="updateStatus(this)" th:classappend="${i.contentStatus == 'Y' ? 'active' : 'inactive'}">[[${i.contentStatus}]]</span></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="pagination">
-            	<!-- 이전 -->
-            	<ul>
-            		<th:block th:if="${pi.currentPage >1}">
-	                <li class="prev">
-                    	<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-                        	<
-                    	</a>
-	               	</li>
-	               	</th:block>
-	               	<th:block th:if="${pi.currentPage <=1}">
-	                <li class="prev">
-                    	<a aria-label="Previous">
-                        	<
-                    	</a>
-	               	</li>
-	               	</th:block>
-	                
-	                <!-- 숫자 -->
-	                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-	                	<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
-	                </li>
-	                
-	                
-	                <!-- 다음 -->
-	                <th:block th:if="${pi.currentPage < pi.MaxPage}">
-	                <li class="next">
-	                	<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
-	                		>
-	                	</a>
-	                </li>
-	                </th:block>
-	                <th:block th:if="${pi.currentPage >= pi.MaxPage}">
-	                <li class="next">
-	                	<a aria-label="Next">
-	                		>
-	                	</a>
-	                </li>
-	                </th:block>
+                <!-- 이전 -->
+                <ul>
+                    <th:block th:if="${pi.currentPage > 1}">
+                        <li class="prev"><a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+                                < </a></li>
+                    </th:block>
+                    <th:block th:if="${pi.currentPage <= 1}">
+                        <li class="prev"><a aria-label="Previous">
+                                < </a></li>
+                    </th:block>
+                    <!-- 숫자 -->
+                    <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a class="active"
+                            th:href="@{${Loc}(page=${p})}">[[${p}]]</a></li>
+                    <!-- 다음 -->
+                    <th:block th:if="${pi.currentPage < pi.MaxPage}">
+                        <li class="next"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+                    </th:block>
+                    <th:block th:if="${pi.currentPage >= pi.MaxPage}">
+                        <li class="next"><a aria-label="Next"> > </a></li>
+                    </th:block>
                 </ul>
             </div>
         </div>
     </main>
-    <script>
-    
-    	[...document.querySelectorAll(".inquiry-list")].map((inquiry, index, array) =>{
-    		inquiry.children[5].addEventListener('click', function(){
-    			
-    			const status = this.innerText == "Y" ? "N" : "Y";
-    			
-    			$.ajax({
-    				url: "/admin/iupdate",
-    				data: {contentNo : inquiry.children[0].innerText, contentStatus : status},
-    				success: data=>{
-    					if(data == 1){
-    						if(status == "Y"){
-    							this.children[0].innerHTML = "Y";
-    						}else{
-    							this.children[0].innerHTML = "N";
-    						}
-    					}
-    				},
-    				error: data=> console.log(data)
-    			})
-    		})
-    	})
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        function updateStatus(element) {
+            const currentStatus = element.innerText;
+            const newStatus = currentStatus === "Y" ? "N" : "Y";
+            const contentNo = element.getAttribute("data-contentno");
 
+            $.ajax({
+                url: "/admin/iupdate",
+                data: { contentNo: contentNo, contentStatus: newStatus },
+                success: data => {
+                    if (data == 1) {
+                        element.innerText = newStatus;
+                        element.classList.remove(currentStatus === "Y" ? "active" : "inactive");
+                        element.classList.add(newStatus === "Y" ? "active" : "inactive");
+                    }
+                },
+                error: data => console.log(data)
+            });
+        }
+
+        [...document.querySelectorAll(".inquiry-list")].forEach(inquiry => {
+            inquiry.addEventListener('click', function (event) {
+                if (event.target.classList.contains('status')) {
+                    return;
+                }
+
+                const contentNo = this.children[0].innerText;
+                window.location.href = '/board/inquiryDetail?contentNo=' + contentNo;
+            });
+        });
     </script>
 </body>
 </html>

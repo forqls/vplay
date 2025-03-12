@@ -65,7 +65,6 @@ input[type="text"], textarea {
 	border-radius: 4px;
 	background-color: #1f1f2c;
 	color: #ffffff;
-	pointer-events: none;
 	cursor: default;
 	font-family: sans-serif;
 }
@@ -125,6 +124,11 @@ textarea {
 	font-style: italic;
 	color: #6a6a6a;
 }
+
+.reply-button-group {
+	display: flex;
+	justify-content: flex-end;
+}
 </style>
 </head>
 <body>
@@ -144,23 +148,59 @@ textarea {
 
 		<div class="form-group">
 			<div class="form-label">제목</div>
-			<input type="text" th:value="${inquiry.contentTitle}" readonly>
+			<input type="text" th:value="${inquiry.contentTitle}" readonly style="pointer-events: none">
 		</div>
 		<div class="form-group">
 			<div class="form-label">내용</div>
-			<textarea th:text="${inquiry.contentDetail}" readonly></textarea>
+			<textarea th:text="${inquiry.contentDetail}" readonly style="pointer-events: none"></textarea>
 		</div>
 		<div class="button-group">
 			<button type="button" class="button" onclick="javascript:history.back();">목록으로</button>
-			<a th:if="${reply == null or #strings.isEmpty(reply.replyDetail)}" th:href="@{/board/inquiryUpdate(contentNo=${inquiry.contentNo})}" class="button">수정 하기</a>
+			<a th:if="${session.loginUser != null and session.loginUser.userNo == inquiry.userNo and (reply == null or #strings.isEmpty(reply.replyDetail))}"
+			th:href="@{/board/inquiryUpdate(contentNo=${inquiry.contentNo})}" class="button">수정 하기</a>
+
 		</div>
 
 		<div class="reply-container">
 			<h1 class="reply-title">문의 답변</h1>
 			<div class="form-group">
-				<textarea class="reply-textarea" readonly th:text="${reply != null ? reply.replyDetail : ''}" th:placeholder="${reply != null ? '' : '답변이 아직 등록되지 않았습니다.'}"></textarea>
+				<textarea class="reply-textarea" th:attr="readonly=${session.loginUser != null and session.loginUser.isAdmin != 'Y' ? 'readonly' : null}"
+				th:style="${session.loginUser != null and session.loginUser.isAdmin == 'Y' and (reply == null or #strings.isEmpty(reply.replyDetail))} ? 'cursor: text' : 'pointer-events: none; cursor: default'"
+				th:text="${reply != null ? reply.replyDetail : ''}" th:placeholder="${(reply != null and #strings.isEmpty(reply.replyDetail)) or (session.loginUser != null and session.loginUser.isAdmin == 'Y') ? '답변 내용을 입력해주세요' : '답변이 아직 등록되지 않았습니다.'}"></textarea>
+			</div>
+			<div class="reply-button-group" th:if="${session.loginUser != null and session.loginUser.isAdmin == 'Y' and (reply == null or #strings.isEmpty(reply.replyDetail))}">
+				<button type="button" class="button" onclick="submitReply()">답변 등록</button>
 			</div>
 		</div>
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			const contentNo = /*[[${inquiry.contentNo}]]*/null;
+			/*]]>*/
+			function submitReply() {
+				const replyContent = $('.reply-textarea').val();
+				$.ajax({
+					url : '/admin/insertReply',
+					method : 'post',
+					data : {
+						contentNo : contentNo,
+						replyDetail : replyContent
+					},
+					success : function(response) {
+						if (response == 1) {
+							alert('답변이 성공적으로 등록되었습니다');
+							location.reload();
+						} else {
+							alert('답변 등록에 실패했습니다.');
+						}
+					},
+					error : function(xhr, status, error) {
+						console.error('오류가 발생했습니다. 다시 시도해주세요.', status, error);
+					}
+				});
+			}
+		</script>
+
 	</main>
 </body>
 </html>

@@ -446,9 +446,7 @@ public class BoardController {
 			reply.setWriter(loginUser.getUserNickname());
 			reply.setContentNo(contentNo);
 		}
-
 		int result = bService.insertReply(reply);
-
 		if (result > 0) {
 			ArrayList<Reply> replyList = bService.selectReplyList(Integer.parseInt(contentNo));
 			model.addAttribute("replyList", replyList);
