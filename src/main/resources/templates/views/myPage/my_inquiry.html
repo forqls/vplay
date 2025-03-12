@@ -223,9 +223,7 @@
 			function deleteInquiry(contentNo, inquiryItem) {
 				$.ajax({
 					url : '/board/throwBoardTrash',
-					data : {
-						contentNo : contentNo
-					},
+					data : {contentNo : contentNo},
 					type : 'POST',
 					success : function(data) {
 						if (data == 1) {

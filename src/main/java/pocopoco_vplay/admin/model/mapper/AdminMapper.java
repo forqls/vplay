@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Mapper
@@ -40,8 +41,5 @@ public interface AdminMapper {
 
 	int countMenuTemp(int i);
 
-
-
-	
-
+	int insertReply(Reply reply);
 }

@@ -5,122 +5,127 @@
 		select count(*)
 		from users
 	</select>
-	
+
 	<select id="selectAllUser">
 		select *
 		from users
 		order by user_no desc
 	</select>
-	
+
 	<select id="getInquiryCount">
 		select count(*)
 		from content
-			 join board using(content_no)
+		join board using(content_no)
 		where board_type = 1
 	</select>
-	
+
 	<select id="selectAllQuiry">
 		select *
 		from content
-			 join board using(content_no)
-			 join MENU using(menu_no)
+		join board using(content_no)
+		join MENU using(menu_no)
 		where board_type = 1
 		order by content_no desc
 	</select>
-	
+
 	<select id="selectUser">
 		select user_id
 		from users
 		where user_no = #{userNo}
 	</select>
-	
+
 	<select id="getTemplatesCount">
 		select count(*)
-		from content 
-			 left join board using(content_no)
+		from content
+		left join board using(content_no)
 		where board_type is null
 	</select>
-	
-	
+
+
 	<select id="selectAllTemplates">
 		select *
 		from content co
-		     left join board b on(co.content_no = b.content_no)
-		     left join content_category coa on(co.content_no = coa.content_no)
-		     left join category ca on(ca.category_no = coa.category_no)
-		     left outer join menu me on(ca.menu_no = me.menu_no)
+		left join board b on(co.content_no = b.content_no)
+		left join content_category coa on(co.content_no = coa.content_no)
+		left join category ca on(ca.category_no = coa.category_no)
+		left outer join menu me on(ca.menu_no = me.menu_no)
 		where board_type is null
 		order by co.content_no
 	</select>
-	
+
 	<select id="getrequestPostCount">
 		select count(*)
 		from content
-			 join board using(content_no)
+		join board using(content_no)
 		where board_type = 2
 	</select>
-	
+
 	<select id="selectAllRequestPost">
 		select *
 		from content
-			 join board using(content_no)
-			 join MENU using(menu_no)
+		join board using(content_no)
+		join MENU using(menu_no)
 		where board_type = 2
 		order by content_no desc
 	</select>
-	
+
 	<update id="userUpdate">
 		update users
 		set status = #{status}
 		where user_no = #{userNo}
 	</update>
-	
+
 	<update id="inquiryUpdate">
 		update content
 		set CONTENT_STATUS = #{contentStatus}, DELETE_STATUS = #{deleteStatus}
 		where content_no = #{contentNo}
 	</update>
-	
+
 	<update id="templatesUpdate">
 		update content
 		set CONTENT_STATUS = #{contentStatus}, DELETE_STATUS = #{deleteStatus}
 		where content_no = #{contentNo}
 	</update>
-	
+
 	<update id="requestUpdate">
 		update content
 		set CONTENT_STATUS = #{contentStatus}, DELETE_STATUS = #{deleteStatus}
 		where content_no = #{contentNo}
 	</update>
-	
+
 	<select id="countMenuTemp">
 		select count(*)
 		from content co
-		     left join board b on(co.content_no = b.content_no)
-		     left join content_category coa on(co.content_no = coa.content_no)
-		     left join category ca on(ca.category_no = coa.category_no)
-		     left outer join menu me on(ca.menu_no = me.menu_no)
-		where board_type is null and 
+		left join board b on(co.content_no = b.content_no)
+		left join content_category coa on(co.content_no = coa.content_no)
+		left join category ca on(ca.category_no = coa.category_no)
+		left outer join menu me on(ca.menu_no = me.menu_no)
+		where board_type is null and
 		<if test="i == 1">
-		me.menu_no = 1
+			me.menu_no = 1
 		</if>
 		<if test="i == 2">
-		me.menu_no = 2
+			me.menu_no = 2
 		</if>
 		<if test="i == 3">
-		me.menu_no = 3
+			me.menu_no = 3
 		</if>
 		<if test="i == 4">
-		me.menu_no = 4
+			me.menu_no = 4
 		</if>
 		<if test="i == 5">
-		me.menu_no = 5
+			me.menu_no = 5
 		</if>
 		<if test="i == 6">
-		me.menu_no = 6
+			me.menu_no = 6
 		</if>
 		<if test="i == 7">
-		me.menu_no = 7
+			me.menu_no = 7
 		</if>
 	</select>
+
+	<insert id="insertReply">
+		insert into reply
+		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
+	</insert>
 </mapper>
