@@ -387,5 +387,13 @@
 		delete from reply
 		where reply_no =#{replyNo}
 	</delete>
+
+	<select id="selectRequestList">
+		select * from content
+		  join board using(content_no)
+		  join menu using(menu_no)
+		  join users using(user_no)
+		where menu_no =#{menuNo} and CONTENT_STATUS ='Y'
+	</select>
   
 </mapper>
