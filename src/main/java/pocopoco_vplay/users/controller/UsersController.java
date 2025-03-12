@@ -379,11 +379,9 @@ public class UsersController {
 		if (!folder.exists())
 			folder.mkdirs();
 
-		if (loginUser.getUserProfile() != null && profile != null) {
+		if (loginUser.getUserProfile() != null) {
 			File f = new File(savePath + "\\" + loginUser.getUserProfile());
-			if (f.exists()) {
 				f.delete();
-			}
 		}
 
 		String renameFileName = null;
@@ -412,5 +410,4 @@ public class UsersController {
 		}
 		return result;
 	}
-
 }
