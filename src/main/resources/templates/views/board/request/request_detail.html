@@ -143,7 +143,7 @@
 		</div>
 
 		<div class="button-group">
-			<button type="button" class="button">목록으로</button>
+			<a th:href="@{/board/request_list(page=${page})}" class="button">목록으로</a>
 			<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
 				<button type="button" id="updateRequest" class="button">수정하기</button>
 				<button type="button" id="deleteModal" class="button">삭제하기</button>
@@ -271,6 +271,8 @@
 			const replyRow = this.closest('tr');
 			const replyDetailTextarea = replyRow.querySelector('td textarea');
 			const replyNo = replyRow.querySelector("input[name='replyId']").value;
+			const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value; // ✅ 원래 댓글 값 가져오기
+
 
 			if (!replyDetailTextarea) {
 				console.error("Textarea 요소를 찾을 수 없습니다.");
@@ -310,6 +312,16 @@
 					}
 				});
 			});
+			replyDetailTextarea.addEventListener('blur', function() {
+				if (!saveButton.classList.contains("saveReply")) return;
+
+				replyDetailTextarea.value = originalReplyDetail;
+				replyDetailTextarea.setAttribute("readonly", true);
+
+				saveButton.textContent = '수정하기';
+				saveButton.classList.remove("saveReply");
+				saveButton.classList.add("updateReply");
+			}, {once: true});
 		});
 	});
 
