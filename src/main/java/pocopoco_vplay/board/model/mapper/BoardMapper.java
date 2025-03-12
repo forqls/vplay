@@ -84,4 +84,6 @@ public interface BoardMapper {
 	int updateReply(Reply r);
 
 	int deleteReply(int replyNo);
+
+	ArrayList<Content> selectRequestList(Content content);
 }

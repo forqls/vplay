@@ -472,5 +472,14 @@ public class BoardController {
 		return bService.deleteReply(replyNo);
 	}
 
+	@GetMapping("filterRequestList")
+	@ResponseBody
+	public ArrayList<Content> filterRequestList(@ModelAttribute Content content) {
+		ArrayList<Content> list = bService.selectRequestList(content);
+		System.out.println("컨텐트" + content);
+		System.out.println("리스트" + list);
+		System.out.println("메뉴넘버" +content.getMenuNo());
+		return list;
+	}
 
 }

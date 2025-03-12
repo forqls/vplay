@@ -33,14 +33,15 @@
 		</div>
 
 		<div class="filters">
-			<button class="filter-btn">
-				<span>Stock Video</span>
-				<i data-lucide="chevron-down"></i>
-			</button>
-			<button class="filter-btn">
-				<span>최신순</span>
-				<i data-lucide="chevron-down"></i>
-			</button>
+			<select class="filter-dropdown" name="menuNo" id="menuNo">
+				<option value="1">video Templates</option>
+				<option value="4">Graphic Templates</option>
+				<option value="5">Stock Video</option>
+				<option value="6">Photos</option>
+				<option value="2">Music</option>
+				<option value="3">Sound Effects</option>
+				<option value="7">Fonts</option>
+			</select>
 		</div>
 	</div>
 
@@ -58,7 +59,7 @@
 			</tr>
 			</thead>
 			<tbody>
-			<tr class="inquiry-list" th:each="c : ${list}">
+			<tr class="request-list" th:each="c : ${list}">
 				<td>[[${c.contentNo}]]</td>
 				<td>[[${c.contentTitle}]]</td>
 				<td>[[${c.menuName}]]</td>
@@ -130,6 +131,43 @@
 				// /board/10/2 - 글번호/페이지번호
 			});
 		}
+
+		document.getElementById("menuNo").addEventListener('change', function() {
+			const menuNo = this.value;
+
+			$.ajax({
+				url:"/board/filterRequestList",
+				data: {menuNo : menuNo},
+				success: data =>{
+					console.log(data);
+					const tbody = document.querySelector('tbody');
+					tbody.innerHTML = "";
+					if(data.length > 0){
+						data.forEach(c => {
+							const row = document.createElement('tr');
+							row.className = "request-list";
+							row.innerHTML = `
+									<td>${c.contentNo}</td>
+									<td>${c.contentTitle}</td>
+									<td>${c.menuName}</td>
+									<td>${c.userNickName}</td>
+									<td>${c.modifyDate}</td>
+									<td>${c.views}</td>
+								`;
+							tbody.appendChild(row);
+						});
+					}else{
+						tbody.innerHTML = "<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>";
+					}
+				},
+				error : data =>{
+					console.log(data);
+					console.log("데이터 로드 중 오류 발생");
+				}
+			});
+
+		});
+
 
 	}
 </script>
