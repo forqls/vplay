@@ -49,17 +49,19 @@
         </main>
     </div>
     <script>
+    const divs = document.querySelector('.video-grid');
+    
+    [...divs.children].map((video, index, array) =>{
+		video.addEventListener('click', function(){
+			const contentNo = video.children[1].children[0].value;
+			console.log(contentNo);
+			location.href = "/board/video-templates/" + contentNo;
+		})
+	})
+    
     window.onload=()=>{
-    	const divs = document.querySelector('.video-grid');
-    	console.log(divs);
     	
-    	[...divs.children].map((video, index, array) =>{
-    		video.addEventListener('click', function(){
-    			const contentNo = video.children[1].children[0].value;
-    			console.log(contentNo);
-    			location.href = "/board/video-templates/" + contentNo;
-    		})
-    	})
+    	console.log(divs);
     	
     	const categoryList = document.querySelector('.category-list');
 //     	console.log(categoryList);
@@ -115,6 +117,12 @@
 								div3.appendChild(p);
 								
 								divs.appendChild(div1);
+								
+								div1.addEventListener('click', function(){
+									  const contentNo = div1.querySelector('input[type=hidden]').value;
+									  console.log(contentNo);
+									  location.href = "/board/video-templates/" + contentNo;
+								});
 							}
 						}
 					})
@@ -160,6 +168,12 @@
 								div3.appendChild(p);
 								
 								divs.appendChild(div1);
+								
+								div1.addEventListener('click', function(){
+									  const contentNo = div1.querySelector('input[type=hidden]').value;
+									  console.log(contentNo);
+									  location.href = "/board/video-templates/" + contentNo;
+								});
 							}
 						}
 					})
