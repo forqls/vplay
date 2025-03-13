@@ -1,5 +1,8 @@
 package pocopoco_vplay.users.controller;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -36,7 +40,6 @@ import pocopoco_vplay.users.model.vo.Users;
 public class UsersController {
 	private final UsersService uService;
 	private final BoardService bService;
-
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 
@@ -99,12 +102,9 @@ public class UsersController {
 			user.setKakaoId(kakaoUser.getKakaoId());
 			user.setLoginType(kakaoUser.getLoginType());
 		}
-
 		System.out.println(user);
-
 		int result = uService.insertUser(user);
 		System.out.println("결과 값은 : " + result);
-
 		return "signup_success";
 
 	}
@@ -115,10 +115,49 @@ public class UsersController {
 	}
 
 	@PostMapping("signIn")
-	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL, HttpSession session) {
+	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL, HttpSession session,RedirectAttributes redirectAttributes) {
 		Users loginUser = uService.signIn(user);
 		if (loginUser != null && bcrypt.matches(user.getUserPw(), loginUser.getUserPw())) {
 			session.setAttribute("loginUser", loginUser);
+			 int dayResult = 0; 
+//			System.out.println("반환값은 : " + uService.getPaymentDate(loginUser));
+			//Timestamp 이새기는 Date보다 좋고 db저장도 쉬운데 , 직접적으로 날짜를 더해주는 함수가 존재하지 않음 그래서 그냥 localDateTime으로 형변환해준후에 plusdays 메소드 써서 30일 더해줘야됨 ㅇㅇ
+			//그 과정에서 스는 함수들이 toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(); 얘네들인데
+			// toInstant() 얘는  Timestamp를 Instant(UTC기준)으로 변환해주고, localDate는 시간정보를 포함하지않는 ㅄ 데이터형이라 atZone(ZoneId.systemDefault())얘를 써줘서 
+			// 현재 시스템의 기본날짜로 세팅해준 후 , toLocalDateTime()을 이용해서 최종적으로 LocalDateTime 객체로 변환해주는 삼단계가 필요함
+			//생각보다 30일날짜만 더하는건데 녹록치않음 ㅅㅂ;
+			Timestamp loginUserPaymentDate = (Timestamp) uService.getPaymentDate(loginUser);
+			if(loginUserPaymentDate == null) {
+				
+			}else {
+				
+				LocalDateTime localDateTime = loginUserPaymentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				
+				Timestamp loginUserPaymentEndDate = Timestamp.valueOf(localDateTime.plusDays(30));
+				//오늘 날짜 가져오기
+				Timestamp today = Timestamp.valueOf(LocalDateTime.now());
+				
+				boolean isPAymentExpired = today.after(loginUserPaymentEndDate);
+				boolean hasSeenAlert = loginUser.isAlertShown();
+				
+				
+				
+				
+				if(isPAymentExpired && !hasSeenAlert) {
+					System.out.println("결제일 한달 경과");
+					
+					dayResult = uService.deleteUserPlan(loginUser);
+					uService.updateAlertShown(loginUser.getUserNo());
+					
+					loginUser = uService.signIn(user);
+					session.setAttribute("loginUser", loginUser);
+					
+					redirectAttributes.addFlashAttribute("showAlert", true);
+				}else {
+					redirectAttributes.addFlashAttribute("showAlert",false);
+				}
+			}
+			
 			if (loginUser.getIsAdmin().equals("Y")) {
 				return "redirect:/admin/dashboard";
 			} else {
@@ -341,14 +380,21 @@ public class UsersController {
 
 	@GetMapping("my_commission")
 	public String myCommission(HttpSession session, Model model) {
-		Users loginUser = (Users) session.getAttribute("loginUser");
-		if (loginUser != null) {
-			model.addAttribute("loginUser", loginUser);
-			return "my_commission";
-		} else {
-			throw new UsersException("로그인이 필요합니다.");
-		}
+	    Users loginUser = (Users) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        int userNo = loginUser.getUserNo();
+	        ArrayList<Content> list = bService.selectMyCommission(userNo);
+	        for (Content content : list) {
+	            Reply reply = bService.countReply(content.getContentNo());
+	            content.setReply(reply);
+	        }
+	        model.addAttribute("list", list);
+	        return "my_commission";
+	    } else {
+	        throw new UsersException("로그인이 필요합니다.");
+	    }
 	}
+
 
 	@GetMapping("my_trash")
 	private String myTrashPage(HttpSession session, Model model) {

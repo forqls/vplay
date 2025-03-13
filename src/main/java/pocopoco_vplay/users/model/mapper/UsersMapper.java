@@ -41,4 +41,14 @@ public interface UsersMapper {
 	Users existUsers(String kakaoId);
 
 	ArrayList<Users> selectTopUser();
+
+	int updateUserPlan(HashMap<String, Object> map);
+
+	Object getPaymentDate(Users loginUser);
+
+	int deleteUserPlan(Users loginUser);
+
+	int updateAlertShown(int userNo);
+
+	int resetAlertShown(int userNo);
 }

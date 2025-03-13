@@ -482,7 +482,14 @@ body {
         </div>
     </div>
 	
-
+	<script>
+	    var showAlert = "[[${showAlert}]]";
+	    
+	    if (showAlert) {
+	    	console.log("123");
+	        alert("결제일이 지났습니다.");
+	    }
+	</script>
 
 </body>
 </html>

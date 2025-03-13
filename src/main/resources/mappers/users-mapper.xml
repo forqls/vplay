@@ -128,8 +128,29 @@
 		fetch first 12 rows only
 	</select>
 	
+	<update id="updateUserPlan">
+		update users 
+		set user_plan = #{userPlan}
+		where user_no = #{userNo}
+	</update>
+	<select id="getPaymentDate">
+		select payment_date from users  join payment using(user_no)
+		where user_no=#{userNo} order by payment_date desc
+		fetch first 1 row only
+	</select>
+	<update id="deleteUserPlan">
+		update users
+		set user_plan = null where user_no=#{userNo}
+	</update>
 	
+	<update id="updateAlertShown">
+		update users
+		set alert_shown=1 where user_no=#{userNo}
+	</update>
 	
-	
+	<update id="resetAlertShown">
+		update users
+		set alert_shown=0 where user_no#{userNo}
+	</update>
 	
 </mapper>
