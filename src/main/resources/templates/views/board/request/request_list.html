@@ -33,14 +33,15 @@
 		</div>
 
 		<div class="filters">
-			<select class="filter-dropdown" name="menuNo" id="menuNo">
-				<option value="1">video Templates</option>
-				<option value="4">Graphic Templates</option>
-				<option value="5">Stock Video</option>
-				<option value="6">Photos</option>
-				<option value="2">Music</option>
-				<option value="3">Sound Effects</option>
-				<option value="7">Fonts</option>
+			<select class="filter-dropdown" name="menuName" id="menuName">
+				<option value="All">All</option>
+				<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
+				<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
+				<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
+				<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
+				<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
+				<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
+				<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
 			</select>
 		</div>
 	</div>
@@ -123,6 +124,7 @@
 	window.onload = () =>{
 		const tbody = document.querySelector('tbody');
 		const tds = tbody.querySelectorAll('td');
+		
 		for(const td of tds){
 			td.addEventListener('click', function(){
 				const trTds = this.parentElement.querySelectorAll('td');
@@ -132,41 +134,20 @@
 			});
 		}
 
-		document.getElementById("menuNo").addEventListener('change', function() {
-			const menuNo = this.value;
-
-			$.ajax({
-				url:"/board/filterRequestList",
-				data: {menuNo : menuNo},
-				success: data =>{
-					console.log(data);
-					const tbody = document.querySelector('tbody');
-					tbody.innerHTML = "";
-					if(data.length > 0){
-						data.forEach(c => {
-							const row = document.createElement('tr');
-							row.className = "request-list";
-							row.innerHTML = `
-									<td>${c.contentNo}</td>
-									<td>${c.contentTitle}</td>
-									<td>${c.menuName}</td>
-									<td>${c.userNickName}</td>
-									<td>${c.modifyDate}</td>
-									<td>${c.views}</td>
-								`;
-							tbody.appendChild(row);
-						});
-					}else{
-						tbody.innerHTML = "<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>";
-					}
-				},
-				error : data =>{
-					console.log(data);
-					console.log("데이터 로드 중 오류 발생");
-				}
-			});
-
+		document.getElementById("menuName").addEventListener('change', function() {
+			const menuName = this.value;
+			console.log(menuName);
+			
+			if(menuName == "All"){
+				location.href= "/board/request_list";
+			}else{
+				location.href= "/board/request_list/" + menuName;
+			}
+			
+			
 		});
+		
+		
 
 
 	}
