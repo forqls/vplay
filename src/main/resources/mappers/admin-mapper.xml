@@ -50,7 +50,7 @@
 		left join category ca on(ca.category_no = coa.category_no)
 		left outer join menu me on(ca.menu_no = me.menu_no)
 		where board_type is null
-		order by co.content_no
+		order by co.content_no desc
 	</select>
 
 	<select id="getrequestPostCount">
