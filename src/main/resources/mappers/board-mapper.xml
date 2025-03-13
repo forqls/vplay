@@ -256,6 +256,9 @@
 		from content
 		join board using(content_no)
 		where board_type = 2
+		<if test="menuNo != null">
+		and menu_no = #{menuNo}
+		</if>
 	</select>
 
 	<select id="selectAllRequestPost">
@@ -265,6 +268,9 @@
 		join menu using(menu_no)
 		join users using(user_no)
 		where board_type = 2 and CONTENT_STATUS = 'Y'
+		<if test="menuNo != null">
+		and menu_no = #{menuNo}
+		</if>
 		order by content_no desc
 	</select>
 

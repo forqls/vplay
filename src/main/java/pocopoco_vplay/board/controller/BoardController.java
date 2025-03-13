@@ -2,6 +2,7 @@ package pocopoco_vplay.board.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -301,12 +302,12 @@ public class BoardController {
 
 	@GetMapping("request_list")
 	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
-
-		int listCount = bService.getrequestPostCount();
+		
+		int listCount = bService.getrequestPostCount(null);
 
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 
-		ArrayList<Content> list = bService.selectAllRequestPost(pi);
+		ArrayList<Content> list = bService.selectAllRequestPost(null ,pi);
 
 		System.out.println("리스트 개수: " + list.size());
 
@@ -317,6 +318,32 @@ public class BoardController {
 		mv.addObject("list", list).addObject("pi", pi);
 		mv.setViewName("request_list");
 		return mv;
+	}
+	
+	@GetMapping("request_list/{menuName}")
+	public String filterRequestList(@RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
+		System.out.println(menuName);
+		Content content = new Content();
+		
+		switch(menuName) {
+		case "video-Templates": content.setMenuNo(1); break;
+		case "Graphic-Templates": content.setMenuNo(4); break;
+		case "Stock-Video": content.setMenuNo(5); break;
+		case "Photos": content.setMenuNo(6); break;
+		case "Music": content.setMenuNo(2); break;
+		case "Sound-Effects": content.setMenuNo(3); break;
+		case "Fonts": content.setMenuNo(7); break;
+		}
+		
+		int listCount = bService.getrequestPostCount(content); // 필터된 데이터 개수 조회
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10); // 페이지네이션 계산
+		
+		ArrayList<Content> list = bService.selectAllRequestPost(content, pi);
+		
+		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
+		
+		return "request_list";
 	}
 
 	@GetMapping("writeRequest")
@@ -472,14 +499,5 @@ public class BoardController {
 		return bService.deleteReply(replyNo);
 	}
 
-	@GetMapping("filterRequestList")
-	@ResponseBody
-	public ArrayList<Content> filterRequestList(@ModelAttribute Content content) {
-		ArrayList<Content> list = bService.selectRequestList(content);
-		System.out.println("컨텐트" + content);
-		System.out.println("리스트" + list);
-		System.out.println("메뉴넘버" +content.getMenuNo());
-		return list;
-	}
 
 }
