@@ -1,5 +1,6 @@
 package pocopoco_vplay.ajax.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,15 +20,17 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.cloudflare.model.service.R2Service;
 import pocopoco_vplay.users.model.vo.Users;
 
 @RestController
-@RequestMapping("{/board/, /users/}")
+@RequestMapping({"/board", "/users"})
 @SessionAttributes("loginUser")
 @RequiredArgsConstructor
 public class AjaxController {
 	
 	private final BoardService bService;
+	private final R2Service r2Service;
 	
 	@PutMapping("like")
 	public int likeAllTemp(@RequestBody HashMap<String, Integer> map, HttpSession session){
@@ -98,7 +101,21 @@ public class AjaxController {
 	}
 	
 	@PatchMapping("profile")
-	public int updateProfile(@RequestParam("profile") MultipartFile file) {
+	public int updateProfile(@RequestParam("profile") MultipartFile file, HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		
+		String fileUrl = null;
+		try {
+			fileUrl = r2Service.uploadFile(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(fileUrl);
+		
+		
+		
+		
 		return 0;
 	}
 		
