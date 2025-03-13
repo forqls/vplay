@@ -20,11 +20,13 @@ public class R2Service {
 	
 	private final S3Client s3Client;
 	private final String bucketName;
+	private final String publicUrl;
 	
 	public R2Service(
 			@Value("${aws.credentials.access-key}") String accessKey,
             @Value("${aws.credentials.secret-key}") String secretKey,
             @Value("${aws.s3.bucket-name}") String bucketName,
+            @Value("${cloudflare.r2.public-url}") String publicUrl,
             @Value("${aws.s3.endpoint}") String endpoint) {
 		
 		 this.s3Client = S3Client.builder()
@@ -33,6 +35,7 @@ public class R2Service {
 	                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey)))
 	                .build();
 	     this.bucketName = bucketName;
+	     this.publicUrl = publicUrl;
 	}
 	
 	public String uploadFile(MultipartFile file) throws IOException {
@@ -44,6 +47,7 @@ public class R2Service {
                         .build(),
                 RequestBody.fromBytes(file.getBytes()));
 
-        return "https://" + bucketName + ".r2.cloudflarestorage.com/" + fileName;
+//        return "https://" + bucketName + ".r2.cloudflarestorage.com/" + fileName;
+          return publicUrl + "/" + fileName;
     }
 }

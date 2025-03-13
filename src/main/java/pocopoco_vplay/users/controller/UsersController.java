@@ -1,10 +1,6 @@
 package pocopoco_vplay.users.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -21,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -30,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Reply;
-import pocopoco_vplay.cloudflare.model.service.R2Service;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
@@ -45,7 +39,6 @@ public class UsersController {
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
 	
-	private final R2Service r2Service;
 
 	@GetMapping("home")
 	public String goHome(HttpSession session) {
