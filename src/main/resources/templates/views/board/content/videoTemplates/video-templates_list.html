@@ -76,7 +76,8 @@
     				}
     			}
     			
-    			console.log(checkboxArr);
+    			let newUrl = "/video-template-list/"; 
+    			
     			if(checkboxArr.length == 0){
     				checkboxArr.length = 0;
     				fetch('/board/video-template-list/empty' ,{
@@ -182,6 +183,14 @@
     		})
     		
     		
+    	})
+    	
+    	const input = document.getElementsByTagName("input")[5];
+    	input.addEventListener('keydown', (event)=>{
+    		if(event.code == 'Enter'){
+    			const search = input.value;
+    			
+    		}
     	})
     }
     </script>

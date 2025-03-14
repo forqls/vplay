@@ -117,6 +117,7 @@ public class AjaxController {
 			try {
 				if(file != null) {
 					fileUrl = r2Service.uploadFile(file);
+					System.out.println(fileUrl);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
