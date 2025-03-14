@@ -84,14 +84,14 @@ public class BoardService {
 		return mapper.allPopularCate(i);
 	}
 
-	public int getrequestPostCount() {
-		return mapper.getrequestPostCount();
+	public int getrequestPostCount(Content content) {
+		return mapper.getrequestPostCount(content);
 	}
 
-	public ArrayList<Content> selectAllRequestPost(PageInfo pi) {
+	public ArrayList<Content> selectAllRequestPost(Content content, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllRequestPost(rowBounds);
+		return mapper.selectAllRequestPost(content,rowBounds);
 	}
 
 	public String selectUser(int userNo) {
