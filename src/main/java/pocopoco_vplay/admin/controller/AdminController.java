@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +34,7 @@ import pocopoco_vplay.users.model.vo.Users;
 public class AdminController {
 	private final AdminService aService;
 	private final BoardService bService;
-	
+
 	@GetMapping("dashboard")
 	public ModelAndView joinDashboard(ModelAndView mv) {
 		int userCount = aService.getUsersCount();
@@ -105,20 +106,43 @@ public class AdminController {
 
 	@GetMapping("inquiry")
 	public ModelAndView joinInquiry(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
-	    int listCount = aService.getInquiryCount();
-	    PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-	    ArrayList<Content> list = aService.selectAllQuiry(pi);
-	    for (Content c : list) {
-	        c.setUserId(aService.selectUser(c.getUserNo()));
-	        Reply reply = bService.selectReply(c.getContentNo());
-	        c.setReply(reply);
-	    }
-	    mv.addObject("list", list)
-	      .addObject("pi", pi)
-	      .setViewName("management_inquiry");
-	    return mv;
+		int listCount = aService.getInquiryCount(null);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		ArrayList<Content> list = aService.selectAllInquiry(null, pi);
+		for (Content c : list) {
+			c.setUserId(aService.selectUser(c.getUserNo()));
+			c.setReply(bService.selectReply(c.getContentNo()));
+		}
+		mv.addObject("list", list).addObject("pi", pi);
+		mv.setViewName("management_inquiry");
+		return mv;
 	}
 
+	@GetMapping("inquiry/{menuName}")
+	public String filterInquiry(@RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
+		System.out.println(menuName);
+		Content content = new Content();
+
+		switch (menuName) {
+		case "system":
+			content.setMenuNo(11);
+			break;
+		case "pay":
+			content.setMenuNo(12);
+			break;
+		case "content":
+			content.setMenuNo(13);
+			break;
+		case "other":
+			content.setMenuNo(14);
+			break;
+		}
+		int listCount = aService.getInquiryCount(content);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		ArrayList<Content> list = aService.selectAllInquiry(content, pi);
+		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
+		return "management_inquiry";
+	}
 
 	@GetMapping("templates")
 	public ModelAndView joinTemplates(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
@@ -210,5 +234,4 @@ public class AdminController {
 			return -1;
 		}
 	}
-
 }
