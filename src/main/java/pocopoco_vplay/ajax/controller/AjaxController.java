@@ -106,41 +106,47 @@ public class AjaxController {
 	@PatchMapping("profile")
 	public int updateProfile(@RequestParam(value = "profile", required = false) MultipartFile file, HttpSession session, @Value("${cloudflare.r2.public-url}") String publicUrl) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
-		HashMap<String,String> map = new HashMap<String, String>();
-		
-		String fileUrl = null;
-		
-		System.out.println("여기까지 옴 ㅋㅋ");
-		
-		
-		try {
-			if(file != null) {
-				fileUrl = r2Service.uploadFile(file);
+		if(loginUser != null) {
+			HashMap<String,String> map = new HashMap<String, String>();
+			
+			String fileUrl = null;
+			
+			System.out.println("여기까지 옴 ㅋㅋ");
+			
+			
+			try {
+				if(file != null) {
+					fileUrl = r2Service.uploadFile(file);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		System.out.println(fileUrl);
-		map.put("userId", loginUser.getUserId());
-		
-		String originalProfile = uService.selectProfile(map);
-		if(originalProfile != null) {
-			String toRemove = publicUrl + "/";
-			String removeProfile = originalProfile.replace(toRemove, "");
+			
+			
+			System.out.println(fileUrl);
+			map.put("userId", loginUser.getUserId());
+			
+			String originalProfile = uService.selectProfile(map);
+			System.out.println(originalProfile);
+			if(originalProfile != null) {
+				String toRemove = publicUrl + "/";
+				String removeProfile = originalProfile.replace(toRemove, "");
 
-			r2Service.deleteFile(removeProfile);
+				r2Service.deleteFile(removeProfile);
+			}
+			
+			
+			map.put("userProfile", fileUrl);
+			int result = uService.updateProfile(map);
+			if(result > 0) {
+				loginUser.setUserProfile(fileUrl);
+				session.setAttribute("loginUser", loginUser);
+			}
+			return result;
+		}else {
+			return 0;
 		}
 		
-		
-		map.put("userProfile", fileUrl);
-		int result = uService.updateProfile(map);
-		if(result > 0) {
-			loginUser.setUserProfile(fileUrl);
-			session.setAttribute("loginUser", loginUser);
-		}
-		return result;
 	}
 		
 }
