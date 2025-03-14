@@ -150,7 +150,7 @@
 	
 	<update id="resetAlertShown">
 		update users
-		set alert_shown=0 where user_no#{userNo}
+		set alert_shown=0 where user_no=#{userNo}
 	</update>
 	
 </mapper>
