@@ -2,6 +2,8 @@ package pocopoco_vplay.board.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -91,6 +93,7 @@ public class BoardService {
 	public ArrayList<Content> selectAllRequestPost(Content content, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+
 		return mapper.selectAllRequestPost(content,rowBounds);
 	}
 
@@ -153,7 +156,7 @@ public class BoardService {
 	public ArrayList<Content> selectContentTop() {
 		return mapper.selectContentTop();
 	}
-  
+
 	public int insertReply(Reply reply) {
 		return mapper.insertReply(reply);
 	}
@@ -166,10 +169,20 @@ public class BoardService {
 		return mapper.countReply(contentNo);
 	}
 
-	public int updateReply(Reply r) { return mapper.updateReply(r);}
+	public int updateReply(Reply r) {
+		return mapper.updateReply(r);
+	}
 
-	public int deleteReply(int replyNo) { return mapper.deleteReply(replyNo);}
+	public int deleteReply(int replyNo) {
+		return mapper.deleteReply(replyNo);
+	}
 
-	public ArrayList<Content> selectRequestList(Content content) {return mapper.selectRequestList(content);}
+	public ArrayList<Content> selectRequestList(Content content) {
+		return mapper.selectRequestList(content);
+	}
+
+	public List<Content> searchRequest(Map<String, Object> searchValue) {
+		return mapper.searchRequest(searchValue);
+	}
+
 }
-

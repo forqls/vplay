@@ -28,7 +28,7 @@
 	<!-- Search and Filter -->
 	<div class="search-filter">
 		<div class="search-bar">
-			<input type="text" placeholder="search">
+			<input type="search" placeholder="search">
 			<i data-lucide="search"></i>
 		</div>
 
@@ -143,12 +143,25 @@
 			}else{
 				location.href= "/board/request_list/" + menuName;
 			}
-			
-			
+		});
+
+		document.querySelector('.search-bar input').addEventListener('keyup', function(event){
+			const value = this.value;
+			console.log("value"+ value);
+			if(event.key === "Enter"){
+				search(value); //value를 search함수에 전달하는거임
+			}
+
 		});
 		
 		
 
+		function search(searchValue){ //searchValue는 value를 전달받은거임
+			console.log("searchValue"+ searchValue);
+
+			window.location.href = "/board/request_list?search=" + searchValue);
+
+		}
 
 	}
 </script>

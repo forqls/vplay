@@ -2,6 +2,7 @@ package pocopoco_vplay.board.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -309,7 +310,7 @@ public class BoardController {
 
 		ArrayList<Content> list = bService.selectAllRequestPost(null ,pi);
 
-		System.out.println("리스트 개수: " + list.size());
+		//System.out.println("리스트 개수: " + list.size());
 
 		for (Content c : list) {
 			c.setUserId(bService.selectUser(c.getUserNo()));
@@ -343,6 +344,16 @@ public class BoardController {
 		
 		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
 		
+		return "request_list";
+	}
+	@GetMapping("request_list/{menuName}/{searchValue}")
+	public String searchRequest(@RequestParam(value="page", defaultValue = "1") int currentPage, @RequestParam Map<String, Object> searchValue, Model model) {
+		Content content = new Content();
+		List<Content> result = bService.searchRequest(searchValue);
+		int listCount = bService.getrequestPostCount(content); // 필터된 데이터 개수 조회
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		System.out.println("searchValue" + searchValue);
+		model.addAttribute("searchValue", searchValue);
 		return "request_list";
 	}
 
