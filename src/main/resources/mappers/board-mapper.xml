@@ -374,6 +374,28 @@
 		where content_no =#{bId}
 	</update>
 
+	
+
+	<select id="selectContentTop">
+	    SELECT 
+	    c.content_no, 
+	    c.content_title, 
+	    c.create_date, 
+	    c.modify_date, 
+	    c.user_no, 
+	    c.views, 
+	    u.user_nickname,
+	    COUNT(l.content_no) AS like_count
+		FROM content c
+		JOIN users u ON c.user_no = u.user_no 
+		LEFT JOIN likes l ON c.content_no = l.content_no 
+		GROUP BY c.content_no, c.content_title, c.create_date, 
+        c.modify_date, c.user_no, c.views, u.user_nickname
+		ORDER BY c.views DESC
+		fetch first 12 rows only
+	</select>	
+
+
 	<select id="selectOrderByViews">
 	    select * from content order by views desc
 	    fetch first 12 rows only 
@@ -383,6 +405,7 @@
 		insert into reply
 		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
 	</insert>
+
 
 	<update id="updateReply">
 		update reply
@@ -401,5 +424,4 @@
 		  join users using(user_no)
 		where menu_no =#{menuNo} and CONTENT_STATUS ='Y'
 	</select>
-  
 </mapper>

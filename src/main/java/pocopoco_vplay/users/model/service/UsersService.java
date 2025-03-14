@@ -77,6 +77,31 @@ public class UsersService {
 		return mapper.selectTopUser();
 	}
 
+	public int updateUserPlan(HashMap<String, Object> map) {
+		return mapper.updateUserPlan(map);
+	}
+
+	public Object getPaymentDate(Users loginUser) {
+		return mapper.getPaymentDate(loginUser);
+		
+	}
+
+	public int deleteUserPlan(Users loginUser) {
+		return mapper.deleteUserPlan(loginUser);
+	}
+
+	public int updateAlertShown(int userNo) {
+		return mapper.updateAlertShown(userNo);
+		
+	}
+
+	public int resetAlertShown(int userNo) {
+		int result =mapper.resetAlertShown(userNo);
+		System.out.println("서비스에서 의 값 : " + result);
+		return result;
+		
+	}
+
 	public int updateProfile(HashMap<String, String> map) {
 		return mapper.updateProfile(map);
 	}
@@ -84,6 +109,5 @@ public class UsersService {
 	public String selectProfile(HashMap<String, String> map) {
 		return mapper.selectProfile(map);
 	}
-
 
 }

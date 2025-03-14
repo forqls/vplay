@@ -246,12 +246,12 @@ body {
 				</ul>
 				<button class="start-button" th:if="${loginUser == null or loginUser.userPlan != 'All Rounder'}">Start now</button>
 			</div>
-
+			<input type="text" id="userEmail" hidden th:value="${loginUser != null ? loginUser.userEmail:''}"/>
 			<!-- Graphic Pro 카드 -->
 			<div th:class="${loginUser != null and loginUser.userPlan == 'Graphic Pro'} ? 'card current-plan' : 'card'">
 				<h3>Graphic Pro</h3>
 				<div class="price">
-					12,500<span>/30</span>
+					1,00<span>/30</span>
 				</div>
 				<ul class="features">
 					<li>FREE Graphic Templates & Photo</li>
@@ -277,5 +277,70 @@ body {
 		</div>
 		<p class="footer-text">가격은 한국 원(₩) 기준이며, 부가세가 포함된 가격입니다. VPLAY 의 사용자 약관이 적용됩니다.</p>
 	</div>
+	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	<script>
+		IMP.init("imp64726784");
+		const priceBtn = document.querySelectorAll('.start-button');
+		const userEmail = document.getElementById('userEmail').value;
+		priceBtn.forEach(btn=>{
+			btn.addEventListener('click',()=>{
+				const card = btn.closest('.card');
+				const price = card.querySelector('.price').textContent;
+				const priceName = card.querySelector('h3').textContent.trim();
+// 				console.log(price.innerHTML);
+				console.log(userEmail);
+				const realPrice = price.split('/')[0].trim();
+// 				console.log(realPrice);
+				
+				const realPriceSlice = realPrice.split(',');
+				const realRealPrice = realPriceSlice[0].trim() + realPriceSlice[1].trim();
+// 				console.log(realRealPrice);
+				
+				IMP.request_pay({
+					pg: "html5_inicis.INIpayTest", // 사용할 PG사
+					pay_method: "card", // 결제 방식
+					merchant_uid: "order_" + new Date().getTime(), // 주문 고유 번호
+					amount: realRealPrice, // 결제 금액
+					name:priceName,
+					buyer_email:userEmail
+				},function(rsp){
+					if(rsp.success){
+						alert("결제가 완료됐슴 결제 금액 ->"+ parseInt(rsp.paid_amount,10));
+						
+						fetch('/payment/success',{
+							method:'POST',
+							headers:{
+								"Content-Type":"application/json"
+							},
+							body:JSON.stringify({
+								paymentId:rsp.imp_uid,
+								amount : rsp.paid_amount
+							})
+						}).then(response=>{
+							if(response.ok){
+								alert("결제 성공");
+								console.log(response);
+								location.reload();
+							}else{
+								alert("결제 실패");
+							}
+						});
+					}else{
+						alert(rsp.error_msg);
+					}
+				});
+			});
+			
+		});
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</script>
 </body>
 </html>

@@ -42,6 +42,16 @@ public interface UsersMapper {
 
 	ArrayList<Users> selectTopUser();
 
+	int updateUserPlan(HashMap<String, Object> map);
+
+	Object getPaymentDate(Users loginUser);
+
+	int deleteUserPlan(Users loginUser);
+
+	int updateAlertShown(int userNo);
+
+	int resetAlertShown(int userNo);
+
 	int updateProfile(HashMap<String, String> map);
 
 	String selectProfile(HashMap<String, String> map);
