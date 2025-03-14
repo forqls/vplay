@@ -32,4 +32,5 @@ public class Content {
 	private int likeTo;
 	private int menuNo;
 	private Reply reply;
+	private int overallScore;
 }

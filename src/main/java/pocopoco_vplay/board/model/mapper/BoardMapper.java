@@ -75,6 +75,9 @@ public interface BoardMapper {
 
 	int deleteBoard(int bId);
 
+
+	ArrayList<Content> selectContentTop();
+
 	ArrayList<Content> selectOrderByViews();
 
 	ArrayList<Content> allTemplateList(HashMap<String, Object> map);

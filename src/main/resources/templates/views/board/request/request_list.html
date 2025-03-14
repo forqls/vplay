@@ -137,8 +137,8 @@
 		document.getElementById("menuName").addEventListener('change', function() {
 			const menuName = this.value;
 			console.log(menuName);
-
-			if(menuName === "All"){
+			
+			if(menuName == "All"){
 				location.href= "/board/request_list";
 			}else{
 				location.href= "/board/request_list/" + menuName;
@@ -153,6 +153,8 @@
 			}
 
 		});
+		
+		
 
 		function search(searchValue){ //searchValue는 value를 전달받은거임
 			console.log("searchValue"+ searchValue);

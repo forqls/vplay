@@ -17,9 +17,9 @@ public interface AdminMapper {
 
 	ArrayList<Users> selectAllUser(RowBounds rowBounds);
 
-	int getInquiryCount();
+	int getInquiryCount(Content content);
 
-	ArrayList<Content> selectAllQuiry(RowBounds rowBounds);
+	ArrayList<Content> selectAllInquiry(Content content, RowBounds rowBounds);
 
 	String selectUser(int userNo);
 
@@ -42,4 +42,5 @@ public interface AdminMapper {
 	int countMenuTemp(int i);
 
 	int insertReply(Reply reply);
+
 }

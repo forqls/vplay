@@ -1,10 +1,9 @@
 package pocopoco_vplay.users.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -43,6 +42,7 @@ public class UsersController {
 	private final BoardService bService;
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
+	
 
 	@GetMapping("home")
 	public String goHome(HttpSession session) {
@@ -116,10 +116,50 @@ public class UsersController {
 	}
 
 	@PostMapping("signIn")
-	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL, HttpSession session) {
+	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL, HttpSession session,RedirectAttributes redirectAttributes) {
 		Users loginUser = uService.signIn(user);
 		if (loginUser != null && bcrypt.matches(user.getUserPw(), loginUser.getUserPw())) {
 			session.setAttribute("loginUser", loginUser);
+			 int dayResult = 0; 
+//			System.out.println("반환값은 : " + uService.getPaymentDate(loginUser));
+			//Timestamp 이새기는 Date보다 좋고 db저장도 쉬운데 , 직접적으로 날짜를 더해주는 함수가 존재하지 않음 그래서 그냥 localDateTime으로 형변환해준후에 plusdays 메소드 써서 30일 더해줘야됨 ㅇㅇ
+			//그 과정에서 스는 함수들이 toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(); 얘네들인데
+			// toInstant() 얘는  Timestamp를 Instant(UTC기준)으로 변환해주고, localDate는 시간정보를 포함하지않는 ㅄ 데이터형이라 atZone(ZoneId.systemDefault())얘를 써줘서 
+			// 현재 시스템의 기본날짜로 세팅해준 후 , toLocalDateTime()을 이용해서 최종적으로 LocalDateTime 객체로 변환해주는 삼단계가 필요함
+			//생각보다 30일날짜만 더하는건데 녹록치않음 ㅅㅂ;
+			Timestamp loginUserPaymentDate = (Timestamp) uService.getPaymentDate(loginUser);
+			if(loginUserPaymentDate == null) {
+				
+			}else {
+				
+				LocalDateTime localDateTime = loginUserPaymentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				
+				Timestamp loginUserPaymentEndDate = Timestamp.valueOf(localDateTime.plusDays(30));
+				//오늘 날짜 가져오기
+				Timestamp today = Timestamp.valueOf(LocalDateTime.now());
+				
+				boolean isPAymentExpired = today.after(loginUserPaymentEndDate);
+				boolean hasSeenAlert = loginUser.isAlertShown();
+				
+				
+				
+				
+				if(isPAymentExpired && !hasSeenAlert) {
+					System.out.println("결제일 한달 경과");
+					
+					dayResult = uService.deleteUserPlan(loginUser);
+					uService.updateAlertShown(loginUser.getUserNo());
+					
+					loginUser = uService.signIn(user);
+					session.setAttribute("loginUser", loginUser);
+					
+					redirectAttributes.addFlashAttribute("showAlert", true);
+				}else {
+					redirectAttributes.addFlashAttribute("showAlert",false);
+				}
+				System.out.println(isPAymentExpired);
+			}
+			
 			if (loginUser.getIsAdmin().equals("Y")) {
 				return "redirect:/admin/dashboard";
 			} else {
@@ -370,44 +410,4 @@ public class UsersController {
 		}
 	}
 
-	@PostMapping("profile")
-	@ResponseBody
-	public int updateProfile(@RequestParam(value = "profile", required = false) MultipartFile profile, HttpSession session) {
-		Users loginUser = (Users) session.getAttribute("loginUser");
-		String savePath = "c:\\profiles";
-		File folder = new File(savePath);
-		if (!folder.exists())
-			folder.mkdirs();
-
-		if (loginUser.getUserProfile() != null) {
-			File f = new File(savePath + "\\" + loginUser.getUserProfile());
-				f.delete();
-		}
-
-		String renameFileName = null;
-		if (profile != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			int ranNum = (int) (Math.random() * 100000);
-			String originFileName = profile.getOriginalFilename();
-			renameFileName = sdf.format(new Date()) + ranNum + originFileName.substring(originFileName.lastIndexOf("."));
-			try {
-				profile.transferTo(new File(folder + "\\" + renameFileName));
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-				return 0;
-			}
-		} else {
-			renameFileName = null;
-		}
-
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("userId", loginUser.getUserId());
-		map.put("userProfile", renameFileName);
-		int result = uService.updateProfile(map);
-		if (result > 0) {
-			loginUser.setUserProfile(renameFileName);
-			session.setAttribute("loginUser", loginUser);
-		}
-		return result;
-	}
 }

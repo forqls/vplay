@@ -7,7 +7,7 @@
 		where user_id=#{id}
 	</select>
 
-	<!-- 로그인 -->
+<!-- 로그인 -->
 	<select id="signIn">
 		select *
 		from users
@@ -15,33 +15,33 @@
 	</select>
 
 	<insert id="insertUser">
-		insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE,LOGIN_TYPE,KAKAO_ID
-		) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, 'DEFAULT_IMG.JPG',#{loginType},#{kakaoId})
+		  insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE,LOGIN_TYPE,KAKAO_ID
+    ) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, 'DEFAULT_IMG.JPG',#{loginType},#{kakaoId})
 	</insert>
-
+	
 	<select id="selectMyProject" resultType="map">
-		SELECT
-		c.content_title, c.VIEWS,
-		c.content_no,
-		(SELECT COUNT(*) FROM likes l2 WHERE l2.content_no = c.content_no) AS like_count
-		FROM content c
+		SELECT 
+	    c.content_title, c.VIEWS,
+	    c.content_no, 
+	    (SELECT COUNT(*) FROM likes l2 WHERE l2.content_no = c.content_no) AS like_count
+		FROM content c  
 		left JOIN likes l ON c.content_no = l.content_no
 		left join board b on c.content_no = b.content_no
-		left JOIN content_category on c.content_no = content_category.content_no
-		left join category on content_category.category_no = category.category_no
-		left JOIN menu ON category.menu_no = menu.menu_no
+        left JOIN content_category on c.content_no = content_category.content_no
+        left join category on content_category.category_no = category.category_no
+        left JOIN menu ON category.menu_no = menu.menu_no 
 		WHERE l.user_no =#{id} and b.board_type is null and menu_name is not null
 		GROUP BY c.content_no, c.content_title, c.views
 	</select>
-
+	
 	<select id="selectMyRealProjects">
-		select c.*,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count , b.board_type,m.menu_name
+       select c.*,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count , b.board_type,m.menu_name
 		from content c
-		left join board b on c.content_no = b.content_no
-		left JOIN content_category cc on c.content_no = cc.content_no
-		left join category ccc on cc.category_no = ccc.category_no
-		left JOIN menu m ON ccc.menu_no = m.menu_no
-		where c.user_no=#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='Y'
+            left join board b on c.content_no = b.content_no
+            left JOIN content_category cc on c.content_no = cc.content_no
+            left join category ccc on cc.category_no = ccc.category_no
+            left JOIN menu m ON ccc.menu_no = m.menu_no 
+        where c.user_no=#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='Y'
 	</select>
 
 	<select id="selectuserIdPhone">
@@ -49,7 +49,7 @@
 		FROM USERS
 		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone}
 	</select>
-
+	
 	<select id="findfollow">
 		select count(*)
 		from subscribe
@@ -62,22 +62,22 @@
 		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone} AND USER_EMAIL =#{userEmail}
 	</select>
 
-	<update id="updateInfo">
-		update users
-		set user_name = #{userName},
-		user_nickname = #{userNickname},
-		user_phone = #{userPhone},
-		user_email = #{userEmail},
-		user_birth = #{userBirth},
-		user_gender = #{userGender},
-		user_comment = #{userComment}
-		where user_no = #{userNo}
-	</update>
-
+  <update id="updateInfo">
+      update users
+      set user_name = #{userName},
+          user_nickname = #{userNickname},
+          user_phone = #{userPhone},
+          user_email = #{userEmail},
+          user_birth = #{userBirth},
+          user_gender = #{userGender},
+          user_comment = #{userComment}
+      where user_no = #{userNo}
+  </update>
+  
 	<update id="changePw">
-		update users
-		set user_pw = #{userPw}
-		where user_no = #{userNo}
+	    update users
+	    set user_pw = #{userPw}
+	    where user_no = #{userNo}
 	</update>
 
 	<select id="findPw">
@@ -103,31 +103,63 @@
 		FROM USERS
 		WHERE LOGIN_TYPE='K' AND USER_ID IS NULL AND KAKAO_ID=#{KAKAOID}
 	</select>
-
+	
 	<select id="selectTopUser">
-		select U.USER_NO,
-		U.USER_ID,
-		U.USER_NICKNAME,
-		U.USER_NAME,
-		U.USER_PHONE,
-		U.USER_EMAIL,
-		U.USER_COMMENT, count(s.subscribe_no) as subscriber
-		from users u
+		select     U.USER_NO, 
+	    U.USER_ID, 
+	    U.USER_NICKNAME, 
+	    U.USER_NAME, 
+	    U.USER_PHONE, 
+	    U.USER_EMAIL, 
+	    U.USER_COMMENT, count(s.subscribe_no) as subscriber
+		from users u 
 		join subscribe s on u.user_no = s.creater_no
-		group by U.USER_NO,
-		U.USER_ID,
-		U.USER_NICKNAME,
-		U.USER_NAME,
-		U.USER_PHONE,
-		U.USER_EMAIL,
-		U.USER_COMMENT
+		group by U.USER_NO, 
+	    U.USER_ID, 
+	    U.USER_NICKNAME, 
+	    U.USER_NAME, 
+	    U.USER_PHONE, 
+	    U.USER_EMAIL, 
+	    U.USER_COMMENT
 		order by subscriber desc
 		fetch first 12 rows only
 	</select>
+	
+	<update id="updateUserPlan">
+		update users 
+		set user_plan = #{userPlan}
+		where user_no = #{userNo}
+	</update>
+	<select id="getPaymentDate">
+		select payment_date from users  join payment using(user_no)
+		where user_no=#{userNo} order by payment_date desc
+		fetch first 1 row only
+	</select>
+	<update id="deleteUserPlan">
+		update users
+		set user_plan = null where user_no=#{userNo}
+	</update>
+	
+	<update id="updateAlertShown">
+		update users
+		set alert_shown=1 where user_no=#{userNo}
+	</update>
+	
+	<update id="resetAlertShown">
+		update users
+		set alert_shown=0 where user_no=#{userNo}
+	</update>
 
 	<update id="updateProfile">
 		update users
 		set user_profile = #{userProfile}
 		where user_id = #{userId}
 	</update>
+	
+	<select id="selectProfile">
+		select user_profile
+		from users
+		where user_id = #{userId}
+	</select>
+	
 </mapper>

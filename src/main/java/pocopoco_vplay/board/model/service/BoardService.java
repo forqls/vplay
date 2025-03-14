@@ -93,7 +93,8 @@ public class BoardService {
 	public ArrayList<Content> selectAllRequestPost(Content content, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllRequestPost(content, rowBounds);
+
+		return mapper.selectAllRequestPost(content,rowBounds);
 	}
 
 	public String selectUser(int userNo) {
@@ -152,8 +153,8 @@ public class BoardService {
 		return mapper.deleteBoard(bId);
 	}
 
-	public ArrayList<Content> selectOrderByViews() {
-		return mapper.selectOrderByViews();
+	public ArrayList<Content> selectContentTop() {
+		return mapper.selectContentTop();
 	}
 
 	public int insertReply(Reply reply) {

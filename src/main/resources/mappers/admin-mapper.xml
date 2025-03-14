@@ -17,14 +17,21 @@
 		from content
 		join board using(content_no)
 		where board_type = 1
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
 	</select>
 
-	<select id="selectAllQuiry">
+	<select id="selectAllInquiry">
 		select *
 		from content
 		join board using(content_no)
-		join MENU using(menu_no)
+		join menu using(menu_no)
+		join users using(user_no)
 		where board_type = 1
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
 		order by content_no desc
 	</select>
 

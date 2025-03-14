@@ -346,7 +346,6 @@ public class BoardController {
 		
 		return "request_list";
 	}
-
 	@GetMapping("request_list/{menuName}/{searchValue}")
 	public String searchRequest(@RequestParam(value="page", defaultValue = "1") int currentPage, @RequestParam Map<String, Object> searchValue, Model model) {
 		Content content = new Content();
