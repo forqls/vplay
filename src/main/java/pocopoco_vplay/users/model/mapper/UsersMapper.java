@@ -43,4 +43,7 @@ public interface UsersMapper {
 	ArrayList<Users> selectTopUser();
 
 	int updateProfile(HashMap<String, String> map);
+
+	String selectProfile(HashMap<String, String> map);
+
 }
