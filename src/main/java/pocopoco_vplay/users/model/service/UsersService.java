@@ -81,4 +81,9 @@ public class UsersService {
 		return mapper.updateProfile(map);
 	}
 
+	public String selectProfile(HashMap<String, String> map) {
+		return mapper.selectProfile(map);
+	}
+
+
 }

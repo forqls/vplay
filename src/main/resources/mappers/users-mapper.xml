@@ -130,4 +130,11 @@
 		set user_profile = #{userProfile}
 		where user_id = #{userId}
 	</update>
+	
+	<select id="selectProfile">
+		select user_profile
+		from users
+		where user_id = #{userId}
+	</select>
+	
 </mapper>

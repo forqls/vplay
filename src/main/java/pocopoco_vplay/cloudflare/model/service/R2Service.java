@@ -10,9 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
@@ -47,7 +49,24 @@ public class R2Service {
                         .build(),
                 RequestBody.fromBytes(file.getBytes()));
 
-//        return "https://" + bucketName + ".r2.cloudflarestorage.com/" + fileName;
           return publicUrl + "/" + fileName;
+          
     }
+	
+	public boolean deleteFile(String fileName) {
+		 try {
+		        DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+		                .bucket(bucketName)
+		                .key(fileName)
+		                .build();
+		
+		        s3Client.deleteObject(deleteRequest);
+		        System.out.println("✅ 파일 삭제 성공: " + fileName);
+		        return true;
+		    } catch (SdkException e) {
+		        System.err.println("❌ 파일 삭제 실패: " + fileName);
+		        e.printStackTrace();
+		        return false;
+		    }
+	}
 }

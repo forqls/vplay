@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
+import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
 @RestController
@@ -30,6 +32,7 @@ import pocopoco_vplay.users.model.vo.Users;
 public class AjaxController {
 	
 	private final BoardService bService;
+	private final UsersService uService;
 	private final R2Service r2Service;
 	
 	@PutMapping("like")
@@ -101,22 +104,43 @@ public class AjaxController {
 	}
 	
 	@PatchMapping("profile")
-	public int updateProfile(@RequestParam("profile") MultipartFile file, HttpSession session) {
+	public int updateProfile(@RequestParam(value = "profile", required = false) MultipartFile file, HttpSession session, @Value("${cloudflare.r2.public-url}") String publicUrl) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
+		HashMap<String,String> map = new HashMap<String, String>();
 		
 		String fileUrl = null;
+		
+		System.out.println("여기까지 옴 ㅋㅋ");
+		
+		
 		try {
-			fileUrl = r2Service.uploadFile(file);
+			if(file != null) {
+				fileUrl = r2Service.uploadFile(file);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		
 		System.out.println(fileUrl);
+		map.put("userId", loginUser.getUserId());
+		
+		String originalProfile = uService.selectProfile(map);
+		if(originalProfile != null) {
+			String toRemove = publicUrl + "/";
+			String removeProfile = originalProfile.replace(toRemove, "");
+
+			r2Service.deleteFile(removeProfile);
+		}
 		
 		
-		
-		
-		return 0;
+		map.put("userProfile", fileUrl);
+		int result = uService.updateProfile(map);
+		if(result > 0) {
+			loginUser.setUserProfile(fileUrl);
+			session.setAttribute("loginUser", loginUser);
+		}
+		return result;
 	}
 		
 }
