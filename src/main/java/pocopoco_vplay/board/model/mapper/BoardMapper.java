@@ -2,6 +2,8 @@ package pocopoco_vplay.board.model.mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -86,4 +88,6 @@ public interface BoardMapper {
 	int deleteReply(int replyNo);
 
 	ArrayList<Content> selectRequestList(Content content);
+
+	List<Content> searchRequest(Map<String, Object> searchValue);
 }
