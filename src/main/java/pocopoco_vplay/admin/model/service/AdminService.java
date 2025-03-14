@@ -28,14 +28,14 @@ public class AdminService {
 		return mapper.selectAllUser(rowBounds);
 	}
 
-	public int getInquiryCount() {
-		return mapper.getInquiryCount();
+	public int getInquiryCount(Content content) {
+		return mapper.getInquiryCount(content);
 	}
 
-	public ArrayList<Content> selectAllQuiry(PageInfo pi) {
+	public ArrayList<Content> selectAllInquiry(Content content, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllQuiry(rowBounds);
+		return mapper.selectAllInquiry(content, rowBounds);
 	}
 
 	public String selectUser(int userNo) {
