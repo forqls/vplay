@@ -65,10 +65,6 @@ public class BoardService {
 		return mapper.selectReply(contentNo);
 	}
 
-	public ArrayList<Content> allTemplateList(String menuName) {
-		return mapper.allTemplateList(menuName);
-	}
-
 	public int updateInquiry(Content inquiry) {
 		int result1 = mapper.updateInquiry(inquiry);
 		int result2 = mapper.updateBoard(inquiry);
@@ -88,14 +84,14 @@ public class BoardService {
 		return mapper.allPopularCate(i);
 	}
 
-	public int getrequestPostCount() {
-		return mapper.getrequestPostCount();
+	public int getrequestPostCount(Content content) {
+		return mapper.getrequestPostCount(content);
 	}
 
-	public ArrayList<Content> selectAllRequestPost(PageInfo pi) {
+	public ArrayList<Content> selectAllRequestPost(Content content, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllRequestPost(rowBounds);
+		return mapper.selectAllRequestPost(content,rowBounds);
 	}
 
 	public String selectUser(int userNo) {
@@ -162,7 +158,18 @@ public class BoardService {
 		return mapper.insertReply(reply);
 	}
 
+	public ArrayList<Content> allTemplateList(HashMap<String, Object> map) {
+		return mapper.allTemplateList(map);
+	}
+
 	public Reply countReply(int contentNo) {
 		return mapper.countReply(contentNo);
 	}
+
+	public int updateReply(Reply r) { return mapper.updateReply(r);}
+
+	public int deleteReply(int replyNo) { return mapper.deleteReply(replyNo);}
+
+	public ArrayList<Content> selectRequestList(Content content) {return mapper.selectRequestList(content);}
 }
+

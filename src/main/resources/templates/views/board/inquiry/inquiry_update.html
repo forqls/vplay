@@ -155,7 +155,7 @@ textarea {
 		    .then(response => {
 		        if(response.ok) {
 		            alert('수정이 완료되었습니다!');
-		            window.location.href = '/users/my_inquiry';
+		            window.location.href = '/board/inquiryDetail?contentNo=[[${inquiry.contentNo}]]';
 		        } else {
 		            alert('수정 중 오류가 발생했습니다.');
 		        }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPLAY - 템플릿 게시물 관리</title>
+<link href="/css/admin/admin_page.css" rel="stylesheet">
+</head>
+<body>
+	<div th:replace="~{admin_sidebar}"></div>
+	<main class="main-content">
+		<h1 class="page-title">템플릿 게시물 관리</h1>
+		<div class="content-card">
+			<div class="search-bar">
+				<input type="text" placeholder="Search">
+				<button type="button">
+					<svg viewBox="0 0 24 24" width="20" height="20">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+				</button>
+			</div>
+
+			<div class="table-container">
+				<table>
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>template type</th>
+							<th>User ID</th>
+							<th>title</th>
+							<th>inquiry date</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="request-list" th:each="t : ${list}">
+							<td>[[${t.contentNo}]]</td>
+							<td>[[${t.menuName}]]</td>
+							<td>[[${t.userId}]]</td>
+							<td>[[${t.contentTitle}]]</td>
+							<td>[[${t.modifyDate}]]</td>
+							<td><span class="status" th:data-contentno="${t.contentNo}" th:onclick="updateStatus(this)" th:classappend="${t.contentStatus == 'Y' ? 'active' : 'inactive'}">[[${t.contentStatus}]]</span></td>
+							<td>⋮</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="pagination">
+				<!-- 이전 -->
+				<ul>
+					<th:block th:if="${pi.currentPage >1}">
+						<li class="prev"><a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous"> < </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage <=1}">
+						<li class="prev"><a aria-label="Previous"> < </a></li>
+					</th:block>
+					<!-- 숫자 -->
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a></li>
+					<!-- 다음 -->
+					<th:block th:if="${pi.currentPage < pi.MaxPage}">
+						<li class="next"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
+						<li class="next"><a aria-label="Next"> > </a></li>
+					</th:block>
+				</ul>
+			</div>
+		</div>
+	</main>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+        function updateStatus(element) {
+            const currentStatus = element.innerText;
+            const newStatus = currentStatus === "Y" ? "N" : "Y";
+            const contentNo = element.getAttribute("data-contentno");
+
+            $.ajax({
+                url: "/admin/rupdate",
+                data: { contentNo: contentNo, contentStatus: newStatus },
+                success: data => {
+                    if (data == 1) {
+                        element.innerText = newStatus;
+                        element.classList.remove(currentStatus === "Y" ? "active" : "inactive");
+                        element.classList.add(newStatus === "Y" ? "active" : "inactive");
+                    }
+                },
+                error: data => console.log(data)
+            });
+        }
+    </script>
+</body>
+</html>

@@ -39,15 +39,13 @@ public interface BoardMapper {
 
 	Reply selectReply(int contentNo);
 
-	ArrayList<Content> allTemplateList(@Param("menuName") String menuName);
-
 	ArrayList<Content> allCategory(@Param("menuNo") int i);
 
 	ArrayList<Content> allPopularCate(int i);
 
-	int getrequestPostCount();
+	int getrequestPostCount(Content content);
 
-	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
+	ArrayList<Content> selectAllRequestPost(Content content, RowBounds rowBounds);
 
 	String selectUser(int userNo);
 
@@ -80,7 +78,15 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectOrderByViews();
 
+	ArrayList<Content> allTemplateList(HashMap<String, Object> map);
+
 	int insertReply(Reply reply);
 
 	Reply countReply(int contentNo);
+
+	int updateReply(Reply r);
+
+	int deleteReply(int replyNo);
+
+	ArrayList<Content> selectRequestList(Content content);
 }

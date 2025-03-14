@@ -143,7 +143,7 @@
 		</div>
 
 		<div class="button-group">
-			<button type="button" class="button">목록으로</button>
+			<a th:href="@{/board/request_list(page=${page})}" class="button">목록으로</a>
 			<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
 				<button type="button" id="updateRequest" class="button">수정하기</button>
 				<button type="button" id="deleteModal" class="button">삭제하기</button>
@@ -209,7 +209,7 @@
 						<input type="hidden" th:value="${r.replyNo}" name="replyId">
 						<span class="updel updateReply">수정하기</span>
 						&nbsp;
-						<span class="updel">삭제하기</span>
+						<span class="updel deleteReply">삭제하기</span>
 						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
 					</th:block>
 				</td>
@@ -267,19 +267,98 @@
 
 	}
 	document.querySelectorAll('.updateReply').forEach(button => {
-		button.addEventListener('click', (event)=>{
-			const replyRow = event.target.closest('tr');
+		button.addEventListener('click', function() {
+			const replyRow = this.closest('tr');
 			const replyDetailTextarea = replyRow.querySelector('td textarea');
+			const replyNo = replyRow.querySelector("input[name='replyId']").value;
+			const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value; // ✅ 원래 댓글 값 가져오기
+
+
+			if (!replyDetailTextarea) {
+				console.error("Textarea 요소를 찾을 수 없습니다.");
+				return;
+			}
 
 			replyDetailTextarea.removeAttribute('readonly');
 			replyDetailTextarea.focus();
+			replyDetailTextarea.setSelectionRange(replyDetailTextarea.value.length, replyDetailTextarea.value.length);
 
-			event.target.textContent ='저장하기';
-			event.target.classList.add("saveReply");
+
+			this.textContent = '저장하기';
+			this.classList.remove("updateReply");
+			this.classList.add("saveReply");
+
+
+			this.replaceWith(this.cloneNode(true));
+			const saveButton = replyRow.querySelector('.saveReply');
+
+			saveButton.addEventListener('click', function() {
+				const updatedReply = replyDetailTextarea.value;
+
+				$.ajax({
+					type: "POST",
+					url: "/board/updateReply",
+					data: { replyNo: replyNo, replyDetail: updatedReply },
+					success: data => {
+						console.log(data);
+						alert("댓글이 수정되었습니다.");
+						replyDetailTextarea.setAttribute("readonly", true);
+						saveButton.textContent = "수정하기";
+						saveButton.classList.remove("saveReply");
+						saveButton.classList.add("updateReply");
+					},
+					error: function(error) {
+						console.log("댓글 수정 중 오류 발생:", error);
+					}
+				});
+			});
+			replyDetailTextarea.addEventListener('blur', function() {
+				if (!saveButton.classList.contains("saveReply")) return;
+
+				replyDetailTextarea.value = originalReplyDetail;
+				replyDetailTextarea.setAttribute("readonly", true);
+
+				saveButton.textContent = '수정하기';
+				saveButton.classList.remove("saveReply");
+				saveButton.classList.add("updateReply");
+			}, {once: true});
+		});
+	});
+
+	document.querySelectorAll('.deleteReply').forEach(button => {
+
+
+
+		button.addEventListener('click', function() {
+			$('#modalChoice').modal('show');
+
+			document.getElementById('delete').addEventListener('click', () =>{
+				$('#modalChoice').modal('hide');
+				const replyRow = this.closest('tr');
+				const replyNo = replyRow.querySelector("input[name='replyId']").value;
+				$.ajax({
+					url: "/board/deleteReply",
+					data: {replyNo : replyNo},
+					success: data => {
+						if(data === 1){
+							replyRow.remove();
+						}
+					},
+					error: function(error) {
+						console.log("댓글 삭제 중 오류 발생:", error);
+					}
+				})
+			});
+
+
 
 
 		});
+
 	});
+
+
+
 
 
 

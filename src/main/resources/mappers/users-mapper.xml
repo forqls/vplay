@@ -7,7 +7,6 @@
 		where user_id=#{id}
 	</select>
 
-
 <!-- 로그인 -->
 	<select id="signIn">
 		select *
@@ -15,7 +14,6 @@
 		where USER_ID = #{userId} and STATUS ='Y'
 	</select>
 
-	
 	<insert id="insertUser">
 		  insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE,LOGIN_TYPE,KAKAO_ID
     ) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, 'DEFAULT_IMG.JPG',#{loginType},#{kakaoId})
@@ -99,8 +97,7 @@
 		from users
 		where user_id =#{userId}
 	</select>
-	
-	
+
 	<select id="existUsers">
 		SELECT *
 		FROM USERS
@@ -152,5 +149,17 @@
 		update users
 		set alert_shown=0 where user_no=#{userNo}
 	</update>
+
+	<update id="updateProfile">
+		update users
+		set user_profile = #{userProfile}
+		where user_id = #{userId}
+	</update>
+	
+	<select id="selectProfile">
+		select user_profile
+		from users
+		where user_id = #{userId}
+	</select>
 	
 </mapper>

@@ -42,6 +42,7 @@ public class UsersController {
 	private final BoardService bService;
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
+	
 
 	@GetMapping("home")
 	public String goHome(HttpSession session) {
@@ -363,7 +364,7 @@ public class UsersController {
 	}
 
 	@GetMapping("my_inquiry")
-	public String myInquiry(HttpSession session, Model model) {
+	public String myInquiry(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();
@@ -380,25 +381,24 @@ public class UsersController {
 	}
 
 	@GetMapping("my_commission")
-	public String myCommission(HttpSession session, Model model) {
-	    Users loginUser = (Users) session.getAttribute("loginUser");
-	    if (loginUser != null) {
-	        int userNo = loginUser.getUserNo();
-	        ArrayList<Content> list = bService.selectMyCommission(userNo);
-	        for (Content content : list) {
-	            Reply reply = bService.countReply(content.getContentNo());
-	            content.setReply(reply);
-	        }
-	        model.addAttribute("list", list);
-	        return "my_commission";
-	    } else {
-	        throw new UsersException("로그인이 필요합니다.");
-	    }
+	public String myCommission(Model model, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser != null) {
+			int userNo = loginUser.getUserNo();
+			ArrayList<Content> list = bService.selectMyCommission(userNo);
+			for (Content content : list) {
+				Reply reply = bService.countReply(content.getContentNo());
+				content.setReply(reply);
+			}
+			model.addAttribute("list", list);
+			return "my_commission";
+		} else {
+			throw new UsersException("로그인이 필요합니다.");
+		}
 	}
 
-
 	@GetMapping("my_trash")
-	private String myTrashPage(HttpSession session, Model model) {
+	private String myTrashPage(Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Mapper
@@ -16,9 +17,9 @@ public interface AdminMapper {
 
 	ArrayList<Users> selectAllUser(RowBounds rowBounds);
 
-	int getInquiryCount();
+	int getInquiryCount(Content content);
 
-	ArrayList<Content> selectAllQuiry(RowBounds rowBounds);
+	ArrayList<Content> selectAllInquiry(Content content, RowBounds rowBounds);
 
 	String selectUser(int userNo);
 
@@ -40,8 +41,6 @@ public interface AdminMapper {
 
 	int countMenuTemp(int i);
 
-
-
-	
+	int insertReply(Reply reply);
 
 }

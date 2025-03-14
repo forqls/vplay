@@ -51,4 +51,9 @@ public interface UsersMapper {
 	int updateAlertShown(int userNo);
 
 	int resetAlertShown(int userNo);
+
+	int updateProfile(HashMap<String, String> map);
+
+	String selectProfile(HashMap<String, String> map);
+
 }

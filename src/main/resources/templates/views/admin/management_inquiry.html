@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPLAY - 문의 관리</title>
+<link href="/css/admin/admin_page.css" rel="stylesheet">
+</head>
+<body>
+	<div th:replace="~{admin_sidebar}"></div>
+	<main class="main-content">
+		<h1 class="page-title">문의 관리</h1>
+		<div class="content-card">
+			<div class="table-container">
+				<div class="search-bar">
+					<select class="filter-dropdown" name="menuName" id="menuName" onchange="filterTable()">
+						<option value="전체">전체</option>
+						<option value="system" th:selected="${menuName == 'system'}">시스템 문의</option>
+						<option value="pay" th:selected="${menuName == 'pay'}">결제 문의</option>
+						<option value="content" th:selected="${menuName == 'content'}">컨텐츠 문의</option>
+						<option value="other" th:selected="${menuName == 'other'}">기타</option>
+					</select> <input type="text" id="searchInput" placeholder="Search" onkeyup="searchTable()">
+					<button type="button">
+						<svg viewBox="0 0 24 24" width="20" height="20">
+							<circle cx="11" cy="11" r="8"></circle>
+							<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+						</svg>
+					</button>
+				</div>
+				<table>
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>inquiry type</th>
+							<th>User ID</th>
+							<th>title</th>
+							<th>inquiry date</th>
+							<th>Reply</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="inquiry-list" th:each="i : ${list}">
+							<td>[[${i.contentNo}]]</td>
+							<td>[[${i.menuName}]]</td>
+							<td>[[${i.userId}]]</td>
+							<td>[[${i.contentTitle}]]</td>
+							<td>[[${i.modifyDate}]]</td>
+							<td><span class="status-badge" th:text="${i.reply != null ? '완료' : '대기'}" th:classappend="${i.reply != null ? 'completed' : ''}"></span></td>
+							<td><span class="status" th:data-contentno="${i.contentNo}" th:onclick="updateStatus(this)" th:classappend="${i.contentStatus == 'Y' ? 'active' : 'inactive'}">[[${i.contentStatus}]]</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="pagination">
+				<ul>
+					<th:block th:if="${pi.currentPage >1}">
+						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous"> < </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage <=1}">
+						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
+					</th:block>
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a></li>
+					<th:block th:if="${pi.currentPage < pi.MaxPage}">
+						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
+						<li class="next chevron-right"><a aria-label="Next"> > </a></li>
+					</th:block>
+				</ul>
+			</div>
+		</div>
+	</main>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script th:inline="javascript">
+		function updateStatus(element) {
+		const currentStatus = element.innerText;
+		const newStatus = currentStatus === "Y" ? "N" : "Y";
+		const contentNo = element.getAttribute("data-contentno");
+
+			$.ajax({
+				url: "/admin/iupdate",
+				data: { contentNo: contentNo, contentStatus: newStatus },
+				success: data => {
+			if (data == 1) {
+				element.innerText = newStatus;
+				element.classList.remove(currentStatus === "Y" ? "active" : "inactive");
+				element.classList.add(newStatus === "Y" ? "active" : "inactive");
+				}
+			},
+				error: data => console.log(data)
+			});
+		}
+			
+		[...document.querySelectorAll(".inquiry-list")].forEach(inquiry => {
+			inquiry.addEventListener('click', function (event) {
+				if (event.target.classList.contains('status')) {
+					return;
+				}
+			const contentNo = this.children[0].innerText;
+				window.location.href = '/board/inquiryDetail?contentNo=' + contentNo;
+			});
+		});
+		
+		document.getElementById("menuName").addEventListener('change', function() {
+			const menuName = this.value;
+			console.log(menuName);
+			
+			if(menuName == "전체"){
+				location.href= "/admin/inquiry";
+			}else{
+				location.href= "/admin/inquiry/" + menuName;
+			}
+		});
+	</script>
+</body>
+</html>

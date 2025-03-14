@@ -57,10 +57,6 @@ public class UsersService {
 		return mapper.changePw(user);
 	}
 
-//	public int findPw(Users users) {
-//    return mapper.findPw(users);
-//  }
-
 	public int findPw(Users users) {
 		return mapper.findPw(users);
 	}
@@ -104,6 +100,14 @@ public class UsersService {
 		System.out.println("서비스에서 의 값 : " + result);
 		return result;
 		
+	}
+
+	public int updateProfile(HashMap<String, String> map) {
+		return mapper.updateProfile(map);
+	}
+
+	public String selectProfile(HashMap<String, String> map) {
+		return mapper.selectProfile(map);
 	}
 
 }

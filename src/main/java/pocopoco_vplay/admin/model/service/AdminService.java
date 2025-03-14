@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.admin.model.mapper.AdminMapper;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Service
 @RequiredArgsConstructor
 public class AdminService {
-	
+
 	private final AdminMapper mapper;
 
 	public int getUsersCount() {
@@ -22,19 +23,19 @@ public class AdminService {
 	}
 
 	public ArrayList<Users> selectAllUser(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)* pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectAllUser(rowBounds);
 	}
 
-	public int getInquiryCount() {
-		return mapper.getInquiryCount();
+	public int getInquiryCount(Content content) {
+		return mapper.getInquiryCount(content);
 	}
 
-	public ArrayList<Content> selectAllQuiry(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)* pi.getBoardLimit();
+	public ArrayList<Content> selectAllInquiry(Content content, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllQuiry(rowBounds);
+		return mapper.selectAllInquiry(content, rowBounds);
 	}
 
 	public String selectUser(int userNo) {
@@ -46,7 +47,7 @@ public class AdminService {
 	}
 
 	public ArrayList<Content> selectAllTemplates(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectAllTemplates(rowBounds);
 	}
@@ -56,7 +57,7 @@ public class AdminService {
 	}
 
 	public ArrayList<Content> selectAllRequestPost(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1)*pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectAllRequestPost(rowBounds);
 	}
@@ -66,7 +67,7 @@ public class AdminService {
 	}
 
 	public int inquiryUpdate(Content content) {
-		
+
 		return mapper.inquiryUpdate(content);
 	}
 
@@ -81,8 +82,8 @@ public class AdminService {
 	public int countMenuTemp(int i) {
 		return mapper.countMenuTemp(i);
 	}
-	
 
-
-
+	public int insertReply(Reply reply) {
+		return mapper.insertReply(reply);
+	}
 }
