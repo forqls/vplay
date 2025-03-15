@@ -409,15 +409,18 @@ public class BoardController {
 	}
 
 	@PostMapping("writeRequest")
-	public String writeRequest(@ModelAttribute Content content, HttpSession session) {
+	public String writeRequest( @RequestParam(defaultValue = "1") int page, @ModelAttribute Content content, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int userNo = loginUser.getUserNo();
+
 		content.setUserNo(userNo);
 		System.out.println(content);
+
 		int result = bService.insertRequest(content);
 		int result2 = bService.insertRequestBoard(content);
 		if (result + result2 == 2) {
-			return "redirect:/board/request_list";
+			int contentNo = content.getContentNo();
+			return "redirect:/board/" + contentNo + "/" + page;
 		} else {
 			throw new BoardException("제작 의뢰 게시글 작성 실패");
 		}
@@ -487,11 +490,17 @@ public class BoardController {
 	@PostMapping("updateRequestForm")
 	public String updateRequestForm(@RequestParam("contentNo") int bId, @RequestParam("page") int page, HttpSession session, Model model) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
+
 		int id = 0;
 		if (loginUser != null) {
 			id = loginUser.getUserNo();
 		}
 		Content content = bService.selectRequest(bId, id);
+
+		if (content == null) {
+			throw new BoardException("해당 게시글을 찾을 수 없습니다.");
+		}
+
 		model.addAttribute("c", content).addAttribute("page", page);
 		return "edit_request";
 	}

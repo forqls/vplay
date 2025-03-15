@@ -5,6 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+	<!-- Bootstrap (Summernote 의존성) -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Summernote -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
 	<title>의뢰게시판 작성</title>
 	<style>
 		* {
@@ -116,6 +122,7 @@
 <main class="inquiryWrite-container">
 	<h1 class="inquiryWrite-title">제작 의뢰</h1>
 	<form id="inquiryForm" action="/board/writeRequest" method="post">
+		<input type="hidden" name="page" th:value="${currentPage}">
 		<div class="form-group">
 			<div class="form-label">
 				<span>카테고리 선택</span> <select class="filter-dropdown" name="menuNo">
@@ -131,13 +138,13 @@
 		</div>
 
 		<div class="form-group">
-			<div class="form-label">제목</div>
-			<input type="text" placeholder="제목을 입력하세요." name="contentTitle">
+			<label for="contentTitle" class="form-label">제목</label>
+			<input type="text" placeholder="제목을 입력하세요." id="contentTitle" name="contentTitle" required>
 		</div>
 
 		<div class="form-group">
-			<div class="form-label">내용</div>
-			<textarea placeholder="내용을 입력하세요." name="contentDetail"></textarea>
+			<label for="contentDetail" class="form-label">내용</label>
+			<textarea id="contentDetail" placeholder="내용을 입력하세요." name="contentDetail"></textarea>
 		</div>
 
 		<div class="button-group">
@@ -147,6 +154,25 @@
 	</form>
 </main>
 <script>
+	$(document).ready(function() {
+		$('#contentDetail').summernote({
+			height: 300,  // 에디터 높이
+			lang: "ko-KR", // 한글 설정
+			placeholder: '내용을 입력하세요...',
+			toolbar: [
+				['style', ['bold', 'italic', 'underline', 'clear']],
+				['font', ['strikethrough', 'superscript', 'subscript']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['insert', ['link', 'picture', 'video']], // 이미지 업로드 버튼 비활성화 가능
+				['view', ['fullscreen', 'codeview', 'help']]
+			]
+		});
+
+		// 폼 제출 시 Summernote 내용 추가
+		$('#submitButton').click(function() {
+			$('#inquiryForm').submit();
+		});
+	});
 
 </script>
 </body>
