@@ -11,17 +11,25 @@
 	<main class="main-content">
 		<h1 class="page-title">의뢰 게시물 관리</h1>
 		<div class="content-card">
-			<div class="search-bar">
-				<input type="text" placeholder="Search">
-				<button type="button">
-					<svg viewBox="0 0 24 24" width="20" height="20">
+			<div class="table-container">
+				<div class="search-bar">
+					<select class="filter-dropdown" name="menuName" id="menuName" onchange="filterTable()">
+						<option value="All">All</option>
+						<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
+						<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
+						<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
+						<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
+						<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
+						<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
+						<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
+					</select> <input type="text" placeholder="Search">
+					<button type="button">
+						<svg viewBox="0 0 24 24" width="20" height="20">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-				</button>
-			</div>
-
-			<div class="table-container">
+					</button>
+				</div>
 				<table>
 					<thead>
 						<tr>
@@ -72,28 +80,39 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
 		[...document.querySelectorAll(".request-list")].map((request, index, array) => {
-        const statusSpan = request.children[5].querySelector('span');
-        statusSpan.addEventListener('click', function() {
-            const currentStatus = this.innerText;
-            const newStatus = currentStatus === "Y" ? "N" : "Y";
-            
-            $.ajax({
-                url: "/admin/rupdate",
-                data: {contentNo: request.children[0].innerText, contentStatus: newStatus},
-                success: data => {
-                    if(data == 1) {
-                        this.innerText = newStatus;
-                        if (newStatus === "Y") {
-                            this.className = "status active";
-                        } else {
-                            this.className = "status inactive";
-                        }
-                    }
-                },
-                error: data => console.log(data)
-            })
-        })
-    })
+	        const statusSpan = request.children[5].querySelector('span');
+	        statusSpan.addEventListener('click', function() {
+	            const currentStatus = this.innerText;
+	            const newStatus = currentStatus === "Y" ? "N" : "Y";
+	            
+	            $.ajax({
+	                url: "/admin/rupdate",
+	                data: {contentNo: request.children[0].innerText, contentStatus: newStatus},
+	                success: data => {
+	                    if(data == 1) {
+	                        this.innerText = newStatus;
+	                        if (newStatus === "Y") {
+	                            this.className = "status active";
+	                        } else {
+	                            this.className = "status inactive";
+	                        }
+	                    }
+	                },
+	                error: data => console.log(data)
+	            })
+	        })
+	    })
+	    
+		document.getElementById("menuName").addEventListener('change', function() {
+			const menuName = this.value;
+			console.log(menuName);
+			
+			if(menuName == "All"){
+				location.href= "/admin/request";
+			}else{
+				location.href= "/admin/request/" + menuName;
+			}
+		});
 </script>
 </body>
 </html>

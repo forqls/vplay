@@ -42,14 +42,14 @@ public class AdminService {
 		return mapper.selectUser(userNo);
 	}
 
-	public int getTemplatesCount() {
-		return mapper.getTemplatesCount();
+	public int getTemplatesCount(Content content) {
+		return mapper.getTemplatesCount(content);
 	}
 
-	public ArrayList<Content> selectAllTemplates(PageInfo pi) {
+	public ArrayList<Content> selectAllTemplates(Content content, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllTemplates(rowBounds);
+		return mapper.selectAllTemplates(content, rowBounds);
 	}
 
 	public int getrequestPostCount() {
