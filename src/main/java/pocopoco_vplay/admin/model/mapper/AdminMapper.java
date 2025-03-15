@@ -23,9 +23,9 @@ public interface AdminMapper {
 
 	String selectUser(int userNo);
 
-	int getTemplatesCount();
+	int getTemplatesCount(Content content);
 
-	ArrayList<Content> selectAllTemplates(RowBounds rowBounds);
+	ArrayList<Content> selectAllTemplates(Content content, RowBounds rowBounds);
 
 	int getrequestPostCount();
 

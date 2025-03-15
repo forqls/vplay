@@ -38,7 +38,7 @@ public class AdminController {
 	@GetMapping("dashboard")
 	public ModelAndView joinDashboard(ModelAndView mv) {
 		int userCount = aService.getUsersCount();
-		int templatesCount = aService.getTemplatesCount();
+		int templatesCount = aService.getTemplatesCount(null);
 		mv.addObject("userCount", userCount).addObject("templatesCount", templatesCount);
 		mv.setViewName("dashboard");
 		return mv;
@@ -146,10 +146,9 @@ public class AdminController {
 
 	@GetMapping("templates")
 	public ModelAndView joinTemplates(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
-		int listCount = aService.getTemplatesCount();
-		System.out.println(listCount);
+		int listCount = aService.getTemplatesCount(null);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Content> list = aService.selectAllTemplates(pi);
+		ArrayList<Content> list = aService.selectAllTemplates(null, pi);
 		for (Content c : list) {
 			System.out.println(c);
 			c.setUserId(aService.selectUser(c.getUserNo()));
@@ -159,17 +158,86 @@ public class AdminController {
 		return mv;
 	}
 
+	@GetMapping("templates/{menuName}")
+	public String filterTemplates(@RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
+		System.out.println(menuName);
+		Content content = new Content();
+		switch (menuName) {
+		case "video-Templates":
+			content.setMenuNo(1);
+			break;
+		case "Graphic-Templates":
+			content.setMenuNo(4);
+			break;
+		case "Stock-Video":
+			content.setMenuNo(5);
+			break;
+		case "Photos":
+			content.setMenuNo(6);
+			break;
+		case "Music":
+			content.setMenuNo(2);
+			break;
+		case "Sound-Effects":
+			content.setMenuNo(3);
+			break;
+		case "Fonts":
+			content.setMenuNo(7);
+			break;
+		}
+		int listCount = aService.getTemplatesCount(content);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		ArrayList<Content> list = aService.selectAllTemplates(content, pi);
+		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
+		return "management_templates";
+	}
+
 	@GetMapping("request")
 	public ModelAndView joinRequest(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
-		int listCount = aService.getrequestPostCount();
+		int listCount = aService.getTemplatesCount(null);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Content> list = aService.selectAllRequestPost(pi);
+		ArrayList<Content> list = aService.selectAllTemplates(null, pi);
 		for (Content c : list) {
+			System.out.println(c);
 			c.setUserId(aService.selectUser(c.getUserNo()));
 		}
 		mv.addObject("list", list).addObject("pi", pi);
 		mv.setViewName("management_request");
 		return mv;
+	}
+
+	@GetMapping("request/{menuName}")
+	public String filterRequest(@RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
+		System.out.println(menuName);
+		Content content = new Content();
+		switch (menuName) {
+		case "video-Templates":
+			content.setMenuNo(1);
+			break;
+		case "Graphic-Templates":
+			content.setMenuNo(4);
+			break;
+		case "Stock-Video":
+			content.setMenuNo(5);
+			break;
+		case "Photos":
+			content.setMenuNo(6);
+			break;
+		case "Music":
+			content.setMenuNo(2);
+			break;
+		case "Sound-Effects":
+			content.setMenuNo(3);
+			break;
+		case "Fonts":
+			content.setMenuNo(7);
+			break;
+		}
+		int listCount = aService.getTemplatesCount(content);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+		ArrayList<Content> list = aService.selectAllTemplates(content, pi);
+		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
+		return "management_request";
 	}
 
 	@GetMapping("mupdate")

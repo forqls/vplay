@@ -44,20 +44,24 @@
 	<select id="getTemplatesCount">
 		select count(*)
 		from content
-		left join board using(content_no)
-		where board_type is null
+		join board using(content_no)
+		where board_type = 2
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
 	</select>
-
 
 	<select id="selectAllTemplates">
 		select *
-		from content co
-		left join board b on(co.content_no = b.content_no)
-		left join content_category coa on(co.content_no = coa.content_no)
-		left join category ca on(ca.category_no = coa.category_no)
-		left outer join menu me on(ca.menu_no = me.menu_no)
-		where board_type is null
-		order by co.content_no desc
+		from content
+		join board using(content_no)
+		join menu using(menu_no)
+		join users using(user_no)
+		where board_type = 2 and CONTENT_STATUS = 'Y'
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
+		order by content_no desc
 	</select>
 
 	<select id="getrequestPostCount">
