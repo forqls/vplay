@@ -6,7 +6,7 @@
 <title>크리에이티브 플랫폼</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
-	<link href="/css/common.css" rel="stylesheet" type="text/css">
+<link href="/css/common.css" rel="stylesheet" type="text/css">
 <style>
 * {
 	margin: 0;
@@ -18,8 +18,7 @@ body {
 	margin-top: 30px;
 	background-color: #191820;
 	color: white;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-		'Helvetica Neue', Arial, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .container {
@@ -27,16 +26,6 @@ body {
 	margin: 0 auto;
 }
 
-        .grid-container {
-        	max-width: 1200px;
-			margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 40px;
-        }
-
-/* 헤더 섹션 */
 .hero {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -81,12 +70,11 @@ body {
 }
 
 .hero-image {
-	aspect-ratio: 1;
+	aspect-ratio: 1; /* 1:1 비율 */
 	background-color: rgba(255, 255, 255, 0.1);
 	border-radius: 8px;
 }
 
-/* 이벤트 섹션 */
 .section {
 	margin-bottom: 60px;
 }
@@ -102,43 +90,38 @@ body {
 	gap: 20px;
 }
 
-.event-slide {
-	flex: 1;
-	border-radius: 12px;
-	overflow: hidden;
-}
-
-.event-slide img {
-	width: 100%;
-	height: auto;
-	object-fit: cover;
-}
-
 .carousel-arrow {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
 	width: 40px;
 	height: 40px;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(255, 255, 255, 0.1);
 	border: none;
 	border-radius: 50%;
-	color: white;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
+.carousel-arrow svg {
+	width: 24px;
+	height: 24px;
+}
+
 .carousel-arrow.left {
-	left: -20px;
+	left: -50px;
 }
 
 .carousel-arrow.right {
-	right: -20px;
+	right: -50px;
 }
 
-/* 템플릿 그리드 */
+.carousel-arrow:hover {
+	background-color: rgba(94, 55, 233, 0.8);
+}
+
 .template-grid {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
@@ -146,12 +129,11 @@ body {
 }
 
 .template-item {
-	aspect-ratio: 16/9;
+	aspect-ratio: 1;
 	background-color: rgba(255, 255, 255, 0.1);
 	border-radius: 8px;
 }
 
-/* 크리에이터 그리드 */
 .creator-grid {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
@@ -206,138 +188,81 @@ body {
 	font-size: 0.9rem;
 }
 
-/* 크리에이터 카드 스타일 */
-.top-creator-card {
-    background-color: #33333a;
-    border-radius: 8px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.template-card {
+	background-color: #33333a;
+	border-radius: 8px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	height: 250px;
 }
 
-.top-creator-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.template-image {
+	width: 100%;
+	height: 150px;
+	background-color: #33333a;
 }
 
-.top-creator-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #d9d9d9;
-    overflow: hidden;
+.template-info {
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: rgba(255, 255, 255, 0.1);
+	flex-grow: 1;
 }
 
-.top-creator-details {
-    display: flex;
-    flex-direction: column;
+.template-details {
+	display: flex;
+	flex-direction: column;
 }
 
-.top-creator-name {
-    font-size: 14px;
-    font-weight: bold;
+.template-title {
+	font-size: 14px;
+	font-weight: bold;
+	color: #ffffff;
 }
 
-.top-creator-followers {
-    font-size: 12px;
-    color: #909090;
+.template-creator {
+	font-size: 12px;
+	color: #d9d9d9;
 }
 
-.top-creator-rank {
-    font-size: 12px;
-    font-weight: bold;
+.template-actions {
+	display: flex;
+	gap: 8px;
 }
 
-        .add-button {
-            width: 24px;
-            height: 24px;
-            background-color: transparent;
-            border: 1px solid #ffffff;
-            border-radius: 4px;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
+.action-button {
+	width: 24px;
+	height: 24px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
-        /* 템플릿 카드 스타일 */
-        .template-card {
-            background-color: #33333a;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+.bookmark-icon {
+	color: #ffffff;
+}
 
-        .template-image {
-            width: 100%;
-            height: 150px;
-            background-color: #d9d9d9;
-        }
-
-        .template-info {
-            padding: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #6a6a6a;
-        }
-
-        .template-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .template-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .template-creator {
-            font-size: 12px;
-            color: #d9d9d9;
-        }
-
-        .template-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-button {
-            width: 24px;
-            height: 24px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .bookmark-icon {
-            color: #ffffff;
-        }
-
-        .like-icon {
-            color: #ff4d4d;
-        }
+.like-icon {
+	color: #ff4d4d;
+}
 </style>
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div th:replace="~{views/common/floatingBtn}"></div>
 	<div class="container">
-
 		<section class="hero">
 			<div class="hero-content">
 				<h1>
-					무제한의 크리에이티브<br>자산이 모두 한곳에<br> 있습니다
+					무제한의 크리에이티브<br>자산이 모두 한곳에<br> 있습니다.
 				</h1>
-
-				<button type="button" onclick="location.href='/users/signUp'">회원가입 하러 가기</button>
 				<button type="button" onclick="location.href='/admin/dashboard'">관리자 페이지 이동</button>
-
 				<p>
 					지금 바로 크리에이터님의 무한 가능성을 경험해 보세요.<br> 디자인 자산을 자유롭게 활용하여 새로운 가능성을 발견할 수 있습니다.
 				</p>
@@ -353,10 +278,24 @@ body {
 		<section class="section">
 			<h2 class="section-title">진행중인 이벤트</h2>
 			<div class="event-carousel">
-				<div class="event-slide"></div>
-				<div class="event-slide"></div>
-				<button class="carousel-arrow left">←</button>
-				<button class="carousel-arrow right">→</button>
+				<button class="carousel-arrow left" aria-label="Previous Event">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.75 19.5L8.25 12l7.5-7.5"></path>
+      </svg>
+				</button>
+				<button class="carousel-arrow right" aria-label="Next Event">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8.25 4.5L15.75 12l-7.5 7.5"></path>
+      </svg>
+				</button>
+			</div>
+			<div class="template-grid">
+				<div class="template-item">
+					<h3 id="monthlyEvent"></h3>
+				</div>
+				<div class="template-item"></div>
+				<div class="template-item"></div>
+				<div class="template-item"></div>
 			</div>
 		</section>
 
@@ -379,33 +318,6 @@ body {
 		<section class="section">
 			<h2 class="section-title">최근 인기 크리에이터 추천</h2>
 			<div class="creator-grid">
-				<!-- 4x3 그리드, 총 12개의 카드 -->
-				<!-- 카드 1 -->
-				<div class="creator-card">
-					<div class="creator-header">
-						<div class="creator-avatar"></div>
-						<div class="creator-info">
-							<h3>Creator</h3>
-							<p>Handsome/given</p>
-						</div>
-					</div>
-					<div class="creator-content"></div>
-					<button class="subscribe-button">Subscribe</button>
-				</div>
-				<!-- 나머지 11개 카드 반복 -->
-				<!-- 카드 2-12 -->
-				<div class="creator-card">
-					<div class="creator-header">
-						<div class="creator-avatar"></div>
-						<div class="creator-info">
-							<h3>Creator</h3>
-							<p>Handsome/given</p>
-						</div>
-					</div>
-					<div class="creator-content"></div>
-					<button class="subscribe-button">Subscribe</button>
-				</div>
-				<!-- 반복 -->
 				<div class="creator-card">
 					<div class="creator-header">
 						<div class="creator-avatar"></div>
@@ -428,68 +340,97 @@ body {
 					<div class="creator-content"></div>
 					<button class="subscribe-button">Subscribe</button>
 				</div>
-				<!-- 나머지 카드들도 동일한 구조로 반복 -->
+				<div class="creator-card">
+					<div class="creator-header">
+						<div class="creator-avatar"></div>
+						<div class="creator-info">
+							<h3>Creator</h3>
+							<p>Handsome/given</p>
+						</div>
+					</div>
+					<div class="creator-content"></div>
+					<button class="subscribe-button">Subscribe</button>
+				</div>
+				<div class="creator-card">
+					<div class="creator-header">
+						<div class="creator-avatar"></div>
+						<div class="creator-info">
+							<h3>Creator</h3>
+							<p>Handsome/given</p>
+						</div>
+					</div>
+					<div class="creator-content"></div>
+					<button class="subscribe-button">Subscribe</button>
+				</div>
 			</div>
 		</section>
 
-		<div th:replace="~{views/common/floatingBtn}"></div>
-	</div>
-	
-    <h2>탑 크리에이터 추천</h2>
-    <div class="grid-container" th:each="l,rank : ${ulist}">
-        <!-- 크리에이터 카드 반복 (12개) -->
-        <!-- 1행 -->
-        <div class="top-creator-card">
-            <div class="top-creator-info">
-                <div class="top-creator-avatar"></div>
-                <div class="top-creator-details">
-                    <div class="top-creator-name">[[${l.userName}]]</div>
-                    <div class="top-creator-followers">[[${l.subscriber}]]</div>
-                </div>
-            </div>
-            <div class="top-creator-rank">#[[${rank.index + 1}]]</div>
-            <button class="add-button">+</button>
-        </div>
-    </div>
+		<section class="section">
+			<h2 class="section-title">탑 크리에이터 추천</h2>
+			<div class="creator-grid">
+				<div class="creator-card" th:each="l, rank : ${ulist}">
+					<div class="creator-header">
+						<div class="creator-avatar"></div>
+						<div class="creator-info">
+							<h3>[[${l.userName}]]</h3>
+							<p>팔로잉 : [[${l.subscriber}]]</p>
+						</div>
+					</div>
+					<div class="creator-content">
+						<p>순위 : #[[${rank.index + 1}]]</p>
+					</div>
+					<button class="subscribe-button">+</button>
+				</div>
+			</div>
+		</section>
 
-    <h2>탑 템플릿 리스트</h2>
-    <div class="grid-container" th:each="c,rank : ${clist}">
-        <!-- 템플릿 카드 반복 (12개) -->
-        <!-- 1행 -->
-        <div class="template-card">
-            <div class="template-image"></div>
-            <div class="template-info">
-                <div class="template-details">
-                    <div class="template-title">[[${c.contentTitle}]]</div>
-                    <div class="template-creator">[[${c.userNickName}]]</div>
-                </div>
-                <div class="template-actions">
-                    <button class="action-button bookmark-icon">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-						  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-						  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-						</svg>
-                    </button>
-                    [[${c.views}]]
-                    <button class="action-button like-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+		<section class="section">
+			<h2 class="section-title">탑 템플릿 리스트</h2>
+			<div class="template-grid">
+				<div class="template-card" th:each="c, rank : ${clist}">
+					<div class="template-image"></div>
+					<div class="template-info">
+						<div class="template-details">
+							<div class="template-title">[[${c.contentTitle}]]</div>
+							<div class="template-creator">[[${c.userNickName}]]</div>
+						</div>
+						<div class="template-actions">
+							<button class="action-button bookmark-icon">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+							</button>
+							[[${c.views}]]
+							<button class="action-button like-icon">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                         </svg>
-                        [[${c.likeCount}]]
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-	<script>
-	    var showAlert = "[[${showAlert}]]";
-	    
-	    if (showAlert == true) {
-	    	console.log(showAlert);
-	        alert("결제일이 지났습니다.");
-	    }
-	</script>
+								[[${c.likeCount}]]
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
 
+	<script>
+		var showAlert = "[[${showAlert}]]";
+
+		if (showAlert == true) {
+			console.log(showAlert);
+			alert("결제일이 지났습니다.");
+		}
+
+		function getCurrentMonthEvent() {
+			const date = new Date();
+			const month = date.toLocaleString('ko-KR', {
+				month : 'long'
+			});
+			document.getElementById("monthlyEvent").textContent = `${month}달 추천이벤트`;
+		}
+		getCurrentMonthEvent();
+	</script>
 </body>
 </html>
