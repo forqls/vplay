@@ -363,7 +363,8 @@ public class BoardController {
 	}
 
 	@PostMapping("writeRequest")
-	public String writeRequest( @RequestParam(defaultValue = "1") int page, @ModelAttribute Content content, HttpSession session) {
+	public String writeRequest(@RequestParam(value="page", defaultValue = "1") int page, @ModelAttribute Content content, HttpSession session) {
+		System.out.println(content);
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int userNo = loginUser.getUserNo();
 
