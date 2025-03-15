@@ -175,13 +175,8 @@
     function updatePage(checkboxValue, flag, search) {
     	console.log("updatePage에 들어옴 : " + checkboxValue);
         // 여기에 실제 페이지를 갱신하는 로직을 작성 (AJAX 요청 가능)
-//         console.log("업데이트 : " + checkboxValue);
-        newUrl = `/board/video-template-list/${checkboxValue}`
-//         console.log("업데이트 : " + newUrl);
         
         let url = "";
-        
-        console.log(checkboxValue);
         
         if(search != null){
         	if(checkboxValue != "list"){
@@ -242,11 +237,7 @@
 				}
 				
 				if(flag == 1){
-					if(search != null){
-						window.history.pushState({ data, checkboxValue }, "", newUrl + "/" + search);
-					}else{
-						window.history.pushState({ data, checkboxValue }, "", newUrl);
-					}
+					window.history.pushState({ data, checkboxValue }, "", url);
 				}
 			})
     }
