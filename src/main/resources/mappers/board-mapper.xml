@@ -78,7 +78,7 @@
 
 	<select id="allTemplateList" parameterType="string">
 		select *
-		from (select c.content_no, c.content_title, u.user_nickname, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
+		from (select cg.category_name, c.content_no, c.content_title, u.user_nickname, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
 		from content c
 		left join users u on(c.user_no = u.user_no)
 		left join board b on(c.content_no = b.content_no)
@@ -93,7 +93,7 @@
 				#{category}
 			</foreach>
 		</if>
-		group by c.content_no, c.content_title, u.user_nickname
+		group by cg.category_name, c.content_no, c.content_title, u.user_nickname
 		order by c.content_no desc)
 		<if test="menuNameNum == 'video Templates'">
 			where rownum <![CDATA[<]]>=
