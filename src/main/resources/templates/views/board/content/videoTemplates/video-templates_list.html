@@ -59,6 +59,11 @@
 		})
 	})
 	
+	const menuNameURL = (window.location.pathname).split("/")[2];
+    console.log(menuNameURL);
+    
+    
+    
 	window.onload=()=>{
     	
     	console.log(divs);
@@ -68,12 +73,13 @@
     	const content = /*[[${cList}]]*/1;
     	/*]]>*/
     	console.log(content);
-		
-    	let lastSegment = window.location.pathname.split("/").pop();
-    	lastSegment = lastSegment.split("-").pop();
-    	console.log(lastSegment);
     	
-    	if(lastSegment != "list"){
+    	let lastSegment = window.location.pathname.split("/").pop();
+    	let lastSegment2 = lastSegment.split("-").pop();
+    	
+    	console.log("lastSegment2 : " + lastSegment2);
+		
+    	if(lastSegment2 != "list"){
 			[...checkbox].map((video, index, array) =>{
 				video.checked = false;
 				for(let i =0; i<content.length ; i++){
@@ -102,29 +108,37 @@
     			
     			if(checkboxArr.length==0){
     				checkboxValue = "empty";
-    				newUrl = `/board/video-template-list`;
+    				newUrl = `/board/${menuNameURL}`;
     			}else{
     				let str = checkboxArr.join("+");
 					
 					checkboxValue = str.replaceAll(" ", "-");
-	    			newUrl = `/board/video-template-list/${checkboxValue}`;
+	    			newUrl = `/board/${menuNameURL}/${checkboxValue}`;
     			}
     			
     			checkboxArr.length = 0;
     		
-				updatePage(checkboxValue, 1);
+				updatePage(checkboxValue, 1, null);
     		})
     	})
     	
-    
     	//검색
-    	const input = document.getElementsByTagName("input")[5];
-    	input.addEventListener('keydown', (event)=>{
-    		if(event.code == 'Enter'){
-    			const search = input.value;
-    		}
-    	})
-    
+		const input = document.getElementsByTagName("input")[5];
+    	console.log(input);
+		input.addEventListener('keyup', (event)=>{
+			event.preventDefault();
+			if(event.key == 'Enter'){
+				const search = input.value;
+				
+				lastSegment = window.location.pathname.split("/").pop();
+				lastSegment2 = window.location.pathname.split("/").pop();
+				
+				console.log("엔터 누르고 나서 : " + search);
+				console.log("엔터 누르고 나서 : " + lastSegment2);
+				updatePage(lastSegment2, 0 ,search);
+			}
+		});
+    	
     }
     
 	window.addEventListener("popstate", (event) =>{
@@ -135,7 +149,7 @@
 	    		let check = event.state.checkboxValue;
 	    		console.log(check);
 	    		
-	    		updatePage(check, 0);
+	    		updatePage(check, 0, null);
 	    		
 	    		checkboxValue = check.replaceAll("-", " ");
 	    		
@@ -158,13 +172,29 @@
 	    	}
 	    });
     
-    function updatePage(checkboxValue, flag) {
-    	console.log(checkboxValue);
+    function updatePage(checkboxValue, flag, search) {
+    	console.log("updatePage에 들어옴 : " + checkboxValue);
         // 여기에 실제 페이지를 갱신하는 로직을 작성 (AJAX 요청 가능)
 //         console.log("업데이트 : " + checkboxValue);
         newUrl = `/board/video-template-list/${checkboxValue}`
 //         console.log("업데이트 : " + newUrl);
-        fetch('/board/video-template-list/' + checkboxValue , {
+        
+        let url = "";
+        
+        console.log(checkboxValue);
+        
+        if(search != null){
+        	if(checkboxValue != "list"){
+        		url = `/board/${menuNameURL}/${checkboxValue}/${search}`;
+        	}else{
+        		url = `/board/${menuNameURL}/${search}`;
+        	}
+        }else{
+        	url = `/board/${menuNameURL}/${checkboxValue}`;
+        }
+        console.log("변경 url : " +url);
+        
+        fetch(url, {
 				method : 'post',
 				headers : {'content-type' : 'application/json; charset=UTF-8'},
 			})
@@ -206,17 +236,18 @@
 						div1.addEventListener('click', function(){
 							  const contentNo = div1.querySelector('input[type=hidden]').value;
 							  console.log(contentNo);
-							  location.href = "/board/video-templates/" + contentNo;
+							  location.href = "/board/" + menuNameURL + "/" + contentNo;
 						});
 					}
 				}
 				
 				if(flag == 1){
-					window.history.pushState({ data, checkboxValue }, "", newUrl);
+					if(search != null){
+						window.history.pushState({ data, checkboxValue }, "", newUrl + "/" + search);
+					}else{
+						window.history.pushState({ data, checkboxValue }, "", newUrl);
+					}
 				}
-				
-				
-				
 			})
     }
     
