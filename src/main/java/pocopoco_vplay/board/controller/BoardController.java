@@ -488,7 +488,7 @@ public class BoardController {
 	}
 
 	@PostMapping("updateRequestForm")
-	public String updateRequestForm(@RequestParam("contentNo") int bId, @RequestParam("page") int page, HttpSession session, Model model) {
+	public String updateRequestForm(@RequestParam(name = "contentNo") int bId, @RequestParam(name = "page") int page, HttpSession session, Model model) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 
 		int id = 0;
