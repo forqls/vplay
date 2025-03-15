@@ -6,9 +6,9 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +56,7 @@ public class AjaxController {
 		return bService.unAllTempLike(map);
 	}
 	
-	@GetMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\+\\s&]+}")
+	@PostMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\+&-]+}")
 	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName){
 		System.out.println(categoryTagName);
 		System.out.println("수정 전 : " + menuName);
@@ -77,6 +77,8 @@ public class AjaxController {
 		System.out.println("수정 후 : " + menuName);
 		
 		map.put("menuName", menuName);
+		categoryTagName = categoryTagName.replace("-", " ");
+		System.out.println(categoryTagName);
 		
 		if(!categoryTagName.equals("empty")) {
 			if(categoryTagName.contains("+")) {
@@ -117,6 +119,7 @@ public class AjaxController {
 			try {
 				if(file != null) {
 					fileUrl = r2Service.uploadFile(file);
+					System.out.println(fileUrl);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

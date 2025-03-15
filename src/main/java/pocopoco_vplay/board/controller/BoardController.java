@@ -299,6 +299,52 @@ public class BoardController {
 		
 		return joinURL;
 	}
+	
+	@GetMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\\\+&-]+}")
+	public String templateList(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName, Model model) {
+		
+		HashMap<String, Object> map = new HashMap<>();
+		String[] result = {};
+		
+		String joinURL = null;
+		int menuNum = 0;
+		
+		switch(menuName) {
+		case "video-template-list": menuName = "video Templates"; joinURL="video-templates_list"; menuNum=1; break;
+		case "sound-effects-list": menuName = "Sound Effects"; joinURL="sound-effects_list"; menuNum=3; break;
+		case "music-list": menuName = "Music"; joinURL="music_list"; menuNum=2; break;
+		case "graphic-template-list": menuName = "Graphic Templates"; joinURL="graphic-templates_list"; menuNum=4; break;
+		case "stock-video-list": menuName = "Stock Video"; joinURL="stock-video_list"; menuNum=5; break;
+		case "photo-list": menuName = "Photos"; joinURL="photo_list"; menuNum=6; break;
+		case "font-list": menuName = "Fonts"; joinURL="font_list"; menuNum=7;
+		}
+		
+		map.put("menuName", menuName);
+		categoryTagName = categoryTagName.replace("-", " ");
+		System.out.println(categoryTagName);
+		
+		if(!categoryTagName.equals("empty")) {
+			if(categoryTagName.contains("+")) {
+				System.out.println("문자열에 +가 포함");
+				result = categoryTagName.split("\\+");
+			}else {
+				System.out.println("문자열에 +가 안포함");
+				result = new String[] {categoryTagName};
+			}
+			
+			map.put("categoryArray", result);
+		}else {
+			System.out.println("empty 맞음");
+		}
+		
+		ArrayList<Content> cList = bService.allTemplateList(map);
+		ArrayList<Content> cCategory = bService.allCategory(menuNum);
+		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
+		
+		model.addAttribute("cList", cList).addAttribute("cCategory", cCategory).addAttribute("cPopularCategory", cPopularCategory);
+		
+		return joinURL;
+	}
 
 
 	@GetMapping("request_list")
@@ -507,6 +553,6 @@ public class BoardController {
 	public int deleteReply(@RequestParam("replyNo") int replyNo) {
 		return bService.deleteReply(replyNo);
 	}
-
-
+	
+	
 }

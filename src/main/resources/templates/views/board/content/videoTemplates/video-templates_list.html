@@ -48,7 +48,7 @@
             </div>
         </main>
     </div>
-    <script>
+    <script th:inline="javascript">
     const divs = document.querySelector('.video-grid');
     
     [...divs.children].map((video, index, array) =>{
@@ -58,17 +58,38 @@
 			location.href = "/board/video-templates/" + contentNo;
 		})
 	})
-    
-    window.onload=()=>{
+	
+	window.onload=()=>{
     	
     	console.log(divs);
+    	
+    	const checkbox = document.querySelectorAll(".category-checkbox");
+    	/*<![CDATA[*/
+    	const content = /*[[${cList}]]*/1;
+    	/*]]>*/
+    	console.log(content);
+		
+    	let lastSegment = window.location.pathname.split("/").pop();
+    	lastSegment = lastSegment.split("-").pop();
+    	console.log(lastSegment);
+    	
+    	if(lastSegment != "list"){
+			[...checkbox].map((video, index, array) =>{
+				video.checked = false;
+				for(let i =0; i<content.length ; i++){
+					if(content[i].categoryName == video.value){
+						video.checked = true;
+					}
+				}
+			})
+    	}
     	
     	const categoryList = document.querySelector('.category-list');
 //     	console.log(categoryList);
     	const checkboxArr = [];
     	[...categoryList.children].map((category, index, array) =>{
     		const checkbox = category.children[0];
-    		checkbox.addEventListener('click', ()=>{
+    		checkbox.addEventListener('click', (event)=>{
     			
     			for(const c of categoryList.children){
     				if(c.children[0].checked){
@@ -76,114 +97,129 @@
     				}
     			}
     			
-    			console.log(checkboxArr);
-    			if(checkboxArr.length == 0){
-    				checkboxArr.length = 0;
-    				fetch('/board/video-template-list/empty' ,{
-						method : 'get',
-						headers : {'content-type' : 'application/json; charset=UTF-8'},
-					})
-					.then(response => response.json())
-					.then(data =>{
-						if(data.length == 0){
-							divs.innerHTML = '';
-						}else{
-							divs.innerHTML = '';
-							for(const i of data){
-								const div1 = document.createElement("div");
-								div1.className = "video-card";
-								
-								const div2 = document.createElement("div");
-								div2.className = "video-thumbnail";
-								
-								const div3 = document.createElement("div");
-								div3.className = "video-info";
-								
-								const input = document.createElement("input");
-								input.setAttribute("type", "hidden");
-								input.setAttribute("value", i.contentNo);
-								
-								const h3 = document.createElement("h3");
-								h3.innerText = i.contentTitle;
-								
-								const p = document.createElement("p");
-								p.innerText = i.userNickName;
-								
-								div1.appendChild(div2);
-								div1.appendChild(div3);
-								
-								div3.appendChild(input);
-								div3.appendChild(h3);
-								div3.appendChild(p);
-								
-								divs.appendChild(div1);
-								
-								div1.addEventListener('click', function(){
-									  const contentNo = div1.querySelector('input[type=hidden]').value;
-									  console.log(contentNo);
-									  location.href = "/board/video-templates/" + contentNo;
-								});
-							}
-						}
-					})
+    			let newUrl = null;
+    			let checkboxValue = "";
+    			
+    			if(checkboxArr.length==0){
+    				checkboxValue = "empty";
+    				newUrl = `/board/video-template-list`;
     			}else{
-	    			let checkboxValue = checkboxArr.join("+");
-	    			checkboxArr.length = 0;
-	    			console.log(checkboxValue);
-					fetch('/board/video-template-list/' + checkboxValue , {
-						method : 'get',
-						headers : {'content-type' : 'application/json; charset=UTF-8'},
-					})
-					.then(response => response.json())
-					.then(data =>{
-						if(data.length == 0){
-							divs.innerHTML = '';
-						}else{
-							divs.innerHTML = '';
-							for(const i of data){
-								const div1 = document.createElement("div");
-								div1.className = "video-card";
-								
-								const div2 = document.createElement("div");
-								div2.className = "video-thumbnail";
-								
-								const div3 = document.createElement("div");
-								div3.className = "video-info";
-								
-								const input = document.createElement("input");
-								input.setAttribute("type", "hidden");
-								input.setAttribute("value", i.contentNo);
-								
-								const h3 = document.createElement("h3");
-								h3.innerText = i.contentTitle;
-								
-								const p = document.createElement("p");
-								p.innerText = i.userNickName;
-								
-								div1.appendChild(div2);
-								div1.appendChild(div3);
-								
-								div3.appendChild(input);
-								div3.appendChild(h3);
-								div3.appendChild(p);
-								
-								divs.appendChild(div1);
-								
-								div1.addEventListener('click', function(){
-									  const contentNo = div1.querySelector('input[type=hidden]').value;
-									  console.log(contentNo);
-									  location.href = "/board/video-templates/" + contentNo;
-								});
-							}
-						}
-					})
+    				let str = checkboxArr.join("+");
+					
+					checkboxValue = str.replaceAll(" ", "-");
+	    			newUrl = `/board/video-template-list/${checkboxValue}`;
     			}
-
+    			
+    			checkboxArr.length = 0;
+    		
+				updatePage(checkboxValue, 1);
     		})
-    		
-    		
     	})
+    	
+    
+    	//검색
+    	const input = document.getElementsByTagName("input")[5];
+    	input.addEventListener('keydown', (event)=>{
+    		if(event.code == 'Enter'){
+    			const search = input.value;
+    		}
+    	})
+    
     }
+    
+	window.addEventListener("popstate", (event) =>{
+	    	if(event.state){
+	    		console.log("뒤로 가기 감지, 이전 상태:", event);
+// 				console.log(event.state.data);
+	    		
+	    		let check = event.state.checkboxValue;
+	    		console.log(check);
+	    		
+	    		updatePage(check, 0);
+	    		
+	    		checkboxValue = check.replaceAll("-", " ");
+	    		
+// 				console.log(checkboxValue);
+				
+				const cArr = checkboxValue.split("+");
+				
+				const checkbox = document.querySelectorAll(".category-checkbox");
+				console.log(checkbox);
+				
+				[...checkbox].map((video, index, array) =>{
+					video.checked = false;
+					for(let i =0; i<cArr.length ; i++){
+						if(cArr[i] == video.value){
+							video.checked = true;
+						}
+					}
+				})
+				
+	    	}
+	    });
+    
+    function updatePage(checkboxValue, flag) {
+    	console.log(checkboxValue);
+        // 여기에 실제 페이지를 갱신하는 로직을 작성 (AJAX 요청 가능)
+//         console.log("업데이트 : " + checkboxValue);
+        newUrl = `/board/video-template-list/${checkboxValue}`
+//         console.log("업데이트 : " + newUrl);
+        fetch('/board/video-template-list/' + checkboxValue , {
+				method : 'post',
+				headers : {'content-type' : 'application/json; charset=UTF-8'},
+			})
+			.then(response => response.json())
+			.then(data =>{
+				if(data.length == 0){
+					divs.innerHTML = "해당 글이 없습니다";
+				}else{
+					divs.innerHTML = '';
+			    	for(const i of data){
+						const div1 = document.createElement("div");
+						div1.className = "video-card";
+						
+						const div2 = document.createElement("div");
+						div2.className = "video-thumbnail";
+						
+						const div3 = document.createElement("div");
+						div3.className = "video-info";
+						
+						const input = document.createElement("input");
+						input.setAttribute("type", "hidden");
+						input.setAttribute("value", i.contentNo);
+						
+						const h3 = document.createElement("h3");
+						h3.innerText = i.contentTitle;
+						
+						const p = document.createElement("p");
+						p.innerText = i.userNickName;
+						
+						div1.appendChild(div2);
+						div1.appendChild(div3);
+						
+						div3.appendChild(input);
+						div3.appendChild(h3);
+						div3.appendChild(p);
+						
+						divs.appendChild(div1);
+						
+						div1.addEventListener('click', function(){
+							  const contentNo = div1.querySelector('input[type=hidden]').value;
+							  console.log(contentNo);
+							  location.href = "/board/video-templates/" + contentNo;
+						});
+					}
+				}
+				
+				if(flag == 1){
+					window.history.pushState({ data, checkboxValue }, "", newUrl);
+				}
+				
+				
+				
+			})
+    }
+    
     </script>
 </body>
 </html>
