@@ -56,7 +56,7 @@ public class AjaxController {
 		return bService.unAllTempLike(map);
 	}
 	
-	@PostMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\+&-]+}")
+	@PostMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z가-힣0-9\\+&-]+}")
 	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName){
 		System.out.println(categoryTagName);
 		System.out.println("수정 전 : " + menuName);
