@@ -131,7 +131,7 @@
 				const search = input.value;
 				
 				lastSegment = window.location.pathname.split("/").pop();
-				lastSegment2 = window.location.pathname.split("/").pop();
+				lastSegment2 = lastSegment.split("-").pop();
 				
 				console.log("엔터 누르고 나서 : " + search);
 				console.log("엔터 누르고 나서 : " + lastSegment2);
