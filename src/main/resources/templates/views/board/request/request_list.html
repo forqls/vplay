@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>제작 의뢰 게시판</title>
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="/css/rBoard/requestBoard.css">
-	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제작 의뢰 게시판</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/css/rBoard/requestBoard.css">
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
@@ -34,21 +34,20 @@
 			</form>
 			
 			<i data-lucide="search"></i>
-		</div>
 
-		<div class="filters">
-			<select class="filter-dropdown" name="menuName" id="menuName">
-				<option value="All">All</option>
-				<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
-				<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
-				<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
-				<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
-				<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
-				<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
-				<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
-			</select>
+			<div class="filters">
+				<select class="filter-dropdown" name="menuName" id="menuName">
+					<option value="All">All</option>
+					<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
+					<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
+					<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
+					<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
+					<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
+					<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
+					<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
+				</select>
+			</div>
 		</div>
-	</div>
 
 	<!-- Table -->
 	<div class="table-container">
@@ -121,13 +120,13 @@
 		</ul>
 	</div>
 
-	<!-- Create Button -->
-	<div class="create-button" th:if="${session.loginUser}">
-		<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
+		<!-- Create Button -->
+		<div class="create-button" th:if="${session.loginUser}">
+			<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
+		</div>
 	</div>
-</div>
 
-<script th:inline="javascript">
+	<script th:inline="javascript">
 	window.onload = () =>{
 		const tbody = document.querySelector('tbody');
 		const tds = tbody.querySelectorAll('td');
