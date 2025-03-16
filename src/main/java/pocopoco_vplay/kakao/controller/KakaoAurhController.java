@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import pocopoco_vplay.kakao.model.Kakao;
+import pocopoco_vplay.kakao.config.GoogleOAuthConfig;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
@@ -27,19 +26,19 @@ import pocopoco_vplay.users.model.vo.Users;
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
 public class KakaoAurhController {
+    private final UsersService uService;
+    private final GoogleOAuthConfig googleOAuthConfig;
     private final String KAKAO_CLIENT_ID = "ffd6b91df4ad805e542c6a8a450195b3";
     private final String KAKAO_REDIRECT_URI = "http://localhost:8080/oauth/kakao";
     private final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private final String KAKAO_USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
 
-    private static final String CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
-    private static final String CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
+
 
     private final String GOOGLE_REDIRECT_URI = "http://localhost:8080/oauth/google";
     private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
     private final String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
 
-    private final UsersService uService;
 
 
     @GetMapping("/kakao")
@@ -71,6 +70,8 @@ public class KakaoAurhController {
 
     @GetMapping("/google")
     public String googleLogin(@RequestParam("code") String code, HttpSession session) {
+    	 String CLIENT_ID = googleOAuthConfig.getClientId();
+    	 String CLIENT_SECRET = googleOAuthConfig.getClientSecret();
         String accessToken = getAccessToken(code, GOOGLE_TOKEN_URL, CLIENT_ID, GOOGLE_REDIRECT_URI,CLIENT_SECRET);
         if (accessToken == null) throw new UsersException("구글 토큰 못 가져옴 ㅋㅋ");
 
