@@ -33,8 +33,8 @@
 		WHERE l.user_no =#{id} and b.board_type is null and menu_name is not null
 		GROUP BY c.content_no, c.content_title, c.views
 	</select>
-	
-	<select id="selectMyRealProjects">
+	 
+	<select id="selectMyRealProjects"> 
        select c.*,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count , b.board_type,m.menu_name
 		from content c
             left join board b on c.content_no = b.content_no
@@ -160,6 +160,12 @@
 		select user_profile
 		from users
 		where user_id = #{userId}
+	</select>
+	
+	<select id="existGoogleUsers">
+  	 	SELECT *
+		FROM USERS
+		WHERE LOGIN_TYPE='G' AND USER_ID IS NULL AND GOOGLE_ID=#{googleId}
 	</select>
 	
 </mapper>

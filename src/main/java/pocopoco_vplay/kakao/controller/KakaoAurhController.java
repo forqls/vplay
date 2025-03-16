@@ -27,94 +27,106 @@ import pocopoco_vplay.users.model.vo.Users;
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
 public class KakaoAurhController {
-	private final String CLIENT_ID = "ffd6b91df4ad805e542c6a8a450195b3";
-    private final String REDIRECT_URI = "http://localhost:8080/oauth/kakao";
-    private final String TOKEN_URL = "https://kauth.kakao.com/oauth/token";
-    private final String USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
+    private final String KAKAO_CLIENT_ID = "ffd6b91df4ad805e542c6a8a450195b3";
+    private final String KAKAO_REDIRECT_URI = "http://localhost:8080/oauth/kakao";
+    private final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
+    private final String KAKAO_USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
+
+    private static final String CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
+    private static final String CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
+
+    private final String GOOGLE_REDIRECT_URI = "http://localhost:8080/oauth/google";
+    private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
+    private final String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
+
     private final UsersService uService;
+
+
     @GetMapping("/kakao")
-    public String kakaoLogin(@RequestParam("code") String code , HttpSession session){
-    	String accessToken = getAccessToken(code); // 토큰 요청
-    	
-    	if(accessToken == null) {
-    		throw new UsersException("토큰 못가져옴 ㅋㅋ");
-    	}else {
-    		System.out.println("토큰받기 성공");
-    	}
-    	
-    	Map<String,Object> userInfo = getUserInfo(accessToken);
-    	
-    	if(userInfo == null) {
-    		throw new UsersException("사용자 정보 못가져옴 ㅋㅋ");
-    	}
-    	Kakao loginUser = new Kakao();
-    	
-    	String kakaoId = userInfo.get("id").toString(); // 카카오 고유 ID
-	    String nickname = userInfo.get("nickname") != null ? userInfo.get("nickname").toString() : "닉네임 없음";
-	    
-	    Users result = uService.existUsers(kakaoId);
-	    
-	    Users users = new Users();
-	    
-	    
-	    if(result != null) {
-	    	session.setAttribute("loginUser", result);
-	    	
-	    	return "redirect:/";
-	    	
-	    }else {
-	    	users.setKakaoId(kakaoId);
-	    	users.setLoginType("K");
-	    	session.setAttribute("kakaoUser", users);
-	    	
-	    	return "redirect:/users/signUp";
-	    	
-	    }
-    	
+    public String kakaoLogin(@RequestParam("code") String code, HttpSession session) {
+        String accessToken = getAccessToken(code, KAKAO_TOKEN_URL, KAKAO_CLIENT_ID, KAKAO_REDIRECT_URI,null);
+        if (accessToken == null) throw new UsersException("카카오 토큰 못 가져옴 ㅋㅋ");
+
+        Map<String, Object> userInfo = getUserInfo(accessToken, KAKAO_USER_INFO_URL);
+        if (userInfo == null) throw new UsersException("카카오 사용자 정보 못 가져옴 ㅋㅋ");
+
+        String kakaoId = userInfo.get("id").toString();
+        String nickname = userInfo.get("nickname") != null ? userInfo.get("nickname").toString() : "닉네임 없음";
+
+        Users result = uService.existUsers(kakaoId);
+
+        if (result != null) {
+            session.setAttribute("loginUser", result);
+            return "redirect:/";
+        } else {
+            Users users = new Users();
+            users.setKakaoId(kakaoId);
+            users.setUserId(null); 
+            users.setLoginType("K"); 
+            users.setUserNickname(nickname);
+            session.setAttribute("kakaoUser", users);
+            return "redirect:/users/signUp";
+        }
     }
-    
-    
-    
-    
-    
-    private String getAccessToken(String code) {
+
+    @GetMapping("/google")
+    public String googleLogin(@RequestParam("code") String code, HttpSession session) {
+        String accessToken = getAccessToken(code, GOOGLE_TOKEN_URL, CLIENT_ID, GOOGLE_REDIRECT_URI,CLIENT_SECRET);
+        if (accessToken == null) throw new UsersException("구글 토큰 못 가져옴 ㅋㅋ");
+
+        Map<String, Object> userInfo = getUserInfo(accessToken, GOOGLE_USER_INFO_URL);
+        if (userInfo == null) throw new UsersException("구글 사용자 정보 못 가져옴 ㅋㅋ");
+
+        String googleId = userInfo.get("id").toString();
+        String email = userInfo.get("email") != null ? userInfo.get("email").toString() : "이메일 없음";
+
+        Users result = uService.existGoogleUsers(googleId);
+
+        if (result != null) {
+            session.setAttribute("loginUser", result);
+            return "redirect:/";
+        } else {
+            Users users = new Users();
+            users.setGoogleId(googleId);
+            users.setUserId(null);
+            users.setLoginType("G"); 
+            users.setUserEmail(email);
+            session.setAttribute("googleUser", users);
+            return "redirect:/users/signUp";
+        }
+    }
+
+    private String getAccessToken(String code, String tokenUrl, String clientId, String redirectUri,String clientSecret) {
         RestTemplate restTemplate = new RestTemplate();
-        // HTTP 클라이언트 이며 RESTful API 와 쉽게 상호작용이 가능함 , 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", CLIENT_ID);
-        params.add("redirect_uri", REDIRECT_URI);
+        params.add("client_id", clientId);
+        params.add("redirect_uri", redirectUri);
         params.add("code", code);
+        
+        if (clientSecret != null) {
+            params.add("client_secret", clientSecret);
+        }
+        
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        //HttpEntitiy 는 HTTP 의 본문과 헤더를 캡슐화 하는 클래스임. 제네릭 타입을 사용해서 어떤 데이터든 담을 수 있도록 설계 되어있음.
-        // 보통 RestTemplate랑 함께 사용함 동기방식이라 비동기방식(논블로킹 방식) 보다 성능이 떨어질 수 있음.근데 카카오 로그인같은 허접 코드는
-        // RestTemplate로 10가능 ㅋㅋ 
-        ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, request, Map.class);
+        ResponseEntity<Map> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, Map.class);
         Map<String, Object> responseBody = response.getBody();
-        
 
         return responseBody != null ? (String) responseBody.get("access_token") : null;
     }
 
-    private Map<String, Object> getUserInfo(String accessToken) {
+    private Map<String, Object> getUserInfo(String accessToken, String userInfoUrl) {
         RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
 
         HttpEntity<?> request = new HttpEntity<>(headers);
-
-        ResponseEntity<Map> response = restTemplate.exchange(USER_INFO_URL, HttpMethod.GET, request, Map.class);
-
+        ResponseEntity<Map> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, request, Map.class);
         return response.getBody();
     }
-    
-    
-    
-    
     
 }

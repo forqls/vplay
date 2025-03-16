@@ -110,4 +110,10 @@ public class UsersService {
 		return mapper.selectProfile(map);
 	}
 
+	public Users existGoogleUsers(String googleId) {
+		return mapper.existGoogleUsers(googleId);
+	}
+
+
+
 }

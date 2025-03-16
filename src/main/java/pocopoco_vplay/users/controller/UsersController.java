@@ -140,7 +140,9 @@ public class UsersController {
 				
 				boolean isPAymentExpired = today.after(loginUserPaymentEndDate);
 				boolean hasSeenAlert = loginUser.isAlertShown();
+				System.out.println(loginUser.isAlertShown());
 				
+				System.out.println("ddddddd 테스트용 : " + hasSeenAlert  + "테스트용 : " + isPAymentExpired);
 				
 				
 				
@@ -157,7 +159,6 @@ public class UsersController {
 				}else {
 					redirectAttributes.addFlashAttribute("showAlert",false);
 				}
-				System.out.println(isPAymentExpired);
 			}
 			
 			if (loginUser.getIsAdmin().equals("Y")) {
