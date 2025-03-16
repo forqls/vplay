@@ -162,10 +162,16 @@
 			toolbar: [
 				['style', ['bold', 'italic', 'underline', 'clear']],
 				['font', ['strikethrough', 'superscript', 'subscript']],
+				['color', ['color']],
 				['para', ['ul', 'ol', 'paragraph']],
 				['insert', ['link', 'picture', 'video']], // 이미지 업로드 버튼 비활성화 가능
 				['view', ['fullscreen', 'codeview', 'help']]
-			]
+			],
+			callbacks: {
+				onInit: function() {
+					$('.note-editable').css('color', '#FFFFFF');
+				}
+			}
 		});
 
 		// 폼 제출 시 Summernote 내용 추가

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.util.HtmlUtils;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
@@ -193,15 +194,20 @@ public class BoardController {
 	}
 
 	@GetMapping("inquiryDetail")
-	public String selectInquiry(@RequestParam("contentNo") int contentNo, Model model) {
+	public String selectInquiry(@RequestParam(value = "contentNo") int contentNo, Model model) {
+
 		Content inquiry = bService.selectInquiry(contentNo);
 		Reply reply = bService.selectReply(contentNo);
-		if (inquiry != null) {
+
+		if (inquiry == null) {
+			throw new UsersException("문의 불러오기에 실패했습니다.");
+		}else{
+			inquiry.setContentDetail(HtmlUtils.htmlUnescape(inquiry.getContentDetail()));
+
 			model.addAttribute("inquiry", inquiry);
 			model.addAttribute("reply", reply);
+
 			return "inquiry_detail";
-		} else {
-			throw new UsersException("문의 불러오기 실패.");
 		}
 	}
 
@@ -226,7 +232,7 @@ public class BoardController {
 	}
 
 	@GetMapping("inquiryUpdate")
-	public String inquiryUpdateView(@RequestParam("contentNo") int contentNo, Model model) {
+	public String inquiryUpdateView(@RequestParam(value = "contentNo") int contentNo, Model model) {
 		Content inquiry = bService.selectInquiry(contentNo);
 		if (inquiry != null) {
 			model.addAttribute("inquiry", inquiry);
@@ -348,13 +354,19 @@ public class BoardController {
 
 
 	@GetMapping("request_list")
-	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
+	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, 
+										@RequestParam(value = "search", required = false) String search,
+										ModelAndView mv) {
 		
+		//전체 게시글 갯수 가지고오는 것
 		int listCount = bService.getrequestPostCount(null);
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("search", search);
 
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 
-		ArrayList<Content> list = bService.selectAllRequestPost(null ,pi);
+		ArrayList<Content> list = bService.selectAllRequestPost(map ,pi);
 
 		//System.out.println("리스트 개수: " + list.size());
 
@@ -368,38 +380,35 @@ public class BoardController {
 	}
 	
 	@GetMapping("request_list/{menuName}")
-	public String filterRequestList(@RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
+	public String filterRequestList(@PathVariable("menuName") String menuName,
+									@RequestParam(value = "page", defaultValue = "1") int currentPage,
+									@RequestParam(value = "search", required = false) String search,
+									Model model) {
+		
 		System.out.println(menuName);
 		Content content = new Content();
 		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("search", search);
+
 		switch(menuName) {
-		case "video-Templates": content.setMenuNo(1); break;
-		case "Graphic-Templates": content.setMenuNo(4); break;
-		case "Stock-Video": content.setMenuNo(5); break;
-		case "Photos": content.setMenuNo(6); break;
-		case "Music": content.setMenuNo(2); break;
-		case "Sound-Effects": content.setMenuNo(3); break;
-		case "Fonts": content.setMenuNo(7); break;
+		case "video-Templates": map.put("menuNo", "1"); break;
+		case "Graphic-Templates": map.put("menuNo", "4"); break;
+		case "Stock-Video": map.put("menuNo", "5"); break;
+		case "Photos": map.put("menuNo", "6"); break;
+		case "Music": map.put("menuNo", "2"); break;
+		case "Sound-Effects": map.put("menuNo", "3"); break;
+		case "Fonts": map.put("menuNo", "7"); break;
 		}
-		
+
 		int listCount = bService.getrequestPostCount(content); // 필터된 데이터 개수 조회
-		
+
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10); // 페이지네이션 계산
-		
-		ArrayList<Content> list = bService.selectAllRequestPost(content, pi);
-		
+
+		ArrayList<Content> list = bService.selectAllRequestPost(map, pi);
+
 		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
-		
-		return "request_list";
-	}
-	@GetMapping("request_list/{menuName}/{searchValue}")
-	public String searchRequest(@RequestParam(value="page", defaultValue = "1") int currentPage, @RequestParam Map<String, Object> searchValue, Model model) {
-		Content content = new Content();
-		List<Content> result = bService.searchRequest(searchValue);
-		int listCount = bService.getrequestPostCount(content); // 필터된 데이터 개수 조회
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		System.out.println("searchValue" + searchValue);
-		model.addAttribute("searchValue", searchValue);
+
 		return "request_list";
 	}
 
