@@ -56,4 +56,6 @@ public interface UsersMapper {
 
 	String selectProfile(HashMap<String, String> map);
 
+	Users existGoogleUsers(String googleId);
+
 }
