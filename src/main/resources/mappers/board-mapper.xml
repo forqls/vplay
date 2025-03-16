@@ -430,8 +430,8 @@
 		FROM content
 		JOIN users USING(user_no)
 		join board using(content_no)
-		<if test="searchvalue != null and searchValue != '">
-		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchvalue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y';
+		<if test="searchValue != null and searchValue.trim() != ''">
+		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
 		</if>
 	</select>
 </mapper>
