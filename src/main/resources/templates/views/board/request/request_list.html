@@ -1,129 +1,103 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>제작 의뢰 게시판</title>
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="/css/rBoard/requestBoard.css">
-	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제작 의뢰 게시판</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/css/rBoard/requestBoard.css">
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div th:replace="~{views/common/topbar :: topbar}"></div>
-<div class="container">
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="container">
 
-	<!-- Main Title -->
-	<h1>제작 의뢰 게시판</h1>
+		<!-- Main Title -->
+		<h1>제작 의뢰 게시판</h1>
 
-	<!-- Description -->
-	<p class="description">
-		안녕하세요! 이곳은 영상 제작을 의뢰하고, 크리에이터와 협업할 수 있는 제작 의뢰 게시판입니다.
-	</p>
-	<p class="description">
-		기업 홍보, 유튜브 콘텐츠, 광고, 뮤직비디오, 웨딩 영상 등 다양한 영상 제작을 전문가들에게 요청할 수 있습니다.
-	</p>
+		<!-- Description -->
+		<p class="description">안녕하세요! 이곳은 영상 제작을 의뢰하고, 크리에이터와 협업할 수 있는 제작 의뢰 게시판입니다.</p>
+		<p class="description">기업 홍보, 유튜브 콘텐츠, 광고, 뮤직비디오, 웨딩 영상 등 다양한 영상 제작을 전문가들에게 요청할 수 있습니다.</p>
 
-	<div class="divider"></div>
+		<div class="divider"></div>
 
-	<!-- Search and Filter -->
-	<div class="search-filter">
-		<div class="search-bar">
-			<input type="search" id="searchInput" placeholder="search" th:value="${searchValue}">
-			<i data-lucide="search"></i>
+		<!-- Search and Filter -->
+		<div class="search-filter">
+			<div class="search-bar">
+				<input type="search" placeholder="search"> <i data-lucide="search"></i>
+			</div>
+
+			<div class="filters">
+				<select class="filter-dropdown" name="menuName" id="menuName">
+					<option value="All">All</option>
+					<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
+					<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
+					<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
+					<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
+					<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
+					<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
+					<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
+				</select>
+			</div>
 		</div>
 
-		<div class="filters">
-			<select class="filter-dropdown" name="menuName" id="menuName">
-				<option value="All">All</option>
-				<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
-				<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
-				<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
-				<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
-				<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
-				<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
-				<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
-			</select>
+		<!-- Table -->
+		<div class="table-container">
+			<table>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Title</th>
+						<th>category</th>
+						<th>User</th>
+						<th>date</th>
+						<th>views</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="request-list" th:each="c : ${list}">
+						<td>[[${c.contentNo}]]</td>
+						<td>[[${c.contentTitle}]]</td>
+						<td>[[${c.menuName}]]</td>
+						<td>[[${c.userNickName}]]</td>
+						<td>[[${c.modifyDate}]]</td>
+						<td>[[${c.views}]]</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Pagination -->
+		<div class="pagination">
+			<ul>
+				<th:block th:if="${pi.currentPage >1}">
+					<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous"> < </a></li>
+				</th:block>
+				<th:block th:if="${pi.currentPage <=1}">
+					<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
+				</th:block>
+
+				<!-- 숫자 -->
+				<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a></li>
+
+
+				<!-- 다음 -->
+				<th:block th:if="${pi.currentPage < pi.MaxPage}">
+					<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+				</th:block>
+				<th:block th:if="${pi.currentPage >= pi.MaxPage}">
+					<li class="next chevron-right"><a aria-label="Next"> > </a></li>
+				</th:block>
+			</ul>
+		</div>
+
+		<!-- Create Button -->
+		<div class="create-button" th:if="${session.loginUser}">
+			<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
 		</div>
 	</div>
 
-	<!-- Table -->
-	<div class="table-container">
-		<table>
-			<thead>
-			<tr>
-				<th>#</th>
-				<th>Title</th>
-				<th>category</th>
-				<th>User</th>
-				<th>date</th>
-				<th>views</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr class="request-list" th:each="c : ${list}">
-				<td>[[${c.contentNo}]]</td>
-				<td>[[${c.contentTitle}]]</td>
-				<td>[[${c.menuName}]]</td>
-				<td>[[${c.userNickName}]]</td>
-				<td>[[${c.modifyDate}]]</td>
-				<td>[[${c.views}]]</td>
-			</tr>
-			<tr th:if="${#lists.isEmpty(list)}">
-				<td colspan="6" style="text-align: center;">검색 결과가 없습니다.</td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<!-- Pagination -->
-	<div class="pagination">
-		<ul>
-			<th:block th:if="${pi.currentPage >1}">
-				<li class="prev chevron-left">
-					<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
-						<
-					</a>
-				</li>
-			</th:block>
-			<th:block th:if="${pi.currentPage <=1}">
-				<li class="prev chevron-left">
-					<a aria-label="Previous">
-						<
-					</a>
-				</li>
-			</th:block>
-
-			<!-- 숫자 -->
-			<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
-				<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
-			</li>
-
-
-			<!-- 다음 -->
-			<th:block th:if="${pi.currentPage < pi.maxPage}">
-				<li class="next chevron-right">
-					<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
-						>
-					</a>
-				</li>
-			</th:block>
-			<th:block th:if="${pi.currentPage >= pi.maxPage}">
-				<li class="next chevron-right">
-					<a aria-label="Next">
-						>
-					</a>
-				</li>
-			</th:block>
-		</ul>
-	</div>
-
-	<!-- Create Button -->
-	<div class="create-button" th:if="${session.loginUser}">
-		<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
-	</div>
-</div>
-
-<script th:inline="javascript">
+	<script th:inline="javascript">
 	window.onload = () =>{
 		const tbody = document.querySelector('tbody');
 		const tds = tbody.querySelectorAll('td');
@@ -140,7 +114,7 @@
 		document.getElementById("menuName").addEventListener('change', function() {
 			const menuName = this.value;
 			console.log(menuName);
-
+			
 			if(menuName == "All"){
 				location.href= "/board/request_list";
 			}else{
@@ -149,20 +123,21 @@
 		});
 
 		document.querySelector('.search-bar input').addEventListener('keyup', function(event){
-			const value = this.value.trim();
-			console.log("검색어"+ value);
+			const value = this.value;
+			console.log("value"+ value);
 			if(event.key === "Enter"){
 				search(value); //value를 search함수에 전달하는거임
 			}
 
 		});
-
+		
+		
 
 		function search(searchValue){ //searchValue는 value를 전달받은거임
 			console.log("searchValue"+ searchValue);
-			if (searchValue !== "") {
-				window.location.href = "/board/request_list/search?search=" + searchValue;
-			}
+
+			window.location.href = "/board/request_list?search=" + searchValue;
+
 		}
 
 	}

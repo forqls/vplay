@@ -27,7 +27,7 @@ public interface AdminMapper {
 
 	ArrayList<Content> selectAllTemplates(Content content, RowBounds rowBounds);
 
-	int getrequestPostCount();
+	int getrequestPostCount(Content content);
 
 	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
 

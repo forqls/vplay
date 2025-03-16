@@ -185,7 +185,7 @@ public class AdminController {
 			content.setMenuNo(7);
 			break;
 		}
-		int listCount = aService.getTemplatesCount(content);
+		int listCount = aService.getrequestPostCount(content);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllTemplates(content, pi);
 		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
@@ -194,9 +194,9 @@ public class AdminController {
 
 	@GetMapping("request")
 	public ModelAndView joinRequest(@RequestParam(value = "page", defaultValue = "1") int currentPage, ModelAndView mv) {
-		int listCount = aService.getTemplatesCount(null);
+		int listCount = aService.getrequestPostCount(null);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Content> list = aService.selectAllTemplates(null, pi);
+		ArrayList<Content> list = aService.selectAllRequestPost(null, pi);
 		for (Content c : list) {
 			System.out.println(c);
 			c.setUserId(aService.selectUser(c.getUserNo()));
@@ -235,7 +235,7 @@ public class AdminController {
 		}
 		int listCount = aService.getTemplatesCount(content);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Content> list = aService.selectAllTemplates(content, pi);
+		ArrayList<Content> list = aService.selectAllRequestPost(content, pi);
 		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
 		return "management_request";
 	}
