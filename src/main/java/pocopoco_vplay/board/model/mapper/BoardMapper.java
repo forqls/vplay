@@ -92,5 +92,4 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectRequestList(Content content);
 
-	List<Content> searchRequest(Map<String, Object> searchValue);
 }

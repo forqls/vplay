@@ -181,8 +181,5 @@ public class BoardService {
 		return mapper.selectRequestList(content);
 	}
 
-	public List<Content> searchRequest(Map<String, Object> searchValue) {
-		return mapper.searchRequest(searchValue);
-	}
 
 }

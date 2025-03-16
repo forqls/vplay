@@ -431,14 +431,14 @@
 		where menu_no =#{menuNo} and CONTENT_STATUS ='Y'
 	</select>
   
-	<select id="searchRequest">
-		SELECT *
-		FROM content
-		JOIN users USING(user_no)
-		join board using(content_no)
-		join menu using(menu_no)
-		<if test="searchValue != null and searchValue.trim() != ''">
-		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
-		</if>
-	</select>
+<!--	<select id="searchRequest">-->
+<!--		SELECT *-->
+<!--		FROM content-->
+<!--		JOIN users USING(user_no)-->
+<!--		join board using(content_no)-->
+<!--		join menu using(menu_no)-->
+<!--		<if test="searchValue != null and searchValue.trim() != ''">-->
+<!--		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'-->
+<!--		</if>-->
+<!--	</select>-->
 </mapper>
