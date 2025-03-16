@@ -76,7 +76,16 @@ public class AjaxController {
 		
 		System.out.println("수정 후 : " + menuName);
 		
-		map.put("menuName", menuName);
+		if(menuName.equals("video Templates") || menuName.equals("Sound Effects") || menuName.equals("Music") || menuName.equals("Graphic Templates") ||
+		   menuName.equals("Stock Video") || menuName.equals("Photos") || menuName.equals("Fonts")) {
+			System.out.println("menuName 들어옴");
+			map.put("menuName", menuName);
+		}else {
+			System.out.println("search 들어옴");
+			map.put("search", menuName);
+		}
+			
+		
 		categoryTagName = categoryTagName.replace("-", " ");
 		System.out.println(categoryTagName);
 		

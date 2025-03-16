@@ -93,6 +93,9 @@
 				#{category}
 			</foreach>
 		</if>
+		<if test="search != null">
+			and CONTENT_TITLE like '%${search}%'
+		</if>
 		group by cg.category_name, c.content_no, c.content_title, u.user_nickname
 		order by c.content_no desc)
 		<if test="menuNameNum == 'video Templates'">
