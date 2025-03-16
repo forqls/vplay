@@ -274,6 +274,9 @@
 		<if test="menuNo != null">
 		and menu_no = #{menuNo}
 		</if>
+		<if test="search != null">
+		and content_title like '%${search}%'
+		</if>
 		order by content_no desc
 	</select>
 
@@ -433,6 +436,7 @@
 		FROM content
 		JOIN users USING(user_no)
 		join board using(content_no)
+		join menu using(menu_no)
 		<if test="searchValue != null and searchValue.trim() != ''">
 		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
 		</if>
