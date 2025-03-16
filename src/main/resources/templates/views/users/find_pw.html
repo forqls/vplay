@@ -98,6 +98,22 @@ body {
 	font-size: 1rem;
 }
 
+.alert_text {
+	display: block;
+	margin-top: -0.5rem;
+	margin-bottom: 0.5rem;
+	font-size: 0.8rem;
+	text-align: center;
+}
+
+.alert_text.success {
+	color: #4CAF50;
+}
+
+.alert_text.error {
+	color: #ff4d4f;
+}
+
 @media ( max-width : 768px) {
 	.find-id-container, .find-pw-container {
 		margin: 1rem;
@@ -125,11 +141,13 @@ body {
 		<h1 class="find-pw-title">비밀번호 찾기</h1>
 		<form id="findIdForm" onsubmit="return findPwBtn(event)" method="post">
 			<div class="input-group">
-				<input type="text" placeholder="ID" class="input-field user_id" id="userId" name="userId"> <span class="alert_text"></span>
+				<input type="text" placeholder="ID" class="input-field user_id" id="userId" name="userId">
 			</div>
+			<span class="alert_text" id="userIdAlert"></span>
 			<div class="input-group">
-				<input type="tel" placeholder="Phone" class="input-field user_phone" id="phone" name="userPhone"> <span class="alert_text"></span>
+				<input type="tel" placeholder="Phone" class="input-field user_phone" id="phone" name="userPhone">
 			</div>
+			<span class="alert_text" id="userPhoneAlert"></span>
 			<div class="input-group">
 				<input type="email" placeholder="Email" class="input-field" id="email" name="userEmail">
 				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
@@ -148,18 +166,20 @@ body {
 		let flag = false;
 
 		window.onload = () => {
-			const alertText = document.querySelectorAll(".alert_text");
 
 			document.getElementById('userId').addEventListener('blur', function() {
+				const userIdAlert = document.getElementById('userIdAlert');
 				if(this.value.trim() === ''){
-					alertText[0].innerHTML ='아이디를 입력해 주세요.';
+					userIdAlert.textContent ='아이디를 입력해 주세요.';
+					userIdAlert.className = 'alert_text error';
 				}else{
-					alertText[0].innerHTML = '';
+					userIdAlert.textContent = '';
+					userIdAlert.className = 'alert_text';
 				}
 			});
 
 			document.getElementById('phone').addEventListener('blur', function() {
-
+				const userPhoneAlert = document.getElementById('userPhoneAlert');
 				let userId = document.getElementById('userId').value.trim();
 				// console.log(this.value);
 
@@ -182,9 +202,9 @@ body {
 				// console.log(this.value);
 				console.log(userId);
 				if(userPhone === ''){
-					alertText[1].innerHTML ='휴대폰 번호를 입력해 주세요.';
+					userPhoneAlert.textContent ='휴대폰 번호를 입력해 주세요.';
+					userPhoneAlert.className = 'alert_text error';
 				}else{
-					alertText[1].innerHTML ='';
 					$.ajax({
 						url:'/users/findPw',
 						type:'POST',
@@ -192,10 +212,12 @@ body {
 						success: data => {
 							console.log(data);
 							if(data === 0){
-								alertText[1].innerHTML = '아이디와 휴대폰 번호가 일치하지 않습니다';
+								userPhoneAlert.textContent = '아이디와 휴대폰 번호가 일치하지 않습니다.';
+								userPhoneAlert.className = 'alert_text error';
 								flag = false;
 							}else{
-								alertText[1].innerHTML = '아이디와 휴대폰 번호가 일치합니다';
+								userPhoneAlert.textContent = '아이디와 휴대폰 번호가 일치합니다.';
+								userPhoneAlert.className = 'alert_text success';
 								flag = true;
 							}
 						},

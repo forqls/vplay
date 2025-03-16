@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div class="sidebar">
-		<div class="logo">
+		<div class="logo" onclick="location.href = '/'">
 			<div class="logo-circle"></div>
 			<div class="logo-text">VPLAY</div>
 		</div>
@@ -19,11 +19,10 @@
                     <rect x="3" y="14" width="7" height="7"></rect>
                     <rect x="14" y="14" width="7" height="7"></rect>
                 </svg> Dashboard
-			</a>
-				<a id="users" onclick="location.href = '/admin/users'" class="nav-item">회원 관리</a>
-				<a id="inquiry" onclick="location.href = '/admin/inquiry'" class="nav-item">문의 관리</a>
-				<a id="templates" onclick="location.href = '/admin/templates'" class="nav-item">템플릿 관리</a>
-				<a id="request" onclick="location.href = '/admin/request'" class="nav-item">의뢰 게시물 관리</a>
+			</a> <a id="users" onclick="location.href = '/admin/users'" class="nav-item">회원 관리</a>
+			<a id="inquiry" onclick="location.href = '/admin/inquiry'" class="nav-item">문의 관리</a>
+			<a id="templates" onclick="location.href = '/admin/templates'" class="nav-item">템플릿 관리</a>
+			<a id="request" onclick="location.href = '/admin/request'" class="nav-item">의뢰 게시물 관리</a>
 		</nav>
 	</div>
 	<script>
