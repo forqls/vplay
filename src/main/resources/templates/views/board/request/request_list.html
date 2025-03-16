@@ -28,7 +28,11 @@
 	<!-- Search and Filter -->
 	<div class="search-filter">
 		<div class="search-bar">
-			<input type="search" id="searchInput" placeholder="search" th:value="${searchValue}">
+		
+			<form>
+				<input type="search" name="search" placeholder="search" th:value="${searchValue}">
+			</form>
+			
 			<i data-lucide="search"></i>
 		</div>
 
@@ -148,24 +152,10 @@
 			}
 		});
 
-		document.querySelector('.search-bar input').addEventListener('keyup', function(event){
-			const value = this.value.trim();
-			console.log("검색어"+ value);
-			if(event.key === "Enter"){
-				search(value); //value를 search함수에 전달하는거임
-			}
-
-		});
-
-
-		function search(searchValue){ //searchValue는 value를 전달받은거임
-			console.log("searchValue"+ searchValue);
-			if (searchValue !== "") {
-				window.location.href = "/board/request_list/search?search=" + searchValue;
-			}
-		}
+		
 
 	}
+	
 </script>
 </body>
 </html>

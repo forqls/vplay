@@ -90,11 +90,11 @@ public class BoardService {
 		return mapper.getrequestPostCount(content);
 	}
 
-	public ArrayList<Content> selectAllRequestPost(Content content, PageInfo pi) {
+	public ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 
-		return mapper.selectAllRequestPost(content,rowBounds);
+		return mapper.selectAllRequestPost(map, rowBounds);
 	}
 
 	public String selectUser(int userNo) {
