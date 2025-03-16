@@ -43,25 +43,36 @@
 
 	<select id="getTemplatesCount">
 		select count(*)
-		from content
-		join board using(content_no)
-		where board_type = 2
+		from content c
+		left join content_category cc on c.content_no = cc.content_no
+		left join category cat on cc.category_no = cat.category_no
+		left join menu m on cat.menu_no = m.menu_no
+		where not exists (
+		select 1
+		from board b
+		where c.content_no = b.content_no
+		)
 		<if test="menuNo != null">
-			and menu_no = #{menuNo}
+			and m.menu_no = #{menuNo}
 		</if>
 	</select>
 
+
 	<select id="selectAllTemplates">
 		select *
-		from content
-		join board using(content_no)
-		join menu using(menu_no)
-		join users using(user_no)
-		where board_type = 2 and CONTENT_STATUS = 'Y'
+		from content c
+		left join content_category cc on c.content_no = cc.content_no
+		left join category cat on cc.category_no = cat.category_no
+		left join menu m on cat.menu_no = m.menu_no
+		where not exists (
+		select 1
+		FROM board b
+		where c.content_no = b.content_no
+		)
 		<if test="menuNo != null">
-			and menu_no = #{menuNo}
+			and cat.menu_no = #{menuNo}
 		</if>
-		order by content_no desc
+		order by c.content_no desc
 	</select>
 
 	<select id="getrequestPostCount">
@@ -75,7 +86,7 @@
 		select *
 		from content
 		join board using(content_no)
-		join MENU using(menu_no)
+		join menu using(menu_no)
 		where board_type = 2
 		order by content_no desc
 	</select>
@@ -88,19 +99,19 @@
 
 	<update id="inquiryUpdate">
 		update content
-		set CONTENT_STATUS = #{contentStatus}, DELETE_STATUS = #{deleteStatus}
+		set content_status = #{contentStatus}, delete_status = #{deleteStatus}
 		where content_no = #{contentNo}
 	</update>
 
 	<update id="templatesUpdate">
 		update content
-		set CONTENT_STATUS = #{contentStatus}, DELETE_STATUS = #{deleteStatus}
+		set content_status = #{contentStatus}, delete_status = #{deleteStatus}
 		where content_no = #{contentNo}
 	</update>
 
 	<update id="requestUpdate">
 		update content
-		set CONTENT_STATUS = #{contentStatus}, DELETE_STATUS = #{deleteStatus}
+		set content_status = #{contentStatus}, delete_status = #{deleteStatus}
 		where content_no = #{contentNo}
 	</update>
 
