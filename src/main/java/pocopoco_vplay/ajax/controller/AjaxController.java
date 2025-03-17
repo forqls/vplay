@@ -27,7 +27,7 @@ import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
 @RestController
-@RequestMapping({"/board", "/users"})
+@RequestMapping({"/board", "/users", "/admin"})
 @SessionAttributes("loginUser")
 @RequiredArgsConstructor
 public class AjaxController {
@@ -161,6 +161,7 @@ public class AjaxController {
 		}
 		
 	}
+
 	
 
 	@GetMapping("writeContent/{menuNo}")
@@ -171,6 +172,7 @@ public class AjaxController {
 		
 		System.out.println(list);
 		return list;
+
 	}
 		
 }
