@@ -1,6 +1,7 @@
 package pocopoco_vplay.admin.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,10 @@ public class AdminService {
 		return mapper.getInquiryCount(content);
 	}
 
-	public ArrayList<Content> selectAllInquiry(Content content, PageInfo pi) {
+	public ArrayList<Content> selectAllInquiry(HashMap<String, String> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllInquiry(content, rowBounds);
+		return mapper.selectAllInquiry(map, rowBounds);
 	}
 
 	public String selectUser(int userNo) {
@@ -46,20 +47,20 @@ public class AdminService {
 		return mapper.getTemplatesCount(content);
 	}
 
-	public ArrayList<Content> selectAllTemplates(Content content, PageInfo pi) {
+	public ArrayList<Content> selectAllTemplates(HashMap<String, String> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllTemplates(content, rowBounds);
+		return mapper.selectAllTemplates(map, rowBounds);
 	}
 
 	public int getrequestPostCount(Content content) {
 		return mapper.getrequestPostCount(content);
 	}
 
-	public ArrayList<Content> selectAllRequestPost(Content content, PageInfo pi) {
+	public ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllRequestPost(rowBounds);
+		return mapper.selectAllRequestPost(map, rowBounds);
 	}
 
 	public int userUpdate(Users user) {
