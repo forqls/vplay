@@ -67,6 +67,11 @@
 
 .vplay-sign-in {
 	color: var(--vplay-text-color-light);
+	transition: color 0.3s ease;
+}
+
+.vplay-sign-in:hover {
+	color: #5e37e9;
 }
 
 @media ( max-width : 768px) {
@@ -76,5 +81,5 @@
 }
 
 body {
-	padding-top: var(--vplay-header-height) !important;
+	padding-top: var(--vplay-header-height) !important
 }

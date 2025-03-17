@@ -19,17 +19,17 @@ public interface AdminMapper {
 
 	int getInquiryCount(Content content);
 
-	ArrayList<Content> selectAllInquiry(Content content, RowBounds rowBounds);
+	ArrayList<Content> selectAllInquiry(HashMap<String, String> map, RowBounds rowBounds);
 
 	String selectUser(int userNo);
 
 	int getTemplatesCount(Content content);
 
-	ArrayList<Content> selectAllTemplates(Content content, RowBounds rowBounds);
+	ArrayList<Content> selectAllTemplates(HashMap<String, String> map, RowBounds rowBounds);
 
 	int getrequestPostCount(Content content);
 
-	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
+	ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, RowBounds rowBounds);
 
 	int userUpdate(Users user);
 
