@@ -38,7 +38,8 @@ public class AdminController {
 
 	@GetMapping("dashboard")
 	public ModelAndView joinDashboard(ModelAndView mv) {
-		int userCount = aService.getUsersCount();
+		HashMap<String, String> map = new HashMap<>();
+		int userCount = aService.getUsersCount(map);
 		int templatesCount = aService.getTemplatesCount(null);
 		mv.addObject("userCount", userCount).addObject("templatesCount", templatesCount);
 		mv.setViewName("dashboard");
@@ -95,79 +96,79 @@ public class AdminController {
 
 	@GetMapping("users")
 	public ModelAndView joinUsers(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, ModelAndView mv) {
-		int listCount = aService.getUsersCount();
+		HashMap<String, String> map = new HashMap<>();
+		map.put("search", search);
+		int listCount = aService.getUsersCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-		ArrayList<Users> list = aService.selectAllUser(pi);
-		for (Users u : list) {
-			System.out.println(u.getJoinDate());
-		}
-		mv.addObject("list", list).addObject("pi", pi).setViewName("management_users");
+		ArrayList<Users> list = aService.selectAllUser(map, pi);
+		mv.addObject("list", list).addObject("pi", pi).addObject("searchValue", search);
+		mv.setViewName("management_users");
 		return mv;
 	}
 
 	@GetMapping("inquiry")
 	public ModelAndView joinInquiry(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, ModelAndView mv) {
-		int listCount = aService.getInquiryCount(null);
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
+		int listCount = aService.getInquiryCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllInquiry(map, pi);
 		for (Content c : list) {
 			c.setUserId(aService.selectUser(c.getUserNo()));
 			c.setReply(bService.selectReply(c.getContentNo()));
 		}
-		mv.addObject("list", list).addObject("pi", pi);
+		mv.addObject("list", list).addObject("pi", pi).addObject("searchValue", search);
 		mv.setViewName("management_inquiry");
 		return mv;
 	}
 
 	@GetMapping("inquiry/{menuName}")
-	public String filterInquiry(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, @PathVariable("menuName") String menuName, Model model) {
-		System.out.println(menuName);
-		Content content = new Content();
+	public String filterInquiry(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
+
 		switch (menuName) {
 		case "system":
-			map.put("menuNo","11");
+			map.put("menuNo", "11");
 			break;
 		case "pay":
-			map.put("menuNo","12");
+			map.put("menuNo", "12");
 			break;
 		case "content":
-			map.put("menuNo","13");
+			map.put("menuNo", "13");
 			break;
 		case "other":
-			map.put("menuNo","14");
+			map.put("menuNo", "14");
 			break;
 		}
-		int listCount = aService.getInquiryCount(content);
+		int listCount = aService.getInquiryCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllInquiry(map, pi);
-		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
+		for (Content c : list) {
+			c.setUserId(aService.selectUser(c.getUserNo()));
+			c.setReply(bService.selectReply(c.getContentNo()));
+		}
+		model.addAttribute("list", list).addAttribute("menuName", menuName).addAttribute("Loc", "/admin/inquiry/" + menuName).addAttribute("pi", pi).addAttribute("searchValue", search);
 		return "management_inquiry";
 	}
 
 	@GetMapping("templates")
 	public ModelAndView joinTemplates(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, ModelAndView mv) {
-		int listCount = aService.getTemplatesCount(null);
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
+		int listCount = aService.getTemplatesCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllTemplates(map, pi);
 		for (Content c : list) {
-			System.out.println(c);
 			c.setUserId(aService.selectUser(c.getUserNo()));
 		}
-		mv.addObject("list", list).addObject("pi", pi);
+		mv.addObject("list", list).addObject("pi", pi).addObject("searchValue", search);
 		mv.setViewName("management_templates");
 		return mv;
 	}
 
 	@GetMapping("templates/{menuName}")
 	public String filterTemplates(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, @PathVariable("menuName") String menuName, Model model) {
-		System.out.println(menuName);
-		Content content = new Content();
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
 		switch (menuName) {
@@ -193,33 +194,34 @@ public class AdminController {
 			map.put("menuNo", "7");
 			break;
 		}
-		int listCount = aService.getrequestPostCount(content);
+		int listCount = aService.getTemplatesCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllTemplates(map, pi);
-		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
+		for (Content c : list) {
+			c.setUserId(aService.selectUser(c.getUserNo()));
+		}
+		model.addAttribute("list", list).addAttribute("menuName", menuName).addAttribute("Loc", "/admin/templates/" + menuName).addAttribute("pi", pi).addAttribute("searchValue", search);
 		return "management_templates";
 	}
 
 	@GetMapping("request")
 	public ModelAndView joinRequest(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, ModelAndView mv) {
-		int listCount = aService.getrequestPostCount(null);
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
+		int listCount = aService.getrequestPostCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllRequestPost(map, pi);
 		for (Content c : list) {
 			System.out.println(c);
 			c.setUserId(aService.selectUser(c.getUserNo()));
 		}
-		mv.addObject("list", list).addObject("pi", pi);
+		mv.addObject("list", list).addObject("pi", pi).addObject("searchValue", search);
 		mv.setViewName("management_request");
 		return mv;
 	}
 
 	@GetMapping("request/{menuName}")
-	public String filterRequest(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, @PathVariable("menuName") String menuName, Model model) {
-		System.out.println(menuName);
-		Content content = new Content();
+	public String filterRequest(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
 		switch (menuName) {
@@ -245,10 +247,13 @@ public class AdminController {
 			map.put("menuNo", "7");
 			break;
 		}
-		int listCount = aService.getTemplatesCount(content);
+		int listCount = aService.getrequestPostCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 		ArrayList<Content> list = aService.selectAllRequestPost(map, pi);
-		model.addAttribute("list", list).addAttribute("pi", pi).addAttribute("menuName", menuName);
+		for (Content c : list) {
+			c.setUserId(aService.selectUser(c.getUserNo()));
+		}
+		model.addAttribute("list", list).addAttribute("menuName", menuName).addAttribute("Loc", "/admin/request/" + menuName).addAttribute("pi", pi).addAttribute("searchValue", search);
 		return "management_request";
 	}
 
