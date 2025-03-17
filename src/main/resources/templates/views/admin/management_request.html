@@ -22,7 +22,10 @@
 						<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
 						<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
 						<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
-					</select> <input type="text" placeholder="Search">
+					</select>
+					<form>
+						<input type="search" name="search" placeholder="Search" th:value="${searchValue}" style="width: 1170px">
+					</form>
 					<button type="button">
 						<svg viewBox="0 0 24 24" width="20" height="20">
                         <circle cx="11" cy="11" r="8"></circle>
