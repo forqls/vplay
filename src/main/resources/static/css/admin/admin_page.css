@@ -26,7 +26,10 @@ body {
 .main-content {
 	flex: 1;
 	margin-left: 240px;
-	padding: 24px;
+	padding: 2rem 3rem;
+	position: relative;
+	overflow: hidden;
+	z-index: 0;
 }
 
 .page-title {
@@ -38,10 +41,11 @@ body {
 .content-card {
 	background-color: #262d34;
 	border-radius: 8px;
-	overflow: hidden;
 	min-height: 780px;
 	display: flex;
 	flex-direction: column;
+	z-index: 1;
+	padding: 0 2rem;
 }
 
 .filter-dropdown {
@@ -158,6 +162,42 @@ tbody tr:hover {
 	color: white;
 }
 
+.AddSettings{
+	position: relative;
+}
+
+/*td.AddSettings:hover .hover_action,
+.hover_action:hover {
+	visibility: visible;
+}*/
+.hover_action {
+	position: fixed;
+	top: 20%;
+	left: 85%;
+	/*visibility: hidden;*/
+	display: none;
+	z-index: 9999;
+	border: 1px solid #1F1F2C;
+	background: #1F1F2C;
+	border-radius: 15px;
+	padding: 0.5rem 0;
+}
+
+span.rm_child {
+	font-size: 0.8rem;
+	display: block;
+	width: 100%;
+	text-align: left;
+	padding: 0.3rem 0.8rem;
+	color: #6F757D;
+}
+
+.rm_child:hover {
+	color: #fff;
+}
+
+
+/*반응형*/
 @media ( max-width : 1024px) {
 	.sidebar {
 		width: 200px;

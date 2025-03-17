@@ -26,7 +26,7 @@ import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
 @RestController
-@RequestMapping({"/board", "/users"})
+@RequestMapping({"/board", "/users", "/admin"})
 @SessionAttributes("loginUser")
 @RequiredArgsConstructor
 public class AjaxController {
@@ -159,6 +159,11 @@ public class AjaxController {
 			return 0;
 		}
 		
+	}
+
+	@PutMapping("mdRecommendation")
+	public int updateRecommendation(@RequestParam HttpSession session) {
+		return 0;
 	}
 		
 }
