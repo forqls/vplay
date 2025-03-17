@@ -21,14 +21,8 @@
 						<option value="other" th:selected="${menuName == 'other'}">기타</option>
 					</select>
 					<form>
-						<input type="search" name="search" placeholder="Search" th:value="${searchValue}" style="width: 1170px">
+						<input type="search" name="search" placeholder="Search" th:value="${searchValue}">
 					</form>
-					<button type="button">
-						<svg viewBox="0 0 24 24" width="20" height="20">
-							<circle cx="11" cy="11" r="8"></circle>
-							<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-						</svg>
-					</button>
 				</div>
 				<table>
 					<thead>
@@ -58,13 +52,13 @@
 
 			<div class="pagination">
 				<ul>
-					<th:block th:if="${pi.currentPage >1}">
-						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous"> < </a></li>
+					<th:block th:if="${pi.currentPage > 1}">
+						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName})}" aria-label="Previous"> < </a></li>
 					</th:block>
 					<th:block th:if="${pi.currentPage <=1}">
 						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
 					</th:block>
-					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a></li>
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"></a></li>
 					<th:block th:if="${pi.currentPage < pi.MaxPage}">
 						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
 					</th:block>
