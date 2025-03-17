@@ -133,7 +133,7 @@
                 <h2>After Effects Templates</h2>
                 <h3 th:text="${content.contentTitle}"></h3>
                 <p>by [[${content.userNickName}]]</p>
-                <div class="pricing-box">
+                <div class="pricing-box" th:unless='${session.loginUser.userPlan == "Frame Pro" || session.loginUser.userPlan == "All Rounder" || session.loginUser == null}'>
                     <h3>Frame Pro</h3>
                     <div class="price">
                         <span class="amount">16,500</span>
@@ -157,8 +157,8 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="action-buttons">
+				
+                <div class="action-buttons" th:if='${session.loginUser.userPlan == "Frame Pro" || session.loginUser.userPlan == "All Rounder"}'>
                     <button class="download-btn">Download</button>
                     <div class="secondary-actions">
                         <button class="action-btn"><i class="fa-solid fa-share-nodes"></i></button>

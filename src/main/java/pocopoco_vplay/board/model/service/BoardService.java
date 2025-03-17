@@ -36,8 +36,8 @@ public class BoardService {
 		return mapper.selectMyCommission(userNo);
 	}
 
-	public int throwBoardTrash(int contentNo) {
-		return mapper.throwBoardTrash(contentNo);
+	public int throwBoardTrash(HashMap<String, Integer> map) {
+		return mapper.throwBoardTrash(map);
 	}
 
 	public ArrayList<Content> selectMyTrash(int userNo) {

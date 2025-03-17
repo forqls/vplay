@@ -89,6 +89,7 @@
 		<div class="container content_wrap">
 			<div class="content-header">
 				<h1>My Projects</h1>
+				<button>컨텐츠 글 쓰기</button>
 			</div>
 			<div class="filter-buttons">
 				<select class="filter-dropdown" id="categorySelect">
@@ -119,6 +120,7 @@
 						<div class="item-content">
 							<span class="item-title" th:text="${r.contentTitle}"></span>
 							<span th:text="${r.contentNo}"></span>
+							<input type="hidden" th:value="${r.menuName}">
 
 							<div class="item-actions">
 								<span>👁️[[${r.views}]]</span> <span>❤️[[${r.likeCount}]]</span>
@@ -137,58 +139,91 @@
 
 	<script type="text/javascript">
 
+			const menuDots = document.querySelectorAll('.menu-dots');
+			menuOption(menuDots);
+			
+			const list = document.querySelectorAll(".grid-item");
+ 			clickDetail(list);
+ 			
+ 			//디테일 페이지 들어가기
+ 			function clickDetail(list){
+ 				[...list].map((content, index, array) =>{
+ 					content.addEventListener('click', function(event){
+ 						const contentNo = this.querySelector(".item-content").children[1].innerText;
+ 						let menuName = this.querySelector(".item-content").children[2].value;
+ 						console.log(contentNo);
+ 						console.log(menuName);
+ 						switch(menuName){
+ 						case "video Templates":  menuName = "video-templates"; break;
+ 						case "Stock Video" : menuName = "stock-video"; break;
+ 						case "Sound Effects" : menuName = "sound-effects"; break;
+ 						case "Graphic Templates" : menuName = "graphic-templates"; break;
+ 						}
+ 						location.href = "/board/" + menuName + "/" + contentNo;
+ 						event.stopPropagation();
+ 					})
+ 				})
+ 			}
+			
+			//... 선택 후 삭제
+			function menuOption(menuDots){
+				menuDots.forEach(button=>{
+					button.addEventListener('click',function(){
+//	 					console.log(this);
 
-			document.querySelectorAll('.menu-dots').forEach(button=>{
-				button.addEventListener('click',function(){
-// 					console.log(this);
+						event.stopPropagation();
 
-					event.stopPropagation();
+						let dropdown = this.nextElementSibling;
 
-					let dropdown = this.nextElementSibling;
-
-					document.querySelectorAll('.dropdown').forEach(d=>{
-						if(d != dropdown){
-							d.classList.remove('show');
-						}
-					});
-					dropdown.classList.toggle('show');
-
-				});
-			});
-
-			document.addEventListener('click',()=>{
-				document.querySelectorAll('.dropdown').forEach(d=>{
-					d.classList.remove('show');
-				});
-			});
-
-			document.querySelectorAll('.dropdown-item').forEach(d=>{
-				d.addEventListener('click',(e)=>{
-					console.log(e.target);
-					let gridItem = e.target.closest('.grid-item');
-// 					console.log(gridItem);
-					let span = gridItem.querySelectorAll('span');
-// 					console.log(span);
-					let contentNo = span[2].textContent.trim();
-					console.log(contentNo);
-
-					$.ajax({
-						url:'/board/throwBoardTrash',
-						data:{contentNo:contentNo},
-						type:'POST',
-						success:data=>{
-// 							console.log(data);
-							if(data == 1){
-								gridItem.remove();
-							}else{
-								alert('게시글 삭제에 실패했습니다.');
+						document.querySelectorAll('.dropdown').forEach(d=>{
+							if(d != dropdown){
+								d.classList.remove('show');
 							}
+						});
+						dropdown.classList.toggle('show');
 
-
-						},error:data=>alert('서버오류')
-					})
+					});
 				});
-			});
+				
+				document.addEventListener('click',(event)=>{
+					document.querySelectorAll('.dropdown').forEach(d=>{
+						d.classList.remove('show');
+					});
+				});
+
+				document.querySelectorAll('.dropdown-item').forEach(d=>{
+					d.addEventListener('click',(e)=>{
+						console.log(e.target);
+						let gridItem = e.target.closest('.grid-item');
+//	 					console.log(gridItem);
+						let span = gridItem.querySelectorAll('span');
+//	 					console.log(span);
+						let contentNo = span[2].textContent.trim();
+						console.log(contentNo);
+
+						$.ajax({
+							url:'/board/throwBoardTrash',
+							data:{contentNo:contentNo, trash:"0"},
+							type:'POST',
+							success:data=>{
+//	 							console.log(data);
+								if(data == 1){
+									gridItem.remove();
+								}else{
+									alert('게시글 삭제에 실패했습니다.');
+								}
+
+
+							},error:data=>alert('서버오류')
+						})
+						
+						event.stopPropagation();
+					});
+				});
+			}
+			
+
+			
 
 
  			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
@@ -220,15 +255,29 @@
  								let gridItem = `
  									<div class="grid-item">
  			                            <button class="menu-dots">⋮</button>
+ 			                          	<div class="dropdown" >
+ 											<div class="dropdown-item">
+ 												<span class="trash-icon"></span> Delete
+ 											</div>
+ 										</div>
  			                            <div class="item-content">
- 			                                <span class="item-title">${r.contentTitle}</span> ${r.contentNo}
+ 			                                <span class="item-title">${r.contentTitle}</span> 
+ 			                                <span>${r.contentNo}</span>
+ 			                                <input type="hidden" value="${r.menuName}">
  			                                <div class="item-actions">
  			                                    <span>👁️ ${r.views}</span> <span>❤️ ${r.likeCount}</span>
  			                                </div>
  			                            </div>
  			                        </div>
  									`;
+ 								
  								grids[0].innerHTML += gridItem;
+ 								
+ 								const list = document.querySelectorAll(".grid-item");
+ 								const menuDots = document.querySelectorAll('.menu-dots');
+ 								clickDetail(list);
+ 								menuOption(menuDots);
+ 								
  							});
 
  	 						console.log(data);
@@ -239,7 +288,7 @@
  	 			});
 
  			});
-
+ 			
  		</script>
 
 </body>
