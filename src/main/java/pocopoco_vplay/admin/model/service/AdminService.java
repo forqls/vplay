@@ -19,18 +19,22 @@ public class AdminService {
 
 	private final AdminMapper mapper;
 
-	public int getUsersCount() {
-		return mapper.getUsersCount();
+	public String selectUser(int userNo) {
+		return mapper.selectUser(userNo);
 	}
 
-	public ArrayList<Users> selectAllUser(PageInfo pi) {
+	public int getUsersCount(HashMap<String, String> map) {
+		return mapper.getUsersCount(map);
+	}
+
+	public ArrayList<Users> selectAllUser(HashMap<String, String> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectAllUser(rowBounds);
+		return mapper.selectAllUser(map, rowBounds);
 	}
 
-	public int getInquiryCount(Content content) {
-		return mapper.getInquiryCount(content);
+	public int getInquiryCount(HashMap<String, String> map) {
+		return mapper.getInquiryCount(map);
 	}
 
 	public ArrayList<Content> selectAllInquiry(HashMap<String, String> map, PageInfo pi) {
@@ -39,12 +43,8 @@ public class AdminService {
 		return mapper.selectAllInquiry(map, rowBounds);
 	}
 
-	public String selectUser(int userNo) {
-		return mapper.selectUser(userNo);
-	}
-
-	public int getTemplatesCount(Content content) {
-		return mapper.getTemplatesCount(content);
+	public int getTemplatesCount(HashMap<String, String> map) {
+		return mapper.getTemplatesCount(map);
 	}
 
 	public ArrayList<Content> selectAllTemplates(HashMap<String, String> map, PageInfo pi) {
@@ -53,8 +53,8 @@ public class AdminService {
 		return mapper.selectAllTemplates(map, rowBounds);
 	}
 
-	public int getrequestPostCount(Content content) {
-		return mapper.getrequestPostCount(content);
+	public int getrequestPostCount(HashMap<String, String> map) {
+		return mapper.getrequestPostCount(map);
 	}
 
 	public ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, PageInfo pi) {
