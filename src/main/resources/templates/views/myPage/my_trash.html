@@ -111,6 +111,10 @@
 						<div class="dropdown">
 							<div class="dropdown-item">
 								<span class="trash-icon"></span> Delete
+							<div class="dropdown" >
+								<div class="dropdown-item">
+									<span class="trash-icon"></span> 복구
+								</div>
 							</div>
 						</div>
 						<div class="item-content">
@@ -170,7 +174,7 @@
 					
 					$.ajax({
 						url:'/board/throwBoardTrash',
-						data:{contentNo:contentNo},
+						data:{contentNo:contentNo, trash:"1"},
 						type:'POST',
 						success:data=>{
 // 							console.log(data);

@@ -43,7 +43,12 @@
 	</select>
 
 	<update id="throwBoardTrash">
+		<if test="trashYN == 0">
 		update content set content_status ='N' where content_no=#{contentNo}
+		</if>
+		<if test="trashYN == 1">
+		update content set content_status ='Y' where content_no=#{contentNo}
+		</if>
 	</update>
 
 	<select id="selectMyTrash">
@@ -317,7 +322,7 @@
 	</update>
 
 	<select id="allMenuDetail" parameterType="int">
-		select c.content_no, c.content_title, to_char(c.content_detail) as content_detail, c.create_date,
+		select c.content_no, c.content_title, to_char(c.content_detail) as content_detail, c.create_date, u.user_profile,
 		c.modify_date, c.content_status, u.user_no, u.user_id,
 		u.user_nickname, u.user_email,u.user_profile, listagg(category_name, ',') within group(order by category_name) as category_name, m.menu_name
 		from content c

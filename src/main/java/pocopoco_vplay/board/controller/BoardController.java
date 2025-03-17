@@ -183,9 +183,14 @@ public class BoardController {
 
 	@PostMapping("throwBoardTrash")
 	@ResponseBody
-	public int throwBoardTrash(@RequestParam("contentNo") int contentNo) {
+	public int throwBoardTrash(@RequestParam("contentNo") int contentNo, @RequestParam("trash") int trashYN) {
 		System.out.println(contentNo);
-		int result = bService.throwBoardTrash(contentNo);
+		System.out.println(trashYN);
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("contentNo", contentNo);
+		map.put("trashYN", trashYN);
+		
+		int result = bService.throwBoardTrash(map);
 		if (result > 0) {
 			return result;
 		} else {
@@ -461,9 +466,11 @@ public class BoardController {
 	}
 
 	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
-	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model) {
+	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model, HttpSession session) {
 
 		Content content = bService.allMenuDetail(contentNo);
+//		Users u = (Users)session.getAttribute("loginUser");
+//		System.out.println(u.getUserPlan());
 		model.addAttribute("content", content);
 
 		String joinURL = null;

@@ -23,7 +23,7 @@ public interface BoardMapper {
 
 	ArrayList<Content> selectMyCommission(int userNo);
 
-	int throwBoardTrash(int contentNo);
+	int throwBoardTrash(HashMap<String, Integer> map);
 
 	ArrayList<Content> selectMyTrash(int userNo);
 
