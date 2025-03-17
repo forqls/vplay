@@ -446,4 +446,10 @@
 		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
 		</if>
 	</select>
+	
+	<select id="menuCategoryList" resultType="map">
+		select category_name, category_no
+		from category
+		where menu_no = #{menuNo}
+	</select>
 </mapper>

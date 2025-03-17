@@ -580,5 +580,11 @@ public class BoardController {
 		return bService.deleteReply(replyNo);
 	}
 	
+	@GetMapping("writeContent")
+	public String joinContentWrite() {
+		return "content_write";
+	}
+	
+	
 	
 }

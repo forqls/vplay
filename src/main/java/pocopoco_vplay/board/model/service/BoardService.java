@@ -185,4 +185,8 @@ public class BoardService {
 		return mapper.searchRequest(searchValue);
 	}
 
+	public ArrayList<Content> menuCategoryList(int menuNo) {
+		return mapper.menuCategoryList(menuNo);
+	}
+
 }

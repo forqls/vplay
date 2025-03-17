@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -159,6 +160,17 @@ public class AjaxController {
 			return 0;
 		}
 		
+	}
+	
+
+	@GetMapping("writeContent/{menuNo}")
+	public ArrayList<Content> menuCategoryList(@PathVariable("menuNo") int menuNo) {
+		System.out.println(menuNo);
+		
+		ArrayList<Content> list = bService.menuCategoryList(menuNo);
+		
+		System.out.println(list);
+		return list;
 	}
 		
 }
