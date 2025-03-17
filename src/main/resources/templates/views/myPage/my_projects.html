@@ -87,7 +87,7 @@
 		<div class="container content_wrap">
 			<div class="content-header">
 				<h1>My Projects</h1>
-				<button>컨텐츠 글 쓰기</button>
+				<button id="content-write">컨텐츠 글 쓰기</button>
 			</div>
 			<div class="filter-buttons">
 				<select class="filter-dropdown" id="categorySelect">
@@ -134,6 +134,10 @@
 	</div>
 
 	<script type="text/javascript">
+	
+			document.getElementById("content-write").addEventListener("click", ()=>{
+				location.href = "/board/writeContent"
+			})
 
 			const menuDots = document.querySelectorAll('.menu-dots');
 			menuOption(menuDots);

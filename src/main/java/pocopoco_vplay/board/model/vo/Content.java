@@ -24,6 +24,7 @@ public class Content {
 	private int userNo;
 	private String userId;
 	private String userNickName;
+	private int cateoryNo;
 	private String categoryName;
 	private String menuName;
 	private String hashtagName;

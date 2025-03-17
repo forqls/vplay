@@ -47,7 +47,8 @@
 							<td>[[${t.contentTitle}]]</td>
 							<td>[[${t.modifyDate}]]</td>
 							<td><span class="status" th:data-contentno="${t.contentNo}" th:onclick="updateStatus(this)" th:classappend="${t.contentStatus == 'Y' ? 'active' : 'inactive'}">[[${t.contentStatus}]]</span></td>
-							<td>⋮</td>
+							<td class="AddSettings"><span>⋮</span> <span id="RecommendedBtn" class="hover_action"> <span id="mdRec" class="rm_child">MD추천</span> <span id="eventRec" class="rm_child">이벤트 등록</span>
+							</span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -102,6 +103,66 @@
 				location.href= "/admin/templates/" + menuName;
 			}
 		});
+		
+		document.addEventListener("DOMContentLoaded", function () {
+	        document.querySelectorAll(".AddSettings").forEach(td => {
+	            let clickFlag = true;
+
+	            let hoverAction = td.querySelector(".hover_action");
+
+	            td.addEventListener("click", function () {
+	                if (clickFlag) {
+	                    console.log(clickFlag);
+
+	                    let rect = td.getBoundingClientRect(); // 현재 td의 화면 내 위치 가져오기
+
+	                    hoverAction.style.position = "fixed"; // 화면 기준으로 위치 설정
+	                    hoverAction.style.top = `${rect.top + window.scrollY}px`; // td와 같은 높이에 위치
+	                    hoverAction.style.left = `${rect.right - 30}px`; // td 바로 오른쪽에 위치 (+10px 여백)
+	                    hoverAction.style.display = "block";
+	                    hoverAction.style.zIndex = "99999"; // 최상단으로 설정
+	                    clickFlag = false;
+	                }else{
+	                    clickFlag = true;
+	                    hoverAction.style.display = "none";
+
+	                }
+
+	                document.addEventListener("click", function (event) {
+	                    if (!td.contains(event.target)) {
+	                        hoverAction.style.display = "none";
+	                        console.log(clickFlag);
+	                    }
+	                });
+	            });
+	        });
+	    });
+
+	    document.querySelectorAll(".rm_child#mdRec").forEach(button => {
+	        button.addEventListener('click', function () {
+	            let tr = this.closest("tr");
+
+	            fetch("/admin/mdRecommendation", {
+	                method: "put",
+	                headers: {'content-type': 'application/json; charset=UTF-8'},
+	                body: JSON.stringify({
+	                    contentNo: this.closest('tr').querySelector('.request-list td').innerText[0],
+	                    status: 'MD추천'
+	                })
+	            })
+				.then(response => response.json())
+				.then(data => {
+	                if(data === 1){
+	                    tr.classList.add("mdActive");
+	                    console.log(tr.classList);
+	                    alert('MD추천이 적용되었습니다.');
+	                }else{
+	                    alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
+	                    location.reload();
+	                }
+	            });
+	        });
+	    });
     </script>
 </body>
 </html>
