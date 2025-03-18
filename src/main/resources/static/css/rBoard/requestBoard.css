@@ -8,38 +8,55 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 	background-color: #191820;
 	color: #fff;
+	min-height: 100vh;
 }
 
-.container {
+.table-container {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 2rem;
+	flex: 1;
+	overflow-x: auto;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	white-space: nowrap;
+}
+
+th, td {
+	padding: 18px;
+	text-align: center;
+	border-bottom: 1px solid #374151;
+}
+
+th {
+	color: #9ca3af;
+	font-weight: 500;
+	font-size: 15px;
+}
+
+td {
+	font-size: 14px;
+	cursor: pointer;
+}
+
+tbody tr:hover {
+	background-color: #2c343d;
+}
+
+.main-content {
+	flex: 1;
+	padding: 2rem 3rem;
+	overflow: hidden;
+	z-index: 0;
 }
 
 .page-title {
+	margin-bottom: 20px;
 	font-size: 30px;
-	margin-top: 35px;
-	margin-bottom: 24px;
 	cursor: default;
 	text-align: center;
-}
-
-.breadcrumb {
-	margin-bottom: 2rem;
-}
-
-.breadcrumb a {
-	color: var(--secondary);
-	text-decoration: none;
-}
-
-.breadcrumb .active {
-	color: var(--accent);
-}
-
-h1 {
-	text-align: center;
-	margin-bottom: 1rem;
 }
 
 .description {
@@ -53,69 +70,25 @@ h1 {
 	margin: 2rem 0;
 }
 
-.search-filter {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 2rem;
-}
-
-.filters {
-	display: flex;
-	gap: 1rem;
-}
-
-.filter-btn {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	background-color: var(--border);
-	color: var(--muted);
+.filter-dropdown {
+	padding: 8px 12px;
+	background-color: #374151;
 	border: none;
-	padding: 0.5rem 1rem;
-	border-radius: 4px;
-	cursor: pointer;
-}
-
-.table-container {
-	overflow-x: auto;
-}
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-th, td {
-	padding: 1rem;
-	text-align: left;
-}
-
-th {
-	color: var(--muted);
-	font-weight: normal;
-}
-
-tbody tr {
-	border-top: 1px solid var(--border);
-}
-
-tbody tr:hover {
-	background-color: rgba(31, 31, 44, 0.3);
-}
-
-.pagination {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 4px;
-	padding: 15px;
-	margin-top: auto;
-}
-
-.pagination a:hover {
-	background: none;
+	border-radius: 6px;
 	color: white;
+	font-size: 14px;
+	text-align: center;
+	cursor: pointer;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	background-size: 16px;
+	padding-right: 35px;
+	padding-left: 5px;
+	margin-right: 15px;
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
 
 .search-bar {
@@ -123,6 +96,7 @@ tbody tr:hover {
 	align-items: center;
 	padding: 16px;
 	border-bottom: 2px solid #374151;
+	margin-top: -55px;
 }
 
 .search-bar input {
@@ -137,6 +111,40 @@ tbody tr:hover {
 
 .search-bar input::placeholder {
 	color: #9ca3af;
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	padding: 15px;
+}
+
+.pagination ul {
+	list-style: none;
+	display: flex;
+	gap: 8px;
+}
+
+.pagination li {
+	display: inline-block;
+}
+
+.pagination a {
+	display: inline-block;
+	padding: 8px 12px;
+	border-radius: 4px;
+	color: white;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.pagination a.active {
+	color: #6a2bc7;
+}
+
+.pagination a:hover:not(.active) {
+	color: #555555;
 }
 
 .create-button {
@@ -159,12 +167,36 @@ tbody tr:hover {
 	background-color: #6a2bc7;
 }
 
-@media ( max-width : 768px) {
-	.search-bar {
-		width: 100%;
-		margin-bottom: 1rem;
+@media ( max-width : 1024px) {
+	.sidebar {
+		width: 200px;
 	}
-	.filters {
-		justify-content: space-between;
+	.main-content {
+		margin-left: 200px;
+	}
+}
+
+@media ( max-width : 768px) {
+	.sidebar {
+		width: 64px;
+		padding: 16px 8px;
+	}
+	.logo-text, .nav-item span {
+		display: none;
+	}
+	.main-content {
+		margin-left: 64px;
+	}
+	.nav-item {
+		justify-content: center;
+		padding: 12px;
+	}
+	.pagination {
+		gap: 4px;
+		padding: 10px;
+	}
+	.pagination a {
+		padding: 6px 8px;
+		font-size: 12px;
 	}
 }

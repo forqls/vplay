@@ -263,7 +263,7 @@
 		select count(*)
 		from content
 		join board using(content_no)
-		where board_type = 2
+		where board_type = 2 and content_status = 'Y'
 		<if test="menuNo != null">
 			and menu_no = #{menuNo}
 		</if>
