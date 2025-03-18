@@ -44,10 +44,10 @@
 
 	<update id="throwBoardTrash">
 		<if test="trashYN == 0">
-		update content set content_status ='N' where content_no=#{contentNo}
+			update content set content_status ='N' where content_no=#{contentNo}
 		</if>
 		<if test="trashYN == 1">
-		update content set content_status ='Y' where content_no=#{contentNo}
+			update content set content_status ='Y' where content_no=#{contentNo}
 		</if>
 	</update>
 
@@ -93,7 +93,7 @@
 		left join likes lk2 on (c.content_no = lk2.content_no)
 		where b.board_type is null and m.menu_name = #{menuName}
 		<if test="categoryArray != null">
-			and cg.category_name in 
+			and cg.category_name in
 			<foreach item="category" collection="categoryArray" open="(" separator="," close=")">
 				#{category}
 			</foreach>
@@ -263,9 +263,12 @@
 		select count(*)
 		from content
 		join board using(content_no)
-		where board_type = 2
+		where board_type = 2 and content_status = 'Y'
 		<if test="menuNo != null">
-		and menu_no = #{menuNo}
+			and menu_no = #{menuNo}
+		</if>
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
 		</if>
 	</select>
 
@@ -274,19 +277,18 @@
 		from content
 		join board using(content_no)
 		join menu using(menu_no)
-		join users using(user_no)
-		where board_type = 2 and CONTENT_STATUS = 'Y'
+		where board_type = 2 and content_status = 'Y'
 		<if test="menuNo != null">
-		and menu_no = #{menuNo}
+			and menu_no = #{menuNo}
 		</if>
-		<if test="search != null">
-		and content_title like '%${search}%'
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
 		</if>
 		order by content_no desc
 	</select>
 
 	<select id="selectUser">
-		select user_id
+		select user_nickname
 		from users
 		where user_no = #{userNo}
 	</select>
@@ -385,33 +387,33 @@
 		where content_no =#{bId}
 	</update>
 
-	
+
 
 	<select id="selectContentTop">
-	    SELECT 
-	    c.content_no, 
-	    c.content_title, 
-	    c.create_date, 
-	    c.modify_date, 
-	    c.user_no, 
-	    c.views, 
-	    u.user_nickname,
-	    COUNT(l.content_no) AS like_count
+		SELECT
+		c.content_no,
+		c.content_title,
+		c.create_date,
+		c.modify_date,
+		c.user_no,
+		c.views,
+		u.user_nickname,
+		COUNT(l.content_no) AS like_count
 		FROM content c
-		JOIN users u ON c.user_no = u.user_no 
-		LEFT JOIN likes l ON c.content_no = l.content_no 
-		GROUP BY c.content_no, c.content_title, c.create_date, 
-        c.modify_date, c.user_no, c.views, u.user_nickname
+		JOIN users u ON c.user_no = u.user_no
+		LEFT JOIN likes l ON c.content_no = l.content_no
+		GROUP BY c.content_no, c.content_title, c.create_date,
+		c.modify_date, c.user_no, c.views, u.user_nickname
 		ORDER BY c.views DESC
 		fetch first 12 rows only
-	</select>	
+	</select>
 
 
 	<select id="selectOrderByViews">
-	    select * from content order by views desc
-	    fetch first 12 rows only 
-	</select>	
-  
+		select * from content order by views desc
+		fetch first 12 rows only
+	</select>
+
 	<insert id="insertReply">
 		insert into reply
 		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
@@ -430,12 +432,12 @@
 
 	<select id="selectRequestList">
 		select * from content
-		  join board using(content_no)
-		  join menu using(menu_no)
-		  join users using(user_no)
+		join board using(content_no)
+		join menu using(menu_no)
+		join users using(user_no)
 		where menu_no =#{menuNo} and CONTENT_STATUS ='Y'
 	</select>
-  
+
 	<select id="searchRequest">
 		SELECT *
 		FROM content
@@ -443,10 +445,10 @@
 		join board using(content_no)
 		join menu using(menu_no)
 		<if test="searchValue != null and searchValue.trim() != ''">
-		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
+			WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
 		</if>
 	</select>
-	
+
 	<select id="menuCategoryList" resultType="map">
 		select category_name, category_no
 		from category
