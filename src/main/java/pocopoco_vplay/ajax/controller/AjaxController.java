@@ -167,12 +167,12 @@ public class AjaxController {
 
 	@GetMapping("writeContent/{menuNo}")
 	public ArrayList<Content> menuCategoryList(@PathVariable("menuNo") int menuNo) {
-		System.out.println(menuNo);
+        System.out.println(menuNo);
 
-		ArrayList<Content> list = bService.menuCategoryList(menuNo);
+        ArrayList<Content> list = bService.menuCategoryList(menuNo);
 
-		System.out.println(list);
-		return list;
+        System.out.println(list);
+        return list;
     }
 
 
