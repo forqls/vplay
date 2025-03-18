@@ -12,15 +12,10 @@
 		<h1 class="page-title">회원 관리</h1>
 		<div class="content-card">
 			<div class="search-bar">
-				<input type="text" placeholder="Search">
-				<button type="button">
-					<svg viewBox="0 0 24 24" width="20" height="20">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-				</button>
+				<form>
+					<input type="search" name="search" placeholder="Search" th:value="${searchValue}">
+				</form>
 			</div>
-
 			<div class="table-container">
 				<table>
 					<thead>
@@ -38,36 +33,33 @@
 					</thead>
 					<tbody>
 						<tr class="user-list" th:each="u : ${list}">
-							<td>[[${u.userNo}]]</td>
-							<td>[[${u.userId}]]</td>
-							<td>[[${u.userName}]]</td>
-							<td>[[${u.userNickname}]]</td>
-							<td>[[${u.userEmail}]]</td>
-							<td>[[${u.userPhone}]]</td>
-							<td>[[${u.joinDate}]]</td>
-							<td><span class="status" th:data-userno="${u.userNo}" th:onclick="updateStatus(this)" th:classappend="${u.status == 'Y' ? 'active' : 'inactive'}">[[${u.status}]]</span></td>
+							<td th:text="${u.userNo}"></td>
+							<td th:text="${u.userId}"></td>
+							<td th:text="${u.userName}"></td>
+							<td th:text="${u.userNickname}"></td>
+							<td th:text="${u.userEmail}"></td>
+							<td th:text="${u.userPhone}"></td>
+							<td th:text="${u.joinDate}"></td>
+							<td><span class="status" th:data-userno="${u.userNo}" th:onclick="updateStatus(this)" th:classappend="${u.status == 'Y' ? 'active' : 'inactive'}" th:text="${u.status}"></span></td>
 							<td>⋮</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div class="pagination">
-				<!-- 이전 -->
 				<ul>
-					<th:block th:if="${pi.currentPage >1}">
-						<li class="prev"><a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous"> < </a></li>
+					<th:block th:if="${pi.currentPage > 1}">
+						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName})}" aria-label="Previous"> < </a></li>
 					</th:block>
-					<th:block th:if="${pi.currentPage <=1}">
-						<li class="prev"><a aria-label="Previous"> < </a></li>
+					<th:block th:if="${pi.currentPage <= 1}">
+						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
 					</th:block>
-					<!-- 숫자 -->
-					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a></li>
-					<!-- 다음 -->
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"></a></li>
 					<th:block th:if="${pi.currentPage < pi.MaxPage}">
-						<li class="next"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
 					</th:block>
 					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
-						<li class="next"><a aria-label="Next"> > </a></li>
+						<li class="next chevron-right"><a aria-label="Next"> > </a></li>
 					</th:block>
 				</ul>
 			</div>
