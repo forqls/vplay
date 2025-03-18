@@ -7,7 +7,8 @@
     <link href="/css/admin/admin_page.css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{admin_sidebar}"></div>
+
+<!-- <div th:replace="~{admin_sidebar}"></div>
 <main class="main-content">
     <h1 class="page-title">템플릿 게시물 관리</h1>
     <div class="content-card">
@@ -27,7 +28,30 @@
                     <option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
                 </select> <input type="text" placeholder="Search">
                 <button type="button">
-                    <svg viewBox="0 0 24 24" width="20" height="20">
+                    <svg viewBox="0 0 24 24" width="20" height="20"> -->
+
+	<div th:replace="~{admin_sidebar}"></div>
+	<main class="main-content">
+		<h1 class="page-title">템플릿 게시물 관리</h1>
+		<div class="content-card">
+			<div class="table-container">
+				<div class="search-bar">
+					<select class="filter-dropdown" name="menuName" id="menuName" onchange="filterTable()">
+						<option value="All">All</option>
+						<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
+						<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
+						<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
+						<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
+						<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
+						<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
+						<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
+					</select>
+					<form>
+						<input type="search" name="search" placeholder="Search" th:value="${searchValue}" style="width: 1170px">
+					</form>
+					<button type="button">
+						<svg viewBox="0 0 24 24" width="20" height="20">
+
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>

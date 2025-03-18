@@ -14,7 +14,7 @@
 }
 
 body {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+	font-family: Arial, sans-serif;
 	background-color: #191820;
 	color: white;
 	line-height: 1.5;
@@ -235,7 +235,7 @@ body {
 			<div th:class="${loginUser != null and loginUser.userPlan == 'All Rounder'} ? 'card current-plan' : 'card'">
 				<h3>All Rounder</h3>
 				<div class="price">
-					26,000<span>/30</span>
+					3,00<span>/30</span>
 				</div>
 				<ul class="features">
 					<li>All Content for Free on VPLAY</li>
@@ -265,7 +265,7 @@ body {
 			<div th:class="${loginUser != null and loginUser.userPlan == 'Frame Pro'} ? 'card current-plan' : 'card'">
 				<h3>Frame Pro</h3>
 				<div class="price">
-					16,500<span>/30</span>
+					2,00<span>/30</span>
 				</div>
 				<ul class="features">
 					<li>FREE Stock Video</li>
@@ -332,15 +332,6 @@ body {
 			});
 			
 		});
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	</script>
 </body>
 </html>
