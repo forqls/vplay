@@ -13,12 +13,12 @@
 	<main class="main-content">
 		<h1 class="page-title">제작 의뢰 게시판</h1>
 		<div class="content-card">
-			<p class="description">안녕하세요! 이곳은 영상 제작을 의뢰하고, 크리에이터와 협업할 수 있는 제작 의뢰 게시판입니다.</p>
-			<p class="description">기업 홍보, 유튜브 콘텐츠, 광고, 뮤직비디오, 웨딩 영상 등 다양한 영상 제작을 전문가들에게 요청할 수 있습니다.</p>
+			<div style="margin-bottom: 20px;">
+				<p class="description">안녕하세요! 이곳은 영상 제작을 의뢰하고, 크리에이터와 협업할 수 있는 제작 의뢰 게시판입니다.</p>
+				<p class="description">기업 홍보, 유튜브 콘텐츠, 광고, 뮤직비디오, 웨딩 영상 등 다양한 영상 제작을 전문가들에게 요청할 수 있습니다.</p>
+			</div>
 			<div class="table-container">
-				<div class="create-button" th:if="${session.loginUser}">
-					<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
-				</div>
+
 				<div class="search-bar">
 					<select class="filter-dropdown" name="menuName" id="menuName">
 						<option value="All">All</option>
@@ -33,6 +33,7 @@
 					<form>
 						<input type="search" name="search" placeholder="search" th:value="${searchValue}">
 					</form>
+					<button class="create-button" th:if="${session.loginUser}" onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
 				</div>
 				<table>
 					<thead>
@@ -78,7 +79,89 @@
 				</ul>
 			</div>
 		</div>
+
+	<!-- Table -->
+	<div class="table-container">
+		<table>
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>Title</th>
+				<th>category</th>
+				<th>User</th>
+				<th>date</th>
+				<th>views</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="request-list" th:each="c : ${list}">
+				<td>[[${c.contentNo}]]</td>
+				<td>[[${c.contentTitle}]]</td>
+				<td>[[${c.menuName}]]</td>
+				<td>[[${c.userNickName}]]</td>
+				<td>[[${c.modifyDate}]]</td>
+				<td>[[${c.views}]]</td>
+			</tr>
+			</tbody>
+
+			<tbody th:if="${#lists.isEmpty(list)}">
+			<tr>
+				<td colspan="6" style="text-align: center;">검색 결과가 없습니다.</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Pagination -->
+	<div class="pagination">
+		<ul>
+			<th:block th:if="${pi.currentPage >1}">
+				<li class="prev chevron-left">
+					<a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous">
+						<
+					</a>
+				</li>
+			</th:block>
+			<th:block th:if="${pi.currentPage <=1}">
+				<li class="prev chevron-left">
+					<a aria-label="Previous">
+						<
+					</a>
+				</li>
+			</th:block>
+
+			<!-- 숫자 -->
+			<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+				<a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a>
+			</li>
+
+
+			<!-- 다음 -->
+			<th:block th:if="${pi.currentPage < pi.maxPage}">
+				<li class="next chevron-right">
+					<a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next">
+						>
+					</a>
+				</li>
+			</th:block>
+			<th:block th:if="${pi.currentPage >= pi.maxPage}">
+				<li class="next chevron-right">
+					<a aria-label="Next">
+						>
+					</a>
+				</li>
+			</th:block>
+		</ul>
+	</div>
+
+		<!-- Create Button -->
+		<div class="create-button" th:if="${session.loginUser}">
+			<button onclick="location.href = '/board/writeRequest'">의뢰 하러 가기</button>
+		</div>
+	</div>
+
 	</main>
+
 	<script th:inline="javascript">
 		window.onload = () =>{
 			const tbody = document.querySelector('tbody');
@@ -105,4 +188,3 @@
 	</script>
 </body>
 </html>
-
