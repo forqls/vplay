@@ -176,7 +176,16 @@ public class AjaxController {
 	@PutMapping("mdRecommendation")
 	public int updateRecommendation(@RequestBody HashMap<String, String> map) {
 		System.out.println("contentNo: " + map.get("contentNo"));
+		System.out.println("column 값: " + map.get("column"));
+
+		int currentMdCount = bService.getMdRecommendationCount();
+
+		if ("Y".equals(map.get("column")) && currentMdCount >= 8) {
+			return -1;
+		}
+
 		int result = bService.updateRecommendation(map);
+
 		if(result > 0) {
 			return 1;
 		}else{

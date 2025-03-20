@@ -97,4 +97,6 @@ public interface BoardMapper {
 	ArrayList<Content> menuCategoryList(int menuNo);
 
     int updateRecommendation(HashMap<String, String> map);
+
+	int getMdRecommendationCount();
 }

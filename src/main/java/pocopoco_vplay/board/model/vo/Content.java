@@ -34,4 +34,5 @@ public class Content {
 	private int menuNo;
 	private Reply reply;
 	private int overallScore;
+	private String mdRecommendation;
 }
