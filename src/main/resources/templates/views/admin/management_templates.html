@@ -40,7 +40,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="request-list" th:each="t : ${list}">
+						<tr class="request-list" th:each="t : ${list}" th:classappend="${t.mdRecommendation == 'Y' ? 'recommended' : ''}">
 							<td>[[${t.contentNo}]]</td>
 							<td>[[${t.menuName}]]</td>
 							<td>[[${t.userId}]]</td>
@@ -50,8 +50,8 @@
 							<td class="AddSettings">
 								<div>⋮</div>
 								<span id="RecommendedBtn" class="hover_action">
-									<span th:class="'mdRec ' + (${t.mdRecommendation == 'Y'} ? 'hidden' : '')">MD추천</span>
-        							<span th:class="'mdCancel ' + (${t.mdRecommendation == 'N'} ? 'hidden' : '')">MD추천 취소</span>
+									<span th:style="${t.mdRecommendation == 'Y' ? 'display: none;' : ''}" class="mdRec">MD추천</span>
+									<span th:style="${t.mdRecommendation == 'N' ? 'display: none;' : ''}" class="mdCancel">MD추천 취소</span>
 								</span>
 							</td>
 						</tr>
@@ -136,7 +136,7 @@
 	                document.addEventListener("click", function (event) {
 	                    if (!td.contains(event.target)) {
 	                        hoverAction.style.display = "none";
-	                        console.log(clickFlag);
+	                        //console.log(clickFlag);
 	                    }
 	                });
 	            });
@@ -144,44 +144,50 @@
 	    });
 
 
-		const tds = document.getElementsByTagName('td');
-			const mdButtons = document.querySelectorAll("#RecommendedBtn .mdRec, #RecommendedBtn .mdCancel");
 
-			for (const button of mdButtons) {
-				button.addEventListener('click', function () {
-					let tr = this.closest("tr");
-					let mdRecButton = tr.querySelector(".mdRec");
-					let mdCancelButton = tr.querySelector(".mdCancel");
+	const mdButtons = document.querySelectorAll("#RecommendedBtn .mdRec, #RecommendedBtn .mdCancel");
 
-					fetch("/admin/mdRecommendation", {
-						method: "put",
-						headers: { 'content-type': 'application/json; charset=UTF-8' },
-						body: JSON.stringify({
-							contentNo: tr.querySelector('td:first-child').innerText.trim(),
-							column: this.classList.contains("mdRec") ? "Y" : "N"
-						})
-					})
-					.then(response => response.json())
-					.then(data => {
-						if (data === 1) {
-							if(this.classList.contains('mdRec')){
-								mdRecButton.classList.add("hidden");
-								mdCancelButton.classList.remove("hidden");
-								alert('MD추천이 적용되었습니다.');
-							}else{
-								mdCancelButton.classList.add("hidden");
-								mdRecButton.classList.remove("hidden");
-								alert('MD추천이 취소되었습니다.');
-							}
-						} else {
-							alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
-							location.reload();
-						}
-					});
+	for (const button of mdButtons) {
+		button.addEventListener('click', function () {
+			let tr = this.closest("tr");
+			let mdRecButton = tr.querySelector(".mdRec");
+			let mdCancelButton = tr.querySelector(".mdCancel");
+
+			fetch("/admin/mdRecommendation", {
+				method: "put",
+				headers: { 'content-type': 'application/json; charset=UTF-8' },
+				body: JSON.stringify({
+					contentNo: tr.querySelector('td:first-child').innerText.trim(),
+					column: this.classList.contains("mdRec") ? "Y" : "N"
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data === 1) {
+					if (this.classList.contains("mdRec")) {
+						mdRecButton.style.display = "none"; // 숨기기
+						mdCancelButton.style.display = "inline"; // 보이기
+						tr.style.backgroundColor = "#162331";
+						alert("MD추천이 적용되었습니다.");
+					} else {
+						mdCancelButton.style.display = "none"; // 숨기기
+						mdRecButton.style.display = "inline"; // 보이기
+						tr.style.backgroundColor = "#262d34";
+						alert("MD추천이 취소되었습니다.");
+					}
+				}else if(data === -1){
+					console.log(data);
+					alert("MD추천 최대 갯수는 8개까지 입니다.");
+				}
+				else {
+					alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
+					location.reload();
+				}
+			});
 
 
-				});
-			}
+		});
+	}
 
 
 	</script>

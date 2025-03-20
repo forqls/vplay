@@ -460,4 +460,8 @@
 		set MD_RECOMMENDATION = #{column}
 		where content_no = #{contentNo}
 	</update>
+
+	<select id="getMdRecommendationCount">
+		select count(*) from content where md_recommendation = 'Y'
+	</select>
 </mapper>

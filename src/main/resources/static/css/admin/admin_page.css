@@ -208,9 +208,10 @@ tr.select {
 	background: #324355;
 }
 
-.hidden {
-	display: none;
+.recommended{
+	background:#162331;
 }
+
 
 /*반응형*/
 @media ( max-width : 1024px) {

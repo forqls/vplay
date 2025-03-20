@@ -192,4 +192,8 @@ public class BoardService {
     public int updateRecommendation(HashMap<String, String> map) {
 		return mapper.updateRecommendation(map);
     }
+
+
+	public int getMdRecommendationCount() {	return mapper.getMdRecommendationCount();
+	}
 }
