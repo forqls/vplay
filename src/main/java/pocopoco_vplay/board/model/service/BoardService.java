@@ -189,4 +189,7 @@ public class BoardService {
 		return mapper.menuCategoryList(menuNo);
 	}
 
+    public int updateRecommendation(HashMap<String, String> map) {
+		return mapper.updateRecommendation(map);
+    }
 }
