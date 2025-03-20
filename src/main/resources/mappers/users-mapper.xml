@@ -168,4 +168,19 @@
 		WHERE LOGIN_TYPE='G' AND USER_ID IS NULL AND GOOGLE_ID=#{googleId}
 	</select>
 	
+	<select id="selectMyMessage">
+		select m.*,u.user_name 
+		from message m
+		join users u on m.sender_no = u.user_no
+		where receiver_no = #{userNo}
+		order by sent_time desc
+	</select>
+	<update id="updateMessageStatus">
+		update message
+		set read_status='Y' where message_no=#{messageNo}
+	</update>
+	
+	
+	
+	
 </mapper>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.mapper.UsersMapper;
+import pocopoco_vplay.users.model.vo.Message;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Service
@@ -112,6 +113,14 @@ public class UsersService {
 
 	public Users existGoogleUsers(String googleId) {
 		return mapper.existGoogleUsers(googleId);
+	}
+
+	public ArrayList<Message> selectMyMessage(String userNo) {
+		return mapper.selectMyMessage(userNo);
+	}
+
+	public int updateMessageStatus(String messageNo) {
+		return mapper.updateMessageStatus(messageNo);
 	}
 
 

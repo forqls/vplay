@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.users.model.vo.Message;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Mapper
@@ -57,5 +58,9 @@ public interface UsersMapper {
 	String selectProfile(HashMap<String, String> map);
 
 	Users existGoogleUsers(String googleId);
+
+	ArrayList<Message> selectMyMessage(String userNo);
+
+	int updateMessageStatus(String messageNo);
 
 }

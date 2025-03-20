@@ -1,8 +1,10 @@
 package pocopoco_vplay.users.controller;
 
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +34,7 @@ import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
+import pocopoco_vplay.users.model.vo.Message;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Controller
@@ -410,5 +414,68 @@ public class UsersController {
 			throw new UsersException("로그인이 풀렸습니다.");
 		}
 	}
+	
+	@GetMapping("/{userNo}")
+	public String messagePage(@PathVariable("userNo") String userNo,HttpSession session , Model model) {
+		System.out.println("들어왔음 " + userNo);
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		
+		if(loginUser == null || loginUser.getUserNo()!=Integer.parseInt(userNo)) {
+			return "redirect:/";
+		}
+		
+		
+		ArrayList<Message> list = uService.selectMyMessage(userNo);
+		
+		for(Message m : list) {
+			String timeout = getTimeAgo(m.getSentTime());
+			m.setTimeout(timeout);
+		}
+//		System.out.println("list 는 " + list);
+		
+		//시간 변환
+		System.out.println(list);
+		
+		
+		model.addAttribute("list",list);
+		
+		
+		
+		return "my_message";
+	}
+	//시간 변환 메소드 듀레이션사용함
+    private String getTimeAgo(LocalDateTime sentTime) {
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(sentTime, now);
+
+        if (duration.toMinutes() < 1) {
+            return "방금 전";
+        } else if (duration.toMinutes() < 60) {
+            return duration.toMinutes() + "분 전";
+        } else if (duration.toHours() < 24) {
+            return duration.toHours() + "시간 전";
+        } else {
+            return sentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        }
+    }
+	
+	@GetMapping("updateMessageStatus")
+	@ResponseBody
+	public int updateMessageStatus(@RequestParam("messageNo") String messageNo) {
+//		System.out.println("메세지 상태값 변경 잘 들어옴." + messageNo);
+		int result = uService.updateMessageStatus(messageNo);
+		return result;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
