@@ -187,7 +187,7 @@ tbody tr:hover {
 	padding: 0.5rem 0;
 }
 
-span.rm_child {
+.hover_action span{
 	font-size: 0.8rem;
 	display: block;
 	width: 100%;
@@ -196,8 +196,12 @@ span.rm_child {
 	color: #6F757D;
 }
 
-.rm_child:hover {
+.hover_action span:hover {
 	color: #fff;
+}
+
+tr.request-list.mdActive {
+	background: #303e4d;
 }
 
 /*반응형*/

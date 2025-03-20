@@ -47,8 +47,13 @@
 							<td>[[${t.contentTitle}]]</td>
 							<td>[[${t.modifyDate}]]</td>
 							<td><span class="status" th:data-contentno="${t.contentNo}" th:onclick="updateStatus(this)" th:classappend="${t.contentStatus == 'Y' ? 'active' : 'inactive'}">[[${t.contentStatus}]]</span></td>
-							<td class="AddSettings"><span>⋮</span> <span id="RecommendedBtn" class="hover_action"> <span id="mdRec" class="rm_child">MD추천</span> <span id="eventRec" class="rm_child">이벤트 등록</span>
-							</span></td>
+							<td class="AddSettings">
+								<div>⋮</div>
+								<span id="RecommendedBtn" class="hover_action">
+									<span th:class="${t.mdRecommendation == 'Y' ? 'select' : 'unselect'}">MD추천</span>
+									<span th:class="${t.mdRecommendation == 'N' ? 'select' : 'unselect'}">MD추천 취소</span>
+								</span>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -92,18 +97,18 @@
                 error: data => console.log(data)
             });
         }
-        
+
 		document.getElementById("menuName").addEventListener('change', function() {
 			const menuName = this.value;
 			console.log(menuName);
-			
+
 			if(menuName == "All"){
 				location.href= "/admin/templates";
 			}else{
 				location.href= "/admin/templates/" + menuName;
 			}
 		});
-		
+
 		document.addEventListener("DOMContentLoaded", function () {
 	        document.querySelectorAll(".AddSettings").forEach(td => {
 	            let clickFlag = true;
@@ -138,30 +143,42 @@
 	        });
 	    });
 
-	    document.querySelectorAll(".rm_child#mdRec").forEach(button => {
-	        button.addEventListener('click', function () {
-	            let tr = this.closest("tr");
 
-	            fetch("/admin/mdRecommendation", {
-	                method: "put",
-	                headers: {'content-type': 'application/json; charset=UTF-8'},
-	                body: JSON.stringify({
-	                    contentNo: this.closest('tr').querySelector('td:first-child').innerText.trim()
-	                })
-	            })
-				.then(response => response.json())
-				.then(data => {
-	                if(data === 1){
-	                    tr.classList.add("mdActive");
-	                    console.log("tr.classList : "+ tr.classList);
-	                    alert('MD추천이 적용되었습니다.');
-	                }else{
-	                    alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
-	                    location.reload();
-	                }
-	            });
-	        });
-	    });
-    </script>
+		const tds = document.getElementsByTagName('td');
+		for (let i = 0; i < tds.length; i++) {
+			const mdButtons = tds[i].querySelectorAll("#RecommendedBtn .unselect, #RecommendedBtn .select");
+			for (const button of mdButtons) {
+				button.addEventListener('click', function () {
+					let tr = this.closest("tr");
+					if (this.classList.contains('unselect')) {
+						fetch("/admin/mdRecommendation", {
+							method: "put",
+							headers: { 'content-type': 'application/json; charset=UTF-8' },
+							body: JSON.stringify({
+								contentNo: this.closest('tr').querySelector('td:first-child').innerText.trim()
+							})
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data === 1) {
+                                this.classList.remove('unselect');
+								this.classList.add("select");
+								console.log("tr.classList : " + tr.classList);
+								alert('MD추천이 적용되었습니다.');
+							} else {
+                                this.classList.remove('select');
+                                this.classList.add("unselect");
+								alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
+								location.reload();
+							}
+						});
+					}
+
+
+				});
+			}
+		}
+
+	</script>
 </body>
 </html>
