@@ -82,13 +82,22 @@ body {
 }
 
 .grid-item {
-	aspect-ratio: 16/9;
-	background-color: #33333e;
-	border-radius: 8px;
-	position: relative;
-	overflow: hidden;
-	min-height: 150px;
+    aspect-ratio: 16/9;
+    background-color: #33333e;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    min-height: 150px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+.grid-item:hover {
+    border-color: #5e37e9;
+    box-shadow: 0 0 10px rgba(94, 55, 233, 0.5);
+}
+
 
 .item-content {
 	position: absolute;
