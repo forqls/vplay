@@ -9,10 +9,25 @@
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Project</title>
 <style>
+.button {
+	background-color: #5e37e9;
+	color: white;
+	border: none;
+	border-radius: 0.375rem;
+	padding: 6px;
+	font-size: 0.875rem;
+	cursor: pointer;
+	margin-left: auto;
+	margin-top: 2.5px;
+}
+
+.button:hover {
+	background-color: #8137e9;
+}
+
 .dropdown {
 	position: absolute;
 	top: 20%;
-	left: 200px;
 	background-color: #252535;
 	border-radius: 0.5rem;
 	padding: 0.5rem;
@@ -20,6 +35,7 @@
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 	display: none;
 	z-index: 100;
+	left: 200px;
 }
 
 .dropdown.show {
@@ -87,7 +103,6 @@
 		<div class="container content_wrap">
 			<div class="content-header">
 				<h1>My Projects</h1>
-				<button id="content-write">컨텐츠 글 쓰기</button>
 			</div>
 			<div class="filter-buttons">
 				<select class="filter-dropdown" id="categorySelect">
@@ -103,6 +118,7 @@
 					<option value="newest">새로운순</option>
 					<option value="mostView">조회수 많은 순</option>
 				</select>
+				<button class="button" id="content-write" style="">컨텐츠 글 쓰기</button>
 			</div>
 
 			<th:block th:if="${not #lists.isEmpty(list)}">
@@ -115,8 +131,7 @@
 							</div>
 						</div>
 						<div class="item-content">
-							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}"></span>
-							<span th:text="${r.contentNo}"></span>
+							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}"></span> <span th:text="${r.contentNo}"></span>
 							<div class="item-actions">
 								<span>👁️[[${r.views}]]</span> <span>❤️[[${r.likeCount}]]</span>
 							</div>
