@@ -193,4 +193,11 @@ public class AjaxController {
 		}
 	}
 
+	@GetMapping("mdList")
+	public ArrayList<Content>  selectmdList() {
+		ArrayList<Content> list = bService.selectMdList();
+		System.out.println("md추천리스트들 : " + list);
+		return list;
+	}
+
 }
