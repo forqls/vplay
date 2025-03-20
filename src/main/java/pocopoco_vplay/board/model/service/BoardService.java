@@ -86,8 +86,8 @@ public class BoardService {
 		return mapper.allPopularCate(i);
 	}
 
-	public int getrequestPostCount(Content content) {
-		return mapper.getrequestPostCount(content);
+	public int getrequestPostCount(HashMap<String, String> map) {
+		return mapper.getrequestPostCount(map);
 	}
 
 	public ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, PageInfo pi) {
@@ -189,4 +189,14 @@ public class BoardService {
 		return mapper.menuCategoryList(menuNo);
 	}
 
+    public int updateRecommendation(HashMap<String, String> map) {
+		return mapper.updateRecommendation(map);
+    }
+
+
+	public int getMdRecommendationCount() {	return mapper.getMdRecommendationCount();
+	}
+
+    public ArrayList<Content> selectMdList() { return mapper.selectMdList();
+    }
 }

@@ -45,7 +45,7 @@ public interface BoardMapper {
 
 	ArrayList<Content> allPopularCate(int i);
 
-	int getrequestPostCount(Content content);
+	int getrequestPostCount(HashMap<String, String> map);
 
 	ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, RowBounds rowBounds);
 
@@ -95,4 +95,10 @@ public interface BoardMapper {
 	List<Content> searchRequest(Map<String, Object> searchValue);
 
 	ArrayList<Content> menuCategoryList(int menuNo);
+
+    int updateRecommendation(HashMap<String, String> map);
+
+	int getMdRecommendationCount();
+
+    ArrayList<Content> selectMdList();
 }

@@ -302,15 +302,15 @@ body {
 		<!-- MD 추천 템플릿 -->
 		<section class="section">
 			<h2 class="section-title">MD가 추천하는 템플릿 리스트</h2>
-			<div class="template-grid">
+			<div class="template-grid" id="template-grid-wrap">
+				<!--<div class="template-item"></div>
 				<div class="template-item"></div>
 				<div class="template-item"></div>
 				<div class="template-item"></div>
 				<div class="template-item"></div>
 				<div class="template-item"></div>
 				<div class="template-item"></div>
-				<div class="template-item"></div>
-				<div class="template-item"></div>
+				<div class="template-item"></div>-->
 			</div>
 		</section>
 
@@ -431,6 +431,37 @@ body {
 			document.getElementById("monthlyEvent").textContent = `${month}달 추천이벤트`;
 		}
 		getCurrentMonthEvent();
+
+		window.onload = () =>{
+
+			fetch("board/mdList", {
+				method: "GET",
+				headers: {'content-type': 'application/json; charset=UTF-8'},
+			})
+			.then(response => response.json())
+			.then(data =>{
+				console.log(data);
+				const mdTemplates = document.getElementById("template-grid-wrap");
+				mdTemplates.innerHTML = "";
+
+				data.forEach(item =>{
+					const itemDiv = document.createElement("div");
+					itemDiv.classList.add("template-card");
+
+					itemDiv.innerHTML = `
+						<div class="template-image"></div>
+						<div class="template-details">
+						<div class="template-title">${item.contentTitle}</div>
+						</div>
+						</div>
+					`;
+					mdTemplates.appendChild(itemDiv);
+
+				});
+			})
+			.catch(error => console.log('리스트 불러오기 실패 : ', error));
+
+		};
 	</script>
 </body>
 </html>

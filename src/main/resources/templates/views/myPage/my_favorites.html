@@ -27,31 +27,30 @@
 					<option value="Sound Effects">Sound Effects</option>
 					<option value="Photos">Photos</option>
 					<option value="Fonts">Fonts</option>
-				</select> 
-				<select class="filter-dropdown" id="sortSelect">
+				</select> <select class="filter-dropdown" id="sortSelect">
 					<option value="newest">새로운순</option>
 					<option value="mostView">조회수 많은 순</option>
 				</select>
 			</div>
-		<th:block th:if="${not #lists.isEmpty(list)}">
-			<div class="grid">
-				<div class="grid-item" th:each="r : ${list}">
-					<button class="menu-dots">⋮</button>
+			<th:block th:if="${not #lists.isEmpty(list)}">
+				<div class="grid">
+					<div class="grid-item" th:each="r : ${list}">
+						<button class="menu-dots">⋮</button>
 
-					<div class="item-content">
-						<span class="item-title">[[${r.CONTENT_TITLE}]]</span> [[${r.CONTENT_NO}]]
-						<div class="item-actions">
-							<span>👁️[[${r.VIEWS}]]</span> <span>❤️[[${r.LIKE_COUNT}]]</span>
+						<div class="item-content">
+							<span class="item-title">[[${r.CONTENT_TITLE}]]</span> <span hidden="">[[${r.CONTENT_NO}]]</span>
+							<div class="item-actions">
+								<span>👁️ [[${r.VIEWS}]]</span> <span>❤️ [[${r.LIKE_COUNT}]]</span>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</th:block>	
-		
-		<th:block th:if="${#lists.isEmpty(list)}">
-			<p>여러 가지 콘텐츠에 좋아요를 눌러 나만의 좋아요 컬렉션을 만들어 보세요!</p>
-		</th:block>
-		
+			</th:block>
+
+			<th:block th:if="${#lists.isEmpty(list)}">
+				<p>여러 가지 콘텐츠에 좋아요를 눌러 나만의 좋아요 컬렉션을 만들어 보세요!</p>
+			</th:block>
+
 		</div>
 	</div>
 

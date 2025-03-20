@@ -7,30 +7,30 @@
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
-<title>My Project</title>
+<title>My Trash</title>
 <style>
 .dropdown {
 	position: absolute;
-	top: 20%;
-	left: 200px;
+	top: 25%;
 	background-color: #252535;
 	border-radius: 0.5rem;
 	padding: 0.5rem;
-	min-width: 120px;
+	min-width: 40px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 	display: none;
 	z-index: 100;
+	right: 0;
 }
 
 .dropdown.show {
 	display: block;
+	margin-right: 7.5px;
 }
 
 .dropdown-item {
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
-	padding: 0.5rem;
+	padding: 3px;
 	color: #fff;
 	text-decoration: none;
 	font-size: 0.875rem;
@@ -38,45 +38,13 @@
 	cursor: pointer;
 }
 
-.dropdown-item:hover {
+.dropdown:hover {
 	background-color: #2a2a3a;
 }
 
 .dropdown-item i {
 	font-size: 1rem;
 	color: #6f757d;
-}
-
-/* 휴지통 아이콘 스타일 */
-.trash-icon {
-	width: 14px;
-	height: 14px;
-	display: inline-block;
-	position: relative;
-	border: 2px solid #6f757d;
-	border-top: none;
-	border-radius: 0 0 2px 2px;
-	margin-right: 4px;
-}
-
-.trash-icon::before {
-	content: '';
-	position: absolute;
-	width: 8px;
-	height: 2px;
-	background: #6f757d;
-	top: -4px;
-	left: 1px;
-}
-
-.trash-icon::after {
-	content: '';
-	position: absolute;
-	width: 14px;
-	height: 2px;
-	background: #6f757d;
-	top: -2px;
-	left: -2px;
 }
 </style>
 </head>
@@ -86,7 +54,7 @@
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
 		<div class="container content_wrap">
 			<div class="content-header">
-				<h1>My Projects</h1>
+				<h1>My Trash</h1>
 			</div>
 			<div class="filter-buttons">
 				<select class="filter-dropdown" id="categorySelect">
@@ -110,49 +78,37 @@
 						<button class="menu-dots">⋮</button>
 						<div class="dropdown">
 							<div class="dropdown-item">
-								<span class="trash-icon"></span> Delete
-							<div class="dropdown" >
-								<div class="dropdown-item">
-									<span class="trash-icon"></span> 복구
-								</div>
+								<span class="trash-icon"></span> 삭제 취소
 							</div>
 						</div>
 						<div class="item-content">
-							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}"></span>
+							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}" hidden=""></span>
 
 							<div class="item-actions">
-								<span>👁️[[${r.views}]]</span> <span>❤️[[${r.likeCount}]]</span>
+								<span>👁️ [[${r.views}]]</span> <span>❤️ [[${r.likeCount}]]</span>
 							</div>
 						</div>
 					</div>
 				</div>
 			</th:block>
-
 			<th:block th:if="${#lists.isEmpty(list)}">
 				<p>휴지통이 비었습니다!</p>
 			</th:block>
 
 		</div>
 	</div>
-
 	<script type="text/javascript">
-				
-	
 			document.querySelectorAll('.menu-dots').forEach(button=>{
 				button.addEventListener('click',function(){
 // 					console.log(this);
-
 					event.stopPropagation();
-					
 					let dropdown = this.nextElementSibling;
-					
 					document.querySelectorAll('.dropdown').forEach(d=>{
 						if(d != dropdown){
 							d.classList.remove('show');
 						}
 					});
 					dropdown.classList.toggle('show');
-					
 				});
 			});
 			
@@ -183,13 +139,10 @@
 							}else{
 								alert('게시글 삭제에 실패했습니다.');
 							}
-							
-
 						},error:data=>alert('서버오류')
 					})
 				});
 			});
-			
 	
  			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
  				dropdown.addEventListener('change',(e)=>{
@@ -198,23 +151,18 @@
  	 				console.log(value);
  	 				console.log(sortValue);
  	 				$.ajax({
- 						
  	 					url:'/board/selectCategoryMyTrash',
  	 					data:{value:value , sortValue:sortValue},
  	 					success:data=>{
 // 	  						console.log(data);
  	 						let grids = document.querySelectorAll('.grid');
- 	 						
  	 						grids.forEach(grid=>{
  	 							grid.innerHTML='';
  	 						});
- 	 						
  	 						if(!data || data.length ==0){
  	 							grids[0].innerHTML='<p>검색된 목록이 없습니다!</p>';
  	 							return;
  	 						}
- 	 						
- 	 						
  	 						data.forEach((r)=>{
  	 							console.log(r.contentTitle);
  								let gridItem = `
@@ -230,17 +178,12 @@
  									`;
  								grids[0].innerHTML += gridItem;
  							});
- 	 						
  	 						console.log(data);
- 							
  	 					},
  	 					error:data=>console.log(data)
  	 				});
  	 			});
- 				
  			});
- 				
  		</script>
-
 </body>
 </html>

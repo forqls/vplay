@@ -94,7 +94,17 @@ input[type="date"] {
 
 .radio-group {
 	display: flex;
+	width: 100%;
+	padding: 0.8rem;
+	background-color: #1f1f2c;
+	border: none;
+	border-radius: 4px;
 	gap: 0.5rem;
+	margin-top: -22.5px;
+	padding: 0.8rem;
+	background-color: #1f1f2c;
+	border: none;
+	border-radius: 4px;
 }
 
 .radio-group span {
@@ -161,7 +171,7 @@ input[type="date"] {
 .modal {
 	display: none;
 	position: fixed;
-	z-index: 1000;
+	z-index: 999;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -195,7 +205,6 @@ input[type="date"] {
 	<div class="breadcrumb">
 		<a href="/">Home</a> > <span class="current">Sign Up</span>
 	</div>
-	<!-- VO 완성되면 아이디 중복확인 버튼 구현하기 (비동기) -->
 	<main class="signup-container">
 		<h1 class="signup-title" th:text="${session.kakaoUser != null ? ' 카카오 유저 회원가입' : '회원가입'}"></h1>
 		<form id="signupForm" method="post" action="/users/signUp">
@@ -215,7 +224,7 @@ input[type="date"] {
 				<input type="text" placeholder="User name" class="input-field" name="userName" id="name"><label class="input-label">User name</label>
 			</div>
 			<div class="input-group">
-				<input type="text" placeholder="Nick name" class="input-field" name="userNickname" id="nickName" th:value="${session.kakaoUser != null ? session.kakaoUser.userNickname : ''}"><label class="input-label">Nick name</label>
+				<input type="text" placeholder="Nick name" class="input-field" name="userNickname" id="nickName" th:value="${session.kakaoUser != null ? session.kakaoUser.userNickname : ''}"><label class="input-label">Nickname</label>
 			</div>
 			<div class="input-group">
 				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel"><label class="input-label">Phone</label>
@@ -231,8 +240,9 @@ input[type="date"] {
 				</div>
 			</div>
 			<div class="input-group">
-				<input type="date" placeholder="Birth day" class="input-field" name="userBirth">
+				<input type="date" placeholder="Birth day" class="input-field" name="userBirth"><label class="input-label">BirthDay</label>
 			</div>
+			<div style="text-align: left; font-size: 0.8rem; margin-left: 8px; position: relative; z-index: 10;">Gender</div>
 			<div class="input-group">
 				<div class="radio-group">
 					<input type="radio" name="userGender" value="M" class="radio-input" id="male"> <span>남자</span> <input type="radio" name="userGender" value="F" class="radio-input" id="female"> <span>여자</span>

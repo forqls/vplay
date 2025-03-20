@@ -161,7 +161,7 @@ textarea.form-control {
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="phone">전화번호</label> <input type="tel" name="userPhone" id="tel" class="form-control" th:value="${session.loginUser.userPhone}">
+						<label class="form-label" for="tel">전화번호</label> <input type="tel" name="userPhone" id="tel" class="form-control" th:value="${session.loginUser.userPhone}">
 					</div>
 
 					<div class="form-group">
@@ -214,15 +214,15 @@ textarea.form-control {
 			<section class="section">
 				<form action="changePw" method="post">
 					<div class="form-group">
-						<label class="form-label" for="current-password">현재 비밀번호</label> <input type="password" name="currentPwd" id="currentPwd" class="form-control" placeholder="현재 비밀번호를 입력하세요.">
+						<label class="form-label" for="currentPwd">현재 비밀번호</label> <input type="password" name="currentPwd" id="currentPwd" class="form-control" placeholder="현재 비밀번호를 입력하세요.">
 					</div>
 					<div id="ChangeConfirmPwText"></div>
 					<div class="form-group">
-						<label class="form-label" for="new-password">새 비밀번호</label> <input type="password" name="newPwd" id="newPwd" class="form-control" placeholder="새로운 비밀번호를 입력하세요.">
+						<label class="form-label" for="newPwd">새 비밀번호</label> <input type="password" name="newPwd" id="newPwd" class="form-control" placeholder="새로운 비밀번호를 입력하세요.">
 					</div>
 
 					<div class="form-group">
-						<label class="form-label" for="confirm-password">새 비밀번호 확인</label> <input type="password" name="newPwdConfirm" id="newPwdConfirm" class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
+						<label class="form-label" for="newPwdConfirm">새 비밀번호 확인</label> <input type="password" name="newPwdConfirm" id="newPwdConfirm" class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
 					</div>
 					<div id="ChangeConfirmPwTextCheck"></div>
 					<button type="button" class="btn" id="changePw">Change Password</button>

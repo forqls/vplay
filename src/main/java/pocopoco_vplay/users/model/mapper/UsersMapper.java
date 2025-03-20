@@ -69,4 +69,5 @@ public interface UsersMapper {
 
 	int getReceiverNo(String receiverName);
 
+
 }

@@ -53,14 +53,14 @@
 			<div class="pagination">
 				<ul>
 					<th:block th:if="${pi.currentPage > 1}">
-						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName})}" aria-label="Previous"> < </a></li>
+						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName}, search=${searchValue})}" aria-label="Previous"> < </a></li>
 					</th:block>
 					<th:block th:if="${pi.currentPage <=1}">
 						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
 					</th:block>
-					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"></a></li>
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName}, search=${searchValue})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"> </a></li>
 					<th:block th:if="${pi.currentPage < pi.MaxPage}">
-						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1}, menuName=${menuName}, search=${searchValue})}" aria-label="Next"> > </a></li>
 					</th:block>
 					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
 						<li class="next chevron-right"><a aria-label="Next"> > </a></li>
