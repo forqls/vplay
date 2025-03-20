@@ -204,6 +204,14 @@ tr.request-list.mdActive {
 	background: #303e4d;
 }
 
+tr.select {
+	background: #324355;
+}
+
+.hidden {
+	display: none;
+}
+
 /*반응형*/
 @media ( max-width : 1024px) {
 	.sidebar {

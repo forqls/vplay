@@ -457,7 +457,7 @@
 
 	<update id="updateRecommendation">
 		update content
-		set MD_RECOMMENDATION = 'Y'
+		set MD_RECOMMENDATION = #{column}
 		where content_no = #{contentNo}
 	</update>
 </mapper>

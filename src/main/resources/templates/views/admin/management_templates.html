@@ -50,8 +50,8 @@
 							<td class="AddSettings">
 								<div>⋮</div>
 								<span id="RecommendedBtn" class="hover_action">
-									<span th:class="${t.mdRecommendation == 'Y' ? 'select' : 'unselect'}">MD추천</span>
-									<span th:class="${t.mdRecommendation == 'N' ? 'select' : 'unselect'}">MD추천 취소</span>
+									<span th:class="'mdRec ' + (${t.mdRecommendation == 'Y'} ? 'hidden' : '')">MD추천</span>
+        							<span th:class="'mdCancel ' + (${t.mdRecommendation == 'N'} ? 'hidden' : '')">MD추천 취소</span>
 								</span>
 							</td>
 						</tr>
@@ -145,39 +145,44 @@
 
 
 		const tds = document.getElementsByTagName('td');
-		for (let i = 0; i < tds.length; i++) {
-			const mdButtons = tds[i].querySelectorAll("#RecommendedBtn .unselect, #RecommendedBtn .select");
+			const mdButtons = document.querySelectorAll("#RecommendedBtn .mdRec, #RecommendedBtn .mdCancel");
+
 			for (const button of mdButtons) {
 				button.addEventListener('click', function () {
 					let tr = this.closest("tr");
-					if (this.classList.contains('unselect')) {
-						fetch("/admin/mdRecommendation", {
-							method: "put",
-							headers: { 'content-type': 'application/json; charset=UTF-8' },
-							body: JSON.stringify({
-								contentNo: this.closest('tr').querySelector('td:first-child').innerText.trim()
-							})
+					let mdRecButton = tr.querySelector(".mdRec");
+					let mdCancelButton = tr.querySelector(".mdCancel");
+
+					fetch("/admin/mdRecommendation", {
+						method: "put",
+						headers: { 'content-type': 'application/json; charset=UTF-8' },
+						body: JSON.stringify({
+							contentNo: tr.querySelector('td:first-child').innerText.trim(),
+							column: this.classList.contains("mdRec") ? "Y" : "N"
 						})
-						.then(response => response.json())
-						.then(data => {
-							if (data === 1) {
-                                this.classList.remove('unselect');
-								this.classList.add("select");
-								console.log("tr.classList : " + tr.classList);
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data === 1) {
+							if(this.classList.contains('mdRec')){
+								mdRecButton.classList.add("hidden");
+								mdCancelButton.classList.remove("hidden");
 								alert('MD추천이 적용되었습니다.');
-							} else {
-                                this.classList.remove('select');
-                                this.classList.add("unselect");
-								alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
-								location.reload();
+							}else{
+								mdCancelButton.classList.add("hidden");
+								mdRecButton.classList.remove("hidden");
+								alert('MD추천이 취소되었습니다.');
 							}
-						});
-					}
+						} else {
+							alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
+							location.reload();
+						}
+					});
 
 
 				});
 			}
-		}
+
 
 	</script>
 </body>

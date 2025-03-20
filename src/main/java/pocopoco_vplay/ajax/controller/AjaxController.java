@@ -176,7 +176,17 @@ public class AjaxController {
 	@PutMapping("mdRecommendation")
 	public int updateRecommendation(@RequestBody HashMap<String, String> map) {
 		System.out.println("contentNo: " + map.get("contentNo"));
+		System.out.println("column 값: " + map.get("column"));
+
+//		if(map.get("column").equals("N")){
+//			map.put("column", "Y");
+//		}else {
+//			map.put("column", "N");
+//		}
+
 		int result = bService.updateRecommendation(map);
+
+
 		if(result > 0) {
 			return 1;
 		}else{
