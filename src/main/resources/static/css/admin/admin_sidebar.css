@@ -21,27 +21,23 @@
 	font-weight: bold;
 }
 
-.nav-item {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	padding: 12px 16px;
-	color: #9ca3af;
-	text-decoration: none;
-	border-radius: 8px;
-	margin-bottom: 8px;
-	cursor: pointer;
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #9ca3af;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
 }
 
-.nav-item:hover {
-	background-color: #2c343d;
+.sidebar-nav-item:hover {
+    background-color: #2c343d;
 }
 
-.nav-item.active {
-	background-color: #5e37e9;
-	color: white;
-}
-
-li {
-	display: inline-block;
+.sidebar-nav-item.active {
+    background-color: #5e37e9;
+    color: white;
 }
