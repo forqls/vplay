@@ -63,4 +63,10 @@ public interface UsersMapper {
 
 	int updateMessageStatus(String messageNo);
 
+	int existReceiver(String receiverName);
+
+	int insertMessage(Message msg);
+
+	int getReceiverNo(String receiverName);
+
 }

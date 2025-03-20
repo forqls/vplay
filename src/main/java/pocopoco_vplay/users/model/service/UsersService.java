@@ -123,6 +123,18 @@ public class UsersService {
 		return mapper.updateMessageStatus(messageNo);
 	}
 
+	public int existReceiver(String receiverName) {
+		return mapper.existReceiver(receiverName);
+	}
+
+	public int insertMessage(Message msg) {
+		return mapper.insertMessage(msg);
+	}
+
+	public int getReceiverNo(String receiverName) {
+		return mapper.getReceiverNo(receiverName);
+	}
+
 
 
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -467,9 +468,32 @@ public class UsersController {
 		return result;
 	}
 	
+	@PostMapping("sendMessage")
+	@ResponseBody
+	public int sendMessage(@RequestBody Message msg,HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		msg.setSenderNo(loginUser.getUserNo());
+		msg.setSenderName(loginUser.getUserNickname());
+		System.out.println("전달받은 쪽지의 구성은2 = " + msg);
+		
+		msg.setReceiverNo(uService.getReceiverNo(msg.getReceiverName()));
+		
+		System.out.println(msg);
+		System.out.println("잘 들어옴");
+//		System.out.println("전달받은 쪽지의 구성은2 = " + msg);
+		int result = uService.insertMessage(msg);
+		
+		return result;
+	}
 	
-	
-	
+	@GetMapping("existReceiver")
+	@ResponseBody
+	public int existReceiver(@RequestParam("receiver") String receiverName) {
+//		System.out.println(receiverName);
+		int result = uService.existReceiver(receiverName);
+			
+		return result;
+	}
 	
 	
 	

@@ -21,6 +21,7 @@ public class Message {
 	private LocalDateTime sentTime;
 	private String readStatus;
 	private String conversationId;
-	private String userName;
+	private String senderName;
+	private String receiverName;
 	private String timeout;
 }
