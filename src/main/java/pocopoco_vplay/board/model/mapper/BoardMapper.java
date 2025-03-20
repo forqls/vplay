@@ -99,4 +99,6 @@ public interface BoardMapper {
     int updateRecommendation(HashMap<String, String> map);
 
 	int getMdRecommendationCount();
+
+    ArrayList<Content> selectMdList();
 }

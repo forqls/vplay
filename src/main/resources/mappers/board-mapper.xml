@@ -464,4 +464,10 @@
 	<select id="getMdRecommendationCount">
 		select count(*) from content where md_recommendation = 'Y'
 	</select>
+
+	<select id="selectMdList">
+		select * from content
+		join users using(user_no)
+		where md_recommendation = 'Y'
+	</select>
 </mapper>

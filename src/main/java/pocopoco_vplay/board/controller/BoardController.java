@@ -563,4 +563,6 @@ public class BoardController {
 		return "content_write";
 	}
 
+
+
 }

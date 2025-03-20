@@ -196,4 +196,7 @@ public class BoardService {
 
 	public int getMdRecommendationCount() {	return mapper.getMdRecommendationCount();
 	}
+
+    public ArrayList<Content> selectMdList() { return mapper.selectMdList();
+    }
 }

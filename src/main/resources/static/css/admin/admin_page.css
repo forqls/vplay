@@ -212,6 +212,10 @@ tr.select {
 	background:#162331;
 }
 
+.request-list-body tr.recommended:hover {
+	background-color: #162331;
+}
+
 
 /*반응형*/
 @media ( max-width : 1024px) {
