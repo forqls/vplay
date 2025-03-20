@@ -95,4 +95,6 @@ public interface BoardMapper {
 	List<Content> searchRequest(Map<String, Object> searchValue);
 
 	ArrayList<Content> menuCategoryList(int menuNo);
+
+    int updateRecommendation(HashMap<String, String> map);
 }

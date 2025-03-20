@@ -452,4 +452,10 @@
 		from category
 		where menu_no = #{menuNo}
 	</select>
+
+	<update id="updateRecommendation">
+		update content
+		set MD_RECOMMENDATION = 'Y'
+		where content_no = #{contentNo}
+	</update>
 </mapper>

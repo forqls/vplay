@@ -71,7 +71,10 @@
 				<td>[[${c.modifyDate}]]</td>
 				<td>[[${c.views}]]</td>
 			</tr>
-			<tr th:if="${#lists.isEmpty(list)}">
+			</tbody>
+
+			<tbody th:if="${#lists.isEmpty(list)}">
+			<tr>
 				<td colspan="6" style="text-align: center;">검색 결과가 없습니다.</td>
 			</tr>
 			</tbody>

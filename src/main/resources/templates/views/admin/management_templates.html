@@ -146,15 +146,14 @@
 	                method: "put",
 	                headers: {'content-type': 'application/json; charset=UTF-8'},
 	                body: JSON.stringify({
-	                    contentNo: this.closest('tr').querySelector('.request-list td').innerText[0],
-	                    status: 'MD추천'
+	                    contentNo: this.closest('tr').querySelector('td:first-child').innerText.trim()
 	                })
 	            })
 				.then(response => response.json())
 				.then(data => {
 	                if(data === 1){
 	                    tr.classList.add("mdActive");
-	                    console.log(tr.classList);
+	                    console.log("tr.classList : "+ tr.classList);
 	                    alert('MD추천이 적용되었습니다.');
 	                }else{
 	                    alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
