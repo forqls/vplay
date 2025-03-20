@@ -137,10 +137,10 @@
 					<option value="7">Fonts</option>
 				</select>
 				<div class="category-label"></div>
-				<div class="category-plus"></div>
 			</div>
 		</div>
 		
+		<input type="file" style="display: none;">
 
 		<div class="form-group">
 			<label for="contentTitle" class="form-label">제목</label>
@@ -159,6 +159,9 @@
 	</form>
 </main>
 <script>
+	const file = $('input[type="file"]');
+	console.log(file);
+
 	$(document).ready(function() {
 		$('#contentDetail').summernote({
 			height: 300,  // 에디터 높이
@@ -186,8 +189,7 @@
 	});
 	
 	const menuList = document.querySelector(".filter-dropdown.menu");
-	const category = document.querySelector(".category-label");
-	const categoryPlus = document.querySelector(".category-plus");
+	const categoryList = document.querySelector(".category-label");
 	
 	menuList.addEventListener('change', function(){
 		const menuNum = this.value
@@ -200,50 +202,32 @@
 			console.log(data);
 			if(data.length > 0){
 				console.log(data);
-				category.innerHTML = '';
-				const span = document.createElement("span");
-				span.innerText = "카테고리 선택";
+				categoryList.innerHTML = '';
 				
-				const select = document.createElement("select");
-				select.className ="filter-dropdown";
-				select.classList.add("category");
-				select.name = "categoryNo";
-				
-				const defaultOption = document.createElement("option");
-				defaultOption.value = "0";
-				defaultOption.innerText = "---------------";
-				select.appendChild(defaultOption);
-				
-				data.forEach(optionData =>{
-					const option = document.createElement("option");
-					option.value = optionData.CATEGORY_NO
-					option.innerText = optionData.CATEGORY_NAME
-					select.appendChild(option);
-				})
-				
-				category.appendChild(span);
-				category.appendChild(select);
-				
-				const categoryList = document.querySelector(".filter-dropdown.category");
-				
-				
-				categoryList.addEventListener('change', function(){
-					const a = document.createElement('a');
-					const selectedText = this.querySelector("option:checked").textContent;
-					console.log(categoryPlus.innerText);
-					if(categoryPlus.innerText.trim() ===  ""){
-						a.innerText = selectedText;
-					}else{
-						a.innerText = ", " + selectedText;
-					}
-					
-					
-					categoryPlus.appendChild(a);
-				})
+				for(const i of data){
+					const input = document.createElement('input');
+					input.type = "checkbox";
+					input.value = i.CATEGORY_NO;
 
+					const label = document.createElement('label');
+					label.textContent = i.CATEGORY_NAME;
+					
+					categoryList.appendChild(input);
+					categoryList.appendChild(label);
+					categoryList.innerHTML += '&nbsp&nbsp';
+					
+				}
+				const categoryInput = categoryList.querySelectorAll('input');
+// 				[...categoryInput].map((category, index, array) =>{
+// 					console.log(category.checked)
+// 				})
 			}
 		})
 	})
+	
+	
+	
+	
 	
 	
 </script>
