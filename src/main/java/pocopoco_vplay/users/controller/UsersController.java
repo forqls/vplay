@@ -497,7 +497,6 @@ public class UsersController {
 
 		return result;
 	}
-<<<<<<< HEAD
 	
 	@GetMapping("unreadMessages")
 	@ResponseBody
@@ -513,9 +512,6 @@ public class UsersController {
 	
 	
 	
-	
-	
-=======
->>>>>>> 1214606a9c9bf3dd5ea7f0a7eaa5e45727c0e83b
+
 
 }
