@@ -73,6 +73,11 @@
 	margin-bottom: 16px;
 }
 
+.follower {
+	display: flex;
+	justify-content: center;
+}
+
 .menu-list {
 	list-style: none;
 }
