@@ -120,9 +120,8 @@
 <body>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
 <main class="inquiryWrite-container">
-	<h1 class="inquiryWrite-title">제작 의뢰</h1>
-	<form id="inquiryForm" action="/board/writeContent" method="post">
-		<input type="hidden" name="page" th:value="${currentPage}">
+	<h1 class="inquiryWrite-title">컨텐츠 글 올리기</h1>
+	<form id="inquiryForm" action="/board/writeContent" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 			<div class="form-label">
 				<span>카테고리 선택</span> 
@@ -136,12 +135,26 @@
 					<option value="3">Sound Effects</option>
 					<option value="7">Fonts</option>
 				</select>
-				<div class="category-label"></div>
+			</div>
+			<div class="category-label"></div>
+		</div>
+		
+		<div class="button-group">
+			<div>
+				<button type="button" id="thumbnail-file" class="button" style="display:none;"></button>
+				<img id="img-preview" style="display: none; max-width: 300px; margin-top: 10px;">
+				<video id="video-preview" style="display: none; max-width: 300px; margin-top: 10px;" controls></video>
+				<br>
+				<button type="button" id="content-file" class="button" style="display:none;">첨부파일</button>
+				<br>
+				<span class="file-name"></span>
+				<input type="file" id="t-file" style="display:none;" name="t-file">
+				<input type="file" id="c-file" style="display:none;" name="c-file">
 			</div>
 		</div>
 		
-		<input type="file" style="display: none;">
-
+		<br>
+		
 		<div class="form-group">
 			<label for="contentTitle" class="form-label">제목</label>
 			<input type="text" placeholder="제목을 입력하세요." id="contentTitle" name="contentTitle" required>
@@ -159,9 +172,92 @@
 	</form>
 </main>
 <script>
-	const file = $('input[type="file"]');
-	console.log(file);
-
+	const contentFileDiv = document.querySelector('.button-group');
+	const contentFile = document.getElementById('content-file');
+	const thumbnailFile = document.getElementById('thumbnail-file');
+	const menuList = document.querySelector(".filter-dropdown.menu");
+	const categoryList = document.querySelector(".category-label");
+	const fileName = document.querySelector('.file-name');
+	const cFile = document.querySelector('#c-file');
+	const tFile = document.querySelector('#t-file');
+	const imgPreview = document.getElementById("img-preview");
+	const videoPreview = document.getElementById("video-preview");
+	
+	menuList.addEventListener('change', function(){
+		
+		thumbnailFile.style.display = "none";
+		contentFile.style.display = "none";
+		
+		videoPreview.style.display = "none";
+		videoPreview.innerHTML = "";		
+		
+		imgPreview.style.display = "none";
+		imgPreview.innerHTML = "";
+		
+		cFile.value = "";
+		fileName.innerText = "";
+		const menuNum = this.value
+// 		console.log("다른카테고리 클릭 : "+ file.value);
+		
+		if(menuNum == 0){
+			categoryList.innerHTML = '';
+		}else if(menuNum == 1 || menuNum == 5){
+			thumbnailFile.style.display = "block";
+			thumbnailFile.innerText = "영상 썸네일";
+			contentFile.style.display = "block";
+			selectCategory(menuNum);
+		}else if(menuNum == 4 || menuNum == 6 || menuNum == 7){
+			thumbnailFile.style.display = "block";
+			thumbnailFile.innerText = "사진 썸네일";
+			contentFile.style.display = "block";
+			selectCategory(menuNum);
+		}else{
+			contentFile.style.display = "block";
+			selectCategory(menuNum);
+		}
+	})
+	
+	//첨부파일
+	contentFile.addEventListener('click', ()=>{
+		console.log("file : " + cFile);
+		
+		cFile.click();
+			
+		cFile.addEventListener('change', (event)=>{
+			const plusFile = event.target.files[0];
+			fileName.innerText = plusFile.name;
+// 			console.log("지금 현재 파일 클릭 : "+ file.value);
+		})
+	})
+	
+	
+	
+	//썸네일 파일
+	thumbnailFile.addEventListener('click', ()=>{
+		
+		tFile.click();
+		
+		tFile.addEventListener('change', (event)=>{
+			const plusFile = event.target.files[0];
+			console.log("1" + plusFile.name);
+			
+			if(plusFile){
+				const reader = new FileReader();
+				reader.addEventListener('load', function(e){
+					if((thumbnailFile.innerText).includes("사진")){
+						imgPreview.style.display = "block";
+						imgPreview.src = e.target.result;
+					}else{
+						videoPreview.style.display = "block";
+						videoPreview.src = e.target.result;
+					}
+				})
+				reader.readAsDataURL(plusFile);
+			}
+		})
+		
+	})
+	
 	$(document).ready(function() {
 		$('#contentDetail').summernote({
 			height: 300,  // 에디터 높이
@@ -188,47 +284,36 @@
 		});
 	});
 	
-	const menuList = document.querySelector(".filter-dropdown.menu");
-	const categoryList = document.querySelector(".category-label");
-	
-	menuList.addEventListener('change', function(){
-		const menuNum = this.value
-		fetch("/board/writeContent" + "/" +this.value, {
+	function selectCategory(menuNum){
+		fetch("/board/writeContent" + "/" + menuNum, {
 			method : 'get',
 			headers : {'content-type' : 'application/json; charset=UTF-8'}
 		})
 		.then(response => response.json())
 		.then(data =>{
-			console.log(data);
+// 			console.log(data);
 			if(data.length > 0){
-				console.log(data);
+// 				console.log(data);
 				categoryList.innerHTML = '';
 				
 				for(const i of data){
 					const input = document.createElement('input');
 					input.type = "checkbox";
 					input.value = i.CATEGORY_NO;
+					input.name = "categoryNum";
 
 					const label = document.createElement('label');
 					label.textContent = i.CATEGORY_NAME;
+// 					label.className = "form-label";
 					
 					categoryList.appendChild(input);
 					categoryList.appendChild(label);
 					categoryList.innerHTML += '&nbsp&nbsp';
 					
 				}
-				const categoryInput = categoryList.querySelectorAll('input');
-// 				[...categoryInput].map((category, index, array) =>{
-// 					console.log(category.checked)
-// 				})
 			}
 		})
-	})
-	
-	
-	
-	
-	
+	}
 	
 </script>
 </body>
