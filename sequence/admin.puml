@@ -1,0 +1,244 @@
+/'유저 목록 불러오기 (GET /admin/users)'/
+@startuml
+actor 사용자
+participant Controller as "AdminController"
+participant Service as "AdminService"
+
+사용자 -> Controller: GET /admin/users?page={currentPage}&search={search}
+activate Controller
+
+Controller -> Service: getUsersCount(search)
+activate Service
+Service --> Controller: listCount
+deactivate Service
+
+Controller -> Controller: getPageInfo(currentPage, listCount, 10)
+
+Controller -> Service: selectAllUser(search, pi)
+activate Service
+Service --> Controller: list of Users
+deactivate Service
+
+Controller -> 사용자: Return ModelAndView ("management_users", list, pi, search)
+deactivate Controller
+@enduml
+
+
+/'문의 목록 불러오기 (GET /admin/inquiry)'/
+@startuml
+participant Client
+participant Controller as "AdminController"
+participant Service as "AdminService"
+participant BoardService as "BoardService"
+
+Client -> Controller: GET /admin/inquiry?page={currentPage}&search={search}
+activate Controller
+
+Controller -> Service: getInquiryCount(search)
+activate Service
+Service --> Controller: listCount
+deactivate Service
+
+Controller -> Controller: getPageInfo(currentPage, listCount, 10)
+
+Controller -> Service: selectAllInquiry(search, pi)
+activate Service
+Service --> Controller: list of Inquiries
+deactivate Service
+
+loop for each Inquiry
+    Controller -> Service: selectUser(userNo)
+    activate Service
+    Service --> Controller: userId
+    deactivate Service
+
+    Controller -> BoardService: selectReply(contentNo)
+    activate BoardService
+    BoardService --> Controller: reply
+    deactivate BoardService
+end
+
+Controller -> Client: Return ModelAndView ("management_inquiry", list, pi, search)
+deactivate Controller
+@enduml
+
+
+/'컨텐츠 목록 불러오기 (GET /admin/templates)'/
+@startuml
+participant Client
+participant Controller as "AdminController"
+participant Service as "AdminService"
+
+Client -> Controller: GET /admin/templates?page={currentPage}&search={search}
+activate Controller
+
+Controller -> Service: getTemplatesCount(search)
+activate Service
+Service --> Controller: listCount
+deactivate Service
+
+Controller -> Controller: getPageInfo(currentPage, listCount, 10)
+
+Controller -> Service: selectAllTemplates(search, pi)
+activate Service
+Service --> Controller: list of Templates
+deactivate Service
+
+loop for each Template
+    Controller -> Service: selectUser(userNo)
+    activate Service
+    Service --> Controller: userId
+    deactivate Service
+end
+
+Controller -> Client: Return ModelAndView ("management_templates", list, pi, search)
+deactivate Controller
+@enduml
+
+
+/'요청 목록 불러오기 (GET /admin/request)'/
+@startuml
+participant Client
+participant Controller as "AdminController"
+participant Service as "AdminService"
+
+Client -> Controller: GET /admin/request?page={currentPage}&search={search}
+activate Controller
+
+Controller -> Service: getrequestPostCount(search)
+activate Service
+Service --> Controller: listCount
+deactivate Service
+
+Controller -> Controller: getPageInfo(currentPage, listCount, 10)
+
+Controller -> Service: selectAllRequestPost(search, pi)
+activate Service
+Service --> Controller: list of Requests
+deactivate Service
+
+loop for each Request
+    Controller -> Service: selectUser(userNo)
+    activate Service
+    Service --> Controller: userId
+    deactivate Service
+end
+
+Controller -> Client: Return ModelAndView ("management_request", list, pi, search)
+deactivate Controller
+@enduml
+
+
+/'문의 리스트 검색 (GET /admin/inquiry/{menuName})'/
+@startuml
+participant Client
+participant Controller as "AdminController"
+participant Service as "AdminService"
+participant BoardService as "BoardService"
+
+Client -> Controller: GET /admin/inquiry/{menuName}?page={currentPage}&search={search}
+activate Controller
+
+Controller -> Controller: Set menuNo based on menuName
+
+Controller -> Service: getInquiryCount(search)
+activate Service
+Service --> Controller: listCount
+deactivate Service
+
+Controller -> Controller: getPageInfo(currentPage, listCount, 10)
+
+Controller -> Service: selectAllInquiry(search, pi)
+activate Service
+Service --> Controller: list of Inquiries
+deactivate Service
+
+loop for each Inquiry
+    Controller -> Service: selectUser(userNo)
+    activate Service
+    Service --> Controller: userId
+    deactivate Service
+
+    Controller -> BoardService: selectReply(contentNo)
+    activate BoardService
+    BoardService --> Controller: reply
+    deactivate BoardService
+end
+
+Controller -> Client: Return "management_inquiry"
+deactivate Controller
+@enduml
+
+
+/'컨텐츠 리스트 검색 (GET /admin/templates/{menuName})'/
+@startuml
+participant Client
+participant Controller as "AdminController"
+participant Service as "AdminService"
+
+Client -> Controller: GET /admin/templates/{menuName}?page={currentPage}&search={search}
+activate Controller
+
+Controller -> Controller: Set menuNo based on menuName
+
+Controller -> Service: getTemplatesCount(search)
+activate Service
+Service --> Controller: listCount
+deactivate Service
+
+Controller -> Controller: getPageInfo(currentPage, listCount, 10)
+
+Controller -> Service: selectAllTemplates(search, pi)
+activate Service
+Service --> Controller: list of Templates
+deactivate Service
+
+loop for each Template
+    Controller -> Service: selectUser(userNo)
+    activate Service
+    Service --> Controller: userId
+    deactivate Service
+end
+
+Controller -> Client: Return "management_templates"
+deactivate Controller
+@enduml
+
+
+/'요청 목록 검색 (GET /admin/request/{menuName})'/
+@startuml
+participant Client
+participant Controller as "AdminController"
+participant Service as "AdminService"
+
+Client -> Controller: GET /admin/request/{menuName}?page={currentPage}&search={search}
+activate Controller
+
+Controller -> Controller: Set menuNo based on menuName
+
+Controller -> Service: getrequestPostCount(search)
+activate Service
+Service --> Controller: listCount
+deactivate Service
+
+Controller -> Controller: getPageInfo(currentPage, listCount, 10)
+
+Controller -> Service: selectAllRequestPost(search, pi)
+activate Service
+Service --> Controller: list of Requests
+deactivate Service
+
+loop for each Request
+    Controller -> Service: selectUser(userNo)
+    activate Service
+    Service --> Controller: userId
+    deactivate Service
+end
+
+Controller -> Client: Return "management_request"
+deactivate Controller
+@enduml
+
+
+
+

@@ -41,13 +41,13 @@ public class PaymentController {
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		map.put("userNo", loginUser.getUserNo());
 		
-		if(payment.getAmount() == 300) {
+		if(payment.getAmount() == 26000) {
 			map.put("userPlan", "All Rounder");
 			result2 = uService.updateUserPlan(map);
-		}else if(payment.getAmount() == 200) {
+		}else if(payment.getAmount() == 15000) {
 			map.put("userPlan", "Frame Pro");
 			result2 = uService.updateUserPlan(map);
-		}else if(payment.getAmount() == 100) {
+		}else if(payment.getAmount() == 12500) {
 			map.put("userPlan", "Graphic Pro");
 			result2 = uService.updateUserPlan(map);
 		}else {
