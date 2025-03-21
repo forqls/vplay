@@ -588,8 +588,7 @@ public class BoardController {
 	@PostMapping("writeContent")
 	public String contentWrite(@ModelAttribute Content content, @RequestParam("categoryNum") ArrayList<Integer> categoryNo ,
 							   @RequestParam("t-file") MultipartFile tFile,
-							   @RequestParam("c-file") MultipartFile cFile, HttpSession session,
-							   @Value("${cloudflare.r2.public-url}") String publicUrl) {
+							   @RequestParam("c-file") MultipartFile cFile, HttpSession session) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
 		content.setUserNo(loginUser.getUserNo());
 		System.out.println("c-file : " + cFile);
@@ -620,9 +619,29 @@ public class BoardController {
 		}else {
 			throw new BoardException("컨텐츠 등록에 실패하였습니다.");
 		}
-		
 	}
 	
+	@PostMapping("updateContent")
+	public String contentUpdate(@ModelAttribute Content content, HttpSession session, Model model) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		int contentNo = content.getContentNo();
+		
+		content = bService.allMenuDetail(contentNo);
+		
+		if(loginUser.getUserNo() == content.getUserNo()) {
+			ArrayList<Files> fList = bService.contentFile(contentNo);
+			
+			
+			System.out.println(content);
+			
+			model.addAttribute("content", content);
+			model.addAttribute("fList", fList);
+			return "content_update";
+		}else {
+			throw new BoardException("해당 아이디와 글쓴이가 일치하지 않습니다.");
+		}
+		
+	}
 	
 
 
