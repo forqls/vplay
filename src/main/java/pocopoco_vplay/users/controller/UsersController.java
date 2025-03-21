@@ -47,12 +47,16 @@ public class UsersController {
 	private final BoardService bService;
 	private final BCryptPasswordEncoder bcrypt;
 	private final JavaMailSender mailSender;
-	
 
 	@GetMapping("home")
 	public String goHome(HttpSession session) {
 		session.removeAttribute("kakaoUser");
 		return "redirect:/";
+	}
+
+	@GetMapping("license")
+	public String license() {
+		return "license";
 	}
 
 	@GetMapping("price")
@@ -121,51 +125,53 @@ public class UsersController {
 	}
 
 	@PostMapping("signIn")
-	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL, HttpSession session,RedirectAttributes redirectAttributes) {
+	public String login(Users user, Model model, @RequestParam("beforeURL") String beforeURL, HttpSession session, RedirectAttributes redirectAttributes) {
 		Users loginUser = uService.signIn(user);
 		if (loginUser != null && bcrypt.matches(user.getUserPw(), loginUser.getUserPw())) {
 			session.setAttribute("loginUser", loginUser);
-			 int dayResult = 0; 
+			int dayResult = 0;
 //			System.out.println("반환값은 : " + uService.getPaymentDate(loginUser));
-			//Timestamp 이새기는 Date보다 좋고 db저장도 쉬운데 , 직접적으로 날짜를 더해주는 함수가 존재하지 않음 그래서 그냥 localDateTime으로 형변환해준후에 plusdays 메소드 써서 30일 더해줘야됨 ㅇㅇ
-			//그 과정에서 스는 함수들이 toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(); 얘네들인데
-			// toInstant() 얘는  Timestamp를 Instant(UTC기준)으로 변환해주고, localDate는 시간정보를 포함하지않는 ㅄ 데이터형이라 atZone(ZoneId.systemDefault())얘를 써줘서 
-			// 현재 시스템의 기본날짜로 세팅해준 후 , toLocalDateTime()을 이용해서 최종적으로 LocalDateTime 객체로 변환해주는 삼단계가 필요함
-			//생각보다 30일날짜만 더하는건데 녹록치않음 ㅅㅂ;
+			// Timestamp 이새기는 Date보다 좋고 db저장도 쉬운데 , 직접적으로 날짜를 더해주는 함수가 존재하지 않음 그래서 그냥
+			// localDateTime으로 형변환해준후에 plusdays 메소드 써서 30일 더해줘야됨 ㅇㅇ
+			// 그 과정에서 스는 함수들이 toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+			// 얘네들인데
+			// toInstant() 얘는 Timestamp를 Instant(UTC기준)으로 변환해주고, localDate는 시간정보를 포함하지않는 ㅄ
+			// 데이터형이라 atZone(ZoneId.systemDefault())얘를 써줘서
+			// 현재 시스템의 기본날짜로 세팅해준 후 , toLocalDateTime()을 이용해서 최종적으로 LocalDateTime 객체로 변환해주는
+			// 삼단계가 필요함
+			// 생각보다 30일날짜만 더하는건데 녹록치않음 ㅅㅂ;
 			Timestamp loginUserPaymentDate = (Timestamp) uService.getPaymentDate(loginUser);
-			if(loginUserPaymentDate == null) {
-				
-			}else {
-				
+			if (loginUserPaymentDate == null) {
+
+			} else {
+
 				LocalDateTime localDateTime = loginUserPaymentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-				
+
 				Timestamp loginUserPaymentEndDate = Timestamp.valueOf(localDateTime.plusDays(30));
-				//오늘 날짜 가져오기
+				// 오늘 날짜 가져오기
 				Timestamp today = Timestamp.valueOf(LocalDateTime.now());
-				
+
 				boolean isPAymentExpired = today.after(loginUserPaymentEndDate);
 				boolean hasSeenAlert = loginUser.isAlertShown();
 				System.out.println(loginUser.isAlertShown());
-				
-				System.out.println("ddddddd 테스트용 : " + hasSeenAlert  + "테스트용 : " + isPAymentExpired);
-				
-				
-				
-				if(isPAymentExpired && !hasSeenAlert) {
+
+				System.out.println("ddddddd 테스트용 : " + hasSeenAlert + "테스트용 : " + isPAymentExpired);
+
+				if (isPAymentExpired && !hasSeenAlert) {
 					System.out.println("결제일 한달 경과");
-					
+
 					dayResult = uService.deleteUserPlan(loginUser);
 					uService.updateAlertShown(loginUser.getUserNo());
-					
+
 					loginUser = uService.signIn(user);
 					session.setAttribute("loginUser", loginUser);
-					
+
 					redirectAttributes.addFlashAttribute("showAlert", true);
-				}else {
-					redirectAttributes.addFlashAttribute("showAlert",false);
+				} else {
+					redirectAttributes.addFlashAttribute("showAlert", false);
 				}
 			}
-			
+
 			if (loginUser.getIsAdmin().equals("Y")) {
 				return "redirect:/admin/dashboard";
 			} else {
@@ -415,51 +421,48 @@ public class UsersController {
 			throw new UsersException("로그인이 풀렸습니다.");
 		}
 	}
-	
+
 	@GetMapping("/{userNo}")
-	public String messagePage(@PathVariable("userNo") String userNo,HttpSession session , Model model) {
+	public String messagePage(@PathVariable("userNo") String userNo, HttpSession session, Model model) {
 		System.out.println("들어왔음 " + userNo);
-		Users loginUser = (Users)session.getAttribute("loginUser");
-		
-		if(loginUser == null || loginUser.getUserNo()!=Integer.parseInt(userNo)) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+
+		if (loginUser == null || loginUser.getUserNo() != Integer.parseInt(userNo)) {
 			return "redirect:/";
 		}
-		
-		
+
 		ArrayList<Message> list = uService.selectMyMessage(userNo);
-		
-		for(Message m : list) {
+
+		for (Message m : list) {
 			String timeout = getTimeAgo(m.getSentTime());
 			m.setTimeout(timeout);
 		}
 //		System.out.println("list 는 " + list);
-		
-		//시간 변환
+
+		// 시간 변환
 		System.out.println(list);
-		
-		
-		model.addAttribute("list",list);
-		
-		
-		
+
+		model.addAttribute("list", list);
+
 		return "my_message";
 	}
-	//시간 변환 메소드 듀레이션사용함
-    private String getTimeAgo(LocalDateTime sentTime) {
-        LocalDateTime now = LocalDateTime.now();
-        Duration duration = Duration.between(sentTime, now);
 
-        if (duration.toMinutes() < 1) {
-            return "방금 전";
-        } else if (duration.toMinutes() < 60) {
-            return duration.toMinutes() + "분 전";
-        } else if (duration.toHours() < 24) {
-            return duration.toHours() + "시간 전";
-        } else {
-            return sentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        }
-    }
-	
+	// 시간 변환 메소드 듀레이션사용함
+	private String getTimeAgo(LocalDateTime sentTime) {
+		LocalDateTime now = LocalDateTime.now();
+		Duration duration = Duration.between(sentTime, now);
+
+		if (duration.toMinutes() < 1) {
+			return "방금 전";
+		} else if (duration.toMinutes() < 60) {
+			return duration.toMinutes() + "분 전";
+		} else if (duration.toHours() < 24) {
+			return duration.toHours() + "시간 전";
+		} else {
+			return sentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		}
+	}
+
 	@GetMapping("updateMessageStatus")
 	@ResponseBody
 	public int updateMessageStatus(@RequestParam("messageNo") String messageNo) {
@@ -467,33 +470,34 @@ public class UsersController {
 		int result = uService.updateMessageStatus(messageNo);
 		return result;
 	}
-	
+
 	@PostMapping("sendMessage")
 	@ResponseBody
-	public int sendMessage(@RequestBody Message msg,HttpSession session) {
-		Users loginUser = (Users)session.getAttribute("loginUser");
+	public int sendMessage(@RequestBody Message msg, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
 		msg.setSenderNo(loginUser.getUserNo());
 		msg.setSenderName(loginUser.getUserNickname());
 		System.out.println("전달받은 쪽지의 구성은2 = " + msg);
-		
+
 		msg.setReceiverNo(uService.getReceiverNo(msg.getReceiverName()));
-		
+
 		System.out.println(msg);
 		System.out.println("잘 들어옴");
 //		System.out.println("전달받은 쪽지의 구성은2 = " + msg);
 		int result = uService.insertMessage(msg);
-		
+
 		return result;
 	}
-	
+
 	@GetMapping("existReceiver")
 	@ResponseBody
 	public int existReceiver(@RequestParam("receiver") String receiverName) {
 //		System.out.println(receiverName);
 		int result = uService.existReceiver(receiverName);
-			
+
 		return result;
 	}
+<<<<<<< HEAD
 	
 	@GetMapping("unreadMessages")
 	@ResponseBody
@@ -511,5 +515,7 @@ public class UsersController {
 	
 	
 	
+=======
+>>>>>>> 1214606a9c9bf3dd5ea7f0a7eaa5e45727c0e83b
 
 }
