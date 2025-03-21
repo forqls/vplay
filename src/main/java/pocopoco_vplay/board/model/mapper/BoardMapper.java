@@ -75,7 +75,6 @@ public interface BoardMapper {
 
 	int deleteBoard(int bId);
 
-
 	ArrayList<Content> selectContentTop();
 
 	ArrayList<Content> selectOrderByViews();
@@ -103,4 +102,10 @@ public interface BoardMapper {
 	int insertThumbnailFile(@Param("tFileUrl")String tFileUrl, @Param("contentNo")int contentNo);
 
 	int insertContentFile(@Param("cFileUrl")String cFileUrl, @Param("contentNo")int contentNo);
+
+   int updateRecommendation(HashMap<String, String> map);
+
+	int getMdRecommendationCount();
+
+   ArrayList<Content> selectMdList();
 }

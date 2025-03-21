@@ -110,16 +110,19 @@
 
 .dropdown {
 	position: absolute;
-	top: 95%;
+	top: 80%;
 	right: 5px;
 	background-color: #252535;
 	border-radius: 0.5rem;
 	padding: 0.5rem;
-	min-width: 120px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 	display: none;
 	z-index: 100;
 	background-color: #252535;
+}
+
+.dropdown:hover {
+	background-color: #2a2a3a;
 }
 
 .dropdown.show {
@@ -129,17 +132,13 @@
 .dropdown-item {
 	display: flex;
 	align-items: center;
+	padding: 3px;
 	gap: 0.5rem;
-	padding: 0.5rem;
 	color: #fff;
 	text-decoration: none;
 	font-size: 0.875rem;
 	border-radius: 0.25rem;
 	cursor: pointer;
-}
-
-.dropdown-item:hover {
-	background-color: #2a2a3a;
 }
 
 .dropdown-item i {
@@ -166,8 +165,10 @@
 						<div class="options-wrapper">
 							<button class="options-btn">⋮</button>
 							<div class="dropdown">
-								<div class="dropdown-item delete-inquiry">
-									<span>🗑️ Delete</span>
+								<div class="dropdown-item delete-commission">
+									<span class="trash-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+  <path transform="translate(0, 10)" fill="currentColor" d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0" />
+</svg> </span>Delete
 								</div>
 							</div>
 						</div>

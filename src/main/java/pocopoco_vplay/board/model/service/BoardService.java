@@ -205,4 +205,15 @@ public class BoardService {
 		return mapper.insertContentFile(cFileUrl, contentNo);
 	}
 
+    public int updateRecommendation(HashMap<String, String> map) {
+		return mapper.updateRecommendation(map);
+    }
+
+
+	public int getMdRecommendationCount() {	return mapper.getMdRecommendationCount();
+	}
+
+    public ArrayList<Content> selectMdList() { return mapper.selectMdList();
+    }
+
 }

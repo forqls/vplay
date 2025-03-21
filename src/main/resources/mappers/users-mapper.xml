@@ -168,4 +168,49 @@
 		WHERE LOGIN_TYPE='G' AND USER_ID IS NULL AND GOOGLE_ID=#{googleId}
 	</select>
 	
+	<select id="selectMyMessage">
+		SELECT 
+	    m.message_no, 
+	    m.sender_no, 
+	    sender_user.user_nickname AS sender_name,
+	    m.receiver_no, 
+	    receiver_user.user_nickname AS receiver_name,
+	    m.content, 
+	    m.sent_time, 
+	    m.read_status,
+	    m.conversation_id
+		FROM message m
+		JOIN users sender_user ON m.sender_no = sender_user.user_no
+		JOIN users receiver_user ON m.receiver_no = receiver_user.user_no
+		WHERE m.receiver_no = 3 OR m.sender_no = 3
+		ORDER BY m.sent_time DESC
+	</select>
+	<update id="updateMessageStatus">
+		update message
+		set read_status='Y' where message_no=#{messageNo}
+	</update>
+	<select id="existReceiver">
+		select count(*) from users where user_nickname=#{receiverName}
+	</select>
+	<insert id="insertMessage">
+	    INSERT INTO MESSAGE (MESSAGE_NO, SENDER_NO, RECEIVER_NO, CONTENT, SENT_TIME, READ_STATUS, CONVERSATION_ID)
+	    VALUES (
+	        MESSAGE_SEQ.NEXTVAL, 
+	        #{senderNo}, 
+	        #{receiverNo}, 
+	        #{content}, 
+	        SYSTIMESTAMP, 
+	        default, 
+	        (CASE 
+	            WHEN #{senderNo} &lt; #{receiverNo} THEN #{senderNo} || '_' || #{receiverNo}
+	            ELSE #{receiverNo} || '_' || #{senderNo}
+	        END)
+	    )
+	</insert>
+	<select id="getReceiverNo">
+		select user_no from users where user_nickname =#{receiverName}
+	</select>
+	
+	
+	
 </mapper>
