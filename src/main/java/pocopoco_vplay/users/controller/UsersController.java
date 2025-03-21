@@ -495,7 +495,17 @@ public class UsersController {
 		return result;
 	}
 	
-	
+	@GetMapping("unreadMessages")
+	@ResponseBody
+	public int getUnreadMessageCount(HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		System.out.println("요청 들어오긴함");
+		if(loginUser == null) {
+			return 0;
+		}
+		return uService.getUnreadMessageCount(loginUser.getUserNo());
+		
+	}
 	
 	
 	
