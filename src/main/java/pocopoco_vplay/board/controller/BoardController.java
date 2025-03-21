@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
 import pocopoco_vplay.commom.Pagination;
@@ -119,6 +120,9 @@ public class BoardController {
 			result = bService.menuLikeTo(num, userNo);
 			fontList.get(f).setLikeTo(result);
 		}
+		
+		System.out.println(videoTemplateList);
+		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
 		mv.setViewName("all_menu");
@@ -454,13 +458,19 @@ public class BoardController {
 
 	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
 	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model, HttpSession session) {
+		HashMap<String, Object> map = new HashMap<>();
+		
 		Content content = bService.allMenuDetail(contentNo);
-//		Users u = (Users)session.getAttribute("loginUser");
-//		System.out.println(u.getUserPlan());
-		model.addAttribute("content", content);
+		ArrayList<Files> fList = bService.contentFile(contentNo);
+		
+		
+		map.put("menuName", content.getMenuName());
+		map.put("recentList", 6);
+		
+		ArrayList<Content> list = bService.allTemplateList(map);
+		
 		String joinURL = null;
 		String[] categories = content.getCategoryName().split(",");
-		model.addAttribute("categories", categories);
 		
 		switch (menuName) {
 		case "video-templates":
@@ -487,6 +497,13 @@ public class BoardController {
 		}
 		System.out.println(content);
 		System.out.println(menuName);
+		System.out.println(fList);
+		
+		model.addAttribute("content", content);
+		model.addAttribute("categories", categories);
+		model.addAttribute("aList", list);
+		model.addAttribute("fList", fList);
+		
 		return joinURL;
 	}
 
