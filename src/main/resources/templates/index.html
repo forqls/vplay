@@ -21,10 +21,7 @@ body {
 	color: white;
 }
 
-.container {
-	max-width: 1200px;
-	margin: 0 auto;
-}
+
 
 .hero {
 	display: grid;
@@ -414,6 +411,7 @@ body {
 			</div>
 		</section>
 	</div>
+	<div th:replace="~{views/common/footer :: footer}"></div>
 
 	<script>
 		var showAlert = "[[${showAlert}]]";
