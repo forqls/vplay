@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="topbar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>top-bar</title>
-<link rel="stylesheet" href="/css/topbar.css">
+	<link rel="stylesheet" href="/css/topbar.css">
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-	<header class="vplay-header" th:fragment="topbar">
+	<header class="vplay-header" >
+
 		<a href="/users/home" class="vplay-logo">
 			<div class="vplay-logo-circle"></div> VPLAY
 		</a>
@@ -17,6 +19,21 @@
 
 		<div class="vplay-nav-right">
 			<th:block th:if="${session.loginUser != null}">
+<<<<<<< HEAD
+				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+						<g fill="none" stroke="currentColor" stroke-width="2">
+							<rect width="16" height="12" x="4" y="6" rx="2"/>
+							<path d="m4 9l7.106 3.553a2 2 0 0 0 1.788 0L20 9"/>
+						</g>
+					</svg>
+					<span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full animate-bounce"></span>
+				</a>
+			</th:block>
+			<a href="#" class="vplay-nav-link">License</a> 
+			<a onclick="location.href='/users/price'" class="vplay-nav-link vplay-pricing">Pricing</a>
+			
+=======
 				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="position: relative; top: 2.5px;">
 						<g fill="none" stroke="#5e37e9" stroke-width="2">
 						<rect width="16" height="12" x="4" y="6" rx="2" />
@@ -25,6 +42,7 @@
 			</th:block>
 			<a onclick="location.href='/users/license'" class="vplay-nav-link">License</a>
 			<a onclick="location.href='/users/price'" class="vplay-nav-link">Pricing</a>
+>>>>>>> 1214606a9c9bf3dd5ea7f0a7eaa5e45727c0e83b
 			<th:block th:if="${session.loginUser == null}">
 				<a onclick="location.href='/users/signIn'" class="vplay-nav-link vplay-sign-in">Sign in</a>
 			</th:block>
@@ -32,8 +50,14 @@
 				<a onclick="location.href='/users/my_projects'" class="vplay-nav-link vplay-sign-in">MyPage</a>
 				<a onclick="location.href='/users/logout'" class="vplay-nav-link">Log out</a>
 			</th:block>
+<<<<<<< HEAD
+=======
 
+>>>>>>> 1214606a9c9bf3dd5ea7f0a7eaa5e45727c0e83b
 		</div>
+
+		<script src="/js/topbar.js" defer></script>
 	</header>
+	<script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>

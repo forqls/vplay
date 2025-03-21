@@ -69,5 +69,7 @@ public interface UsersMapper {
 
 	int getReceiverNo(String receiverName);
 
+	int getUnreadMessageCount(int userNo);
+
 
 }

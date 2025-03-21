@@ -135,6 +135,10 @@ public class UsersService {
 		return mapper.getReceiverNo(receiverName);
 	}
 
+	public int getUnreadMessageCount(int userNo) {
+		return mapper.getUnreadMessageCount(userNo);
+	}
+
 
 
 }
