@@ -17,6 +17,7 @@
 	right: 0;
 	z-index: 1000;
 	height: 60px;
+	width: 100%;
 }
 
 .vplay-logo {
@@ -39,11 +40,13 @@
 .vplay-nav-main {
 	display: flex;
 	gap: 2rem;
+	align-items: center;
 }
 
 .vplay-nav-right {
 	display: flex;
 	gap: 1rem;
+	align-items: center !important;
 }
 
 .vplay-nav-link {
