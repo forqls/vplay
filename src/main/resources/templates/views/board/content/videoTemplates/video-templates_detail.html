@@ -20,8 +20,9 @@
                 <div class="item-tags">
                     <h3>Item Tags</h3>
                     <div class="tags">
-                        <span class="tag">Titles</span>
-                        <span class="tag">Animated</span>
+                    	<th:block th:each="category : ${categories}">
+                        	<span class="tag" th:text="${category}"></span>
+                        </th:block>
                     </div>
                 </div>
                 <div class="item-detail">

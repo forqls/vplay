@@ -95,4 +95,12 @@ public interface BoardMapper {
 	List<Content> searchRequest(Map<String, Object> searchValue);
 
 	ArrayList<Content> menuCategoryList(int menuNo);
+
+	int insertContent(Content content);
+
+	int insertContentCategory(@Param("categoryNo")ArrayList<Integer> categoryNo, @Param("contentNo")int contentNo);
+
+	int insertThumbnailFile(@Param("tFileUrl")String tFileUrl, @Param("contentNo")int contentNo);
+
+	int insertContentFile(@Param("cFileUrl")String cFileUrl, @Param("contentNo")int contentNo);
 }

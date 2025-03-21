@@ -189,4 +189,20 @@ public class BoardService {
 		return mapper.menuCategoryList(menuNo);
 	}
 
+	public int insertContent(Content content) {
+		return mapper.insertContent(content);
+	}
+
+	public int insertContentCategory(ArrayList<Integer> categoryNo, int contentNo) {
+		return mapper.insertContentCategory(categoryNo, contentNo);
+	}
+
+	public int insertThumbnailFile(String tFileUrl, int contentNo) {
+		return mapper.insertThumbnailFile(tFileUrl, contentNo);
+	}
+
+	public int insertContentFile(String cFileUrl, int contentNo) {
+		return mapper.insertContentFile(cFileUrl, contentNo);
+	}
+
 }

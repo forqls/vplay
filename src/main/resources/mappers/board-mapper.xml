@@ -387,8 +387,6 @@
 		where content_no =#{bId}
 	</update>
 
-
-
 	<select id="selectContentTop">
 		SELECT
 		c.content_no,
@@ -454,4 +452,33 @@
 		from category
 		where menu_no = #{menuNo}
 	</select>
+	
+	<!-- 컨텐츠 글 등록 -->
+	<insert id="insertContent">
+		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">
+			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into content
+		values(#{contentNo}, #{contentTitle}, #{contentDetail}, default, default, default, default, #{userNo}, default, default)
+	</insert>
+	
+	<!-- 컨텐츠 글 카테고리 등록 -->
+	<insert id="insertContentCategory">
+		insert all
+		<foreach collection="categoryNo" item="no" separator=" ">
+			into content_category 
+			values(#{contentNo}, #{no})
+		</foreach>
+		select * from dual
+	</insert>
+	
+	<insert id="insertThumbnailFile">
+		insert into Files
+		values(file_seq.nextval, #{contentNo}, #{tFileUrl}, default, 1)
+	</insert>
+	
+	<insert id="insertContentFile">
+		insert into Files
+		values(file_seq.nextval, #{contentNo}, #{cFileUrl}, default, 2)
+	</insert>
 </mapper>

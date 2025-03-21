@@ -174,5 +174,4 @@ public class AjaxController {
 		return list;
 
 	}
-		
 }
