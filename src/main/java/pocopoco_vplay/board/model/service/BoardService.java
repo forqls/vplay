@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 
@@ -215,5 +216,9 @@ public class BoardService {
 
     public ArrayList<Content> selectMdList() { return mapper.selectMdList();
     }
+
+	public ArrayList<Files> contentFile(int contentNo) {
+		return mapper.contentFile(contentNo);
+	}
 
 }
