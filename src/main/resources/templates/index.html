@@ -17,12 +17,15 @@
 
 body {
 	font-family: Arial, sans-serif;
-	margin-top: 30px;
+	margin-top: 30px !important;
 	background-color: #191820;
 	color: white;
 }
 
-
+.container {
+	max-width: 1200px !important;
+	margin: 0 auto !important;
+}
 
 .hero {
 	display: grid;
@@ -412,7 +415,6 @@ body {
 			</div>
 		</section>
 	</div>
-	<div th:replace="~{views/common/footer :: footer}"></div>
 
 	<script>
 		var showAlert = "[[${showAlert}]]";
