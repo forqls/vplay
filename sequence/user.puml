@@ -1,0 +1,665 @@
+/'회원가입 (signUp)'/
+@startuml
+actor 사용자
+
+participant "회원가입 페이지" as SignUpPage
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "서비스" as Service
+participant "매퍼" as Mapper
+database "DB" as DB
+participant "리턴 페이지" as ReturnPage
+
+사용자 -> SignUpPage: 회원가입 요청
+
+alt 기본 회원가입
+    SignUpPage -> JavaScript: 입력값 확인 후 서버로 전송
+    JavaScript -> Controller: POST /signUp (user 정보)
+    activate Controller
+
+    Controller -> Service: createUser(user)
+    activate Service
+
+    Service -> Mapper: insertUser(user)
+    activate Mapper
+    Mapper -> DB: 사용자 정보 저장
+    DB --> Mapper: 저장 완료
+    deactivate Mapper
+
+    Mapper --> Service: 저장 결과 반환
+    deactivate Service
+
+    Service --> Controller: 회원가입 성공 여부 반환
+    Controller -> ReturnPage: 회원가입 완료 페이지로 이동
+    deactivate Controller
+
+else 구글 간편 로그인
+    SignUpPage -> JavaScript: Google 로그인 버튼 클릭
+    JavaScript -> "Google OAuth": 인증 요청
+    "Google OAuth" -> JavaScript: Access Token 반환
+    JavaScript -> Controller: POST /oauth/google (Access Token)
+    activate Controller
+
+    Controller -> Service: verifyGoogleToken(Access Token)
+    activate Service
+
+    Service -> Mapper: findUserByGoogleId(googleId)
+    activate Mapper
+    Mapper -> DB: 사용자 정보 조회
+    DB --> Mapper: 결과 반환 (없으면 null)
+    deactivate Mapper
+
+    Mapper --> Service: 결과 반환
+    deactivate Service
+
+    alt 사용자 정보가 없음 (회원가입 필요)
+        Controller -> SignUpPage: 추가 정보 입력 폼 제공
+        사용자 -> SignUpPage: 추가 정보 입력 후 제출
+        SignUpPage -> JavaScript: 입력값 확인 후 서버로 전송
+        JavaScript -> Controller: POST /signUp (추가 정보 포함)
+        activate Controller
+
+        Controller -> Service: createGoogleUser(user)
+        activate Service
+
+        Service -> Mapper: insertUser(user)
+        activate Mapper
+        Mapper -> DB: 사용자 정보 저장
+        DB --> Mapper: 저장 완료
+        deactivate Mapper
+
+        Mapper --> Service: 저장 결과 반환
+        deactivate Service
+
+        Service --> Controller: 회원가입 성공 여부 반환
+        Controller -> ReturnPage: 회원가입 완료 페이지로 이동
+        deactivate Controller
+    else
+        Controller -> ReturnPage: 로그인 후 리디렉트
+    end
+    deactivate Controller
+
+else 카카오 간편 로그인
+    SignUpPage -> JavaScript: Kakao 로그인 버튼 클릭
+    JavaScript -> "Kakao OAuth": 인증 요청
+    "Kakao OAuth" -> JavaScript: Access Token 반환
+    JavaScript -> Controller: POST /oauth/kakao (Access Token)
+    activate Controller
+
+    Controller -> Service: verifyKakaoToken(Access Token)
+    activate Service
+
+    Service -> Mapper: findUserByKakaoId(kakaoId)
+    activate Mapper
+    Mapper -> DB: 사용자 정보 조회
+    DB --> Mapper: 결과 반환 (없으면 null)
+    deactivate Mapper
+
+    Mapper --> Service: 결과 반환
+    deactivate Service
+
+    alt 사용자 정보가 없음 (회원가입 필요)
+        Controller -> SignUpPage: 추가 정보 입력 폼 제공
+        사용자 -> SignUpPage: 추가 정보 입력 후 제출
+        SignUpPage -> JavaScript: 입력값 확인 후 서버로 전송
+        JavaScript -> Controller: POST /signUp (추가 정보 포함)
+        activate Controller
+
+        Controller -> Service: createKakaoUser(user)
+        activate Service
+
+        Service -> Mapper: insertUser(user)
+        activate Mapper
+        Mapper -> DB: 사용자 정보 저장
+        DB --> Mapper: 저장 완료
+        deactivate Mapper
+
+        Mapper --> Service: 저장 결과 반환
+        deactivate Service
+
+        Service --> Controller: 회원가입 성공 여부 반환
+        Controller -> ReturnPage: 회원가입 완료 페이지로 이동
+        deactivate Controller
+    else
+        Controller -> ReturnPage: 로그인 후 리디렉트
+    end
+    deactivate Controller
+end
+
+@enduml
+
+
+
+/'로그인 (signIn)'/
+@startuml
+actor 사용자
+
+participant "로그인 페이지" as LoginPage
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "서비스" as Service
+participant "매퍼" as Mapper
+database "DB" as DB
+participant "메인 페이지" as ReturnPage
+
+사용자 -> LoginPage: 로그인 요청
+
+alt 기존 사이트 로그인
+    LoginPage -> JavaScript: 입력값 확인 후 서버로 전송
+    JavaScript -> Controller: POST /signIn (userId, userPw)
+    activate Controller
+
+    Controller -> Service: signIn(user)
+    activate Service
+
+    Service -> Mapper: selectUserById(userId)
+    activate Mapper
+    Mapper -> DB: 사용자 정보 조회
+    DB --> Mapper: 사용자 정보 반환
+    deactivate Mapper
+
+    Mapper --> Service: 사용자 정보 반환
+    deactivate Service
+
+    Service --> Controller: 로그인 결과 반환
+    Controller -> ReturnPage: 로그인 성공 시 세션 저장 후 리디렉트
+    deactivate Controller
+
+else 구글 간편 로그인
+    LoginPage -> JavaScript: Google 로그인 버튼 클릭
+    JavaScript -> "Google OAuth": 인증 요청
+    "Google OAuth" -> JavaScript: Access Token 반환
+    JavaScript -> Controller: POST /oauth/google (Access Token)
+    activate Controller
+
+    Controller -> Service: verifyGoogleToken(Access Token)
+    activate Service
+
+    Service -> Mapper: findOrCreateGoogleUser(사용자 정보)
+    activate Mapper
+    Mapper -> DB: 사용자 정보 조회 또는 저장
+    DB --> Mapper: 사용자 정보 반환
+    deactivate Mapper
+
+    Mapper --> Service: 사용자 정보 반환
+    deactivate Service
+
+    Service --> Controller: 로그인 결과 반환
+    Controller -> ReturnPage: 로그인 성공 후 리디렉트
+    deactivate Controller
+
+else 카카오 간편 로그인
+    LoginPage -> JavaScript: Kakao 로그인 버튼 클릭
+    JavaScript -> "Kakao OAuth": 인증 요청
+    "Kakao OAuth" -> JavaScript: Access Token 반환
+    JavaScript -> Controller: POST /oauth/kakao (Access Token)
+    activate Controller
+
+    Controller -> Service: verifyKakaoToken(Access Token)
+    activate Service
+
+    Service -> Mapper: findOrCreateKakaoUser(사용자 정보)
+    activate Mapper
+    Mapper -> DB: 사용자 정보 조회 또는 저장
+    DB --> Mapper: 사용자 정보 반환
+    deactivate Mapper
+
+    Mapper --> Service: 사용자 정보 반환
+    deactivate Service
+
+    Service --> Controller: 로그인 결과 반환
+    Controller -> ReturnPage: 로그인 성공 후 리디렉트
+    deactivate Controller
+end
+
+@enduml
+
+
+
+
+/'로그아웃 (logout)'/
+@startuml
+actor 사용자
+
+participant "로그아웃 버튼" as LogoutButton
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "세션" as Session
+participant "리턴 페이지" as ReturnPage
+
+사용자 -> LogoutButton: 로그아웃 버튼 클릭
+LogoutButton -> JavaScript: 클릭 이벤트 감지
+JavaScript -> Controller: GET /logout
+activate Controller
+
+Controller -> Session: session.invalidate() (로그아웃 처리)
+Session --> Controller: 세션 삭제 완료
+
+Controller -> ReturnPage: Redirect to "/"
+deactivate Controller
+
+@enduml
+
+
+/'아이디 찾기 (findId)'/
+@startuml
+actor 사용자
+
+participant "아이디 찾기 페이지" as FindIdPage
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "서비스" as Service
+participant "매퍼" as Mapper
+database "DB" as DB
+participant "구글 API" as GoogleAPI
+participant "리턴 페이지" as ReturnPage
+
+사용자 -> FindIdPage: 아이디 찾기 요청
+FindIdPage -> JavaScript: 입력값 확인 후 이메일 인증 요청
+JavaScript -> GoogleAPI: 이메일 인증 요청
+GoogleAPI --> JavaScript: 인증코드 발송
+
+사용자 -> JavaScript: 이메일에서 인증코드 입력
+JavaScript -> GoogleAPI: 인증코드 검증
+GoogleAPI --> JavaScript: 인증 성공 여부
+
+alt 이메일 인증 성공
+    JavaScript -> Controller: AJAX 요청 (이메일 존재 여부 확인)
+    activate Controller
+
+    Controller -> Service: checkEmailExists(email)
+    activate Service
+
+    Service -> Mapper: findUserByEmail(email)
+    activate Mapper
+    Mapper -> DB: 이메일로 회원 조회
+    DB --> Mapper: 회원 정보 반환 (없으면 null)
+    deactivate Mapper
+
+    Mapper --> Service: 회원 정보 반환
+    deactivate Service
+
+    Service --> Controller: 존재 여부 반환
+    Controller -> JavaScript: 이메일 존재 여부 응답
+    deactivate Controller
+
+    alt 회원이 존재함
+        JavaScript -> Controller: AJAX 요청 (이름과 이메일 일치 확인)
+        activate Controller
+
+        Controller -> Service: findUserByNameAndEmail(name, email)
+        activate Service
+
+        Service -> Mapper: findUserByNameAndEmail(name, email)
+        activate Mapper
+        Mapper -> DB: 이름 + 이메일 일치 회원 조회
+        DB --> Mapper: 일치하는 회원 정보 반환 (없으면 null)
+        deactivate Mapper
+
+        Mapper --> Service: 회원 정보 반환
+        deactivate Service
+
+        Service --> Controller: 회원 아이디 반환
+        Controller -> JavaScript: 아이디 반환
+        deactivate Controller
+
+        JavaScript -> FindIdPage: 아이디 표시
+
+    else 회원이 존재하지 않음
+        JavaScript -> FindIdPage: "회원 정보 없음" 메시지 표시
+    end
+else 이메일 인증 실패
+    JavaScript -> FindIdPage: "이메일 인증 실패" 메시지 표시
+end
+
+@enduml
+
+
+
+/'비밀번호 찾기 (findPw)'/
+@startuml
+actor 사용자
+
+participant "비밀번호 찾기 페이지" as PasswordPage
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "서비스" as Service
+participant "매퍼" as Mapper
+database "DB" as DB
+participant "임시 비밀번호 페이지" as TempPasswordPage
+
+사용자 -> PasswordPage: 비밀번호 찾기 요청
+PasswordPage -> JavaScript: 아이디, 이름 입력
+JavaScript -> "Google API": 이메일 인증 요청
+"Google API" --> JavaScript: Access Token 반환
+
+JavaScript -> Controller: POST /findPassword (아이디, 이름, Access Token)
+activate Controller
+
+Controller -> Service: verifyEmailAndFindUser(아이디, 이름, Access Token)
+activate Service
+
+Service -> Mapper: findUserByIdAndName(아이디, 이름)
+activate Mapper
+Mapper -> DB: 사용자 정보 조회 (비동기)
+DB --> Mapper: 조회 결과 (존재 또는 없음)
+deactivate Mapper
+
+Mapper --> Service: 결과 반환
+deactivate Service
+
+alt 일치하는 사용자 존재
+    Controller -> TempPasswordPage: 임시 비밀번호 발급 및 페이지 이동
+else 사용자 정보 불일치
+    Controller -> PasswordPage: 에러 메시지 반환 (일치하는 정보 없음)
+end
+deactivate Controller
+@enduml
+
+
+/'마이페이지 관련 기능'/
+/'프로젝트 페이지 (myProjects)'/
+@startuml
+actor 사용자
+
+participant "마이페이지" as MyPage
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "서비스" as Service
+participant "매퍼" as Mapper
+database "DB" as DB
+
+사용자 -> MyPage: 마이페이지 접속
+
+== 사이드바 기능 ==
+사용자 -> MyPage: 사이드바 클릭 (예: My Projects)
+MyPage -> JavaScript: 해당 카테고리 요청
+JavaScript -> Controller: GET /projects?category=MyProjects
+activate Controller
+Controller -> Service: getUserProjects(사용자ID, 카테고리)
+activate Service
+Service -> Mapper: findProjectsByUser(사용자ID, 카테고리)
+activate Mapper
+Mapper -> DB: 프로젝트 데이터 조회
+DB --> Mapper: 조회 결과 반환
+deactivate Mapper
+Mapper --> Service: 데이터 반환
+deactivate Service
+Service --> Controller: 프로젝트 리스트 반환
+Controller -> JavaScript: 데이터 전송
+JavaScript -> MyPage: 화면에 프로젝트 표시
+deactivate Controller
+
+== 내 정보 수정 ==
+사용자 -> MyPage: 내 정보 수정 요청
+MyPage -> JavaScript: 입력값 확인 후 서버로 전송
+JavaScript -> Controller: POST /updateProfile (새로운 정보)
+activate Controller
+Controller -> Service: updateUserProfile(사용자ID, 새 정보)
+activate Service
+Service -> Mapper: updateUser(사용자ID, 새 정보)
+activate Mapper
+Mapper -> DB: 사용자 정보 업데이트
+DB --> Mapper: 업데이트 성공 여부 반환
+deactivate Mapper
+Mapper --> Service: 결과 반환
+deactivate Service
+Service --> Controller: 업데이트 성공 여부 반환
+Controller -> MyPage: 성공 메시지 표시
+deactivate Controller
+
+== 프로젝트 삭제 ==
+사용자 -> MyPage: 프로젝트 삭제 요청
+MyPage -> JavaScript: 삭제 요청 처리
+JavaScript -> Controller: POST /deleteProject (프로젝트ID)
+activate Controller
+Controller -> Service: moveToTrash(프로젝트ID)
+activate Service
+Service -> Mapper: moveProjectToTrash(프로젝트ID)
+activate Mapper
+Mapper -> DB: 프로젝트 상태 "삭제됨"으로 변경
+DB --> Mapper: 업데이트 완료
+deactivate Mapper
+Mapper --> Service: 결과 반환
+deactivate Service
+Service --> Controller: 삭제 성공 반환
+Controller -> MyPage: 프로젝트 휴지통으로 이동 표시
+deactivate Controller
+
+== 휴지통 자동 삭제 (30일 후) ==
+Controller -> Service: checkAndDeleteOldTrash()
+activate Service
+Service -> Mapper: findOldTrash(30일 지난 프로젝트)
+activate Mapper
+Mapper -> DB: 30일 지난 삭제된 프로젝트 조회
+DB --> Mapper: 삭제할 프로젝트 리스트 반환
+deactivate Mapper
+Mapper -> Service: 삭제할 프로젝트 리스트 반환
+Service -> Mapper: deleteProjects(리스트)
+activate Mapper
+Mapper -> DB: 프로젝트 데이터 삭제
+DB --> Mapper: 삭제 완료
+deactivate Mapper
+deactivate Service
+@enduml
+
+@startuml
+actor 사용자
+
+participant "컨텐츠 페이지" as ContentPage
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "서비스" as Service
+participant "매퍼" as Mapper
+database "DB" as DB
+
+사용자 -> ContentPage: 컨텐츠 페이지 접속
+
+== 카테고리 및 소분류 선택 ==
+사용자 -> ContentPage: 카테고리 선택 (예: Video Templates)
+ContentPage -> JavaScript: 해당 카테고리 요청
+JavaScript -> Controller: GET /content?category=VideoTemplates
+activate Controller
+Controller -> Service: getContentList(카테고리)
+activate Service
+Service -> Mapper: findContentByCategory(카테고리)
+activate Mapper
+Mapper -> DB: 카테고리에 해당하는 컨텐츠 조회
+DB --> Mapper: 조회 결과 반환
+deactivate Mapper
+Mapper --> Service: 데이터 반환
+deactivate Service
+Service --> Controller: 컨텐츠 리스트 반환
+Controller -> JavaScript: 데이터 전송
+JavaScript -> ContentPage: 화면에 컨텐츠 목록 표시
+deactivate Controller
+
+사용자 -> ContentPage: 소분류 선택 (예: "자연" 테마)
+ContentPage -> JavaScript: 선택된 테마로 필터링 요청
+JavaScript -> Controller: GET /content?category=VideoTemplates&theme=Nature
+activate Controller
+Controller -> Service: getContentListByTheme(카테고리, 테마)
+activate Service
+Service -> Mapper: findContentByTheme(카테고리, 테마)
+activate Mapper
+Mapper -> DB: 선택된 테마의 컨텐츠 조회
+DB --> Mapper: 조회 결과 반환
+deactivate Mapper
+Mapper --> Service: 데이터 반환
+deactivate Service
+Service --> Controller: 필터링된 컨텐츠 리스트 반환
+Controller -> JavaScript: 데이터 전송
+JavaScript -> ContentPage: 화면에 필터링된 컨텐츠 표시
+deactivate Controller
+
+== 컨텐츠 상세 확인 및 다운로드 ==
+사용자 -> ContentPage: 원하는 컨텐츠 선택
+ContentPage -> JavaScript: 컨텐츠 상세 정보 요청
+JavaScript -> Controller: GET /content/{id}
+activate Controller
+Controller -> Service: getContentDetail(컨텐츠 ID)
+activate Service
+Service -> Mapper: findContentById(컨텐츠 ID)
+activate Mapper
+Mapper -> DB: 컨텐츠 상세 정보 조회
+DB --> Mapper: 조회 결과 반환
+deactivate Mapper
+Mapper --> Service: 데이터 반환
+deactivate Service
+Service --> Controller: 컨텐츠 상세 정보 반환
+Controller -> JavaScript: 데이터 전송
+JavaScript -> ContentPage: 컨텐츠 상세 정보 표시
+deactivate Controller
+
+사용자 -> ContentPage: 다운로드 버튼 클릭
+ContentPage -> JavaScript: 다운로드 요청
+JavaScript -> Controller: POST /download (컨텐츠 ID, 사용자 ID)
+activate Controller
+Controller -> Service: processDownload(컨텐츠 ID, 사용자 ID)
+activate Service
+Service -> Mapper: saveDownloadHistory(컨텐츠 ID, 사용자 ID)
+activate Mapper
+Mapper -> DB: 다운로드 기록 저장
+DB --> Mapper: 저장 완료
+deactivate Mapper
+Mapper --> Service: 저장 결과 반환
+deactivate Service
+Service --> Controller: 다운로드 링크 반환
+Controller -> JavaScript: 다운로드 파일 제공
+JavaScript -> ContentPage: 다운로드 시작
+deactivate Controller
+
+== 다운로드 완료 ==
+ContentPage -> 사용자: 다운로드 완료 메시지 표시
+
+@enduml
+
+
+@startuml
+actor 관리자
+
+participant "관리자 페이지" as AdminPage
+participant "자바스크립트 코드" as JavaScript
+participant "컨트롤러" as Controller
+participant "서비스" as Service
+participant "매퍼" as Mapper
+database "DB" as DB
+
+관리자 -> AdminPage: 관리자 페이지 접속
+
+== 대시보드 로딩 ==
+AdminPage -> JavaScript: 통계 데이터 요청
+JavaScript -> Controller: GET /admin/dashboard
+activate Controller
+Controller -> Service: getDashboardStats()
+activate Service
+Service -> Mapper: fetchStatsFromDB()
+activate Mapper
+Mapper -> DB: 회원 수, 결제 금액, 다운로드 수 등 조회
+DB --> Mapper: 데이터 반환
+deactivate Mapper
+Mapper --> Service: 통계 데이터 반환
+deactivate Service
+Service --> Controller: 통계 데이터 반환
+Controller -> JavaScript: 통계 데이터 전송
+JavaScript -> AdminPage: 그래프 및 수치 표시
+deactivate Controller
+
+== 회원 관리 ==
+관리자 -> AdminPage: 회원 목록 조회
+AdminPage -> JavaScript: 회원 데이터 요청
+JavaScript -> Controller: GET /admin/members
+activate Controller
+Controller -> Service: getAllMembers()
+activate Service
+Service -> Mapper: findAllMembers()
+activate Mapper
+Mapper -> DB: 전체 회원 조회
+DB --> Mapper: 회원 리스트 반환
+deactivate Mapper
+Mapper --> Service: 데이터 반환
+deactivate Service
+Service --> Controller: 회원 리스트 반환
+Controller -> JavaScript: 데이터 전송
+JavaScript -> AdminPage: 회원 목록 표시
+deactivate Controller
+
+관리자 -> AdminPage: 특정 회원 수정 요청
+AdminPage -> JavaScript: 수정 데이터 전송
+JavaScript -> Controller: POST /admin/member/update (회원 ID, 수정 데이터)
+activate Controller
+Controller -> Service: updateMemberInfo(회원 ID, 수정 데이터)
+activate Service
+Service -> Mapper: updateMember(회원 ID, 수정 데이터)
+activate Mapper
+Mapper -> DB: 회원 정보 업데이트
+DB --> Mapper: 업데이트 완료
+deactivate Mapper
+Mapper --> Service: 결과 반환
+deactivate Service
+Service --> Controller: 업데이트 성공 여부 반환
+Controller -> AdminPage: 수정 완료 메시지 표시
+deactivate Controller
+
+== 템플릿 추천 기능 ==
+관리자 -> AdminPage: 특정 템플릿 추천 요청
+AdminPage -> JavaScript: 추천 요청 처리
+JavaScript -> Controller: POST /admin/template/recommend (템플릿 ID)
+activate Controller
+Controller -> Service: setTemplateAsRecommended(템플릿 ID)
+activate Service
+Service -> Mapper: updateTemplateRecommendation(템플릿 ID)
+activate Mapper
+Mapper -> DB: 해당 템플릿 추천 상태 업데이트
+DB --> Mapper: 업데이트 완료
+deactivate Mapper
+Mapper --> Service: 결과 반환
+deactivate Service
+Service --> Controller: 업데이트 성공 여부 반환
+Controller -> AdminPage: 추천 완료 메시지 표시
+deactivate Controller
+
+== 문의 관리 ==
+관리자 -> AdminPage: 문의 목록 조회
+AdminPage -> JavaScript: 문의 데이터 요청
+JavaScript -> Controller: GET /admin/inquiries
+activate Controller
+Controller -> Service: getInquiries()
+activate Service
+Service -> Mapper: findAllInquiries()
+activate Mapper
+Mapper -> DB: 문의 리스트 조회
+DB --> Mapper: 문의 리스트 반환
+deactivate Mapper
+Mapper --> Service: 데이터 반환
+deactivate Service
+Service --> Controller: 문의 리스트 반환
+Controller -> JavaScript: 데이터 전송
+JavaScript -> AdminPage: 문의 목록 표시
+deactivate Controller
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
