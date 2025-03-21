@@ -1,10 +1,10 @@
 package pocopoco_vplay.board.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.util.HtmlUtils;
-
-import pocopoco_vplay.admin.model.service.AdminService;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Reply;
+import pocopoco_vplay.cloudflare.model.service.R2Service;
 import pocopoco_vplay.commom.Pagination;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 import pocopoco_vplay.users.exception.UsersException;
@@ -37,6 +37,7 @@ import pocopoco_vplay.users.model.vo.Users;
 @SessionAttributes("loginUser")
 public class BoardController {
 	private final BoardService bService;
+	private final R2Service r2Service;
 
 	@GetMapping("all_menu")
 	public ModelAndView joinVideoTemplatesList(ModelAndView mv, HttpSession session) {
@@ -458,6 +459,9 @@ public class BoardController {
 //		System.out.println(u.getUserPlan());
 		model.addAttribute("content", content);
 		String joinURL = null;
+		String[] categories = content.getCategoryName().split(",");
+		model.addAttribute("categories", categories);
+		
 		switch (menuName) {
 		case "video-templates":
 			joinURL = "video-templates_detail";
@@ -481,6 +485,7 @@ public class BoardController {
 			joinURL = "font_detail";
 			break;
 		}
+		System.out.println(content);
 		System.out.println(menuName);
 		return joinURL;
 	}
@@ -562,6 +567,46 @@ public class BoardController {
 	public String joinContentWrite() {
 		return "content_write";
 	}
+	
+	@PostMapping("writeContent")
+	public String contentWrite(@ModelAttribute Content content, @RequestParam("categoryNum") ArrayList<Integer> categoryNo ,
+							   @RequestParam("t-file") MultipartFile tFile,
+							   @RequestParam("c-file") MultipartFile cFile, HttpSession session,
+							   @Value("${cloudflare.r2.public-url}") String publicUrl) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		content.setUserNo(loginUser.getUserNo());
+		System.out.println("c-file : " + cFile);
+		System.out.println("t-file : " + tFile);
+		
+		String tFileUrl = null;
+		String cFileUrl = null;
+		
+		//글추가
+		int result = bService.insertContent(content);
+		int contentNo = content.getContentNo();
+		
+		try {
+			tFileUrl = r2Service.uploadFile(tFile);
+			cFileUrl = r2Service.uploadFile(cFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo);
+		int result4 = bService.insertContentFile(cFileUrl, contentNo);
+		
+		System.out.println(content);
+		
+		int result2 = bService.insertContentCategory(categoryNo, contentNo);
+		if(result + result2 + result3 + result4 >= 4) {
+			return "redirect:/board/all_menu";
+		}else {
+			throw new BoardException("컨텐츠 등록에 실패하였습니다.");
+		}
+		
+	}
+	
+	
 
 
 

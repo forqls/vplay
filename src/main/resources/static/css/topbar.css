@@ -1,78 +1,80 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 .vplay-header {
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: #191820;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    height: 60px;
+	padding: 1rem 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	background-color: #191820;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	height: 60px;
+	width: 100%;
 }
 
 .vplay-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 1.5rem;
+	font-weight: bold;
 }
 
 .vplay-logo-circle {
-    width: 24px;
-    height: 24px;
-    background-color: #d46868;
-    border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	background-color: #d46868;
+	border-radius: 50%;
 }
 
 .vplay-nav-main {
-    display: flex;
-    gap: 2rem;
+	display: flex;
+	gap: 2rem;
+	align-items: center;
 }
 
 .vplay-nav-right {
-    display: flex;
-    gap: 1rem;
+	display: flex;
+	gap: 1rem;
+	align-items: center !important;
 }
 
 .vplay-nav-link {
-    color: #949396;
-    text-decoration: none;
-    font-size: 0.9rem;
-    cursor: pointer;
+	color: #949396;
+	text-decoration: none;
+	font-size: 0.9rem;
+	cursor: pointer;
 }
 
 .vplay-nav-link:hover {
-    color: #ffffff;
+	color: #ffffff;
 }
 
 .vplay-sign-in {
-    color: #ffffff;
-    transition: color 0.3s ease;
+	color: #ffffff;
+	transition: color 0.3s ease;
 }
 
 .vplay-sign-in:hover {
-    color: #5e37e9;
+	color: #5e37e9;
 }
 
-@media ( max-width: 768px) {
-    .vplay-nav-main {
-        display: none;
-    }
+@media ( max-width : 768px) {
+	.vplay-nav-main {
+		display: none;
+	}
 }
 
 body {
-    padding-top: 60px !important;
+	padding-top: 60px !important;
 }
-

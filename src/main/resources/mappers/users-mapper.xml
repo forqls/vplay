@@ -210,7 +210,9 @@
 	<select id="getReceiverNo">
 		select user_no from users where user_nickname =#{receiverName}
 	</select>
-	
+	<select id="getUnreadMessageCount">
+		select count(*) from message where receiver_no =#{userNo} and read_status='N'
+	</select>
 	
 	
 </mapper>
