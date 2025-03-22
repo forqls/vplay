@@ -114,6 +114,7 @@
 	    /*<![CDATA[*/
 	    const loginUser = /*[[${session.loginUser}]]*/ 'loginUser';
 	    /*]]>*/
+	    const userNo = loginUser.userNo;
 	    const fileLocation = document.getElementById('download-file-location').value;
 	    const fileName = fileLocation.split("/").pop();
 	    const contentNo = document.getElementById('contentNo').value;
@@ -124,11 +125,12 @@
 	    	console.log(fileName);
 	    	console.log(contentNo);
 	    	console.log(form);
+	    	console.log(userNo);
 	    }
     
     
     	function downloadFile(){
-    		fetch("/board/download/" + fileName, {
+    		fetch("/board/download/" + fileName + "/" + contentNo + "/" + userNo, {
 				method : 'get',
 				headers : {'content-type' : 'application/json; charset=UTF-8'}
 			})
