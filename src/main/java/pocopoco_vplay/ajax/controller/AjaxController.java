@@ -205,8 +205,8 @@ public class AjaxController {
 		return list;
 	}
 	
-	@GetMapping("download/{fileName}")
-	public ResponseEntity<Resource> downloadFile(@PathVariable("fileName") String fileName) {
+	@GetMapping("download/{fileName}/{contentNo}/{userNo}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable("fileName") String fileName,@PathVariable("contentNo") int contentNo,@PathVariable("userNo") int userNo) {
 		
 		System.out.println(fileName);
 		
@@ -217,6 +217,11 @@ public class AjaxController {
 		}
 		
 		ByteArrayResource resource = new ByteArrayResource(fileBytes);
+		
+		int count = bService.checkDownload(contentNo, userNo);
+		if(count == 0) {
+			int result = bService.downloadRecord(contentNo, userNo);
+		}
 		
 		return ResponseEntity.ok()
 	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")

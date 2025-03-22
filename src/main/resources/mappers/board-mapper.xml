@@ -510,4 +510,15 @@
 		join users using(user_no)
 		where md_recommendation = 'Y'
 	</select>
+	
+	<select id="checkDownload">
+		select count(*)
+		from downloads
+		where user_no = #{userNo} and content_no = #{contentNo}
+	</select>
+	
+	<insert id="downloadRecord">
+		insert into downloads
+		values(DOWNLOADS_SEQ.nextval, #{userNo}, #{contentNo})
+	</insert>
 </mapper>

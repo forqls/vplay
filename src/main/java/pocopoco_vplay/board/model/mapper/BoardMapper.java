@@ -111,4 +111,8 @@ public interface BoardMapper {
    ArrayList<Content> selectMdList();
 
    ArrayList<Files> contentFile(int contentNo);
+
+   int checkDownload(@Param("contentNo")int contentNo, @Param("userNo")int userNo);
+
+   int downloadRecord(@Param("contentNo")int contentNo, @Param("userNo")int userNo);
 }

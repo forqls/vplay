@@ -221,4 +221,12 @@ public class BoardService {
 		return mapper.contentFile(contentNo);
 	}
 
+	public int checkDownload(int contentNo, int userNo) {
+		return mapper.checkDownload(contentNo, userNo);
+	}
+
+	public int downloadRecord(int contentNo, int userNo) {
+		return mapper.downloadRecord(contentNo, userNo);
+	}
+
 }
