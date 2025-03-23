@@ -487,12 +487,12 @@
 	
 	<insert id="insertThumbnailFile">
 		insert into Files
-		values(file_seq.nextval, #{contentNo}, #{tFileUrl}, default, 1)
+		values(file_seq.nextval, #{contentNo}, #{tFileUrl}, default, 1, #{tFileOriginalName} )
 	</insert>
 	
 	<insert id="insertContentFile">
 		insert into Files
-		values(file_seq.nextval, #{contentNo}, #{cFileUrl}, default, 2)
+		values(file_seq.nextval, #{contentNo}, #{cFileUrl}, default, 2, #{cFileOriginalName})
 	</insert>
 
 	<update id="updateRecommendation">
@@ -521,4 +521,33 @@
 		insert into downloads
 		values(DOWNLOADS_SEQ.nextval, #{userNo}, #{contentNo})
 	</insert>
+	
+	<update id="updateContent">
+		update content
+		set content_title = #{contentTitle}, content_detail = #{contentDetail}, modify_date = sysdate
+		where content_no = #{contentNo}
+	</update>
+	
+	<select id="selectFiles">
+		select *
+		from files
+		where ref_content_no = #{contentNo}
+	</select>
+	
+	<update id="updateTFile">
+		update files
+		set FILE_LOCATION = #{newTFileURL}, ORIGINAL_FILE_NAME = #{tFileOriginalName}
+		where ref_content_no = #{contentNo} and FILE_LEVEL = 1
+	</update>
+	
+	<update id="updateCFile">
+		update files
+		set FILE_LOCATION = #{newCFileURL}, ORIGINAL_FILE_NAME = #{cFileOriginalName}
+		where ref_content_no = #{contentNo} and FILE_LEVEL = 2
+	</update>
+	
+	<delete id="deleteContentCategory">
+		delete from content_category
+		where content_no = #{contentNo}
+	</delete>
 </mapper>
