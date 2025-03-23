@@ -100,9 +100,9 @@ public interface BoardMapper {
 
 	int insertContentCategory(@Param("categoryNo")ArrayList<Integer> categoryNo, @Param("contentNo")int contentNo);
 
-	int insertThumbnailFile(@Param("tFileUrl")String tFileUrl, @Param("contentNo")int contentNo);
+	int insertThumbnailFile(@Param("tFileUrl")String tFileUrl, @Param("contentNo")int contentNo,@Param("tFileOriginalName") String tFileOriginalName);
 
-	int insertContentFile(@Param("cFileUrl")String cFileUrl, @Param("contentNo")int contentNo);
+	int insertContentFile(@Param("cFileUrl")String cFileUrl, @Param("contentNo")int contentNo, @Param("cFileOriginalName")String cFileOriginalName);
 
    int updateRecommendation(HashMap<String, String> map);
 
@@ -115,4 +115,14 @@ public interface BoardMapper {
    int checkDownload(@Param("contentNo")int contentNo, @Param("userNo")int userNo);
 
    int downloadRecord(@Param("contentNo")int contentNo, @Param("userNo")int userNo);
+
+   int updateContent(Content content);
+
+   ArrayList<Files> selectFiles(@Param("contentNo")int contentNo);
+
+   void updateTFile(@Param("newTFileURL")String newTFileURL, @Param("tFileOriginalName")String tFileOriginalName, @Param("contentNo")int contentNo);
+
+   void updateCFile(@Param("newCFileURL")String newCFileURL, @Param("cFileOriginalName")String cFileOriginalName, @Param("contentNo")int contentNo);
+
+   int deleteContentCategory(@Param("contentNo")int contentNo);
 }

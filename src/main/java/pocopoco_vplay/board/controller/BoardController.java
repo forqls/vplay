@@ -594,6 +594,9 @@ public class BoardController {
 		System.out.println("c-file : " + cFile);
 		System.out.println("t-file : " + tFile);
 		
+		String tFileOriginalName = tFile.getOriginalFilename();
+		String cFileOriginalName = cFile.getOriginalFilename();
+		
 		String tFileUrl = null;
 		String cFileUrl = null;
 		
@@ -608,8 +611,8 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		
-		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo);
-		int result4 = bService.insertContentFile(cFileUrl, contentNo);
+		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
+		int result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
 		
 		System.out.println(content);
 		
@@ -621,21 +624,40 @@ public class BoardController {
 		}
 	}
 	
-	@PostMapping("updateContent")
-	public String contentUpdate(@ModelAttribute Content content, HttpSession session, Model model) {
+	@PostMapping("updateContentJoin")
+	public String contentUpdateJoin(@ModelAttribute Content content, HttpSession session, Model model) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
 		int contentNo = content.getContentNo();
 		
 		content = bService.allMenuDetail(contentNo);
+		int menuNo = content.getMenuNo();
+		
+		ArrayList<Content> categoryList = bService.menuCategoryList(menuNo);
 		
 		if(loginUser.getUserNo() == content.getUserNo()) {
 			ArrayList<Files> fList = bService.contentFile(contentNo);
 			
-			
 			System.out.println(content);
+			System.out.println(categoryList);
 			
+			Files tFile = new Files();
+			Files cFile = new Files();
+			
+			for(Files f : fList) {
+				if(f.getFileLevel() == 1) {
+					tFile = f;
+				}else {
+					cFile = f;
+				}
+			}
+			
+			System.out.println(tFile);
+			System.out.println(cFile);
+			
+			model.addAttribute("categoryList", categoryList);
 			model.addAttribute("content", content);
-			model.addAttribute("fList", fList);
+			model.addAttribute("tFile", tFile);
+			model.addAttribute("cFile", cFile);
 			return "content_update";
 		}else {
 			throw new BoardException("해당 아이디와 글쓴이가 일치하지 않습니다.");
@@ -643,7 +665,90 @@ public class BoardController {
 		
 	}
 	
+	@PostMapping("updateContent")
+	public String contentUpdate(@ModelAttribute Content content, @RequestParam("categoryNum") ArrayList<Integer> categoryNo ,
+			   					@RequestParam("t-file") MultipartFile tFile,
+			   					@RequestParam("c-file") MultipartFile cFile, HttpSession session) {
+		
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+		content.setUserNo(userNo);
+		
+		int contentNo = content.getContentNo();
+		//글 수정
+		int result = bService.updateContent(content);
+		
+		System.out.println("c-file : " + cFile);
+		System.out.println("t-file : " + tFile);
+		
 
+		Files originalTFile = null;
+		Files originalCFile = null;
+		
+		ArrayList<Files> flist = bService.selectFiles(contentNo); 
+		
+		for(Files f : flist) {
+			if(f.getFileLevel() == 1) {
+				originalTFile = f;
+			}else {
+				originalCFile = f;
+			}
+		}
+		
+		String tFileOriginalName = "";
+		String cFileOriginalName = "";
+		
+		if(!tFile.isEmpty() || !cFile.isEmpty()) {
+			
+			if(!tFile.isEmpty()) {
+				tFileOriginalName = tFile.getOriginalFilename();
+				
+				//원래 있던 파일 가져오고
+				String originalTFileName = (originalTFile.getFileLocation()).substring((originalTFile.getFileLocation()).lastIndexOf("/") +1 );
+				
+				//파일 삭제
+				r2Service.deleteFile(originalTFileName);
+				
+				//새로운 파일 추가
+				try {
+					String newTFileURL = r2Service.uploadFile(tFile);
+					bService.updateTFile(newTFileURL, tFileOriginalName, contentNo);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(!cFile.isEmpty()) {
+				cFileOriginalName = cFile.getOriginalFilename();
+				
+				//원래 있던 파일 가져오고
+				String originalCFileName = (originalCFile.getFileLocation()).substring((originalCFile.getFileLocation()).lastIndexOf("/") +1 );
+				
+				//파일 삭제
+				r2Service.deleteFile(originalCFileName);
+				
+				//새로운 파일 추가
+				try {
+					String newCFileURL = r2Service.uploadFile(cFile);
+					bService.updateCFile(newCFileURL, cFileOriginalName, contentNo);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		//카테고리 삭제
+		int result3 = bService.deleteContentCategory(contentNo);
+		
+		//카테고리 다시 추가
+		int result2 = bService.insertContentCategory(categoryNo, contentNo);
+		
+		if(result + result2 + result3 >= 3) {
+			return "redirect:/board/all_menu";
+		}else {
+			throw new BoardException("컨텐츠 등록에 실패하였습니다.");
+		}
+	}
 
 
 }

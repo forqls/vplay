@@ -18,4 +18,5 @@ public class Files {
 	private String fileLocation;
 	private String fileStatus;
 	private int fileLevel;
+	private String originalFileName;
 }

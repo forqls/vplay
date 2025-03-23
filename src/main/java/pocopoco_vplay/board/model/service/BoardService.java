@@ -198,12 +198,12 @@ public class BoardService {
 		return mapper.insertContentCategory(categoryNo, contentNo);
 	}
 
-	public int insertThumbnailFile(String tFileUrl, int contentNo) {
-		return mapper.insertThumbnailFile(tFileUrl, contentNo);
+	public int insertThumbnailFile(String tFileUrl, int contentNo, String tFileOriginalName) {
+		return mapper.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
 	}
 
-	public int insertContentFile(String cFileUrl, int contentNo) {
-		return mapper.insertContentFile(cFileUrl, contentNo);
+	public int insertContentFile(String cFileUrl, int contentNo, String cFileOriginalName) {
+		return mapper.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
 	}
 
     public int updateRecommendation(HashMap<String, String> map) {
@@ -227,6 +227,26 @@ public class BoardService {
 
 	public int downloadRecord(int contentNo, int userNo) {
 		return mapper.downloadRecord(contentNo, userNo);
+	}
+
+	public int updateContent(Content content) {
+		return mapper.updateContent(content);
+	}
+
+	public ArrayList<Files> selectFiles(int contentNo) {
+		return mapper.selectFiles(contentNo);
+	}
+
+	public void updateTFile(String newTFileURL, String tFileOriginalName, int contentNo) {
+		mapper.updateTFile(newTFileURL, tFileOriginalName, contentNo);
+	}
+
+	public void updateCFile(String newCFileURL, String cFileOriginalName, int contentNo) {
+		mapper.updateCFile(newCFileURL, cFileOriginalName, contentNo);
+	}
+
+	public int deleteContentCategory(int contentNo) {
+		return mapper.deleteContentCategory(contentNo);
 	}
 
 }
