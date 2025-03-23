@@ -507,4 +507,14 @@ public class UsersController {
 		}
 		return uService.getUnreadMessageCount(loginUser.getUserNo());
 	}
+	
+	@GetMapping("creator/{userNo}")
+	public String joinCreatorPage(@PathVariable("userNo")int userNo, Model model) {
+		Users u = new Users();
+		u.setUserNo(userNo);
+		Users user = uService.signIn(u);
+		
+		model.addAttribute("Users", user);
+		return "creator_page";
+	}
 }
