@@ -368,12 +368,13 @@ body {
 
 		<section class="section">
 			<h2 class="section-title">탑 크리에이터 추천</h2>
-			<div class="creator-grid">
+			<div class="creator-grid top">
 				<div class="creator-card" th:each="l, rank : ${ulist}">
+					<input type="hidden" th:value="${l.userNo}">
 					<div class="creator-header">
 						<div class="creator-avatar"></div>
 						<div class="creator-info">
-							<h3>[[${l.userName}]]</h3>
+							<h3>[[${l.userNickname}]]</h3>
 							<p>팔로잉 : [[${l.subscriber}]]</p>
 						</div>
 					</div>
@@ -417,6 +418,8 @@ body {
 	</div>
 
 	<script>
+		const creatorList = document.querySelector('.creator-grid.top');
+	
 		var showAlert = "[[${showAlert}]]";
 		console.log(showAlert);
 		if (showAlert.trim() === "true") {
@@ -434,6 +437,7 @@ body {
 		getCurrentMonthEvent();
 
 		window.onload = () =>{
+// 			console.log(creatorList);
 
 			fetch("board/mdList", {
 				method: "GET",
@@ -463,6 +467,15 @@ body {
 			.catch(error => console.log('리스트 불러오기 실패 : ', error));
 
 		};
+		
+		[...creatorList.children].map((creator, index, array) =>{
+			creator.addEventListener('click', function(){
+				const userNo = this.querySelector('input').value;
+				console.log(userNo);
+				location.href = "/users/creator/" + userNo;
+			})
+		})
+		
 	</script>
 </body>
 </html>
