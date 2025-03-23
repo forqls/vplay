@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
@@ -26,7 +33,7 @@ import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
 @RestController
-@RequestMapping({"/board", "/users"})
+@RequestMapping({"/board", "/users", "/admin"})
 @SessionAttributes("loginUser")
 @RequiredArgsConstructor
 public class AjaxController {
@@ -160,5 +167,67 @@ public class AjaxController {
 		}
 		
 	}
+
+	@GetMapping("writeContent/{menuNo}")
+	public ArrayList<Content> menuCategoryList(@PathVariable("menuNo") int menuNo) {
+        System.out.println(menuNo);
+
+        ArrayList<Content> list = bService.menuCategoryList(menuNo);
+
+        System.out.println(list);
+        return list;
+    }
+
+	@PutMapping("mdRecommendation")
+	public int updateRecommendation(@RequestBody HashMap<String, String> map) {
+		System.out.println("contentNo: " + map.get("contentNo"));
+		System.out.println("column 값: " + map.get("column"));
+
+		int currentMdCount = bService.getMdRecommendationCount();
+
+		if ("Y".equals(map.get("column")) && currentMdCount >= 8) {
+			return -1;
+		}
+
+		int result = bService.updateRecommendation(map);
+
+		if(result > 0) {
+			return 1;
+		}else{
+			throw new BoardException("상태값 업데이트 중 오류 발생 컨트롤러를 보세용");
+		}
+	}
+
+	@GetMapping("mdList")
+	public ArrayList<Content>  selectmdList() {
+		ArrayList<Content> list = bService.selectMdList();
+		System.out.println("md추천리스트들 : " + list);
+		return list;
+	}
+	
+	@GetMapping("download/{fileName}/{contentNo}/{userNo}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable("fileName") String fileName,@PathVariable("contentNo") int contentNo,@PathVariable("userNo") int userNo) {
 		
+		System.out.println(fileName);
+		
+		byte[] fileBytes = r2Service.downloadFile(fileName);
+		
+		if(fileBytes == null) {
+			throw new BoardException("파일 다운로드 중 오류 발생");
+		}
+		
+		ByteArrayResource resource = new ByteArrayResource(fileBytes);
+		
+		int count = bService.checkDownload(contentNo, userNo);
+		if(count == 0) {
+			int result = bService.downloadRecord(contentNo, userNo);
+		}
+		
+		return ResponseEntity.ok()
+	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+	            .contentLength(fileBytes.length)
+	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+	            .body(resource);
+	}
+
 }

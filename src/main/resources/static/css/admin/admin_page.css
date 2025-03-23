@@ -5,11 +5,11 @@
 }
 
 body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	font-family: Arial, sans-serif;
 	background-color: #191820;
+	color: #fff;
 	display: flex;
 	min-height: 100vh;
-	color: #fff;
 }
 
 .sidebar {
@@ -18,15 +18,15 @@ body {
 	background-color: #262d34;
 	padding: 20px;
 	position: fixed;
-	padding: 20px;
-	background-color: #262d34;
-	padding: 20px;
 }
 
 .main-content {
 	flex: 1;
 	margin-left: 240px;
-	padding: 24px;
+	padding: 2rem 3rem;
+	position: relative;
+	overflow: hidden;
+	z-index: 0;
 }
 
 .page-title {
@@ -38,10 +38,11 @@ body {
 .content-card {
 	background-color: #262d34;
 	border-radius: 8px;
-	overflow: hidden;
 	min-height: 780px;
 	display: flex;
 	flex-direction: column;
+	z-index: 1;
+	padding: 0 2rem;
 }
 
 .filter-dropdown {
@@ -84,19 +85,6 @@ body {
 
 .search-bar input::placeholder {
 	color: #9ca3af;
-}
-
-.search-bar button {
-	background: none;
-	border: none;
-	cursor: pointer;
-	padding: 8px;
-}
-
-.search-bar button svg {
-	stroke: #9ca3af;
-	fill: none;
-	stroke-width: 2;
 }
 
 .table-container {
@@ -146,18 +134,90 @@ tbody tr:hover {
 
 .pagination {
 	display: flex;
-	align-items: center;
 	justify-content: center;
-	gap: 4px;
+	gap: 8px;
 	padding: 15px;
-	margin-top: auto;
 }
 
-.pagination a:hover {
-	background: none;
+.pagination ul {
+	list-style: none;
+	display: flex;
+	gap: 8px;
+}
+
+.pagination li {
+	display: inline-block;
+}
+
+.pagination a {
+	display: inline-block;
+	padding: 8px 12px;
+	border-radius: 4px;
 	color: white;
+	text-decoration: none;
+	transition: color 0.3s ease;
 }
 
+.pagination a.active {
+	color: #6a2bc7;
+}
+
+.pagination a:hover:not(.active) {
+	color: #555555;
+}
+
+.AddSettings {
+	position: relative;
+}
+
+/*td.AddSettings:hover .hover_action,
+.hover_action:hover {
+	visibility: visible;
+}*/
+.hover_action {
+	position: fixed;
+	top: 20%;
+	left: 85%;
+	/*visibility: hidden;*/
+	display: none;
+	z-index: 9999;
+	border: 1px solid #1F1F2C;
+	background: #1F1F2C;
+	border-radius: 15px;
+	padding: 0.5rem 0;
+}
+
+.hover_action span{
+	font-size: 0.8rem;
+	display: block;
+	width: 100%;
+	text-align: left;
+	padding: 0.3rem 0.8rem;
+	color: #6F757D;
+}
+
+.hover_action span:hover {
+	color: #fff;
+}
+
+tr.request-list.mdActive {
+	background: #303e4d;
+}
+
+tr.select {
+	background: #324355;
+}
+
+.recommended{
+	background:#162331;
+}
+
+.request-list-body tr.recommended:hover {
+	background-color: #162331;
+}
+
+
+/*반응형*/
 @media ( max-width : 1024px) {
 	.sidebar {
 		width: 200px;

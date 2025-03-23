@@ -13,109 +13,44 @@
 
     <main>
         <div class="content">
-            <div class="featured-template">
-                <div class="template-image">
-                    <img src="/placeholder.svg?height=400&width=550" alt="Modular Animated Titles">
-                </div>
-                <div class="item-tags">
-                    <h3>Item Tags</h3>
-                    <div class="tags">
-                        <span class="tag">Titles</span>
-                        <span class="tag">Animated</span>
-                    </div>
-                </div>
-                <div class="item-detail">
-                    <h3>Item Detail</h3>
-                    <p th:text="${content.contentDetail}"></p>
-                </div>
-            </div>
-
+        	<form method="post" enctype="multipart/form-data">
+	            <div class="featured-template">
+	<!--                 <div class="template-image"> -->
+	                    <video id="video-preview" style="max-width: 1200px; margin-top: 10px;" th:each="f : ${fList}" th:if="${f.fileLevel == 1}" controls>
+	                    	 <source th:src="@{${f.fileLocation}}" type="video/mp4">
+	                    </video>
+	<!--                 </div> -->
+	                <div class="item-tags">
+	                    <h3>Item Tags</h3>
+	                    <div class="tags">
+	                    	<th:block th:each="category : ${categories}">
+	                        	<span class="tag" th:text="${category}"></span>
+	                        </th:block>
+	                    </div>
+	                </div>
+	                <div class="item-detail">
+	                    <h3>Item Detail</h3>
+	                    <p th:utext="${content.contentDetail}"></p>
+	                </div>
+	                
+	                <input type="hidden" name="contentNo" id="contentNo" th:value="${content.contentNo}">
+	                <th:block th:each="l : ${fList}">
+		                <input type="file" name="t-file" id="tFile" th:value="${l}" th:if="${l.fileLevel == 1}" style="display: none;">
+		                <input type="file" name="c-file" id="cFile" th:value="${l}" th:if="${l.fileLevel == 2}" style="display: none;">
+	                </th:block>
+	            </div>
+             </form>
+			
             <div class="similar-templates">
-                <h2>최신 스톡 비디오 리스트</h2>
+                <h2>최신 스톡 영상 템플릿 리스트</h2>
                 <div class="template-grid">
                     <!-- Template 1 -->
-                    <div class="template-card">
+                    <div class="template-card" th:each="content : ${aList}">
                         <div class="template-thumbnail">
                             <img src="/placeholder.svg?height=150&width=250" alt="Big Game Grunge">
                             <div class="template-info">
-                                <h4>Big Game Grunge</h4>
-                                <p>HandsomeOwn</p>
-                            </div>
-                            <div class="template-actions">
-                                <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-                                <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
-                            </div>
-                            <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                        </div>
-                    </div>
-                    
-                    <!-- Repeat for other templates -->
-                    <div class="template-card">
-                        <div class="template-thumbnail">
-                            <img src="/placeholder.svg?height=150&width=250" alt="Big Game Grunge">
-                            <div class="template-info">
-                                <h4>Big Game Grunge</h4>
-                                <p>HandsomeOwn</p>
-                            </div>
-                            <div class="template-actions">
-                                <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-                                <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
-                            </div>
-                            <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="template-card">
-                        <div class="template-thumbnail">
-                            <img src="/placeholder.svg?height=150&width=250" alt="Big Game Grunge">
-                            <div class="template-info">
-                                <h4>Big Game Grunge</h4>
-                                <p>HandsomeOwn</p>
-                            </div>
-                            <div class="template-actions">
-                                <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-                                <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
-                            </div>
-                            <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="template-card">
-                        <div class="template-thumbnail">
-                            <img src="/placeholder.svg?height=150&width=250" alt="Big Game Grunge">
-                            <div class="template-info">
-                                <h4>Big Game Grunge</h4>
-                                <p>HandsomeOwn</p>
-                            </div>
-                            <div class="template-actions">
-                                <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-                                <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
-                            </div>
-                            <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="template-card">
-                        <div class="template-thumbnail">
-                            <img src="/placeholder.svg?height=150&width=250" alt="Big Game Grunge">
-                            <div class="template-info">
-                                <h4>Big Game Grunge</h4>
-                                <p>HandsomeOwn</p>
-                            </div>
-                            <div class="template-actions">
-                                <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-                                <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
-                            </div>
-                            <button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="template-card">
-                        <div class="template-thumbnail">
-                            <img src="/placeholder.svg?height=150&width=250" alt="Big Game Grunge">
-                            <div class="template-info">
-                                <h4>Big Game Grunge</h4>
-                                <p>HandsomeOwn</p>
+                                <h4 th:text="${content.contentTitle}"></h4>
+                                <p th:text="${content.userNickName}"></p>
                             </div>
                             <div class="template-actions">
                                 <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
@@ -133,7 +68,7 @@
                 <h2>After Effects Templates</h2>
                 <h3 th:text="${content.contentTitle}"></h3>
                 <p>by [[${content.userNickName}]]</p>
-                <div class="pricing-box">
+                <div class="pricing-box" th:if='${session.loginUser == null || session.loginUser.userPlan != "Frame Pro"}'>
                     <h3>Frame Pro</h3>
                     <div class="price">
                         <span class="amount">16,500</span>
@@ -144,30 +79,86 @@
                     <div class="features">
                         <div class="feature">
                             <span class="free-tag">FREE</span>
-                            <span>Stock Video</span>
+                            <span>Video Templates</span>
                             <p>VPLAY의 모든 영상을 무료로 즐겨보세요!</p>
                         </div>
                         <div class="feature">
                             <span class="free-tag">FREE</span>
-                            <span>Sound Effects</span>
+                            <span>Stock Video</span>
                         </div>
                         <div class="feature">
                             <span class="free-tag">FREE</span>
-                            <span>Fonts</span>
+                            <span>Music</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="action-buttons">
-                    <button class="download-btn">Download</button>
+				
+                <div class="action-buttons" th:if='${session.loginUser != null && (session.loginUser.userPlan == "Frame Pro" || session.loginUser.userPlan == "All Rounder")}'>
+                    <button type="button" class="download-btn" onclick="downloadFile()">Download</button>
+                    <th:block th:each="f : ${fList}" th:if="${f.fileLevel == 2}" controls>
+                    <input id="download-file-location" type="hidden" th:value="${f.fileLocation}"> 
+                    </th:block>
                     <div class="secondary-actions">
                         <button class="action-btn"><i class="fa-solid fa-share-nodes"></i></button>
                         <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
                         <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
+                        <th:block th:if="${session.loginUser.userNo == content.userNo}">
+                        <button class="action-btn" onclick="contentUpdate();"><i class="fa-regular fa-pencil"></i></button>
+                        </th:block>
                     </div>
                 </div>
             </div>
         </aside>
     </main>
+    <script th:inline="javascript">
+	    /*<![CDATA[*/
+	    const loginUser = /*[[${session.loginUser}]]*/ 'loginUser';
+	    /*]]>*/
+	    const userNo = loginUser.userNo;
+	    const fileLocation = document.getElementById('download-file-location').value;
+	    const fileName = fileLocation.split("/").pop();
+	    const contentNo = document.getElementById('contentNo').value;
+	    const form = document.querySelector('form');
+	    
+	    window.onload=()=>{
+	    	console.log(fileLocation);
+	    	console.log(fileName);
+	    	console.log(contentNo);
+	    	console.log(form);
+	    	console.log(userNo);
+	    }
+    
+    
+    	function downloadFile(){
+    		fetch("/board/download/" + fileName + "/" + contentNo + "/" + userNo, {
+				method : 'get',
+				headers : {'content-type' : 'application/json; charset=UTF-8'}
+			})
+			.then(response => {
+			 if(!response.ok) throw new Error("다운로드 실패");
+
+		      return response.blob();	// 응답을 blob(파일 데이터)으로 파싱
+			})
+			.then(blob =>{
+				const url = window.URL.createObjectURL(blob);	// blob 데이터를 가리키는 가짜 URL 생성
+				const a= document.createElement("a");			// <a> 태그 동적으로 생성
+				a.href = url;
+				a.download = fileName;							//다운로드 파일 이름 설정
+				document.body.appendChild(a);				// 페이지에 <a>추가
+				a.click();										// 강제로 클릭 이벤트 발생시켜 다운로드 실행
+				a.remove();										// 다 쓰고 <a>태그 제거
+				window.URL.revokeObjectURL(url);				// 가짜 URL 해제해서 메모리 누수 방지
+			})
+			.catch(error =>{
+				console.error("에러 발생 : " + error);
+			})
+    	}
+    	
+    	function contentUpdate(){
+    		form.action = "/board/updateContentJoin";
+    		form.submit();
+    	}
+    </script>
+    
 </body>
 </html>

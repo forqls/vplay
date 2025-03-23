@@ -13,23 +13,23 @@ import pocopoco_vplay.users.model.vo.Users;
 @Mapper
 public interface AdminMapper {
 
-	int getUsersCount();
-
-	ArrayList<Users> selectAllUser(RowBounds rowBounds);
-
-	int getInquiryCount(Content content);
-
-	ArrayList<Content> selectAllInquiry(Content content, RowBounds rowBounds);
-
 	String selectUser(int userNo);
 
-	int getTemplatesCount(Content content);
+	int getUsersCount(HashMap<String, String> map);
 
-	ArrayList<Content> selectAllTemplates(Content content, RowBounds rowBounds);
+	ArrayList<Users> selectAllUser(HashMap<String, String> map, RowBounds rowBounds);
 
-	int getrequestPostCount(Content content);
+	int getInquiryCount(HashMap<String, String> map);
 
-	ArrayList<Content> selectAllRequestPost(RowBounds rowBounds);
+	ArrayList<Content> selectAllInquiry(HashMap<String, String> map, RowBounds rowBounds);
+
+	int getTemplatesCount(HashMap<String, String> map);
+
+	ArrayList<Content> selectAllTemplates(HashMap<String, String> map, RowBounds rowBounds);
+
+	int getrequestPostCount(HashMap<String, String> map);
+
+	ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, RowBounds rowBounds);
 
 	int userUpdate(Users user);
 

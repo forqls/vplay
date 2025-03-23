@@ -24,6 +24,7 @@ public class Content {
 	private int userNo;
 	private String userId;
 	private String userNickName;
+	private int cateoryNo;
 	private String categoryName;
 	private String menuName;
 	private String hashtagName;
@@ -33,4 +34,5 @@ public class Content {
 	private int menuNo;
 	private Reply reply;
 	private int overallScore;
+	private String mdRecommendation;
 }

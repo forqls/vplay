@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 
@@ -36,8 +37,8 @@ public class BoardService {
 		return mapper.selectMyCommission(userNo);
 	}
 
-	public int throwBoardTrash(int contentNo) {
-		return mapper.throwBoardTrash(contentNo);
+	public int throwBoardTrash(HashMap<String, Integer> map) {
+		return mapper.throwBoardTrash(map);
 	}
 
 	public ArrayList<Content> selectMyTrash(int userNo) {
@@ -86,8 +87,8 @@ public class BoardService {
 		return mapper.allPopularCate(i);
 	}
 
-	public int getrequestPostCount(Content content) {
-		return mapper.getrequestPostCount(content);
+	public int getrequestPostCount(HashMap<String, String> map) {
+		return mapper.getrequestPostCount(map);
 	}
 
 	public ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, PageInfo pi) {
@@ -181,5 +182,68 @@ public class BoardService {
 		return mapper.selectRequestList(content);
 	}
 
+
+	public ArrayList<Content> menuCategoryList(int menuNo) {
+		return mapper.menuCategoryList(menuNo);
+	}
+
+	public int insertContent(Content content) {
+		return mapper.insertContent(content);
+	}
+
+	public int insertContentCategory(ArrayList<Integer> categoryNo, int contentNo) {
+		return mapper.insertContentCategory(categoryNo, contentNo);
+	}
+
+	public int insertThumbnailFile(String tFileUrl, int contentNo, String tFileOriginalName) {
+		return mapper.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
+	}
+
+	public int insertContentFile(String cFileUrl, int contentNo, String cFileOriginalName) {
+		return mapper.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
+	}
+
+    public int updateRecommendation(HashMap<String, String> map) {
+		return mapper.updateRecommendation(map);
+    }
+
+
+	public int getMdRecommendationCount() {	return mapper.getMdRecommendationCount();
+	}
+
+    public ArrayList<Content> selectMdList() { return mapper.selectMdList();
+    }
+
+	public ArrayList<Files> contentFile(int contentNo) {
+		return mapper.contentFile(contentNo);
+	}
+
+	public int checkDownload(int contentNo, int userNo) {
+		return mapper.checkDownload(contentNo, userNo);
+	}
+
+	public int downloadRecord(int contentNo, int userNo) {
+		return mapper.downloadRecord(contentNo, userNo);
+	}
+
+	public int updateContent(Content content) {
+		return mapper.updateContent(content);
+	}
+
+	public ArrayList<Files> selectFiles(int contentNo) {
+		return mapper.selectFiles(contentNo);
+	}
+
+	public void updateTFile(String newTFileURL, String tFileOriginalName, int contentNo) {
+		mapper.updateTFile(newTFileURL, tFileOriginalName, contentNo);
+	}
+
+	public void updateCFile(String newCFileURL, String cFileOriginalName, int contentNo) {
+		mapper.updateCFile(newCFileURL, cFileOriginalName, contentNo);
+	}
+
+	public int deleteContentCategory(int contentNo) {
+		return mapper.deleteContentCategory(contentNo);
+	}
 
 }

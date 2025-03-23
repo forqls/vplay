@@ -8,22 +8,6 @@
 <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Downloads</title>
-<style>
-.delete-button {
-	background-color: #33333e;
-	border: none;
-	border-radius: 6px;
-	color: white;
-	font-size: 13px;
-	padding: 8px 16px;
-	cursor: pointer;
-	margin-top: 4px;
-}
-
-.delete-button:hover {
-	box-shadow: 0 0 0 0.5px #ffffff;
-}
-</style>
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
@@ -45,7 +29,6 @@
 					<option value="newest">새로운순</option>
 					<option value="most-viewed">조회수 많은 순</option>
 				</select>
-				<button class="delete-button">🗑️</button>
 			</div>
 
 			<div class="grid">

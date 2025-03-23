@@ -47,6 +47,7 @@ body {
 }
 
 .input-group {
+	position: relative;
 	display: flex;
 	margin-top: 1rem;
 	margin-bottom: 1rem;
@@ -54,17 +55,37 @@ body {
 }
 
 .input-field {
-	flex-grow: 1;
+	width: 100%;
 	padding: 0.8rem;
 	background-color: #1f1f2c;
-	border: 1px solid #28303f;
+	border: none;
 	border-radius: 4px;
 	color: #ffffff;
 	font-family: sans-serif;
+	outline: none;
+}
+
+.input-label {
+	position: absolute;
+	left: 0.8rem;
+	top: 0.95rem;
+	color: #949396;
+	pointer-events: none;
+	transition: 0.2s ease all;
+	font-size: 0.85rem;
+}
+
+.input-field:focus ~ .input-label, .input-field:not(:placeholder-shown) ~ .input-label {
+	top: -0.45rem;
+	left: 0.5rem;
+	font-size: 0.8rem;
+	color: #ffffff;
+	background-color: transparent;
+	padding: 0;
 }
 
 .input-field::placeholder {
-	color: #949396;
+	color: transparent;
 }
 
 input[type="date"] {
@@ -73,7 +94,17 @@ input[type="date"] {
 
 .radio-group {
 	display: flex;
+	width: 100%;
+	padding: 0.8rem;
+	background-color: #1f1f2c;
+	border: none;
+	border-radius: 4px;
 	gap: 0.5rem;
+	margin-top: -22.5px;
+	padding: 0.8rem;
+	background-color: #1f1f2c;
+	border: none;
+	border-radius: 4px;
 }
 
 .radio-group span {
@@ -140,7 +171,7 @@ input[type="date"] {
 .modal {
 	display: none;
 	position: fixed;
-	z-index: 1000;
+	z-index: 999;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -174,33 +205,32 @@ input[type="date"] {
 	<div class="breadcrumb">
 		<a href="/">Home</a> > <span class="current">Sign Up</span>
 	</div>
-	<!-- VO 완성되면 아이디 중복확인 버튼 구현하기 (비동기) -->
 	<main class="signup-container">
 		<h1 class="signup-title" th:text="${session.kakaoUser != null ? ' 카카오 유저 회원가입' : '회원가입'}"></h1>
 		<form id="signupForm" method="post" action="/users/signUp">
 			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
-				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID">
+				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID" required><label class="input-label">ID</label>
 				<button type="button" id="checkIdBtn" class="button verify-button">중복확인</button>
 			</div>
 			<div id="confirmIdText"></div>
 			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
-				<input type="password" placeholder="Password" class="input-field" name="userPw" id="password">
+				<input type="password" placeholder="Password" class="input-field" name="userPw" id="password"><label class="input-label">Password</label>
 			</div>
 			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
-				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword">
+				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword"><label class="input-label">Password 확인</label>
 			</div>
 			<div id="confirmPwText"></div>
 			<div class="input-group">
-				<input type="text" placeholder="User name" class="input-field" name="userName" id="name">
+				<input type="text" placeholder="User name" class="input-field" name="userName" id="name"><label class="input-label">User name</label>
 			</div>
 			<div class="input-group">
-				<input type="text" class="input-field" name="userNickname" id="nickName" th:value="${session.kakaoUser != null ? session.kakaoUser.userNickname : ''}" placeholder="Nick name">
+				<input type="text" placeholder="Nick name" class="input-field" name="userNickname" id="nickName" th:value="${session.kakaoUser != null ? session.kakaoUser.userNickname : ''}"><label class="input-label">Nickname</label>
 			</div>
 			<div class="input-group">
-				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel">
+				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel"><label class="input-label">Phone</label>
 			</div>
 			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email">
+				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email"><label class="input-label">Email</label>
 				<button type="button" class="button verify-button" id="emailBtn">인증하기</button>
 			</div>
 			<div class="verification-section" id="verificationSection">
@@ -210,8 +240,9 @@ input[type="date"] {
 				</div>
 			</div>
 			<div class="input-group">
-				<input type="date" placeholder="Birth day" class="input-field" name="userBirth">
+				<input type="date" placeholder="Birth day" class="input-field" name="userBirth"><label class="input-label">BirthDay</label>
 			</div>
+			<div style="text-align: left; font-size: 0.8rem; margin-left: 8px; position: relative; z-index: 10;">Gender</div>
 			<div class="input-group">
 				<div class="radio-group">
 					<input type="radio" name="userGender" value="M" class="radio-input" id="male"> <span>남자</span> <input type="radio" name="userGender" value="F" class="radio-input" id="female"> <span>여자</span>

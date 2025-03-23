@@ -43,7 +43,12 @@
 	</select>
 
 	<update id="throwBoardTrash">
-		update content set content_status ='N' where content_no=#{contentNo}
+		<if test="trashYN == 0">
+			update content set content_status ='N' where content_no=#{contentNo}
+		</if>
+		<if test="trashYN == 1">
+			update content set content_status ='Y' where content_no=#{contentNo}
+		</if>
 	</update>
 
 	<select id="selectMyTrash">
@@ -78,25 +83,27 @@
 
 	<select id="allTemplateList" parameterType="string">
 		select *
-		from (select cg.category_name, c.content_no, c.content_title, u.user_nickname, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
-		from content c
-		left join users u on(c.user_no = u.user_no)
-		left join board b on(c.content_no = b.content_no)
-		left join content_category cc on(c.content_no = cc.content_no)
-		left join category cg on(cc.category_no = cg.category_no)
-		left join menu m on(cg.menu_no = m.menu_no)
-		left join likes lk2 on (c.content_no = lk2.content_no)
-		where b.board_type is null and m.menu_name = #{menuName}
+		from (
+			select
+			LISTAGG(cg.category_name, ',') WITHIN GROUP (ORDER BY cg.category_name) AS category_name, c.content_no, c.content_title, u.user_nickname, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
+			from content c
+			left join users u on(c.user_no = u.user_no)
+			left join board b on(c.content_no = b.content_no)
+			left join content_category cc on(c.content_no = cc.content_no)
+			left join category cg on(cc.category_no = cg.category_no)
+			left join menu m on(cg.menu_no = m.menu_no)
+			left join likes lk2 on (c.content_no = lk2.content_no)
+			where b.board_type is null and m.menu_name = #{menuName}
 		<if test="categoryArray != null">
-			and cg.category_name in 
+			and cg.category_name in
 			<foreach item="category" collection="categoryArray" open="(" separator="," close=")">
 				#{category}
 			</foreach>
 		</if>
 		<if test="search != null">
-			and CONTENT_TITLE like '%${search}%'
+			and CONTENT_TITLE like '%' || #{search} || '%'
 		</if>
-		group by cg.category_name, c.content_no, c.content_title, u.user_nickname
+		group by c.content_no, c.content_title, u.user_nickname
 		order by c.content_no desc)
 		<if test="menuNameNum == 'video Templates'">
 			where rownum <![CDATA[<]]>=
@@ -125,6 +132,10 @@
 		<if test="menuNameNum == 'Fonts'">
 			where rownum <![CDATA[<]]>=
 			5
+		</if>
+		<if test="recentList != null">
+			where rownum <![CDATA[<]]>=
+			6
 		</if>
 	</select>
 
@@ -258,9 +269,12 @@
 		select count(*)
 		from content
 		join board using(content_no)
-		where board_type = 2
+		where board_type = 2 and content_status = 'Y'
 		<if test="menuNo != null">
-		and menu_no = #{menuNo}
+			and menu_no = #{menuNo}
+		</if>
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
 		</if>
 	</select>
 
@@ -269,19 +283,18 @@
 		from content
 		join board using(content_no)
 		join menu using(menu_no)
-		join users using(user_no)
-		where board_type = 2 and CONTENT_STATUS = 'Y'
+		where board_type = 2 and content_status = 'Y'
 		<if test="menuNo != null">
-		and menu_no = #{menuNo}
+			and menu_no = #{menuNo}
 		</if>
-		<if test="search != null">
-		and content_title like '%${search}%'
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
 		</if>
 		order by content_no desc
 	</select>
 
 	<select id="selectUser">
-		select user_id
+		select user_nickname
 		from users
 		where user_no = #{userNo}
 	</select>
@@ -317,9 +330,9 @@
 	</update>
 
 	<select id="allMenuDetail" parameterType="int">
-		select c.content_no, c.content_title, to_char(c.content_detail) as content_detail, c.create_date,
+		select c.content_no, c.content_title, to_char(c.content_detail) as content_detail, c.create_date, u.user_profile,
 		c.modify_date, c.content_status, u.user_no, u.user_id,
-		u.user_nickname, u.user_email,u.user_profile, listagg(category_name, ',') within group(order by category_name) as category_name, m.menu_name
+		u.user_nickname, u.user_email,u.user_profile, listagg(category_name, ',') within group(order by category_name) as category_name, m.menu_name, m.menu_no
 		from content c
 		join users u on(c.user_no = u.user_no)
 		join content_category cc on(c.content_no = cc.content_no)
@@ -338,7 +351,14 @@
 		u.user_nickname,
 		u.user_email,
 		u.user_profile,
-		m.menu_name
+		m.menu_name,
+		m.menu_no
+	</select>
+
+	<select id="contentFile">
+		select *
+		from files
+		where ref_content_no = #{contentNo}
 	</select>
 
 	<select id="selectReplyList">
@@ -380,33 +400,31 @@
 		where content_no =#{bId}
 	</update>
 
-	
-
 	<select id="selectContentTop">
-	    SELECT 
-	    c.content_no, 
-	    c.content_title, 
-	    c.create_date, 
-	    c.modify_date, 
-	    c.user_no, 
-	    c.views, 
-	    u.user_nickname,
-	    COUNT(l.content_no) AS like_count
+		SELECT
+		c.content_no,
+		c.content_title,
+		c.create_date,
+		c.modify_date,
+		c.user_no,
+		c.views,
+		u.user_nickname,
+		COUNT(l.content_no) AS like_count
 		FROM content c
-		JOIN users u ON c.user_no = u.user_no 
-		LEFT JOIN likes l ON c.content_no = l.content_no 
-		GROUP BY c.content_no, c.content_title, c.create_date, 
-        c.modify_date, c.user_no, c.views, u.user_nickname
+		JOIN users u ON c.user_no = u.user_no
+		LEFT JOIN likes l ON c.content_no = l.content_no
+		GROUP BY c.content_no, c.content_title, c.create_date,
+		c.modify_date, c.user_no, c.views, u.user_nickname
 		ORDER BY c.views DESC
 		fetch first 12 rows only
-	</select>	
+	</select>
 
 
 	<select id="selectOrderByViews">
-	    select * from content order by views desc
-	    fetch first 12 rows only 
-	</select>	
-  
+		select * from content order by views desc
+		fetch first 12 rows only
+	</select>
+
 	<insert id="insertReply">
 		insert into reply
 		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
@@ -425,20 +443,111 @@
 
 	<select id="selectRequestList">
 		select * from content
-		  join board using(content_no)
-		  join menu using(menu_no)
-		  join users using(user_no)
+		join board using(content_no)
+		join menu using(menu_no)
+		join users using(user_no)
 		where menu_no =#{menuNo} and CONTENT_STATUS ='Y'
 	</select>
-  
-<!--	<select id="searchRequest">-->
-<!--		SELECT *-->
-<!--		FROM content-->
-<!--		JOIN users USING(user_no)-->
-<!--		join board using(content_no)-->
-<!--		join menu using(menu_no)-->
-<!--		<if test="searchValue != null and searchValue.trim() != ''">-->
-<!--		WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'-->
-<!--		</if>-->
-<!--	</select>-->
+
+	<select id="searchRequest">
+		SELECT *
+		FROM content
+		JOIN users USING(user_no)
+		join board using(content_no)
+		join menu using(menu_no)
+		<if test="searchValue != null and searchValue.trim() != ''">
+			WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
+		</if>
+	</select>
+
+	<select id="menuCategoryList" resultType="map">
+		select category_name, category_no
+		from category
+		where menu_no = #{menuNo}
+	</select>
+
+	<!-- 컨텐츠 글 등록 -->
+	<insert id="insertContent">
+		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">
+			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into content
+		values(#{contentNo}, #{contentTitle}, #{contentDetail}, default, default, default, default, #{userNo}, default, default)
+	</insert>
+
+	<!-- 컨텐츠 글 카테고리 등록 -->
+	<insert id="insertContentCategory">
+		insert all
+		<foreach collection="categoryNo" item="no" separator=" ">
+			into content_category
+			values(#{contentNo}, #{no})
+		</foreach>
+		select * from dual
+	</insert>
+
+	<insert id="insertThumbnailFile">
+		insert into Files
+		values(file_seq.nextval, #{contentNo}, #{tFileUrl}, default, 1, #{tFileOriginalName} )
+	</insert>
+
+	<insert id="insertContentFile">
+		insert into Files
+		values(file_seq.nextval, #{contentNo}, #{cFileUrl}, default, 2, #{cFileOriginalName})
+	</insert>
+
+	<update id="updateRecommendation">
+		update content
+		set MD_RECOMMENDATION = #{column}
+		where content_no = #{contentNo}
+	</update>
+
+	<select id="getMdRecommendationCount">
+		select count(*) from content where md_recommendation = 'Y'
+	</select>
+
+	<select id="selectMdList">
+		select * from content
+		join users using(user_no)
+		where md_recommendation = 'Y'
+	</select>
+
+	<select id="checkDownload">
+		select count(*)
+		from downloads
+		where user_no = #{userNo} and content_no = #{contentNo}
+	</select>
+
+	<insert id="downloadRecord">
+		insert into downloads
+		values(DOWNLOADS_SEQ.nextval, #{userNo}, #{contentNo})
+	</insert>
+
+	<update id="updateContent">
+		update content
+		set content_title = #{contentTitle}, content_detail = #{contentDetail}, modify_date = sysdate
+		where content_no = #{contentNo}
+	</update>
+
+	<select id="selectFiles">
+		select *
+		from files
+		where ref_content_no = #{contentNo}
+	</select>
+
+	<update id="updateTFile">
+		update files
+		set FILE_LOCATION = #{newTFileURL}, ORIGINAL_FILE_NAME = #{tFileOriginalName}
+		where ref_content_no = #{contentNo} and FILE_LEVEL = 1
+	</update>
+
+	<update id="updateCFile">
+		update files
+		set FILE_LOCATION = #{newCFileURL}, ORIGINAL_FILE_NAME = #{cFileOriginalName}
+		where ref_content_no = #{contentNo} and FILE_LEVEL = 2
+	</update>
+
+	<delete id="deleteContentCategory">
+		delete from content_category
+		where content_no = #{contentNo}
+	</delete>
 </mapper>

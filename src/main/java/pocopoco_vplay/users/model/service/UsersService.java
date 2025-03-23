@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.mapper.UsersMapper;
+import pocopoco_vplay.users.model.vo.Message;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Service
@@ -83,7 +84,7 @@ public class UsersService {
 
 	public Object getPaymentDate(Users loginUser) {
 		return mapper.getPaymentDate(loginUser);
-		
+
 	}
 
 	public int deleteUserPlan(Users loginUser) {
@@ -92,14 +93,14 @@ public class UsersService {
 
 	public int updateAlertShown(int userNo) {
 		return mapper.updateAlertShown(userNo);
-		
+
 	}
 
 	public int resetAlertShown(int userNo) {
-		int result =mapper.resetAlertShown(userNo);
+		int result = mapper.resetAlertShown(userNo);
 		System.out.println("서비스에서 의 값 : " + result);
 		return result;
-		
+
 	}
 
 	public int updateProfile(HashMap<String, String> map) {
@@ -108,6 +109,34 @@ public class UsersService {
 
 	public String selectProfile(HashMap<String, String> map) {
 		return mapper.selectProfile(map);
+	}
+
+	public Users existGoogleUsers(String googleId) {
+		return mapper.existGoogleUsers(googleId);
+	}
+
+	public ArrayList<Message> selectMyMessage(String userNo) {
+		return mapper.selectMyMessage(userNo);
+	}
+
+	public int updateMessageStatus(String messageNo) {
+		return mapper.updateMessageStatus(messageNo);
+	}
+
+	public int existReceiver(String receiverName) {
+		return mapper.existReceiver(receiverName);
+	}
+
+	public int insertMessage(Message msg) {
+		return mapper.insertMessage(msg);
+	}
+
+	public int getReceiverNo(String receiverName) {
+		return mapper.getReceiverNo(receiverName);
+	}
+
+	public int getUnreadMessageCount(int userNo) {
+		return mapper.getUnreadMessageCount(userNo);
 	}
 
 }

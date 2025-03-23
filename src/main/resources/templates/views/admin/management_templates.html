@@ -22,15 +22,11 @@
 						<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
 						<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
 						<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
-					</select> <input type="text" placeholder="Search">
-					<button type="button">
-						<svg viewBox="0 0 24 24" width="20" height="20">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-					</button>
+					</select>
+					<form>
+						<input type="search" name="search" placeholder="Search" th:value="${searchValue}">
+					</form>
 				</div>
-
 				<table>
 					<thead>
 						<tr>
@@ -43,36 +39,39 @@
 							<th>Action</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr class="request-list" th:each="t : ${list}">
+					<tbody class="request-list-body">
+						<tr class="request-list" th:each="t : ${list}" th:classappend="${t.mdRecommendation == 'Y' ? 'recommended' : ''}">
 							<td>[[${t.contentNo}]]</td>
 							<td>[[${t.menuName}]]</td>
 							<td>[[${t.userId}]]</td>
 							<td>[[${t.contentTitle}]]</td>
 							<td>[[${t.modifyDate}]]</td>
 							<td><span class="status" th:data-contentno="${t.contentNo}" th:onclick="updateStatus(this)" th:classappend="${t.contentStatus == 'Y' ? 'active' : 'inactive'}">[[${t.contentStatus}]]</span></td>
-							<td>⋮</td>
+							<td class="AddSettings">
+								<div>⋮</div>
+								<span id="RecommendedBtn" class="hover_action">
+									<span th:style="${t.mdRecommendation == 'Y' ? 'display: none;' : ''}" class="mdRec">MD추천</span>
+									<span th:style="${t.mdRecommendation == 'N' ? 'display: none;' : ''}" class="mdCancel">MD추천 취소</span>
+								</span>
+							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div class="pagination">
-				<!-- 이전 -->
 				<ul>
-					<th:block th:if="${pi.currentPage >1}">
-						<li class="prev"><a th:href="@{${Loc}(page=${pi.currentPage-1})}" aria-label="Previous"> < </a></li>
+					<th:block th:if="${pi.currentPage > 1}">
+						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName}, search=${searchValue})}" aria-label="Previous"> < </a></li>
 					</th:block>
 					<th:block th:if="${pi.currentPage <=1}">
-						<li class="prev"><a aria-label="Previous"> < </a></li>
+						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
 					</th:block>
-					<!-- 숫자 -->
-					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a class="active" th:href="@{${Loc}(page=${p})}">[[${p}]]</a></li>
-					<!-- 다음 -->
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName}, search=${searchValue})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"> </a></li>
 					<th:block th:if="${pi.currentPage < pi.MaxPage}">
-						<li class="next"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1}, menuName=${menuName}, search=${searchValue})}" aria-label="Next"> > </a></li>
 					</th:block>
 					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
-						<li class="next"><a aria-label="Next"> > </a></li>
+						<li class="next chevron-right"><a aria-label="Next"> > </a></li>
 					</th:block>
 				</ul>
 			</div>
@@ -98,17 +97,99 @@
                 error: data => console.log(data)
             });
         }
-        
+
 		document.getElementById("menuName").addEventListener('change', function() {
 			const menuName = this.value;
 			console.log(menuName);
-			
+
 			if(menuName == "All"){
 				location.href= "/admin/templates";
 			}else{
 				location.href= "/admin/templates/" + menuName;
 			}
 		});
-    </script>
+
+		document.addEventListener("DOMContentLoaded", function () {
+	        document.querySelectorAll(".AddSettings").forEach(td => {
+	            let clickFlag = true;
+
+	            let hoverAction = td.querySelector(".hover_action");
+
+	            td.addEventListener("click", function () {
+	                if (clickFlag) {
+	                    console.log(clickFlag);
+
+	                    let rect = td.getBoundingClientRect(); // 현재 td의 화면 내 위치 가져오기
+
+	                    hoverAction.style.position = "fixed"; // 화면 기준으로 위치 설정
+	                    hoverAction.style.top = `${rect.top + window.scrollY}px`; // td와 같은 높이에 위치
+	                    hoverAction.style.left = `${rect.right - 30}px`; // td 바로 오른쪽에 위치 (+10px 여백)
+	                    hoverAction.style.display = "block";
+	                    hoverAction.style.zIndex = "99999"; // 최상단으로 설정
+	                    clickFlag = false;
+	                }else{
+	                    clickFlag = true;
+	                    hoverAction.style.display = "none";
+
+	                }
+
+	                document.addEventListener("click", function (event) {
+	                    if (!td.contains(event.target)) {
+	                        hoverAction.style.display = "none";
+	                        //console.log(clickFlag);
+	                    }
+	                });
+	            });
+	        });
+	    });
+
+
+
+	const mdButtons = document.querySelectorAll("#RecommendedBtn .mdRec, #RecommendedBtn .mdCancel");
+
+	for (const button of mdButtons) {
+		button.addEventListener('click', function () {
+			let tr = this.closest("tr");
+			let mdRecButton = tr.querySelector(".mdRec");
+			let mdCancelButton = tr.querySelector(".mdCancel");
+
+			fetch("/admin/mdRecommendation", {
+				method: "put",
+				headers: { 'content-type': 'application/json; charset=UTF-8' },
+				body: JSON.stringify({
+					contentNo: tr.querySelector('td:first-child').innerText.trim(),
+					column: this.classList.contains("mdRec") ? "Y" : "N"
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data === 1) {
+					if (this.classList.contains("mdRec")) {
+						mdRecButton.style.display = "none";
+						mdCancelButton.style.display = "inline";
+						tr.style.backgroundColor = "#162331";
+						alert("MD추천이 적용되었습니다.");
+					} else {
+						mdCancelButton.style.display = "none";
+						mdRecButton.style.display = "inline";
+						tr.style.backgroundColor = "#262d34";
+						alert("MD추천이 취소되었습니다.");
+					}
+				}else if(data === -1){
+					console.log(data);
+					alert("MD추천 최대 갯수는 8개까지 입니다.");
+				}
+				else {
+					alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
+					location.reload();
+				}
+			});
+
+
+		});
+	}
+
+
+	</script>
 </body>
 </html>

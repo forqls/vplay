@@ -12,11 +12,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-public class File {
+public class Files {
 	private int fileNo;
-	private String fileName;
-	private String fileReName;
-	private String thumbnail;
+	private String refContentNo;
 	private String fileLocation;
 	private String fileStatus;
+	private int fileLevel;
+	private String originalFileName;
 }

@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pocopoco_vplay.admin.model.mapper.AdminMapper">
+
+	<select id="selectUser">
+		select user_id
+		from users
+		where user_no = #{userNo}
+	</select>
+
 	<select id="getUsersCount">
 		select count(*)
 		from users
+
+		<if test="search != null and search != ''">
+			where user_name like '%${search}%'
+		</if>
 	</select>
 
 	<select id="selectAllUser">
 		select *
 		from users
+		<if test="search != null and search != ''">
+			where user_name like '%${search}%'
+		</if>
 		order by user_no desc
 	</select>
 
@@ -19,6 +33,9 @@
 		where board_type = 1
 		<if test="menuNo != null">
 			and menu_no = #{menuNo}
+		</if>
+		<if test="search != null and search != ''">
+			and content_title like '%${search}%'
 		</if>
 	</select>
 
@@ -32,14 +49,12 @@
 		<if test="menuNo != null">
 			and menu_no = #{menuNo}
 		</if>
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
+		</if>
 		order by content_no desc
 	</select>
 
-	<select id="selectUser">
-		select user_id
-		from users
-		where user_no = #{userNo}
-	</select>
 
 	<select id="getTemplatesCount">
 		select count(*)
@@ -57,7 +72,6 @@
 		</if>
 	</select>
 
-
 	<select id="selectAllTemplates">
 		select *
 		from content c
@@ -72,6 +86,9 @@
 		<if test="menuNo != null">
 			and cat.menu_no = #{menuNo}
 		</if>
+		<if test="search != null and search != ''">
+			and (c.content_title like '%${search}%' or c.content_detail like '%${search}%')
+		</if>
 		order by c.content_no desc
 	</select>
 
@@ -80,6 +97,12 @@
 		from content
 		join board using(content_no)
 		where board_type = 2
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
+		</if>
 	</select>
 
 	<select id="selectAllRequestPost">
@@ -88,6 +111,12 @@
 		join board using(content_no)
 		join menu using(menu_no)
 		where board_type = 2
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
+		</if>
 		order by content_no desc
 	</select>
 

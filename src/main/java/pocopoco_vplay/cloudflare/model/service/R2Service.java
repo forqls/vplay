@@ -1,6 +1,8 @@
 package pocopoco_vplay.cloudflare.model.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.UUID;
 
@@ -15,6 +17,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
@@ -68,5 +71,30 @@ public class R2Service {
 		        e.printStackTrace();
 		        return false;
 		    }
+	}
+	
+	public byte[] downloadFile(String fileName) {
+	    GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+	            .bucket(bucketName)
+	            .key(fileName)
+	            .build();
+
+	    try (InputStream inputStream = s3Client.getObject(getObjectRequest);
+	         ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+	        byte[] buffer = new byte[4096];
+	        int bytesRead;
+	        while ((bytesRead = inputStream.read(buffer)) != -1) {
+	            outputStream.write(buffer, 0, bytesRead);
+	        }
+
+	        System.out.println("✅ 파일 다운로드 성공: " + fileName);
+	        return outputStream.toByteArray();
+
+	    } catch (IOException | SdkException e) {
+	        System.err.println("❌ 파일 다운로드 실패: " + fileName);
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 }
