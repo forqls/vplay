@@ -23,17 +23,28 @@
 	</select>
 
 	<select id="selectCategoryMyProjects">
-		SELECT c.*,
-		(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count
+		SELECT c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,c.MD_RECOMMENDATION, b.board_type, m.menu_name,
+		(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name
 		FROM content c
 		left JOIN board b ON c.content_no = b.content_no
 		left JOIN content_category cc on c.content_no = cc.content_no
 		left join category ccc on cc.category_no = ccc.category_no
 		left JOIN menu m ON ccc.menu_no = m.menu_no
-		WHERE c.user_no =3 and b.board_type is null and m.menu_name is not null and c.content_status='Y'
+		WHERE c.user_no =#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='Y'
 		<if test="menu != 'All'">
 			AND m.menu_name =#{menu}
 		</if>
+		group by 
+	        c.CONTENT_NO,
+	        c.CONTENT_TITLE,
+	        c.CREATE_DATE,
+	        c.MODIFY_DATE,
+	        c.CONTENT_STATUS,
+	        c.DELETE_STATUS,
+	        c.USER_NO,
+	        c.VIEWS,
+	        c.MD_RECOMMENDATION,
+	        b.board_type, m.menu_name
 		<if test="sort == 'newest'">
 			order by c.create_date
 		</if>
@@ -52,13 +63,26 @@
 	</update>
 
 	<select id="selectMyTrash">
-		select c.*,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count , b.board_type,m.menu_name
+		select c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,
+        	   c.MD_RECOMMENDATION,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count , 
+        	   b.board_type,m.menu_name, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name
 		from content c
 		left join board b on c.content_no = b.content_no
 		left JOIN content_category cc on c.content_no = cc.content_no
 		left join category ccc on cc.category_no = ccc.category_no
 		left JOIN menu m ON ccc.menu_no = m.menu_no
 		where c.user_no=#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='N'
+        group by 
+	        c.CONTENT_NO,
+	        c.CONTENT_TITLE,
+	        c.CREATE_DATE,
+	        c.MODIFY_DATE,
+	        c.CONTENT_STATUS,
+	        c.DELETE_STATUS,
+	        c.USER_NO,
+	        c.VIEWS,
+	        c.MD_RECOMMENDATION,
+	        b.board_type, m.menu_name
 	</select>
 
 	<select id="selectCategoryMyTrash">
@@ -69,7 +93,7 @@
 		left JOIN content_category cc on c.content_no = cc.content_no
 		left join category ccc on cc.category_no = ccc.category_no
 		left JOIN menu m ON ccc.menu_no = m.menu_no
-		WHERE c.user_no =3 and b.board_type is null and m.menu_name is not null and c.content_status='N'
+		WHERE c.user_no =#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='N'
 		<if test="menu != 'All'">
 			AND m.menu_name =#{menu}
 		</if>
@@ -85,7 +109,7 @@
 		select *
 		from (
 			select 
-			LISTAGG(cg.category_name, ',') WITHIN GROUP (ORDER BY cg.category_name) AS category_name, c.content_no, c.content_title, u.user_nickname, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
+			LISTAGG(cg.category_name, ',') WITHIN GROUP (ORDER BY cg.category_name) AS category_name, c.content_no, c.content_title, u.user_nickname,m.menu_no, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
 			from content c
 			left join users u on(c.user_no = u.user_no)
 			left join board b on(c.content_no = b.content_no)
@@ -93,7 +117,7 @@
 			left join category cg on(cc.category_no = cg.category_no)
 			left join menu m on(cg.menu_no = m.menu_no)
 			left join likes lk2 on (c.content_no = lk2.content_no)
-			where b.board_type is null and m.menu_name = #{menuName}
+			where b.board_type is null and m.menu_name = #{menuName} and c.content_status='Y'
 		<if test="categoryArray != null">
 			and cg.category_name in
 			<foreach item="category" collection="categoryArray" open="(" separator="," close=")">
@@ -103,7 +127,7 @@
 		<if test="search != null">
 			and CONTENT_TITLE like '%' || #{search} || '%'
 		</if>
-		group by c.content_no, c.content_title, u.user_nickname
+		group by c.content_no, c.content_title, u.user_nickname, m.menu_no
 		order by c.content_no desc)
 		<if test="menuNameNum == 'video Templates'">
 			where rownum <![CDATA[<]]>=
