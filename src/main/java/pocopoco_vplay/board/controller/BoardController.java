@@ -250,50 +250,43 @@ public class BoardController {
 	@GetMapping("{menuName:[a-zA-Z-]+}")
 	public String templateList(@PathVariable("menuName") String menuName, Model model) {
 		HashMap<String, Object> map = new HashMap<>();
-		String joinURL = null;
 		int menuNum = 0;
 		switch (menuName) {
 		case "video-template-list":
 			menuName = "video Templates";
-			joinURL = "video-templates_list";
 			menuNum = 1;
 			break;
 		case "sound-effects-list":
 			menuName = "Sound Effects";
-			joinURL = "sound-effects_list";
 			menuNum = 3;
 			break;
 		case "music-list":
 			menuName = "Music";
-			joinURL = "music_list";
 			menuNum = 2;
 			break;
 		case "graphic-template-list":
 			menuName = "Graphic Templates";
-			joinURL = "graphic-templates_list";
 			menuNum = 4;
 			break;
 		case "stock-video-list":
 			menuName = "Stock Video";
-			joinURL = "stock-video_list";
 			menuNum = 5;
 			break;
 		case "photo-list":
 			menuName = "Photos";
-			joinURL = "photo_list";
 			menuNum = 6;
 			break;
 		case "font-list":
 			menuName = "Fonts";
-			joinURL = "font_list";
 			menuNum = 7;
 		}
 		map.put("menuName", menuName);
 		ArrayList<Content> cList = bService.allTemplateList(map);
 		ArrayList<Content> cCategory = bService.allCategory(menuNum);
 		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
+		System.out.println(cList);
 		model.addAttribute("cList", cList).addAttribute("cCategory", cCategory).addAttribute("cPopularCategory", cPopularCategory);
-		return joinURL;
+		return "content_list";
 	}
 
 	@GetMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\\\+&-]+}")
@@ -469,32 +462,8 @@ public class BoardController {
 		
 		ArrayList<Content> list = bService.allTemplateList(map);
 		
-		String joinURL = null;
 		String[] categories = content.getCategoryName().split(",");
 		
-		switch (menuName) {
-		case "video-templates":
-			joinURL = "video-templates_detail";
-			break;
-		case "music":
-			joinURL = "music_detail";
-			break;
-		case "sound-effect":
-			joinURL = "sound-effects_detail";
-			break;
-		case "graphic-templates":
-			joinURL = "graphic-templates_detail";
-			break;
-		case "stock-video":
-			joinURL = "stock-video_detail";
-			break;
-		case "photo":
-			joinURL = "photo_detail";
-			break;
-		default:
-			joinURL = "font_detail";
-			break;
-		}
 		System.out.println(content);
 		System.out.println(menuName);
 		System.out.println(fList);
@@ -504,7 +473,7 @@ public class BoardController {
 		model.addAttribute("aList", list);
 		model.addAttribute("fList", fList);
 		
-		return joinURL;
+		return "content_detail";
 	}
 
 	@PostMapping("updateRequestForm")
