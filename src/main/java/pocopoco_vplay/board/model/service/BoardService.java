@@ -249,4 +249,5 @@ public class BoardService {
 		return mapper.deleteContentCategory(contentNo);
 	}
 
+
 }
