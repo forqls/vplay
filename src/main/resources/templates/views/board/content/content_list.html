@@ -193,8 +193,10 @@
         	}else{
         		url = `/board/${menuNameURL}/${search}`;
         	}
-        }else{
+        }else if(checkboxValue != "empty"){
         	url = `/board/${menuNameURL}/${checkboxValue}`;
+        }else{
+        	url = `/board/${menuNameURL}`;
         }
         console.log("변경 url : " +url);
         
