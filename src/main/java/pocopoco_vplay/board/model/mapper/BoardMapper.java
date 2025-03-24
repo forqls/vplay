@@ -125,4 +125,6 @@ public interface BoardMapper {
    void updateCFile(@Param("newCFileURL")String newCFileURL, @Param("cFileOriginalName")String cFileOriginalName, @Param("contentNo")int contentNo);
 
    int deleteContentCategory(@Param("contentNo")int contentNo);
+
+   ArrayList<Content> selectDownloadsCategorySort(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
 }

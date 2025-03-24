@@ -71,5 +71,7 @@ public interface UsersMapper {
 
 	int getUnreadMessageCount(int userNo);
 
+	ArrayList<Content> selectMyDownloads(int userNo);
+
 
 }

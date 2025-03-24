@@ -250,4 +250,9 @@ public class BoardService {
 	}
 
 
+	public ArrayList<Content> selectDownloadsCategorySort(String menu, int userNo, String sort) {
+		return mapper.selectDownloadsCategorySort(menu,userNo,sort);
+	}
+
+
 }

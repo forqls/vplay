@@ -574,4 +574,52 @@
 		delete from content_category
 		where content_no = #{contentNo}
 	</delete>
+	
+	<select id="selectDownloadsCategorySort">
+		SELECT 
+		    c.CONTENT_NO,
+		    c.CONTENT_TITLE,
+		    c.CREATE_DATE,
+		    c.MODIFY_DATE,
+		    c.CONTENT_STATUS,
+		    c.DELETE_STATUS,
+		    c.USER_NO,
+		    c.VIEWS,
+		    c.MD_RECOMMENDATION,
+		    (SELECT COUNT(*) FROM likes l WHERE l.content_no = c.content_no) AS like_count,
+		    b.board_type,
+		    m.menu_name,
+		    (
+		        SELECT LISTAGG(cg.category_name, ',') 
+		               WITHIN GROUP (ORDER BY cg.category_name)
+		        FROM content_category cc
+		        JOIN category cg ON cc.category_no = cg.category_no
+		        WHERE cc.content_no = c.content_no
+		    ) AS category_name
+		FROM content c
+		LEFT JOIN board b ON c.content_no = b.content_no
+		LEFT JOIN users u ON c.user_no = u.user_no
+		LEFT JOIN downloads d ON c.content_no = d.content_no
+		LEFT JOIN menu m ON (
+		    SELECT cg.menu_no
+		    FROM content_category cc
+		    JOIN category cg ON cc.category_no = cg.category_no
+		    WHERE cc.content_no = c.content_no
+		    FETCH FIRST 1 ROWS ONLY
+		) = m.menu_no
+		WHERE d.user_no = #{userNo}
+		  AND b.board_type IS NULL
+		  AND m.menu_name IS NOT NULL
+		  AND c.content_status = 'Y'
+		<if test="menu != 'All'">
+			AND m.menu_name =#{menu}
+		</if>
+		<if test="sort == 'newest'">
+			order by c.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by c.views desc
+		</if>
+	</select>
+	
 </mapper>
