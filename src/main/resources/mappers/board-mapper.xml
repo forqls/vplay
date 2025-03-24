@@ -121,7 +121,8 @@
 		select *
 		from (
 			select 
-			LISTAGG(cg.category_name, ',') WITHIN GROUP (ORDER BY cg.category_name) AS category_name, c.content_no, c.content_title, u.user_nickname,m.menu_no, (select count(*) from likes lk where lk.content_no = c.content_no) as like_count
+			LISTAGG(cg.category_name, ',') WITHIN GROUP (ORDER BY cg.category_name) AS category_name, c.content_no, c.content_title, u.user_nickname,m.menu_no, 
+			(select count(*) from likes lk where lk.content_no = c.content_no) as like_count, (select count(*) from downloads d where d.content_no = c.content_no) AS download_count
 			from content c
 			left join users u on(c.user_no = u.user_no)
 			left join board b on(c.content_no = b.content_no)
