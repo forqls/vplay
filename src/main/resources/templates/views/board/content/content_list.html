@@ -25,9 +25,9 @@
 
         <main class="content">
 
-<!--             <div class="search-bar"> -->
-<!--                 <input type="text" placeholder="Search"> -->
-<!--             </div> -->
+            <div class="search-bar">
+                <input type="text" placeholder="Search">
+            </div>
 
             <div class="video-grid">
                 <div class="video-card" th:each="vl: ${cList}">
@@ -49,6 +49,8 @@
                     </div>
                 </div>
             </div>
+            
+            
         </main>
     </div>
     <script th:inline="javascript">
@@ -79,8 +81,6 @@
 	
 	const menuNameURL = (window.location.pathname).split("/")[2];
     console.log(menuNameURL);
-    
-    
     
 	window.onload=()=>{
 		thumbnailPlay();
@@ -120,7 +120,6 @@
     					checkboxArr.push(c.children[0].value);
     				}
     			}
-    			
     			let newUrl = null;
     			let checkboxValue = "";
     			
@@ -140,7 +139,6 @@
 				
     		})
     	})
-    	
     	//검색
 		const input = document.getElementsByTagName("input")[5];
     	console.log(input);
@@ -157,7 +155,6 @@
 				updatePage(lastSegment2, 0 ,search);
 			}
 		});
-    	
     }
     
 	window.addEventListener("popstate", (event) =>{
@@ -239,7 +236,7 @@
 							
 							video.appendChild(source);
 							div2.appendChild(video);
-						}else if(i.menuNo == 4 || i.menuNo == 6 || i.menuNo == 7){
+						}else if(i.menuNo == 4 || i.menuNo == 6 || i.menuNo == 7 || i.menuNo == 2){
 							const img = document.createElement("img");
 							img.id="video-preview";
 							
@@ -300,7 +297,6 @@
     	[...thumbnailList].map((thumbnail, index, array)=>{
     		const contentNo = thumbnail.parentElement.children[1].children[0].value;
     		const menuNo = thumbnail.parentElement.children[1].children[1].value;
-    		console.log(menuNo);
     		
     		fetch("/board/select-thumbnail/" + contentNo,{
     			method : "get",

@@ -110,7 +110,9 @@
 			and (c.content_title like '%${search}%' or c.content_detail like '%${search}%')
 		</if>
 		group by c.content_no, c.content_title, c.create_date, c.modify_date, c.content_status, c.delete_status, c.user_no, c.md_recommendation, m.menu_name
-		order by c.content_no desc
+		order by
+			CASE WHEN c.md_recommendation = 'Y' THEN 0 ELSE 1 END, 
+			c.content_no desc
 	</select>
 
 	<select id="getrequestPostCount">
