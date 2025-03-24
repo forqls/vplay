@@ -535,8 +535,10 @@ public class BoardController {
 	@ResponseBody
 	public int updateReply(@ModelAttribute Reply r, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
-		r.setUserNo(loginUser.getUserNo()); // 여기서 userNo가 제대로 세팅되는지 확인해요.
+		r.setUserNo(loginUser.getUserNo());
 		System.out.println("userNo ==================================== " + r.getUserNo());
+		System.out.println("userNo ==================================== " + r.getReplyDetail());
+
 		int result = bService.updateReply(r); // updateReply 호출
 		System.out.println("update 결과 ======================================= " + result);
 

@@ -237,7 +237,7 @@
 
 				<!-- 댓글 내용 -->
 				<td>
-					<textarea readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea>
+					<textarea id="modifyReply" readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea>
 				</td>
 
 				<!-- 작성일 -->
@@ -310,6 +310,7 @@
 	}
 	document.querySelectorAll('.updateReply').forEach(button => {
 		button.addEventListener('click', function() {
+			const modifyReply = document.getElementById('modifyReply').value;
 			const replyRow = this.closest('tr');
 			const replyDetailTextarea = replyRow.querySelector('td textarea');
 			const replyNo = replyRow.querySelector("input[name='replyId']").value;
@@ -329,7 +330,8 @@
 			this.textContent = '저장하기';
 			this.classList.remove("updateReply");
 			this.classList.add("saveReply");
-
+			console.log("modifyReply : " + modifyReply);
+			console.log("replyDetailTextarea : "+ replyDetailTextarea.value());
 
 			this.replaceWith(this.cloneNode(true));
 			const saveButton = replyRow.querySelector('.saveReply');
@@ -342,7 +344,7 @@
 					url: "/board/updateReply",
 					data: { replyNo: replyNo, replyDetail: updatedReply, userNo: /*[[${session.loginUser.userNo}]]*/ 0},
 					success: data => {
-						location.reload();
+						/*location.reload();*/
 						console.log("data" + data);
 						alert("댓글이 수정되었습니다.");
 						replyDetailTextarea.setAttribute("readonly", true);
