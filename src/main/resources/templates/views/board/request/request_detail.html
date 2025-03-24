@@ -237,6 +237,7 @@
 
 				<!-- 댓글 내용 -->
 				<td>
+
 					<textarea id="modifyReply" readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea>
 				</td>
 
@@ -308,9 +309,15 @@
 
 
 	}
+	let replyModifyDetail = '';
+	document.getElementById('modifyReply').addEventListener('input', function() {
+		replyModifyDetail = this.value;
+		console.log("replyModifyDetail ==========" + replyModifyDetail);
+	});
 	document.querySelectorAll('.updateReply').forEach(button => {
 		button.addEventListener('click', function() {
-			const modifyReply = document.getElementById('modifyReply').value;
+			console.log(replyModifyDetail);
+			let modifyReply = document.getElementById('modifyReply').value;
 			const replyRow = this.closest('tr');
 			const replyDetailTextarea = replyRow.querySelector('td textarea');
 			const replyNo = replyRow.querySelector("input[name='replyId']").value;
@@ -331,18 +338,18 @@
 			this.classList.remove("updateReply");
 			this.classList.add("saveReply");
 			console.log("modifyReply : " + modifyReply);
-			console.log("replyDetailTextarea : "+ replyDetailTextarea.value());
+			//console.log("replyDetailTextarea : "+ replyDetailTextarea.value());
 
 			this.replaceWith(this.cloneNode(true));
 			const saveButton = replyRow.querySelector('.saveReply');
 
 			saveButton.addEventListener('click', function() {
-				const updatedReply = replyDetailTextarea.value;
+				//const updatedReply = replyDetailTextarea.value;
 
 				$.ajax({
 					type: "POST",
 					url: "/board/updateReply",
-					data: { replyNo: replyNo, replyDetail: updatedReply, userNo: /*[[${session.loginUser.userNo}]]*/ 0},
+					data: { replyNo: replyNo, replyDetail: modifyReply, userNo: /*[[${session.loginUser.userNo}]]*/ 0},
 					success: data => {
 						/*location.reload();*/
 						console.log("data" + data);
