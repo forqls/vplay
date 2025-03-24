@@ -71,7 +71,8 @@
                 <h2 th:text="${content.menuName}"></h2>
                 <h3 th:text="${content.contentTitle}"></h3>
                 <p>by [[${content.userNickName}]]</p>
-                <div class="pricing-box" th:if='${session.loginUser == null || session.loginUser.userPlan != "All Rounder" || session.loginUser.userPlan != "Frame Pro"}'>
+                <th:block th:if='${session.loginUser == null || (session.loginUser.userPlan != "Frame Pro" && session.loginUser.userPlan != "All Rounder")}'>
+                <div class="pricing-box">
                     <h3>Frame Pro</h3>
                     <div class="price">
                         <span class="amount">16,500</span>
@@ -95,6 +96,7 @@
                         </div>
                     </div>
                 </div>
+                </th:block>
 				
                 <div class="action-buttons" th:if='${session.loginUser != null && (session.loginUser.userPlan == "Frame Pro" || session.loginUser.userPlan == "All Rounder")}'>
                     <button type="button" class="download-btn" onclick="downloadFile()">Download</button>
