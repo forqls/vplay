@@ -309,11 +309,11 @@
 
 
 	}
-	// let replyModifyDetail = '';
-	// document.getElementById('modifyReply').addEventListener('input', function() {
-	// 	replyModifyDetail = this.value;
-	// 	console.log("replyModifyDetail ==========" + replyModifyDetail);
-	// });
+	let replyModifyDetail = '';
+	document.getElementById('modifyReply').addEventListener('input', function() {
+		replyModifyDetail = this.value;
+		console.log("replyModifyDetail ==========" + replyModifyDetail);
+	});
 	document.querySelectorAll('.updateReply').forEach(button => {
 		button.addEventListener('click', function() {
 			const replyRow = this.closest('tr');
