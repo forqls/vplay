@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
 import pocopoco_vplay.commom.Pagination;
@@ -119,6 +120,9 @@ public class BoardController {
 			result = bService.menuLikeTo(num, userNo);
 			fontList.get(f).setLikeTo(result);
 		}
+		
+		System.out.println(videoTemplateList);
+		
 		mv.addObject("videoTemplateList", videoTemplateList).addObject("musicList", musicList).addObject("soundEffectsList", soundEffectsList).addObject("graphicTemplateList", graphicTemplateList);
 		mv.addObject("stockVideoList", stockVideoList).addObject("photosList", photosList).addObject("fontList", fontList);
 		mv.setViewName("all_menu");
@@ -246,50 +250,43 @@ public class BoardController {
 	@GetMapping("{menuName:[a-zA-Z-]+}")
 	public String templateList(@PathVariable("menuName") String menuName, Model model) {
 		HashMap<String, Object> map = new HashMap<>();
-		String joinURL = null;
 		int menuNum = 0;
 		switch (menuName) {
 		case "video-template-list":
 			menuName = "video Templates";
-			joinURL = "video-templates_list";
 			menuNum = 1;
 			break;
 		case "sound-effects-list":
 			menuName = "Sound Effects";
-			joinURL = "sound-effects_list";
 			menuNum = 3;
 			break;
 		case "music-list":
 			menuName = "Music";
-			joinURL = "music_list";
 			menuNum = 2;
 			break;
 		case "graphic-template-list":
 			menuName = "Graphic Templates";
-			joinURL = "graphic-templates_list";
 			menuNum = 4;
 			break;
 		case "stock-video-list":
 			menuName = "Stock Video";
-			joinURL = "stock-video_list";
 			menuNum = 5;
 			break;
 		case "photo-list":
 			menuName = "Photos";
-			joinURL = "photo_list";
 			menuNum = 6;
 			break;
 		case "font-list":
 			menuName = "Fonts";
-			joinURL = "font_list";
 			menuNum = 7;
 		}
 		map.put("menuName", menuName);
 		ArrayList<Content> cList = bService.allTemplateList(map);
 		ArrayList<Content> cCategory = bService.allCategory(menuNum);
 		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
+		System.out.println(cList);
 		model.addAttribute("cList", cList).addAttribute("cCategory", cCategory).addAttribute("cPopularCategory", cPopularCategory);
-		return joinURL;
+		return "content_list";
 	}
 
 	@GetMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\\\+&-]+}")
@@ -454,40 +451,29 @@ public class BoardController {
 
 	@GetMapping("/{menuName:[a-zA-Z-]+}/{no:\\d+}")
 	public String videoTempDetail(@PathVariable("menuName") String menuName, @PathVariable("no") int contentNo, Model model, HttpSession session) {
-		Content content = bService.allMenuDetail(contentNo);
-//		Users u = (Users)session.getAttribute("loginUser");
-//		System.out.println(u.getUserPlan());
-		model.addAttribute("content", content);
-		String joinURL = null;
-		String[] categories = content.getCategoryName().split(",");
-		model.addAttribute("categories", categories);
+		HashMap<String, Object> map = new HashMap<>();
 		
-		switch (menuName) {
-		case "video-templates":
-			joinURL = "video-templates_detail";
-			break;
-		case "music":
-			joinURL = "music_detail";
-			break;
-		case "sound-effect":
-			joinURL = "sound-effects_detail";
-			break;
-		case "graphic-templates":
-			joinURL = "graphic-templates_detail";
-			break;
-		case "stock-video":
-			joinURL = "stock-video_detail";
-			break;
-		case "photo":
-			joinURL = "photo_detail";
-			break;
-		default:
-			joinURL = "font_detail";
-			break;
-		}
+		Content content = bService.allMenuDetail(contentNo);
+		ArrayList<Files> fList = bService.contentFile(contentNo);
+		
+		
+		map.put("menuName", content.getMenuName());
+		map.put("recentList", 6);
+		
+		ArrayList<Content> list = bService.allTemplateList(map);
+		
+		String[] categories = content.getCategoryName().split(",");
+		
 		System.out.println(content);
 		System.out.println(menuName);
-		return joinURL;
+		System.out.println(fList);
+		
+		model.addAttribute("content", content);
+		model.addAttribute("categories", categories);
+		model.addAttribute("aList", list);
+		model.addAttribute("fList", fList);
+		
+		return "content_detail";
 	}
 
 	@PostMapping("updateRequestForm")
@@ -571,12 +557,14 @@ public class BoardController {
 	@PostMapping("writeContent")
 	public String contentWrite(@ModelAttribute Content content, @RequestParam("categoryNum") ArrayList<Integer> categoryNo ,
 							   @RequestParam("t-file") MultipartFile tFile,
-							   @RequestParam("c-file") MultipartFile cFile, HttpSession session,
-							   @Value("${cloudflare.r2.public-url}") String publicUrl) {
+							   @RequestParam("c-file") MultipartFile cFile, HttpSession session) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
 		content.setUserNo(loginUser.getUserNo());
 		System.out.println("c-file : " + cFile);
 		System.out.println("t-file : " + tFile);
+		
+		String tFileOriginalName = tFile.getOriginalFilename();
+		String cFileOriginalName = cFile.getOriginalFilename();
 		
 		String tFileUrl = null;
 		String cFileUrl = null;
@@ -592,8 +580,8 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		
-		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo);
-		int result4 = bService.insertContentFile(cFileUrl, contentNo);
+		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
+		int result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
 		
 		System.out.println(content);
 		
@@ -603,11 +591,133 @@ public class BoardController {
 		}else {
 			throw new BoardException("컨텐츠 등록에 실패하였습니다.");
 		}
+	}
+	
+	@PostMapping("updateContentJoin")
+	public String contentUpdateJoin(@ModelAttribute Content content, HttpSession session, Model model) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		int contentNo = content.getContentNo();
+		
+		content = bService.allMenuDetail(contentNo);
+		int menuNo = content.getMenuNo();
+		
+		ArrayList<Content> categoryList = bService.menuCategoryList(menuNo);
+		
+		if(loginUser.getUserNo() == content.getUserNo()) {
+			ArrayList<Files> fList = bService.contentFile(contentNo);
+			
+			System.out.println(content);
+			System.out.println(categoryList);
+			
+			Files tFile = new Files();
+			Files cFile = new Files();
+			
+			for(Files f : fList) {
+				if(f.getFileLevel() == 1) {
+					tFile = f;
+				}else {
+					cFile = f;
+				}
+			}
+			
+			System.out.println(tFile);
+			System.out.println(cFile);
+			
+			model.addAttribute("categoryList", categoryList);
+			model.addAttribute("content", content);
+			model.addAttribute("tFile", tFile);
+			model.addAttribute("cFile", cFile);
+			return "content_update";
+		}else {
+			throw new BoardException("해당 아이디와 글쓴이가 일치하지 않습니다.");
+		}
 		
 	}
 	
-	
+	@PostMapping("updateContent")
+	public String contentUpdate(@ModelAttribute Content content, @RequestParam("categoryNum") ArrayList<Integer> categoryNo ,
+			   					@RequestParam("t-file") MultipartFile tFile,
+			   					@RequestParam("c-file") MultipartFile cFile, HttpSession session) {
+		
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+		content.setUserNo(userNo);
+		
+		int contentNo = content.getContentNo();
+		//글 수정
+		int result = bService.updateContent(content);
+		
+		System.out.println("c-file : " + cFile);
+		System.out.println("t-file : " + tFile);
+		
 
+		Files originalTFile = null;
+		Files originalCFile = null;
+		
+		ArrayList<Files> flist = bService.selectFiles(contentNo); 
+		
+		for(Files f : flist) {
+			if(f.getFileLevel() == 1) {
+				originalTFile = f;
+			}else {
+				originalCFile = f;
+			}
+		}
+		
+		String tFileOriginalName = "";
+		String cFileOriginalName = "";
+		
+		if(!tFile.isEmpty() || !cFile.isEmpty()) {
+			
+			if(!tFile.isEmpty()) {
+				tFileOriginalName = tFile.getOriginalFilename();
+				
+				//원래 있던 파일 가져오고
+				String originalTFileName = (originalTFile.getFileLocation()).substring((originalTFile.getFileLocation()).lastIndexOf("/") +1 );
+				
+				//파일 삭제
+				r2Service.deleteFile(originalTFileName);
+				
+				//새로운 파일 추가
+				try {
+					String newTFileURL = r2Service.uploadFile(tFile);
+					bService.updateTFile(newTFileURL, tFileOriginalName, contentNo);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(!cFile.isEmpty()) {
+				cFileOriginalName = cFile.getOriginalFilename();
+				
+				//원래 있던 파일 가져오고
+				String originalCFileName = (originalCFile.getFileLocation()).substring((originalCFile.getFileLocation()).lastIndexOf("/") +1 );
+				
+				//파일 삭제
+				r2Service.deleteFile(originalCFileName);
+				
+				//새로운 파일 추가
+				try {
+					String newCFileURL = r2Service.uploadFile(cFile);
+					bService.updateCFile(newCFileURL, cFileOriginalName, contentNo);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		//카테고리 삭제
+		int result3 = bService.deleteContentCategory(contentNo);
+		
+		//카테고리 다시 추가
+		int result2 = bService.insertContentCategory(categoryNo, contentNo);
+		
+		if(result + result2 + result3 >= 3) {
+			return "redirect:/board/all_menu";
+		}else {
+			throw new BoardException("컨텐츠 등록에 실패하였습니다.");
+		}
+	}
 
 
 }

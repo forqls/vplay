@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPLAY - Stock Videos</title>
+    <link href="/css/board/videoTemplates/list.css" rel="stylesheet">
+    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	
+    <div class="main-content">
+        <aside class="sidebar">
+            <div class="category-title">Categories</div>
+            <ul class="category-list">
+            	<th:block th:each="vc : ${cCategory}">
+            	<li>
+            	<input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}">
+            	<a>[[${vc.categoryName}]]</a>
+            	</li>
+            	</th:block>
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <div class="search-bar">
+                <input type="text" placeholder="Search">
+            </div>
+
+            <div class="video-grid">
+                <div class="video-card" th:each="vl: ${cList}">
+                    <div class="video-thumbnail"></div>
+                    <div class="video-info">
+                    	<input type="hidden" th:value="${vl.contentNo}"/>
+                    	<input type="hidden" th:value="${vl.menuNo}">
+                        <h3>[[${vl.contentTitle}]]</h3>
+                        <p>[[${vl.userNickName}]]</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script th:inline="javascript">
+    const divs = document.querySelector('.video-grid');
+    
+    [...divs.children].map((video, index, array) =>{
+		video.addEventListener('click', function(){
+			const contentNo = video.children[1].children[0].value;
+			const menuNo = video.children[1].children[1].value;
+			let menuName = "";
+			console.log(contentNo);
+			console.log(menuNo);
+			switch(menuNo){
+			case "1": menuName = "video-templates"; break;
+			case "2": menuName = "music"; break;
+			case "3": menuName = "sound-effect"; break;
+			case "4": menuName = "graphic-templates"; break;
+			case "5": menuName = "stock-video"; break;
+			case "6": menuName = "photo"; break;
+			case "7": menuName = "font";
+			}
+			
+			console.log(menuName);
+			
+			location.href = "/board/" + menuName + "/" + contentNo;
+		})
+	})
+	
+	const menuNameURL = (window.location.pathname).split("/")[2];
+    console.log(menuNameURL);
+    
+    
+    
+	window.onload=()=>{
+    	
+    	console.log(divs);
+    	
+    	const checkbox = document.querySelectorAll(".category-checkbox");
+    	/*<![CDATA[*/
+    	const content = /*[[${cList}]]*/1;
+    	/*]]>*/
+    	console.log(content);
+    	
+    	let lastSegment = window.location.pathname.split("/").pop();
+    	let lastSegment2 = lastSegment.split("-").pop();
+    	
+    	console.log("lastSegment2 : " + lastSegment2);
+		
+    	if(lastSegment2 != "list"){
+			[...checkbox].map((video, index, array) =>{
+				video.checked = false;
+				for(let i =0; i<content.length ; i++){
+					if(content[i].categoryName == video.value){
+						video.checked = true;
+					}
+				}
+			})
+    	}
+    	
+    	const categoryList = document.querySelector('.category-list');
+//     	console.log(categoryList);
+    	const checkboxArr = [];
+    	[...categoryList.children].map((category, index, array) =>{
+    		const checkbox = category.children[0];
+    		checkbox.addEventListener('click', (event)=>{
+    			
+    			for(const c of categoryList.children){
+    				if(c.children[0].checked){
+    					checkboxArr.push(c.children[0].value);
+    				}
+    			}
+    			
+    			let newUrl = null;
+    			let checkboxValue = "";
+    			
+    			if(checkboxArr.length==0){
+    				checkboxValue = "empty";
+    				newUrl = `/board/${menuNameURL}`;
+    			}else{
+    				let str = checkboxArr.join("+");
+					
+					checkboxValue = str.replaceAll(" ", "-");
+	    			newUrl = `/board/${menuNameURL}/${checkboxValue}`;
+    			}
+    			
+    			checkboxArr.length = 0;
+    		
+				updatePage(checkboxValue, 1, null);
+    		})
+    	})
+    	
+    	//검색
+		const input = document.getElementsByTagName("input")[5];
+    	console.log(input);
+		input.addEventListener('keyup', (event)=>{
+			event.preventDefault();
+			if(event.key == 'Enter'){
+				const search = input.value;
+				
+				lastSegment = window.location.pathname.split("/").pop();
+				lastSegment2 = lastSegment.split("-").pop();
+				
+				console.log("엔터 누르고 나서 : " + search);
+				console.log("엔터 누르고 나서 : " + lastSegment2);
+				updatePage(lastSegment2, 0 ,search);
+			}
+		});
+    	
+    }
+    
+	window.addEventListener("popstate", (event) =>{
+	    	if(event.state){
+	    		console.log("뒤로 가기 감지, 이전 상태:", event);
+// 				console.log(event.state.data);
+	    		
+	    		let check = event.state.checkboxValue;
+	    		console.log(check);
+	    		
+	    		updatePage(check, 0, null);
+	    		
+	    		checkboxValue = check.replaceAll("-", " ");
+	    		
+// 				console.log(checkboxValue);
+				
+				const cArr = checkboxValue.split("+");
+				
+				const checkbox = document.querySelectorAll(".category-checkbox");
+				console.log(checkbox);
+				
+				[...checkbox].map((video, index, array) =>{
+					video.checked = false;
+					for(let i =0; i<cArr.length ; i++){
+						if(cArr[i] == video.value){
+							video.checked = true;
+						}
+					}
+				})
+				
+	    	}
+	    });
+    
+    function updatePage(checkboxValue, flag, search) {
+    	console.log("updatePage에 들어옴 : " + checkboxValue);
+        // 여기에 실제 페이지를 갱신하는 로직을 작성 (AJAX 요청 가능)
+        
+        let url = "";
+        
+        if(search != null){
+        	if(checkboxValue != "list"){
+        		url = `/board/${menuNameURL}/${checkboxValue}/${search}`;
+        	}else{
+        		url = `/board/${menuNameURL}/${search}`;
+        	}
+        }else{
+        	url = `/board/${menuNameURL}/${checkboxValue}`;
+        }
+        console.log("변경 url : " +url);
+        
+        fetch(url, {
+				method : 'post',
+				headers : {'content-type' : 'application/json; charset=UTF-8'}
+			})
+			.then(response => response.json())
+			.then(data =>{
+				if(data.length == 0){
+					divs.innerHTML = "해당 글이 없습니다";
+				}else{
+					divs.innerHTML = '';
+			    	for(const i of data){
+						const div1 = document.createElement("div");
+						div1.className = "video-card";
+						
+						const div2 = document.createElement("div");
+						div2.className = "video-thumbnail";
+						
+						const div3 = document.createElement("div");
+						div3.className = "video-info";
+						
+						const input = document.createElement("input");
+						input.setAttribute("type", "hidden");
+						input.setAttribute("value", i.contentNo);
+						
+						const h3 = document.createElement("h3");
+						h3.innerText = i.contentTitle;
+						
+						const p = document.createElement("p");
+						p.innerText = i.userNickName;
+						
+						div1.appendChild(div2);
+						div1.appendChild(div3);
+						
+						div3.appendChild(input);
+						div3.appendChild(h3);
+						div3.appendChild(p);
+						
+						divs.appendChild(div1);
+						
+						div1.addEventListener('click', function(){
+							  const contentNo = div1.querySelector('input[type=hidden]').value;
+							  console.log(contentNo);
+							  location.href = "/board/" + menuNameURL + "/" + contentNo;
+						});
+					}
+				}
+				
+				if(flag == 1){
+					window.history.pushState({ data, checkboxValue }, "", url);
+				}
+			})
+    }
+    
+    </script>
+</body>
+</html>

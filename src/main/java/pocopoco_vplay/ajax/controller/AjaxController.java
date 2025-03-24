@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -198,6 +203,31 @@ public class AjaxController {
 		ArrayList<Content> list = bService.selectMdList();
 		System.out.println("md추천리스트들 : " + list);
 		return list;
+	}
+	
+	@GetMapping("download/{fileName}/{contentNo}/{userNo}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable("fileName") String fileName,@PathVariable("contentNo") int contentNo,@PathVariable("userNo") int userNo) {
+		
+		System.out.println(fileName);
+		
+		byte[] fileBytes = r2Service.downloadFile(fileName);
+		
+		if(fileBytes == null) {
+			throw new BoardException("파일 다운로드 중 오류 발생");
+		}
+		
+		ByteArrayResource resource = new ByteArrayResource(fileBytes);
+		
+		int count = bService.checkDownload(contentNo, userNo);
+		if(count == 0) {
+			int result = bService.downloadRecord(contentNo, userNo);
+		}
+		
+		return ResponseEntity.ok()
+	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+	            .contentLength(fileBytes.length)
+	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+	            .body(resource);
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.commom.model.vo.PageInfo;
 
@@ -197,12 +198,12 @@ public class BoardService {
 		return mapper.insertContentCategory(categoryNo, contentNo);
 	}
 
-	public int insertThumbnailFile(String tFileUrl, int contentNo) {
-		return mapper.insertThumbnailFile(tFileUrl, contentNo);
+	public int insertThumbnailFile(String tFileUrl, int contentNo, String tFileOriginalName) {
+		return mapper.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
 	}
 
-	public int insertContentFile(String cFileUrl, int contentNo) {
-		return mapper.insertContentFile(cFileUrl, contentNo);
+	public int insertContentFile(String cFileUrl, int contentNo, String cFileOriginalName) {
+		return mapper.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
 	}
 
     public int updateRecommendation(HashMap<String, String> map) {
@@ -215,5 +216,37 @@ public class BoardService {
 
     public ArrayList<Content> selectMdList() { return mapper.selectMdList();
     }
+
+	public ArrayList<Files> contentFile(int contentNo) {
+		return mapper.contentFile(contentNo);
+	}
+
+	public int checkDownload(int contentNo, int userNo) {
+		return mapper.checkDownload(contentNo, userNo);
+	}
+
+	public int downloadRecord(int contentNo, int userNo) {
+		return mapper.downloadRecord(contentNo, userNo);
+	}
+
+	public int updateContent(Content content) {
+		return mapper.updateContent(content);
+	}
+
+	public ArrayList<Files> selectFiles(int contentNo) {
+		return mapper.selectFiles(contentNo);
+	}
+
+	public void updateTFile(String newTFileURL, String tFileOriginalName, int contentNo) {
+		mapper.updateTFile(newTFileURL, tFileOriginalName, contentNo);
+	}
+
+	public void updateCFile(String newCFileURL, String cFileOriginalName, int contentNo) {
+		mapper.updateCFile(newCFileURL, cFileOriginalName, contentNo);
+	}
+
+	public int deleteContentCategory(int contentNo) {
+		return mapper.deleteContentCategory(contentNo);
+	}
 
 }

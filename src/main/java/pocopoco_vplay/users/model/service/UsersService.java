@@ -84,7 +84,7 @@ public class UsersService {
 
 	public Object getPaymentDate(Users loginUser) {
 		return mapper.getPaymentDate(loginUser);
-		
+
 	}
 
 	public int deleteUserPlan(Users loginUser) {
@@ -93,14 +93,14 @@ public class UsersService {
 
 	public int updateAlertShown(int userNo) {
 		return mapper.updateAlertShown(userNo);
-		
+
 	}
 
 	public int resetAlertShown(int userNo) {
-		int result =mapper.resetAlertShown(userNo);
+		int result = mapper.resetAlertShown(userNo);
 		System.out.println("서비스에서 의 값 : " + result);
 		return result;
-		
+
 	}
 
 	public int updateProfile(HashMap<String, String> map) {
@@ -138,7 +138,5 @@ public class UsersService {
 	public int getUnreadMessageCount(int userNo) {
 		return mapper.getUnreadMessageCount(userNo);
 	}
-
-
 
 }

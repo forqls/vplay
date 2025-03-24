@@ -497,21 +497,35 @@ public class UsersController {
 
 		return result;
 	}
+<<<<<<< HEAD
 
 	
+=======
+>>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
 	@GetMapping("unreadMessages")
 	@ResponseBody
 	public int getUnreadMessageCount(HttpSession session) {
-		Users loginUser = (Users)session.getAttribute("loginUser");
+		Users loginUser = (Users) session.getAttribute("loginUser");
 		System.out.println("요청 들어오긴함");
-		if(loginUser == null) {
+		if (loginUser == null) {
 			return 0;
 		}
 		return uService.getUnreadMessageCount(loginUser.getUserNo());
-		
 	}
 	
+<<<<<<< HEAD
 	
 
 
+=======
+	@GetMapping("creator/{userNo}")
+	public String joinCreatorPage(@PathVariable("userNo")int userNo, Model model) {
+		Users u = new Users();
+		u.setUserNo(userNo);
+		Users user = uService.signIn(u);
+		
+		model.addAttribute("Users", user);
+		return "creator_page";
+	}
+>>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
 }
