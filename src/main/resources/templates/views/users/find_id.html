@@ -34,6 +34,9 @@ body {
 	color: #5e37e9;
 }
 
+
+
+
 .find-id-container {
 	max-width: 400px;
 	margin: 2rem auto;
@@ -66,7 +69,7 @@ body {
 	color: #ffffff;
 	border: none;
 	border-radius: 4px;
-	padding: 0.65rem 1rem;
+	padding: 0.75rem 1rem;
 	cursor: pointer;
 	font-size: 0.9rem;
 	white-space: nowrap;
@@ -78,13 +81,29 @@ body {
 	width: 100px;
 }
 
+
+
 .verification-section {
 	display: none;
 }
 
+
+
+
+
+
 .verification-section.active {
 	display: block;
 }
+
+
+
+
+
+
+
+
+
 
 .find-id-btn {
 	width: 100%;
@@ -97,6 +116,30 @@ body {
 	margin-top: 2rem;
 	font-size: 1rem;
 }
+
+.alert_text {
+	display: block;
+	margin-top: -0.5rem;
+	margin-bottom: 0.5rem;
+	font-size: 0.8rem;
+	text-align: center;
+}
+
+.alert_text.success {
+	color: #4CAF50;
+}
+
+.alert_text.error {
+	color: #ff4d4f;
+}
+
+
+
+
+
+
+
+
 
 @media ( max-width : 768px) {
 	.find-id-container {
@@ -125,11 +168,20 @@ body {
 		<h1 class="find-id-title">아이디 찾기</h1>
 		<form id="findIdForm" onsubmit="return findIdBtn(event)">
 			<div class="input-group">
-				<input type="text" placeholder="User name" class="input-field user_name" id="userName" name="userName"> <span class="alert_text"></span>
+				<input type="text" placeholder="User name" class="input-field user_name" id="userName" name="userName">
 			</div>
+			<span class="alert_text" id="userNameAlert"></span>
+
+
+
+
+
+
+
 			<div class="input-group">
-				<input type="tel" placeholder="Phone" class="input-field user_phone" id="phone" name="userPhone"> <span class="alert_text"></span>
+				<input type="tel" placeholder="Phone" class="input-field user_phone" id="phone" name="userPhone">
 			</div>
+			<span class="alert_text" id="userPhoneAlert"></span>
 			<div class="input-group">
 				<input type="email" placeholder="Email" class="input-field" id="email" name="userEmail">
 				<button type="button" class="button verify-button" onclick="showVerification()">인증하기</button>
@@ -144,20 +196,25 @@ body {
 		</form>
 	</main>
 
+
 	<script>
 	let flag = false;
 	window.onload = function () {
-		const alertText = document.querySelectorAll('.alert_text');
+
 
 		document.getElementById('userName').addEventListener('blur', function() {
+			const userNameAlert = document.getElementById('userNameAlert');
 			if(this.value.trim() === ''){
-				alertText[0].innerHTML ='이름을 입력해 주세요.';
+				userNameAlert.textContent ='이름을 입력해 주세요.';
+				userNameAlert.className = 'alert_text error';
 			}else{
-				alertText[0].innerHTML = '';
+				userNameAlert.textContent = '';
+				userNameAlert.className = 'alert_text';
 			}
 		})
 
 		document.getElementById('phone').addEventListener('blur', function() {
+			const userPhoneAlert = document.getElementById('userPhoneAlert');
 			// console.log(this.value);
 			let userName = document.getElementById('userName').value.trim();
 			let userPhone = this.value.replace(/[^0-9]/g, "");
@@ -179,20 +236,23 @@ body {
 			// console.log(this.value);
 
 			if(userPhone === ''){
-				alertText[1].innerHTML ='휴대폰 번호를 입력해 주세요.';
+				userPhoneAlert.textContent ='휴대폰 번호를 입력해 주세요.';
+				userPhoneAlert.className = 'alert_text error';
 			}else{
-				alertText[1].innerHTML ='';
+
 				$.ajax({
 					url:'/users/findId',
 					type:'POST',
 					data: {userName: userName, userPhone: userPhone},
 					success: data => {
 						if(data === 0){
-							alertText[1].innerHTML = '이름과 휴대폰 번호가 일치하지 않습니다';
+							userPhoneAlert.textContent = '이름과 휴대폰 번호가 일치하지 않습니다.';
+							userPhoneAlert.className = 'alert_text error';
 							flag = false;
 
 						}else{
-							alertText[1].innerHTML = '이름과 휴대폰 번호가 일치합니다';
+							userPhoneAlert.textContent = '이름과 휴대폰 번호가 일치합니다.';
+							userPhoneAlert.className = 'alert_text success';
 							flag = true;
 						}
 					},
@@ -262,7 +322,7 @@ body {
 
 	const findIdBtn = (event) => {
 		const form = document.getElementById('findIdForm');
-		if (!emailCheck) { //emailCheck 값이 false 면 true 값이 반환되어 if문 안의 코드가 실행
+		if (!emailCheck) {
 			alert("인증번호를 입력해주세요.");
 			return false;
 		}
@@ -272,4 +332,3 @@ body {
 	};
 </script>
 </body>
-</html>
