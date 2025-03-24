@@ -139,4 +139,8 @@ public class UsersService {
 		return mapper.getUnreadMessageCount(userNo);
 	}
 
+	public ArrayList<Content> selectMyDownloads(int userNo) {
+		return mapper.selectMyDownloads(userNo);
+	}
+
 }

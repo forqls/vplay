@@ -271,7 +271,7 @@ public class UsersController {
 		if (loginUser != null) {
 			int userNo = loginUser.getUserNo();
 			ArrayList<Content> list = uService.selectMyRealProjects(userNo); // 자기가 한 프로젝트 가져오기
-			System.out.println("리스트 사이즈는 : " + list.size());
+			System.out.println("리스트 사이즈는 : " + list);
 			model.addAttribute("list", list);
 		} else {
 			throw new UsersException("로그인이 풀렸습니다.");
@@ -285,7 +285,7 @@ public class UsersController {
 		if (loginUser != null) {
 			int id = loginUser.getUserNo();
 			ArrayList<HashMap<String, Object>> list = uService.selectMyProjects(id); // 좋아요 한 목록가져오기
-			System.out.println(list);
+			System.out.println("ddd" + list);
 			model.addAttribute("list", list);
 		} else {
 			throw new UsersException("로그인이 풀렸습니다.");
@@ -293,15 +293,6 @@ public class UsersController {
 		return "my_favorites";
 	}
 
-	@GetMapping("my_downloads")
-	public String myDownloads(Model model, HttpSession session) {
-		Users loginUser = (Users) session.getAttribute("loginUser");
-		if (loginUser != null) {
-			return "my_downloads";
-		} else {
-			throw new UsersException("로그인이 풀렸습니다.");
-		}
-	}
 
 	@GetMapping("my_account")
 	public String myAccount(Model model, HttpSession session) {
@@ -497,11 +488,6 @@ public class UsersController {
 
 		return result;
 	}
-<<<<<<< HEAD
-
-	
-=======
->>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
 	@GetMapping("unreadMessages")
 	@ResponseBody
 	public int getUnreadMessageCount(HttpSession session) {
@@ -512,12 +498,7 @@ public class UsersController {
 		}
 		return uService.getUnreadMessageCount(loginUser.getUserNo());
 	}
-	
-<<<<<<< HEAD
-	
 
-
-=======
 	@GetMapping("creator/{userNo}")
 	public String joinCreatorPage(@PathVariable("userNo")int userNo, Model model) {
 		Users u = new Users();
@@ -527,5 +508,24 @@ public class UsersController {
 		model.addAttribute("Users", user);
 		return "creator_page";
 	}
->>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
+	
+	@GetMapping("my_downloads")
+	public String myDownloads(Model model , HttpSession session) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		if(loginUser!=null) {
+			int userNo = loginUser.getUserNo();
+			ArrayList<Content> list = uService.selectMyDownloads(userNo);
+			System.out.println("다운로드 list = " + list);
+			model.addAttribute("list",list);
+		}else {
+			throw new UsersException("로그인이 풀렸3");
+		}
+		return "my_downloads";
+	}
+	
+	
+	
+	
+	
+	
 }

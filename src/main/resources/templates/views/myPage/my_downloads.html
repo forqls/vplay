@@ -8,6 +8,61 @@
 <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Downloads</title>
+<style>
+.button {
+	background-color: #5e37e9;
+	color: white;
+	border: none;
+	border-radius: 0.375rem;
+	padding: 6px;
+	font-size: 0.875rem;
+	cursor: pointer;
+	margin-left: auto;
+	margin-top: 2.5px;
+}
+
+.button:hover {
+	background-color: #8137e9;
+}
+
+.dropdown {
+	position: absolute;
+	top: 25%;
+	background-color: #252535;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	display: none;
+	z-index: 100;
+	right: 0;
+}
+
+.dropdown:hover {
+	background-color: #2a2a3a;
+}
+
+.dropdown.show {
+	display: block;
+	margin-right: 7.5px;
+}
+
+.dropdown-item {
+	display: flex;
+	align-items: center;
+	padding: 3px;
+	gap: 0.5rem;
+	color: #fff;
+	text-decoration: none;
+	font-size: 0.875rem;
+	border-radius: 0.25rem;
+	cursor: pointer;
+}
+
+.dropdown-item i {
+	font-size: 1rem;
+	color: #6f757d;
+}
+</style>
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
@@ -18,130 +73,86 @@
 				<h1>My Downloads</h1>
 			</div>
 			<div class="filter-buttons">
-				<select class="filter-dropdown">
-					<option value="stock-video">Stock Video</option>
-					<option value="graphic-templates">Graphic Templates</option>
-					<option value="music">Music</option>
-					<option value="sound-effects">Sound Effects</option>
-					<option value="photos">Photos</option>
-					<option value="fonts">Fonts</option>
-				</select> <select class="filter-dropdown">
+				<select class="filter-dropdown" id="categorySelect">
+					<option value="All">All</option>
+					<option value="video Templates">Video Templates</option>
+					<option value="Stock Video">Stock Video</option>
+					<option value="Graphic Templates">Graphic Templates</option>
+					<option value="Music">Music</option>
+					<option value="Sound Effects">Sound Effects</option>
+					<option value="Photos">Photos</option>
+					<option value="Fonts">Fonts</option>
+				</select> <select class="filter-dropdown" id="sortSelect">
 					<option value="newest">새로운순</option>
-					<option value="most-viewed">조회수 많은 순</option>
+					<option value="mostView">조회수 많은 순</option>
 				</select>
+				<button class="button" id="content-write">컨텐츠 글 쓰기</button>
 			</div>
-
-			<div class="grid">
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
+			<th:block th:if="${not #lists.isEmpty(list)}">
+				<div class="grid">
+					<div class="grid-item" th:each="r:${list}">
+						<button class="menu-dots">⋮</button>
+						<div class="item-content">
+							<span class="item-title">[[${r.contentTitle}]]</span>
+							<div class="item-actions">
+								<span>👁[[${r.views}]]</span> <span>❤️[[${r.likeCount}]]</span>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
-				<div class="grid-item">
-					<button class="menu-dots">⋮</button>
-					<div class="item-content">
-						<span class="item-title">Big Game Grunge</span>
-						<div class="item-actions">
-							<span>👁️ 157</span> <span>❤️</span>
-						</div>
-					</div>
-				</div>
+			</th:block>
+			<th:block th:if="${#lists.isEmpty(list)}">
+				<p>다운로드 받은 기록이 없습니다!</p>
+			</th:block>
 			</div>
 		</div>
-	</div>
+		
+			<script type="text/javascript">
+			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
+				dropdown.addEventListener('change',(e)=>{
+					let value = document.getElementById('categorySelect').value;
+					let sortValue = document.getElementById('sortSelect').value;
+					console.log(sortValue);
+					console.log(value);
+					$.ajax({
+						url:'/board/selectDownloadsCategorySort',
+						data:{value:value,sortValue:sortValue},
+						success:data=>{
+							console.log(data);
+							let grids = document.querySelectorAll('.grid');
+							
+							grids.forEach(grid=>{
+								grid.innerHTML='';
+							});
+							
+							if(!data || data.length == 0){
+								grids[0].innerHTML='<p>검색된 다운로드 목록이 없습니다! 좋아요를 눌러보세요!</p>';
+								return;
+							}
+							data.forEach((r)=>{
+								let gridItem = `
+									<div class="grid-item">
+				                           <button class="menu-dots">⋮</button>
+				                           <div class="item-content">
+				                               <span class="item-title">${r.contentTitle}</span> ${r.contentNo}
+				                               <div class="item-actions">
+				                                   <span>👁️ ${r.views}</span> <span>❤️ ${r.likeCount}</span>
+				                               </div>
+				                           </div>
+				                       </div>
+									`;
+								grids[0].innerHTML += gridItem;
+							});
+					},
+					error:data=>console.log(data)
+				});
+			});
+		});
+	</script>
+		
+		
+		
+		
+		
 </body>
 </html>

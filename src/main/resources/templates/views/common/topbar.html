@@ -19,30 +19,23 @@
 
 		<div class="vplay-nav-right">
 			<th:block th:if="${session.loginUser != null}">
-<<<<<<< HEAD
+
 				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-=======
+
 				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
->>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
 						<g fill="none" stroke="currentColor" stroke-width="2">
 							<rect width="16" height="12" x="4" y="6" rx="2" />
 							<path d="m4 9l7.106 3.553a2 2 0 0 0 1.788 0L20 9" />
 						</g>
-<<<<<<< HEAD
 					</svg>
 					<span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full animate-bounce"></span>
-=======
 					</svg> <span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full animate-bounce"></span>
->>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
 				</a>
 			</th:block>
 			<a onclick="location.href='/users/license'" class="vplay-nav-link">License</a>
 			<a onclick="location.href='/users/price'" class="vplay-nav-link">Pricing</a>
-<<<<<<< HEAD
 
-=======
->>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
 			<th:block th:if="${session.loginUser == null}">
 				<a onclick="location.href='/users/signIn'" class="vplay-nav-link vplay-sign-in">Sign in</a>
 			</th:block>
@@ -50,10 +43,6 @@
 				<a onclick="location.href='/users/my_projects'" class="vplay-nav-link vplay-sign-in">MyPage</a>
 				<a onclick="location.href='/users/logout'" class="vplay-nav-link">Log out</a>
 			</th:block>
-<<<<<<< HEAD
-
-=======
->>>>>>> c5e0b40372a23a2a1204b13e9de597ca7e91d0b1
 		</div>
 		<script src="/js/topbar.js" defer></script>
 	</header>
