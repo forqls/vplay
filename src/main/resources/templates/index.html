@@ -301,7 +301,16 @@ body {
 		<!-- MD 추천 템플릿 -->
 		<section class="section">
 			<h2 class="section-title">MD가 추천하는 템플릿 리스트</h2>
-			<div class="template-grid" id="template-grid-wrap"></div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="md : ${mdList}">
+					<input type="hidden" th:value=${md.contentNo}>
+					<input type="hidden" th:value=${md.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="template-title">[[${md.contentTitle}]]</div>
+					</div>
+				</div>
+			</div>
 		</section>
 
 		<!-- 크리에이터 섹션 -->
@@ -415,38 +424,53 @@ body {
 			console.log(showAlert);
 			alert("결제일이 지났습니다.");
 		}
-
-		window.onload = () =>{
-// 			console.log(creatorList);
-
-			fetch("board/mdList", {
-				method: "GET",
-				headers: {'content-type': 'application/json; charset=UTF-8'},
+		
+		window.onload=()=>{
+			const mdList = document.getElementById('template-grid-wrap');
+			[...mdList.children].map((template, index, array) =>{
+// 				console.log(template)
+				const thumbnail = template.children[2].children[0];
+				const contentNo = template.children[0].value;
+				const menuNo = template.children[1].value;
+				console.log(menuNo);
+				fetch("/board/select-thumbnail/" + contentNo,{
+					method : 'get',
+					headers : {'content-type' : 'application/json; charset=UTF-8'}
+				})
+				.then(response => response.json())
+				.then(data=>{
+					console.log(data);
+					if(menuNo == 1 || menuNo == 5){
+						const video = document.createElement('video');
+						video.muted = true;
+						video.loop = true;
+						
+						const source = document.createElement("source");
+						source.type = "video/mp4";
+						source.src = data.thumbnail;
+						
+						video.appendChild(source);
+						thumbnail.appendChild(video);
+						
+						video.addEventListener('mouseenter', function(){
+							this.play();
+						});
+						
+						video.addEventListener('mouseleave', function(){
+							this.pause();
+							this.currentTime = 0;
+						});
+					}else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2){
+						const img = document.createElement('img');
+						img.src = data.thumbnail;
+						
+						thumbnail.appendChild(img);
+					}
+					
+				})
 			})
-			.then(response => response.json())
-			.then(data =>{
-				console.log(data);
-				const mdTemplates = document.getElementById("template-grid-wrap");
-				mdTemplates.innerHTML = "";
+		}
 
-				data.forEach(item =>{
-					const itemDiv = document.createElement("div");
-					itemDiv.classList.add("template-card");
-
-					itemDiv.innerHTML = `
-						<div class="template-image"></div>
-						<div class="template-details">
-						<div class="template-title">${item.contentTitle}</div>
-						</div>
-						</div>
-					`;
-					mdTemplates.appendChild(itemDiv);
-
-				});
-			})
-			.catch(error => console.log('리스트 불러오기 실패 : ', error));
-
-		};
 		
 		[...creatorList.children].map((creator, index, array) =>{
 			creator.addEventListener('click', function(){

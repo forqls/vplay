@@ -260,13 +260,6 @@ public class AjaxController {
 			throw new BoardException("상태값 업데이트 중 오류 발생 컨트롤러를 보세용");
 		}
 	}
-
-	@GetMapping("mdList")
-	public ArrayList<Content>  selectmdList() {
-		ArrayList<Content> list = bService.selectMdList();
-		System.out.println("md추천리스트들 : " + list);
-		return list;
-	}
 	
 	@GetMapping("download/{fileName}/{contentNo}/{userNo}")
 	public ResponseEntity<StreamingResponseBody> downloadFile(@PathVariable("fileName") String fileName,@PathVariable("contentNo") int contentNo,@PathVariable("userNo") int userNo) {

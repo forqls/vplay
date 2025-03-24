@@ -169,11 +169,13 @@
 						mdCancelButton.style.display = "inline";
 						tr.style.backgroundColor = "#162331";
 						alert("MD추천이 적용되었습니다.");
+						location.href = "/admin/templates";
 					} else {
 						mdCancelButton.style.display = "none";
 						mdRecButton.style.display = "inline";
 						tr.style.backgroundColor = "#262d34";
 						alert("MD추천이 취소되었습니다.");
+						location.href = "/admin/templates";
 					}
 				}else if(data === -1){
 					console.log(data);
