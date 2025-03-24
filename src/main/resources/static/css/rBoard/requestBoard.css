@@ -162,6 +162,12 @@ tbody tr:hover {
 	margin-left: auto;
 }
 
+textarea{
+	color: #fff !important;
+}
+
+
+
 .create-button:hover {
 	background-color: #374151;
 }
