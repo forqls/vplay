@@ -148,7 +148,7 @@ public class BoardController {
 		int userNo = loginUser.getUserNo();
 		ArrayList<Content> list = bService.selectCategoryMyProjects(menu, userNo, sort);
 		System.out.println("리스트는 " + list);
-		if (list != null) {
+		if (loginUser != null) {
 			return list;
 		} else {
 			throw new UsersException("로그인 하셈");
@@ -708,6 +708,20 @@ public class BoardController {
 			return "redirect:/board/all_menu";
 		}else {
 			throw new BoardException("컨텐츠 등록에 실패하였습니다.");
+		}
+	}
+	
+	@GetMapping("selectDownloadsCategorySort")
+	@ResponseBody
+	public ArrayList<Content> selectDownloadsCategorySort(@RequestParam("value") String menu,HttpSession session,@RequestParam("sortValue") String sort){
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+		ArrayList<Content> list = bService.selectDownloadsCategorySort(menu,userNo,sort);
+		System.out.println("셀렉트 마이 다운로드 카테고리 소트 : " + list);
+		if(loginUser != null) {
+			return list;
+		}else {
+			throw new UsersException("로그인 하셈");
 		}
 	}
 
