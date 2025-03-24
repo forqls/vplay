@@ -62,6 +62,41 @@ public class AjaxController {
 		
 		return bService.unAllTempLike(map);
 	}
+	@PostMapping("{menuName:[a-zA-Z-]+}")
+	public ArrayList<Content> selectCategoryEmpty(@PathVariable("menuName") String menuName){
+		System.out.println("수정 전 : " + menuName);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		switch(menuName) {
+		case "video-template-list": menuName = "video Templates"; break;
+		case "sound-effects-list": menuName = "Sound Effects"; break;
+		case "music-list": menuName = "Music"; break;
+		case "graphic-template-list": menuName = "Graphic Templates"; break;
+		case "stock-video-list": menuName = "Stock Video"; break;
+		case "photo-list": menuName = "Photos"; break;
+		case "font-list": menuName = "Fonts";
+		}
+		
+		System.out.println("수정 후 : " + menuName);
+		
+		if(menuName.equals("video Templates") || menuName.equals("Sound Effects") || menuName.equals("Music") || menuName.equals("Graphic Templates") ||
+		   menuName.equals("Stock Video") || menuName.equals("Photos") || menuName.equals("Fonts")) {
+			System.out.println("menuName 들어옴");
+			map.put("menuName", menuName);
+		}else {
+			System.out.println("search 들어옴");
+			map.put("search", menuName);
+		}
+		
+		ArrayList<Content> cList = bService.allTemplateList(map);
+		
+		for(Content c : cList) {
+			System.out.println(c);
+		}
+		
+		return cList;
+	}
 	
 	@PostMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z가-힣0-9\\+&-]+}")
 	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName){
