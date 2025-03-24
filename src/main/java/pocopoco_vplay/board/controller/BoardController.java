@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -137,7 +136,7 @@ public class BoardController {
 			throw new UsersException("로그인하삼");
 		int userNo = loginUser.getUserNo();
 		ArrayList<HashMap<String, Object>> list = bService.selectCategory(menu, userNo, sort);
-		System.out.println(list);
+		System.out.println("셀렉트 카테고리 골랐을때 == " + list);
 		return list;
 	}
 
@@ -148,7 +147,7 @@ public class BoardController {
 		int userNo = loginUser.getUserNo();
 		ArrayList<Content> list = bService.selectCategoryMyProjects(menu, userNo, sort);
 		System.out.println("리스트는 " + list);
-		if (list != null) {
+		if (loginUser != null) {
 			return list;
 		} else {
 			throw new UsersException("로그인 하셈");
@@ -250,92 +249,77 @@ public class BoardController {
 	@GetMapping("{menuName:[a-zA-Z-]+}")
 	public String templateList(@PathVariable("menuName") String menuName, Model model) {
 		HashMap<String, Object> map = new HashMap<>();
-		String joinURL = null;
 		int menuNum = 0;
 		switch (menuName) {
 		case "video-template-list":
 			menuName = "video Templates";
-			joinURL = "video-templates_list";
 			menuNum = 1;
 			break;
 		case "sound-effects-list":
 			menuName = "Sound Effects";
-			joinURL = "sound-effects_list";
 			menuNum = 3;
 			break;
 		case "music-list":
 			menuName = "Music";
-			joinURL = "music_list";
 			menuNum = 2;
 			break;
 		case "graphic-template-list":
 			menuName = "Graphic Templates";
-			joinURL = "graphic-templates_list";
 			menuNum = 4;
 			break;
 		case "stock-video-list":
 			menuName = "Stock Video";
-			joinURL = "stock-video_list";
 			menuNum = 5;
 			break;
 		case "photo-list":
 			menuName = "Photos";
-			joinURL = "photo_list";
 			menuNum = 6;
 			break;
 		case "font-list":
 			menuName = "Fonts";
-			joinURL = "font_list";
 			menuNum = 7;
 		}
 		map.put("menuName", menuName);
 		ArrayList<Content> cList = bService.allTemplateList(map);
 		ArrayList<Content> cCategory = bService.allCategory(menuNum);
 		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
+		System.out.println(cList);
 		model.addAttribute("cList", cList).addAttribute("cCategory", cCategory).addAttribute("cPopularCategory", cPopularCategory);
-		return joinURL;
+		return "content_list";
 	}
 
 	@GetMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\\\+&-]+}")
 	public String templateList(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName, Model model) {
 		HashMap<String, Object> map = new HashMap<>();
 		String[] result = {};
-		String joinURL = null;
 		int menuNum = 0;
 		switch (menuName) {
 		case "video-template-list":
 			menuName = "video Templates";
-			joinURL = "video-templates_list";
 			menuNum = 1;
 			break;
 		case "sound-effects-list":
 			menuName = "Sound Effects";
-			joinURL = "sound-effects_list";
 			menuNum = 3;
 			break;
 		case "music-list":
 			menuName = "Music";
-			joinURL = "music_list";
 			menuNum = 2;
 			break;
 		case "graphic-template-list":
 			menuName = "Graphic Templates";
-			joinURL = "graphic-templates_list";
 			menuNum = 4;
 			break;
 		case "stock-video-list":
 			menuName = "Stock Video";
-			joinURL = "stock-video_list";
 			menuNum = 5;
 			break;
 		case "photo-list":
 			menuName = "Photos";
-			joinURL = "photo_list";
 			menuNum = 6;
 			break;
 		case "font-list":
 			menuName = "Fonts";
-			joinURL = "font_list";
 			menuNum = 7;
 		}
 		map.put("menuName", menuName);
@@ -357,11 +341,13 @@ public class BoardController {
 		ArrayList<Content> cCategory = bService.allCategory(menuNum);
 		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
 		model.addAttribute("cList", cList).addAttribute("cCategory", cCategory).addAttribute("cPopularCategory", cPopularCategory);
-		return joinURL;
+		return "content_list";
 	}
 
 	@GetMapping("request_list")
-	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, ModelAndView mv) {
+	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage,
+										@RequestParam(value = "search", required = false) String search,
+										ModelAndView mv) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
 		int listCount = bService.getrequestPostCount(map);
@@ -370,37 +356,34 @@ public class BoardController {
 		for (Content c : list) {
 			c.setUserNickName(bService.selectUser(c.getUserNo()));
 		}
-		mv.addObject("list", list).addObject("pi", pi).addObject("searchValue", search);
+		mv.addObject("list", list)
+				.addObject("pi", pi)
+				.addObject("searchValue", search);
 		mv.setViewName("request_list");
 		return mv;
 	}
 
 	@GetMapping("request_list/{menuName}")
-	public String filterRequestList(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
+	public String filterRequestList(@RequestParam(value = "search", required = false) String search,
+									@RequestParam(value = "page", defaultValue = "1") int currentPage,
+									@PathVariable("menuName") String menuName, Model model) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
 		switch (menuName) {
 		case "video-Templates":
-			map.put("menuNo", "1");
-			break;
+			map.put("menuNo", "1");break;
 		case "Graphic-Templates":
-			map.put("menuNo", "4");
-			break;
+			map.put("menuNo", "4");break;
 		case "Stock-Video":
-			map.put("menuNo", "5");
-			break;
+			map.put("menuNo", "5");break;
 		case "Photos":
-			map.put("menuNo", "6");
-			break;
+			map.put("menuNo", "6");break;
 		case "Music":
-			map.put("menuNo", "2");
-			break;
+			map.put("menuNo", "2");break;
 		case "Sound-Effects":
-			map.put("menuNo", "3");
-			break;
+			map.put("menuNo", "3");break;
 		case "Fonts":
-			map.put("menuNo", "7");
-			break;
+			map.put("menuNo", "7");break;
 		}
 		int listCount = bService.getrequestPostCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
@@ -408,7 +391,10 @@ public class BoardController {
 		for (Content c : list) {
 			c.setUserNickName(bService.selectUser(c.getUserNo()));
 		}
-		model.addAttribute("list", list).addAttribute("menuName", menuName).addAttribute("Loc", "/board/request_list/" + menuName).addAttribute("pi", pi).addAttribute("searchValue", search);
+		model.addAttribute("list", list)
+				.addAttribute("menuName", menuName)
+				.addAttribute("Loc", "/board/request_list/" + menuName)
+				.addAttribute("pi", pi).addAttribute("searchValue", search);
 		return "request_list";
 	}
 
@@ -469,32 +455,8 @@ public class BoardController {
 		
 		ArrayList<Content> list = bService.allTemplateList(map);
 		
-		String joinURL = null;
 		String[] categories = content.getCategoryName().split(",");
 		
-		switch (menuName) {
-		case "video-templates":
-			joinURL = "video-templates_detail";
-			break;
-		case "music":
-			joinURL = "music_detail";
-			break;
-		case "sound-effect":
-			joinURL = "sound-effects_detail";
-			break;
-		case "graphic-templates":
-			joinURL = "graphic-templates_detail";
-			break;
-		case "stock-video":
-			joinURL = "stock-video_detail";
-			break;
-		case "photo":
-			joinURL = "photo_detail";
-			break;
-		default:
-			joinURL = "font_detail";
-			break;
-		}
 		System.out.println(content);
 		System.out.println(menuName);
 		System.out.println(fList);
@@ -504,7 +466,7 @@ public class BoardController {
 		model.addAttribute("aList", list);
 		model.addAttribute("fList", fList);
 		
-		return joinURL;
+		return "content_detail";
 	}
 
 	@PostMapping("updateRequestForm")
@@ -747,6 +709,20 @@ public class BoardController {
 			return "redirect:/board/all_menu";
 		}else {
 			throw new BoardException("컨텐츠 등록에 실패하였습니다.");
+		}
+	}
+	
+	@GetMapping("selectDownloadsCategorySort")
+	@ResponseBody
+	public ArrayList<Content> selectDownloadsCategorySort(@RequestParam("value") String menu,HttpSession session,@RequestParam("sortValue") String sort){
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+		ArrayList<Content> list = bService.selectDownloadsCategorySort(menu,userNo,sort);
+		System.out.println("셀렉트 마이 다운로드 카테고리 소트 : " + list);
+		if(loginUser != null) {
+			return list;
+		}else {
+			throw new UsersException("로그인 하셈");
 		}
 	}
 

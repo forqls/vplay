@@ -1,11 +1,11 @@
 package pocopoco_vplay.ajax.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,12 +22,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
@@ -61,6 +63,67 @@ public class AjaxController {
 		map.put("userNo", userNo);
 		
 		return bService.unAllTempLike(map);
+	}
+	
+	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
+	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo){
+//		System.out.println(menuNo);
+//		System.out.println(contentNo);
+		
+		HashMap<String, String> map = new HashMap<>();
+		
+		String thumbnail = null;
+		String file = null;
+		
+		ArrayList<Files> contentFile = bService.selectFiles(contentNo);
+		for(Files f : contentFile) {
+			if(f.getFileLevel() == 1) {
+				thumbnail = f.getFileLocation();
+			}else {
+				file = f.getFileLocation();
+			}
+		}
+		
+		map.put("thumbnail", thumbnail);
+		map.put("file", file);
+		
+		return map;
+	}
+	
+	@PostMapping("{menuName:[a-zA-Z-]+}")
+	public ArrayList<Content> selectCategoryEmpty(@PathVariable("menuName") String menuName){
+		System.out.println("수정 전 : " + menuName);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		switch(menuName) {
+		case "video-template-list": menuName = "video Templates"; break;
+		case "sound-effects-list": menuName = "Sound Effects"; break;
+		case "music-list": menuName = "Music"; break;
+		case "graphic-template-list": menuName = "Graphic Templates"; break;
+		case "stock-video-list": menuName = "Stock Video"; break;
+		case "photo-list": menuName = "Photos"; break;
+		case "font-list": menuName = "Fonts";
+		}
+		
+		System.out.println("수정 후 : " + menuName);
+		
+		if(menuName.equals("video Templates") || menuName.equals("Sound Effects") || menuName.equals("Music") || menuName.equals("Graphic Templates") ||
+		   menuName.equals("Stock Video") || menuName.equals("Photos") || menuName.equals("Fonts")) {
+			System.out.println("menuName 들어옴");
+			map.put("menuName", menuName);
+		}else {
+			System.out.println("search 들어옴");
+			map.put("search", menuName);
+		}
+		
+		ArrayList<Content> cList = bService.allTemplateList(map);
+		
+		for(Content c : cList) {
+			System.out.println(c);
+		}
+		
+		return cList;
 	}
 	
 	@PostMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z가-힣0-9\\+&-]+}")
@@ -206,28 +269,34 @@ public class AjaxController {
 	}
 	
 	@GetMapping("download/{fileName}/{contentNo}/{userNo}")
-	public ResponseEntity<Resource> downloadFile(@PathVariable("fileName") String fileName,@PathVariable("contentNo") int contentNo,@PathVariable("userNo") int userNo) {
+	public ResponseEntity<StreamingResponseBody> downloadFile(@PathVariable("fileName") String fileName,@PathVariable("contentNo") int contentNo,@PathVariable("userNo") int userNo) {
 		
 		System.out.println(fileName);
 		
-		byte[] fileBytes = r2Service.downloadFile(fileName);
+		InputStream fileStream = r2Service.downloadFileStream(fileName);
 		
-		if(fileBytes == null) {
+		if(fileStream == null) {
 			throw new BoardException("파일 다운로드 중 오류 발생");
 		}
 		
-		ByteArrayResource resource = new ByteArrayResource(fileBytes);
-		
 		int count = bService.checkDownload(contentNo, userNo);
 		if(count == 0) {
-			int result = bService.downloadRecord(contentNo, userNo);
+			bService.downloadRecord(contentNo, userNo);
 		}
 		
-		return ResponseEntity.ok()
+		StreamingResponseBody responseBody = outputStream -> {
+	        byte[] buffer = new byte[8192];
+	        int bytesRead;
+	        while ((bytesRead = fileStream.read(buffer)) != -1) {
+	            outputStream.write(buffer, 0, bytesRead);
+	        }
+	        fileStream.close();
+	    };
+		
+	    return ResponseEntity.ok()
 	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-	            .contentLength(fileBytes.length)
 	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
-	            .body(resource);
+	            .body(responseBody);
 	}
 
 }

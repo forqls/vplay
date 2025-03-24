@@ -246,4 +246,10 @@ public class BoardService {
 		return mapper.deleteContentCategory(contentNo);
 	}
 
+
+	public ArrayList<Content> selectDownloadsCategorySort(String menu, int userNo, String sort) {
+		return mapper.selectDownloadsCategorySort(menu,userNo,sort);
+	}
+
+
 }

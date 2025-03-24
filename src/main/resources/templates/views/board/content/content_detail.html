@@ -15,11 +15,14 @@
         <div class="content">
         	<form method="post" enctype="multipart/form-data">
 	            <div class="featured-template">
-	<!--                 <div class="template-image"> -->
+	            		<th:block th:if="${content.menuNo == 1 || content.menuNo == 5}">
 	                    <video id="video-preview" style="max-width: 1200px; margin-top: 10px;" th:each="f : ${fList}" th:if="${f.fileLevel == 1}" controls>
 	                    	 <source th:src="@{${f.fileLocation}}" type="video/mp4">
 	                    </video>
-	<!--                 </div> -->
+	                    </th:block>
+	                    <th:block th:if="${content.menuNo == 4 || content.menuNo == 6 || content.menuNo == 7}" th:each="f : ${fList}">
+	                    	<img id="img-preview" style="max-width: 1000px; margin-top: 10px;" th:src="@{${f.fileLocation}}" th:if="${f.fileLevel == 1}">
+	                    </th:block>
 	                <div class="item-tags">
 	                    <h3>Item Tags</h3>
 	                    <div class="tags">
@@ -65,10 +68,11 @@
 
         <aside class="sidebar">
             <div class="template-info-card">
-                <h2>After Effects Templates</h2>
+                <h2 th:text="${content.menuName}"></h2>
                 <h3 th:text="${content.contentTitle}"></h3>
                 <p>by [[${content.userNickName}]]</p>
-                <div class="pricing-box" th:if='${session.loginUser == null || session.loginUser.userPlan != "Frame Pro"}'>
+                <th:block th:if='${session.loginUser == null || (session.loginUser.userPlan != "Frame Pro" && session.loginUser.userPlan != "All Rounder")}'>
+                <div class="pricing-box">
                     <h3>Frame Pro</h3>
                     <div class="price">
                         <span class="amount">16,500</span>
@@ -92,6 +96,7 @@
                         </div>
                     </div>
                 </div>
+                </th:block>
 				
                 <div class="action-buttons" th:if='${session.loginUser != null && (session.loginUser.userPlan == "Frame Pro" || session.loginUser.userPlan == "All Rounder")}'>
                     <button type="button" class="download-btn" onclick="downloadFile()">Download</button>

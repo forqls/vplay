@@ -25,15 +25,25 @@
 
         <main class="content">
 
-            <div class="search-bar">
-                <input type="text" placeholder="Search">
-            </div>
+<!--             <div class="search-bar"> -->
+<!--                 <input type="text" placeholder="Search"> -->
+<!--             </div> -->
 
             <div class="video-grid">
                 <div class="video-card" th:each="vl: ${cList}">
-                    <div class="video-thumbnail"></div>
+                    <div class="video-thumbnail">
+                    	<th:block th:if="${vl.menuNo == 1 || vl.menuNo == 5}">
+	                    <video id="video-preview" muted loop>
+		                	<source type="video/mp4">
+		                </video>
+		                </th:block>
+		                <th:block th:if="${vl.menuNo == 4 || vl.menuNo == 6 || vl.menuNo == 7}">
+		                <img id="video-preview">
+		                </th:block>
+                    </div>
                     <div class="video-info">
                     	<input type="hidden" th:value="${vl.contentNo}"/>
+                    	<input type="hidden" th:value="${vl.menuNo}">
                         <h3>[[${vl.contentTitle}]]</h3>
                         <p>[[${vl.userNickName}]]</p>
                     </div>
@@ -47,8 +57,23 @@
     [...divs.children].map((video, index, array) =>{
 		video.addEventListener('click', function(){
 			const contentNo = video.children[1].children[0].value;
+			const menuNo = video.children[1].children[1].value;
+			let menuName = "";
 			console.log(contentNo);
-			location.href = "/board/video-templates/" + contentNo;
+			console.log(menuNo);
+			switch(menuNo){
+			case "1": menuName = "video-templates"; break;
+			case "2": menuName = "music"; break;
+			case "3": menuName = "sound-effect"; break;
+			case "4": menuName = "graphic-templates"; break;
+			case "5": menuName = "stock-video"; break;
+			case "6": menuName = "photo"; break;
+			case "7": menuName = "font";
+			}
+			
+			console.log(menuName);
+			
+			location.href = "/board/" + menuName + "/" + contentNo;
 		})
 	})
 	
@@ -58,8 +83,8 @@
     
     
 	window.onload=()=>{
-    	
-    	console.log(divs);
+		thumbnailPlay();
+//     	console.log(divs);
     	
     	const checkbox = document.querySelectorAll(".category-checkbox");
     	/*<![CDATA[*/
@@ -112,6 +137,7 @@
     			checkboxArr.length = 0;
     		
 				updatePage(checkboxValue, 1, null);
+				
     		})
     	})
     	
@@ -177,8 +203,10 @@
         	}else{
         		url = `/board/${menuNameURL}/${search}`;
         	}
-        }else{
+        }else if(checkboxValue != "empty"){
         	url = `/board/${menuNameURL}/${checkboxValue}`;
+        }else{
+        	url = `/board/${menuNameURL}`;
         }
         console.log("변경 url : " +url);
         
@@ -193,11 +221,31 @@
 				}else{
 					divs.innerHTML = '';
 			    	for(const i of data){
+			    		console.log("이거보는 중 :" + i.menuNo);
 						const div1 = document.createElement("div");
 						div1.className = "video-card";
 						
 						const div2 = document.createElement("div");
 						div2.className = "video-thumbnail";
+						
+						if(i.menuNo == 1 || i.menuNo == 5){
+							const video = document.createElement("video");
+							video.id = "video-preview";
+							video.muted = true;
+							video.loop = true;
+							
+							const source = document.createElement("source");
+							source.type = "video/mp4";
+							
+							video.appendChild(source);
+							div2.appendChild(video);
+						}else if(i.menuNo == 4 || i.menuNo == 6 || i.menuNo == 7){
+							const img = document.createElement("img");
+							img.id="video-preview";
+							
+							div2.appendChild(img);
+						}
+						
 						
 						const div3 = document.createElement("div");
 						div3.className = "video-info";
@@ -205,6 +253,10 @@
 						const input = document.createElement("input");
 						input.setAttribute("type", "hidden");
 						input.setAttribute("value", i.contentNo);
+						
+						const input2 = document.createElement("input");
+						input2.setAttribute("type", "hidden");
+						input2.setAttribute("value", i.menuNo);
 						
 						const h3 = document.createElement("h3");
 						h3.innerText = i.contentTitle;
@@ -216,6 +268,7 @@
 						div1.appendChild(div3);
 						
 						div3.appendChild(input);
+						div3.appendChild(input2);
 						div3.appendChild(h3);
 						div3.appendChild(p);
 						
@@ -226,15 +279,61 @@
 							  console.log(contentNo);
 							  location.href = "/board/" + menuNameURL + "/" + contentNo;
 						});
+						
+						
 					}
+			    	
+			    	thumbnailPlay();
 				}
 				
 				if(flag == 1){
 					window.history.pushState({ data, checkboxValue }, "", url);
 				}
+
 			})
     }
     
+    function thumbnailPlay(){
+    	const thumbnailList = document.querySelectorAll('.video-thumbnail');
+    	console.log("썸네일 로드");
+		//썸네일
+    	[...thumbnailList].map((thumbnail, index, array)=>{
+    		const contentNo = thumbnail.parentElement.children[1].children[0].value;
+    		const menuNo = thumbnail.parentElement.children[1].children[1].value;
+    		console.log(menuNo);
+    		
+    		fetch("/board/select-thumbnail/" + contentNo,{
+    			method : "get",
+    			headers : {'content-type' : 'application/json; charset=UTF-8'}
+    			})
+				.then(response => response.json())
+				.then(data=>{
+					if(menuNo == 1 || menuNo == 5){
+						const video = thumbnail.children[0];
+						
+						const source = thumbnail.children[0].children[0];
+						console.log(source);
+						source.src = data.thumbnail;
+						
+						video.appendChild(source);
+						
+						thumbnail.appendChild(video);
+						
+						video.addEventListener('mouseenter', function(){
+							this.play();
+						});
+						
+						video.addEventListener('mouseleave', function(){
+							this.pause();
+							this.currentTime = 0;
+						});
+					}else{
+						const img = thumbnail.children[0];
+						img.src = data.thumbnail;
+					}
+				})
+    	})   	
+    }
     </script>
 </body>
 </html>
