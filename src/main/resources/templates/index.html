@@ -301,16 +301,7 @@ body {
 		<!-- MD 추천 템플릿 -->
 		<section class="section">
 			<h2 class="section-title">MD가 추천하는 템플릿 리스트</h2>
-			<div class="template-grid" id="template-grid-wrap">
-				<!--<div class="template-item"></div>
-				<div class="template-item"></div>
-				<div class="template-item"></div>
-				<div class="template-item"></div>
-				<div class="template-item"></div>
-				<div class="template-item"></div>
-				<div class="template-item"></div>
-				<div class="template-item"></div>-->
-			</div>
+			<div class="template-grid" id="template-grid-wrap"></div>
 		</section>
 
 		<!-- 크리에이터 섹션 -->
@@ -424,15 +415,6 @@ body {
 			console.log(showAlert);
 			alert("결제일이 지났습니다.");
 		}
-
-		function getCurrentMonthEvent() {
-			const date = new Date();
-			const month = date.toLocaleString('ko-KR', {
-				month : 'long'
-			});
-			document.getElementById("monthlyEvent").textContent = `${month}달 추천이벤트`;
-		}
-		getCurrentMonthEvent();
 
 		window.onload = () =>{
 // 			console.log(creatorList);
