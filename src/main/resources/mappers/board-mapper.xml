@@ -399,13 +399,19 @@
 	</select>
 
 	<select id="selectReplyList">
-		select *
-		from reply
-		join content using(content_no)
-		join users using(user_no)
-		where content_no = #{bId} and reply_status ='Y'
-		order by reply_no desc
+		SELECT
+			r.reply_no,
+			r.reply_detail,
+			r.modify_date,
+			u.user_nickname,
+			u.user_profile AS userProfile
+		FROM reply r
+				 JOIN users u ON r.user_no = u.user_no
+		WHERE r.content_no = #{bId}
+		  AND r.reply_status = 'Y'
+		ORDER BY r.reply_no DESC
 	</select>
+
 
 	<insert id="allTempLike">
 		insert into likes
@@ -464,13 +470,15 @@
 
 	<insert id="insertReply">
 		insert into reply
-		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
+		values(REPLY_SEQ.nextval,#{replyDetail},sysdate,sysdate,'Y', #{contentNo},#{userNo})
 	</insert>
 
-
 	<update id="updateReply">
-		update reply
-		set reply_detail =#{replyDetail} where reply_no =#{replyNo}
+		UPDATE reply
+		SET reply_detail = #{replyDetail},
+			modify_date = SYSDATE
+		WHERE reply_no = #{replyNo}
+		  AND user_no = #{userNo}
 	</update>
 
 	<delete id="deleteReply">

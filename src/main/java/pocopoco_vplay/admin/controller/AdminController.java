@@ -304,7 +304,7 @@ public class AdminController {
 	public int insertReply(@ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") String contentNo) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
-			reply.setWriter(loginUser.getUserNickname());
+			reply.setUserNickname(loginUser.getUserNickname());
 			reply.setContentNo(contentNo);
 		}
 		try {

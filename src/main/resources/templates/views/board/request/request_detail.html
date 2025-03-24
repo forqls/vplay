@@ -203,7 +203,7 @@
 
 				<th:block th:if="${session.loginUser != null}">
 					<span>[[${session.loginUser.userNickname}]]</span>
-					<!--프로필 사진부분--><!--<img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> -->
+					<span><img th:src="${session.loginUser.userProfile}"></span>
 				</th:block>
 				<th:block th:if="${session.loginUser == null}">
 					<span>로그인을 하여 자유롭게 의견을 남겨보세요.</span>
@@ -217,27 +217,46 @@
 			<thead>
 			<tr>
 				<th width="130px">작성자</th>
+				<th>프로필</th>
 				<th>작성내용</th>
 				<th width="130px">작성일자</th>
 				<th></th>
 			</tr>
 			</thead>
 			<tbody>
-			<tr th:each="r:${replyList}"><!--있는댓글 가져오기-->
-				<td>[[${r.writer}]]</td>
-				<td><textarea readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea></td>
+			<tr th:each="r : ${replyList}">
+				<!-- 닉네임 -->
+				<td>[[${r.userNickname}]]</td>
+
+				<!-- 프로필 이미지 -->
+				<td>
+					<img th:src="@{${r.userProfile}}"
+						 alt="프로필 이미지"
+						 style="width:30px; height:30px; border-radius:50%;">
+				</td>
+
+				<!-- 댓글 내용 -->
+				<td>
+					<textarea readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea>
+				</td>
+
+				<!-- 작성일 -->
 				<td>[[${r.modifyDate}]]</td>
+
+				<!-- 수정/삭제 버튼 -->
 				<td width="80px">
-					<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
-						<input type="hidden" th:value="${r.replyNo}" name="replyId">
+
+					<th:block th:if="${session.loginUser != null && r.userNickname eq session.loginUser.userNickname}">
+					<input type="hidden" th:value="${r.replyNo}" name="replyId">
 						<span class="updel updateReply">수정하기</span>
 						&nbsp;
 						<span class="updel deleteReply">삭제하기</span>
-						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
+						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail">
 					</th:block>
 				</td>
 			</tr>
 			</tbody>
+
 		</table>
 
 
@@ -294,7 +313,7 @@
 			const replyRow = this.closest('tr');
 			const replyDetailTextarea = replyRow.querySelector('td textarea');
 			const replyNo = replyRow.querySelector("input[name='replyId']").value;
-			const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value; // ✅ 원래 댓글 값 가져오기
+			const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value;
 
 
 			if (!replyDetailTextarea) {
@@ -321,9 +340,10 @@
 				$.ajax({
 					type: "POST",
 					url: "/board/updateReply",
-					data: { replyNo: replyNo, replyDetail: updatedReply },
+					data: { replyNo: replyNo, replyDetail: updatedReply, userNo: /*[[${session.loginUser.userNo}]]*/ 0},
 					success: data => {
-						console.log(data);
+						location.reload();
+						console.log("data" + data);
 						alert("댓글이 수정되었습니다.");
 						replyDetailTextarea.setAttribute("readonly", true);
 						saveButton.textContent = "수정하기";

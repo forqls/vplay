@@ -515,10 +515,11 @@ public class BoardController {
 	public String insertReply(@RequestParam(value = "page", defaultValue = "1") int currentPage, @ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") String contentNo) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
-			reply.setWriter(loginUser.getUserNickname());
+			reply.setUserNo(loginUser.getUserNo());
 			reply.setContentNo(contentNo);
 		}
 		int result = bService.insertReply(reply);
+
 		if (result > 0) {
 			ArrayList<Reply> replyList = bService.selectReplyList(Integer.parseInt(contentNo));
 			model.addAttribute("replyList", replyList);
@@ -532,8 +533,14 @@ public class BoardController {
 
 	@PostMapping("updateReply")
 	@ResponseBody
-	public int updateReply(@ModelAttribute Reply r) {
-		return bService.updateReply(r);
+	public int updateReply(@ModelAttribute Reply r, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		r.setUserNo(loginUser.getUserNo()); // 여기서 userNo가 제대로 세팅되는지 확인해요.
+		System.out.println("userNo ==================================== " + r.getUserNo());
+		int result = bService.updateReply(r); // updateReply 호출
+		System.out.println("update 결과 ======================================= " + result);
+
+		return result;
 	}
 
 	@GetMapping("deleteReply")
