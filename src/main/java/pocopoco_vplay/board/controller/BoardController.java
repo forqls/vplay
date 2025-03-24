@@ -346,7 +346,9 @@ public class BoardController {
 	}
 
 	@GetMapping("request_list")
-	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage, @RequestParam(value = "search", required = false) String search, ModelAndView mv) {
+	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage,
+										@RequestParam(value = "search", required = false) String search,
+										ModelAndView mv) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
 		int listCount = bService.getrequestPostCount(map);
@@ -355,37 +357,34 @@ public class BoardController {
 		for (Content c : list) {
 			c.setUserNickName(bService.selectUser(c.getUserNo()));
 		}
-		mv.addObject("list", list).addObject("pi", pi).addObject("searchValue", search);
+		mv.addObject("list", list)
+				.addObject("pi", pi)
+				.addObject("searchValue", search);
 		mv.setViewName("request_list");
 		return mv;
 	}
 
 	@GetMapping("request_list/{menuName}")
-	public String filterRequestList(@RequestParam(value = "search", required = false) String search, @RequestParam(value = "page", defaultValue = "1") int currentPage, @PathVariable("menuName") String menuName, Model model) {
+	public String filterRequestList(@RequestParam(value = "search", required = false) String search,
+									@RequestParam(value = "page", defaultValue = "1") int currentPage,
+									@PathVariable("menuName") String menuName, Model model) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("search", search);
 		switch (menuName) {
 		case "video-Templates":
-			map.put("menuNo", "1");
-			break;
+			map.put("menuNo", "1");break;
 		case "Graphic-Templates":
-			map.put("menuNo", "4");
-			break;
+			map.put("menuNo", "4");break;
 		case "Stock-Video":
-			map.put("menuNo", "5");
-			break;
+			map.put("menuNo", "5");break;
 		case "Photos":
-			map.put("menuNo", "6");
-			break;
+			map.put("menuNo", "6");break;
 		case "Music":
-			map.put("menuNo", "2");
-			break;
+			map.put("menuNo", "2");break;
 		case "Sound-Effects":
-			map.put("menuNo", "3");
-			break;
+			map.put("menuNo", "3");break;
 		case "Fonts":
-			map.put("menuNo", "7");
-			break;
+			map.put("menuNo", "7");break;
 		}
 		int listCount = bService.getrequestPostCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
@@ -393,7 +392,10 @@ public class BoardController {
 		for (Content c : list) {
 			c.setUserNickName(bService.selectUser(c.getUserNo()));
 		}
-		model.addAttribute("list", list).addAttribute("menuName", menuName).addAttribute("Loc", "/board/request_list/" + menuName).addAttribute("pi", pi).addAttribute("searchValue", search);
+		model.addAttribute("list", list)
+				.addAttribute("menuName", menuName)
+				.addAttribute("Loc", "/board/request_list/" + menuName)
+				.addAttribute("pi", pi).addAttribute("searchValue", search);
 		return "request_list";
 	}
 

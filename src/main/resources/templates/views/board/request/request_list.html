@@ -63,18 +63,36 @@
 			</div>
 			<div class="pagination">
 				<ul>
+					<!-- 현재 페이지가 2 이상이면 이전 페이지로 이동하는 링크 보여줌 -->
 					<th:block th:if="${pi.currentPage > 1}">
-						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName}, search=${searchValue})}" aria-label="Previous"> < </a></li>
+						<li class="prev chevron-left">
+							<a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName}, search=${searchValue})}" aria-label="Previous"> < </a>
+						</li>
 					</th:block>
+					<!-- 현재 페이지가 1 이하이면 비활성화된 이전 버튼을 보여줌 -->
 					<th:block th:if="${pi.currentPage <=1}">
-						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
+						<li class="prev chevron-left">
+							<a aria-label="Previous"> < </a><!-- href 없음: 비활성화 상태 -->
+						</li>
 					</th:block>
-					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName}, search=${searchValue})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"> </a></li>
-					<th:block th:if="${pi.currentPage < pi.MaxPage}">
-						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1}, menuName=${menuName}, search=${searchValue})}" aria-label="Next"> > </a></li>
+					<!-- 숫자 페이지 버튼 영역 -->
+					<!-- pi.startPage부터 pi.endPage까지 반복해서 페이지 번호 링크 생성 -->
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+						<a th:href="@{${Loc}(page=${p}, menuName=${menuName}, search=${searchValue})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"> </a>
+					</li><!-- 현재 페이지에는 'active' 클래스 부여됨 -->
+
+					<!-- 다음 페이지 버튼 (비활성/활성 분기) -->
+					<!-- 현재 페이지가 최대 페이지보다 작을 때: 다음 페이지 링크 활성화 -->
+					<th:block th:if="${pi.currentPage < pi.maxPage}">
+						<li class="next chevron-right">
+							<a th:href="@{${Loc}(page=${pi.currentPage+1}, menuName=${menuName}, search=${searchValue})}" aria-label="Next"> > </a>
+						</li>
 					</th:block>
-					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
-						<li class="next chevron-right"><a aria-label="Next"> > </a></li>
+					<!-- 마지막 페이지인 경우: 다음 버튼 비활성 -->
+					<th:block th:if="${pi.currentPage >= pi.maxPage}">
+						<li class="next chevron-right">
+							<a aria-label="Next"> > </a>
+						</li>
 					</th:block>
 				</ul>
 			</div>
@@ -85,11 +103,11 @@
 		window.onload = () =>{
 			const tbody = document.querySelector('tbody');
 			const tds = tbody.querySelectorAll('td');
-
 			for(const td of tds){
 				td.addEventListener('click', function(){
 					const trTds = this.parentElement.querySelectorAll('td');
-					const boardId = trTds[0].innerText;/*네추럴 템플릿 적용 : 서버가 없는 상태에서 파일을 열었을때 에러가 안나게 하기 위해(1이 보임 +로 끝나서 에러가 나는것을 방지)*/
+					const boardId = trTds[0].innerText;
+					/*네추럴 템플릿 적용 : 서버가 없는 상태에서 파일을 열었을때 에러가 안나게 하기 위해(1이 보임 +로 끝나서 에러가 나는것을 방지)*/
 					location.href="/board/"+boardId + "/" +/*<![CDATA[*//*[[${pi.currentPage}]]*/1/*]]>*/;
 					// /board/10/2 - 글번호/페이지번호
 				});
