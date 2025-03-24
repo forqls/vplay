@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
@@ -62,6 +63,32 @@ public class AjaxController {
 		
 		return bService.unAllTempLike(map);
 	}
+	
+	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
+	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo){
+//		System.out.println(menuNo);
+//		System.out.println(contentNo);
+		
+		HashMap<String, String> map = new HashMap<>();
+		
+		String thumbnail = null;
+		String file = null;
+		
+		ArrayList<Files> contentFile = bService.selectFiles(contentNo);
+		for(Files f : contentFile) {
+			if(f.getFileLevel() == 1) {
+				thumbnail = f.getFileLocation();
+			}else {
+				file = f.getFileLocation();
+			}
+		}
+		
+		map.put("thumbnail", thumbnail);
+		map.put("file", file);
+		
+		return map;
+	}
+	
 	@PostMapping("{menuName:[a-zA-Z-]+}")
 	public ArrayList<Content> selectCategoryEmpty(@PathVariable("menuName") String menuName){
 		System.out.println("수정 전 : " + menuName);
