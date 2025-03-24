@@ -137,7 +137,7 @@ public class BoardController {
 			throw new UsersException("로그인하삼");
 		int userNo = loginUser.getUserNo();
 		ArrayList<HashMap<String, Object>> list = bService.selectCategory(menu, userNo, sort);
-		System.out.println(list);
+		System.out.println("셀렉트 카테고리 골랐을때 == " + list);
 		return list;
 	}
 

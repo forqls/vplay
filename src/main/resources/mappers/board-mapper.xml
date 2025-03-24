@@ -2,25 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pocopoco_vplay.board.model.mapper.BoardMapper">
 	<select id="selectCategory" resultType="map">
-		SELECT content.views,content.content_no,content.content_title,TO_CHAR(content.content_detail) as content_detail, menu.menu_name, likes.user_no as likesUser,
-		(select count(*) from likes l2 where l2.content_no = content.content_no) as like_count
+		SELECT 
+			content.views,
+			content.content_no,
+			content.content_title,
+			TO_CHAR(content.content_detail) as content_detail,
+			menu.menu_name,
+			likes.user_no as likesUser,
+			COUNT(l2.content_no) AS like_count
 		FROM content
-		left JOIN board ON content.content_no = board.content_no
-		left JOIN content_category on content.content_no = content_category.content_no
-		left join category on content_category.category_no = category.category_no
-		left JOIN menu ON category.menu_no = menu.menu_no
-		left JOIN likes ON content.content_no = likes.content_no
-		WHERE board.board_type is null and likes.user_no=#{userNo} and menu_name is not null
+		LEFT JOIN board ON content.content_no = board.content_no
+		LEFT JOIN content_category ON content.content_no = content_category.content_no
+		LEFT JOIN category ON content_category.category_no = category.category_no
+		LEFT JOIN menu ON category.menu_no = menu.menu_no
+		LEFT JOIN likes ON content.content_no = likes.content_no
+		LEFT JOIN likes l2 ON l2.content_no = content.content_no
+		WHERE board.board_type IS NULL
+		  AND likes.user_no = #{userNo}
+		  AND menu.menu_name IS NOT NULL
 		<if test="menu != 'All'">
-			AND menu.menu_name =#{menu}
+			AND menu.menu_name = #{menu}
 		</if>
+		GROUP BY 
+			content.views, content.content_no, content.content_title, menu.menu_name, likes.user_no, TO_CHAR(content.content_detail),content.create_date
 		<if test="sort == 'newest'">
-			order by content.create_date
+			ORDER BY content.create_date
 		</if>
 		<if test="sort == 'mostView'">
-			order by content.views desc
+			ORDER BY content.views DESC
 		</if>
 	</select>
+
 
 	<select id="selectCategoryMyProjects">
 		SELECT c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,c.MD_RECOMMENDATION, b.board_type, m.menu_name,
