@@ -36,4 +36,5 @@ public class Content {
 	private int overallScore;
 	private String mdRecommendation;
 	private int downloadCount;
+	private String UserProfile;
 }
