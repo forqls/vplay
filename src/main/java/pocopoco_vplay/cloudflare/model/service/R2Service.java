@@ -73,26 +73,19 @@ public class R2Service {
 		    }
 	}
 	
-	public byte[] downloadFile(String fileName) {
+	public InputStream downloadFileStream(String fileName) {
 	    GetObjectRequest getObjectRequest = GetObjectRequest.builder()
 	            .bucket(bucketName)
 	            .key(fileName)
 	            .build();
 
-	    try (InputStream inputStream = s3Client.getObject(getObjectRequest);
-	         ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+	    try {
+	        InputStream inputStream = s3Client.getObject(getObjectRequest);
+	        System.out.println("✅ 파일 스트리밍 시작: " + fileName);
+	        return inputStream;
 
-	        byte[] buffer = new byte[4096];
-	        int bytesRead;
-	        while ((bytesRead = inputStream.read(buffer)) != -1) {
-	            outputStream.write(buffer, 0, bytesRead);
-	        }
-
-	        System.out.println("✅ 파일 다운로드 성공: " + fileName);
-	        return outputStream.toByteArray();
-
-	    } catch (IOException | SdkException e) {
-	        System.err.println("❌ 파일 다운로드 실패: " + fileName);
+	    } catch (SdkException e) {
+	        System.err.println("❌ 파일 스트리밍 실패: " + fileName);
 	        e.printStackTrace();
 	        return null;
 	    }

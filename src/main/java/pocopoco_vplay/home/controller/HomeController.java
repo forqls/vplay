@@ -24,6 +24,7 @@ public class HomeController {
 	@GetMapping("/")
 	public String goIndex(Model model) {
 		ArrayList<Users> user = uService.selectTopUser();
+		ArrayList<Content> mdList = bService.selectMdList();
 		System.out.println(user);
 		
 		model.addAttribute("ulist",user);
@@ -41,7 +42,7 @@ public class HomeController {
 	    }
 	    System.out.println(content);
 		
-		model.addAttribute("clist",content);
+		model.addAttribute("clist",content).addAttribute("mdList", mdList);
 		return "index";
 	}
 }
