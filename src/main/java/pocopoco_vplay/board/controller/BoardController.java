@@ -565,16 +565,26 @@ public class BoardController {
 		//글추가
 		int result = bService.insertContent(content);
 		int contentNo = content.getContentNo();
+		int result3 = 0;
+		int result4 = 0;
 		
 		try {
-			tFileUrl = r2Service.uploadFile(tFile);
-			cFileUrl = r2Service.uploadFile(cFile);
+			if(!tFile.isEmpty()) {
+				tFileUrl = r2Service.uploadFile(tFile);
+				result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
+			}
+			
+			if(!cFile.isEmpty()) {
+				cFileUrl = r2Service.uploadFile(cFile);
+				result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
-		int result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
+		 
+		
 		
 		System.out.println(content);
 		

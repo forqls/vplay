@@ -1,6 +1,5 @@
 package pocopoco_vplay.cloudflare.model.service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
