@@ -1,430 +1,566 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<link href="/css/topbar.css" rel="stylesheet" type="text/css">
-	<link href="/css/rBoard/requestBoard.css" rel="stylesheet" type="text/css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>의뢰 게시판 상세</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 
-	<title>의뢰 게시판 작성</title>
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
+body {
+	font-family: Arial, sans-serif;
+	background-color: #191820;
+	color: white;
+	min-height: 100vh;
+}
 
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #191820;
-			color: #ffffff;
-			min-height: 100vh;
-		}
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
 
-		.inquiryWrite-container {
-			max-width: 1200px;
-			margin: 2rem auto;
-			padding: 2rem;
-			text-align: center;
-		}
+.post-title {
+	font-size: 24px;
+	font-weight: 600;
+	text-align: center;
+	margin-top: 80px;
+	margin-bottom: 50px;
+}
 
-		.inquiryWrite-title {
-			font-size: 1.5rem;
-			margin-bottom: 2rem;
-		}
+.author-info {
+	display: flex;
+	align-items: center;
+	margin-bottom: 30px;
+}
 
-		.form-group {
-			margin-bottom: 20px;
-		}
+.author-avatar {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	border: 1.5px solid #5e37e9;
+	overflow: hidden;
+	margin-right: 15px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
 
-		.form-label {
-			display: flex;
-			align-items: center;
-			margin-bottom: 10px;
-		}
+.author-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
 
-		.filter-dropdown {
-			padding: 8px 16px;
-			background-color: #33333e;
-			border: none;
-			border-radius: 6px;
-			color: white;
-			font-size: 14px;
-			text-align: center;
-			cursor: pointer;
-			appearance: none;
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			background-repeat: no-repeat;
-			background-position: right 8px center;
-			background-size: 16px;
-			padding-right: 30px;
-			padding-left: 5px;
-			margin-left: 10px;
-			margin-top: 3px;
-			background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-		}
+.author-meta {
+	display: flex;
+	flex-direction: column;
+}
 
-		.filter-dropdown:hover {
-			box-shadow: 0 0 0 0.5px #ffffff;
-		}
+.author-name {
+	font-weight: 600;
+	font-size: 16px;
+}
 
-		input[type="text"], textarea {
-			width: 100%;
-			padding: 12px 16px;
-			border-radius: 4px;
-			background-color: #1f1f2c;
-			color: #ffffff;
-		}
+.post-date {
+	color: #949396;
+	font-size: 14px;
+}
 
-		input[type="text"]::placeholder, textarea::placeholder {
-			color: #6a6a6a;
-		}
+.post-category {
+	margin-bottom: 20px;
+}
 
-		textarea {
-			color: #fff;
-			resize: vertical;
-		}
+.category-label {
+	display: inline-block;
+	background-color: #1f1f2c;
+	padding: 5px 15px;
+	border-radius: 20px;
+	font-size: 14px;
+}
 
-		.button-group {
-			display: flex;
-			justify-content: space-between;
-		}
+.post-content {
+	background-color: #1f1f2c;
+	border-radius: 10px;
+	padding: 30px;
+	margin-bottom: 40px;
+	line-height: 1.8;
+}
 
-		.button {
-			background-color: #5e37e9;
-			color: white;
-			border: none;
-			border-radius: 0.375rem;
-			padding: 0.75rem;
-			font-size: 0.875rem;
-			cursor: pointer;
-		}
+.action-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin: 40px 0;
+}
 
-		.button:hover {
-			background-color: #8137e9;
-		}
+.left-buttons {
+	display: flex;
+}
 
-		table.table {
-			color: #ffffff !important;
-			background: #1f1f2c !important;
-		}
+.right-buttons {
+	display: flex;
+	gap: 15px;
+}
 
-		.custom-table {
-			color: #fff;
-			background-color: #1f1f2c;
-			border-collapse: collapse !important;
-			border-bottom: 1px solid #444 !important;
-		}
-		.custom-table th, .custom-table td {
-			padding: 0.8rem 1rem 0.5rem 1rem !important; /* top right bottom left */
-		}
-		.custom-table th, .custom-table td {
-			background-color: #1f1f2c;
-			color: #fff;
-		}
-		.content {
-			margin-bottom: 3rem;
-		}
-	</style>
+.btn {
+	padding: 10px 25px;
+	border-radius: 5px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: none;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-primary {
+	background-color: #8137e9;
+	color: white;
+}
+
+.btn-primary:hover {
+	background-color: #9550ff;
+	color: white;
+}
+
+.btn-outline {
+	background-color: transparent;
+	border: 1px solid #949396;
+	color: #ffffff;
+}
+
+.btn-outline:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger {
+	background-color: #d46868;
+	color: white;
+}
+
+.btn-danger:hover {
+	background-color: #e57979;
+}
+
+.comments-section {
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+.comments-title {
+	font-size: 22px;
+	margin-bottom: 30px;
+	font-weight: 600;
+}
+
+.comment-form {
+	margin-bottom: 40px;
+}
+
+.comment-user {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	margin-left: 5px;
+}
+
+.comment-user img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 1.5px solid #5e37e9;
+	margin-right: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.comment-textarea {
+	width: 100%;
+	background-color: #1f1f2c;
+	color: #ffffff;
+	border: none;
+	border-radius: 10px;
+	padding: 20px;
+	font-size: 15px;
+	resize: none;
+	min-height: 120px;
+	margin-bottom: 15px;
+}
+
+.comment-textarea:focus {
+	outline: 1px solid #8137e9;
+}
+
+.comment-list {
+	margin-top: 40px;
+}
+
+.comment-item {
+	background-color: #1f1f2c;
+	border-radius: 10px;
+	padding: 20px;
+	margin-bottom: 15px;
+}
+
+.comment-header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 15px;
+}
+
+.comment-author {
+	display: flex;
+	align-items: center;
+}
+
+.comment-author img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 1.5px solid #5e37e9;
+	margin-right: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.comment-author-name {
+	font-weight: 600;
+}
+
+.comment-date {
+	color: #949396;
+	font-size: 14px;
+}
+
+.comment-content {
+	width: 100%;
+	background-color: transparent;
+	color: #ffffff;
+	border: none;
+	resize: none;
+	font-size: 15px;
+	padding: 0;
+}
+
+.comment-content:focus {
+	outline: 1px solid #8137e9;
+}
+
+.comment-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.comment-btn {
+	padding: 5px 15px;
+	border-radius: 5px;
+	font-size: 13px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: none;
+}
+
+.comment-btn-edit {
+	background-color: #8137e9;
+	color: white;
+}
+
+.comment-btn-edit:hover {
+	background-color: #9550ff;
+}
+
+.comment-btn-delete {
+	background-color: #d46868;
+	color: white;
+}
+
+.comment-btn-delete:hover {
+	background-color: #e57979;
+}
+
+/* Modal styling */
+.modal-content {
+	background-color: #1f1f2c;
+	color: #ffffff;
+	border: none;
+	border-radius: 10px;
+}
+
+.modal-body {
+	padding: 30px;
+}
+
+.modal-title {
+	font-size: 20px;
+	margin-bottom: 15px;
+}
+
+.modal-footer {
+	border-top: none;
+	padding: 0 30px 30px 30px;
+}
+
+.purple-button {
+	background-color: #8137e9;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	text-align: center;
+	display: inline-block;
+}
+
+.purple-button:hover {
+	background-color: #9550ff;
+}
+
+/* Responsive adjustments */
+@media ( max-width : 768px) {
+	.post-title {
+		font-size: 24px;
+	}
+	.action-buttons {
+		flex-direction: column;
+	}
+	.btn {
+		width: 100%;
+	}
+}
+
+@media ( max-width : 768px) {
+	.action-buttons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.left-buttons, .right-buttons {
+		justify-content: center;
+		margin-bottom: 15px;
+	}
+}
+</style>
 </head>
 <body>
-<div th:replace="~{views/common/topbar :: topbar}"></div>
-<main class="inquiryWrite-container">
-	<h1 class="inquiryWrite-title">[[${c.contentTitle}]]</h1>
-	<form method="post" id="requestDetailForm">
-		<input type="hidden" name="contentNo" th:value="${c.contentNo}">
-		<input type="hidden" name="page" th:value="${page}">
-		<div class="form-group">
-			<div class="form-label">
-				<span>[[${c.contentTitle}]]</span>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="container">
+		<form method="post" id="requestDetailForm">
+			<input type="hidden" name="contentNo" th:value="${c.contentNo}"> <input type="hidden" name="page" th:value="${page}">
+
+			<!-- Post Title -->
+			<h1 class="post-title" th:text="${c.contentTitle}"></h1>
+
+			<!-- Author Info -->
+			<div class="author-info">
+				<div class="author-avatar">
+					<th:block th:if="${c.userProfile == null}">
+						<img src="/img/testProfile.jpg" width="100%" height="100%">
+					</th:block>
+					<th:block th:unless="${c.userProfile == null}">
+						<img th:src="${c.userProfile}" alt="프로필 이미지" width="100%" height="100%">
+					</th:block>
+				</div>
+				<div class="author-meta">
+					<div class="author-name" th:text="${c.userNickName}"></div>
+					<div class="post-date" th:text="${c.modifyDate}"></div>
+				</div>
 			</div>
-		</div>
-		<!--<img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> 사진-->
-		<div class="form-group">
-			<div class="form-label">[[${c.userNickName}]]</div>
-		</div>
-		<div class="form-group">
-			<div class="form-label">조회수 : [[${c.views}]]</div>
-		</div>
 
-		<div class="form-group">
-			<div class="form-label">[[${c.modifyDate}]]</div>
-		</div>
-
-		<div class="form-group">
-			<div class="form-label">[[${c.menuName}]]</div>
-		</div>
-
-		<div class="form-group">
-			<div class="form-label">
-				<div th:utext="${c.contentDetail}"></div>
+			<!-- Category -->
+			<div class="post-category">
+				<div class="category-label" th:text="${c.menuName}"></div>
+				<span style="margin-left: 15px; color: #949396;"> <i class="fas fa-eye"></i> <span th:text="${c.views}"></span>
+				</span>
 			</div>
-		</div>
 
-		<div class="button-group">
-			<a th:href="@{/board/request_list(page=${page})}" class="button">목록으로</a>
-			<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
-				<button type="button" id="updateRequest" class="button">수정하기</button>
-				<button type="button" id="deleteModal" class="button">삭제하기</button>
-			</th:block>
-		</div>
+			<!-- Post Content -->
+			<div class="post-content" th:utext="${c.contentDetail}"></div>
 
-		<!-- 삭제하기 모달 -->
-		<div class="modal" tabindex="-1" role="dialog" id="modalChoice">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-body p-4 text-center">
-						<h3 class="mb-0">정말로 삭제하시겠습니까?</h3>
-						<p class="mb-0">삭제 후 게시글은 복구할 수 없습니다.</p>
-					</div>
-					<div class="modal-footer flex-nowrap p-0">
-						<button type="button" id="delete">
-							<strong>네</strong>
+			<!-- Action Buttons -->
+			<div class="action-buttons">
+				<div class="left-buttons">
+					<a th:href="@{/board/request_list(page=${page})}" class="btn btn-outline"> <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> 목록으로
+					</a>
+				</div>
+				<div class="right-buttons">
+					<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
+						<button type="button" id="updateRequest" class="btn btn-primary">
+							<i class="fas fa-edit" style="margin-right: 8px;"></i> 수정하기
 						</button>
-						<button type="button" data-bs-dismiss="modal">아니오</button>
+						<button type="button" id="deleteModal" class="btn btn-danger">
+							<i class="fas fa-trash-alt" style="margin-right: 8px;"></i> 삭제하기
+						</button>
+					</th:block>
+				</div>
+			</div>
+		</form>
+
+		<!-- Comments Section -->
+		<div class="comments-section">
+			<h2 class="comments-title">댓글</h2>
+
+			<!-- Comment Form -->
+			<div class="comment-form">
+				<form method="post" id="replyForm" action="/board/insertReply">
+					<input type="hidden" name="contentNo" th:value="${c.contentNo}"> <input type="hidden" name="page" th:value="${page}">
+
+					<div class="comment-user">
+						<th:block th:if="${session.loginUser != null}">
+							<img th:src="${session.loginUser.userProfile}" alt="프로필 이미지">
+							<span th:text="${session.loginUser.userNickname}" style="font-weight: 500;"></span>
+						</th:block>
+						<th:block th:if="${session.loginUser == null}">
+							<i class="fas fa-user-circle" style="font-size: 40px; color: #949396; margin-right: 10px;"></i>
+							<span style="color: #949396;">로그인을 하여 자유롭게 의견을 남겨보세요.</span>
+						</th:block>
 					</div>
+
+					<textarea class="comment-textarea" id="replyContent" name="replyDetail" placeholder="댓글을 작성해주세요."></textarea>
+
+					<div style="text-align: right;">
+						<button class="purple-button" id="replySubmit" type="submit" th:disabled="${session.loginUser == null}">댓글 작성</button>
+					</div>
+				</form>
+			</div>
+
+			<!-- Comment List -->
+			<div class="comment-list">
+				<div th:each="r : ${replyList}" class="comment-item">
+					<div class="comment-header">
+						<div class="comment-author">
+							<img th:src="${r.userProfile}" alt="프로필 이미지"> <span class="comment-author-name" th:text="${r.userNickname}"></span>
+						</div>
+						<div class="comment-date" th:text="${r.modifyDate}"></div>
+					</div>
+
+					<textarea id="modifyReply" readonly class="comment-content replyListDetail" name="replyDetail" th:text="${r.replyDetail}"></textarea>
+
+					<th:block th:if="${session.loginUser != null && r.userNickname eq session.loginUser.userNickname}">
+						<input type="hidden" th:value="${r.replyNo}" name="replyId">
+						<div class="comment-actions">
+							<button class="comment-btn comment-btn-edit updateReply">수정</button>
+							<button class="comment-btn comment-btn-delete deleteReply">삭제</button>
+						</div>
+						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail">
+					</th:block>
 				</div>
 			</div>
 		</div>
-		<br><br><br><br><br><br>
-	</form>
-	<form class="reply_wrap" method="post" id="replyForm" action="/board/insertReply">
-		<input type="hidden" name="contentNo" th:value="${c.contentNo}">
-		<input type="hidden" name="page" th:value="${page}">
-		<div style="margin-bottom: 20px;">
-			<p style="color: #999;">크리에이터 답변</p>
-		</div>
-		<div class="content"><!--댓글 작성부분-->
-			<div style="margin-bottom: 20px;">
+	</div>
 
-				<th:block th:if="${session.loginUser != null}">
-					<span>[[${session.loginUser.userNickname}]]</span>
-					<span><img th:src="${session.loginUser.userProfile}"></span>
-				</th:block>
-				<th:block th:if="${session.loginUser == null}">
-					<span>로그인을 하여 자유롭게 의견을 남겨보세요.</span>
-				</th:block>
+	<!-- 삭제 확인 모달 -->
+	<div class="modal fade" id="modalChoice" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h5 class="modal-title">정말로 삭제하시겠습니까?</h5>
+					<p>삭제 후 게시글은 복구할 수 없습니다.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="delete" class="btn btn-danger">네</button>
+					<button type="button" class="btn btn-outline" data-bs-dismiss="modal">아니오</button>
+				</div>
 			</div>
-			<textarea class="reply_detail" rows="8" id="replyContent" style="resize:none" name="replyDetail"></textarea>
-			<button class="btn btn-outline-success" id="replySubmit" type="submit" th:disabled="${session.loginUser == null}">SUBMIT</button>
 		</div>
-	</form>
-	<table class="table custom-table" style="color:#fff; background: #1f1f2c;"><!--원래있는 댓글부분-->
-		<thead>
-		<tr>
-			<th width="130px">작성자</th>
-			<th>프로필</th>
-			<th>작성내용</th>
-			<th width="130px">작성일자</th>
-			<th></th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="r : ${replyList}">
-			<!-- 닉네임 -->
-			<td>[[${r.userNickname}]]</td>
-
-			<!-- 프로필 이미지 -->
-			<td>
-				<img th:src="@{${r.userProfile}}"
-					 alt="프로필 이미지"
-					 style="width:30px; height:30px; border-radius:50%;">
-			</td>
-
-			<!-- 댓글 내용 -->
-			<td>
-				<textarea id="modifyReply" readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea>
-			</td>
-
-			<!-- 작성일 -->
-			<td>[[${r.modifyDate}]]</td>
-
-			<!-- 수정/삭제 버튼 -->
-			<td width="80px">
-
-				<th:block th:if="${session.loginUser != null && r.userNickname eq session.loginUser.userNickname}">
-					<input type="hidden" th:value="${r.replyNo}" name="replyId">
-					<span class="updel updateReply">수정하기</span>
-					&nbsp;
-					<span class="updel deleteReply">삭제하기</span>
-					<input type="hidden" th:value="${r.replyDetail}" name="replyDetail">
-				</th:block>
-			</td>
-		</tr>
-		</tbody>
-
-	</table>
-
-
-	<div style="text-align: center; margin-top: 20px;">
-		<!--         <button class="button">답글달기</button>-->
 	</div>
 
 </main>
-<script th:inline="javascript">
-	let userNo = "";
-	window.onload = () => {
 
-		/*<![CDATA[*/
-		const loginUser = /*[[${session.loginUser}]]*/1;
-		/*]]>*/
+	<script th:inline="javascript">
+        let userNo = "";
+        
+        window.onload = () => {
+            const loginUser = /*[[${session.loginUser}]]*/ null;
+            if (loginUser != null) {
+                userNo = loginUser.userNo;
+            }
 
-		if(loginUser != null){
-			userNo = loginUser.userNo;
-		}
-		const udr = document.getElementById('updateRequest');
-		const form = document.getElementById('requestDetailForm');
-		if(udr != null){
-			udr.addEventListener('click', () =>{
-				form.action = '/board/updateRequestForm';
-				form.submit();
-			});
-		}
+            const updateRequestBtn = document.getElementById('updateRequest');
+            const form = document.getElementById('requestDetailForm');
+            
+            if (updateRequestBtn) {
+                updateRequestBtn.addEventListener('click', () => {
+                    form.action = '/board/updateRequestForm';
+                    form.submit();
+                });
+            }
 
+            const deleteModalBtn = document.getElementById('deleteModal');
+            if (deleteModalBtn) {
+                deleteModalBtn.addEventListener('click', () => {
+                    $('#modalChoice').modal('show');
+                });
+            }
 
+            document.getElementById('delete').addEventListener('click', () => {
+                form.action = '/board/deleteRequest';
+                form.submit();
+            });
+        }
 
-		if(loginUser != null){
-			document.getElementById('deleteModal').addEventListener('click' ,  () =>{
-				$('#modalChoice').modal('show');
-			})
-		}else{
-			console.log('모달없음');
-		}
+        // 댓글 수정 및 삭제 기능
+        document.querySelectorAll('.updateReply').forEach(button => {
+            button.addEventListener('click', function() {
+                const replyRow = this.closest('.comment-item');
+                const replyDetailTextarea = replyRow.querySelector('textarea.replyListDetail');
+                const replyNo = replyRow.querySelector("input[name='replyId']").value;
+                const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value;
 
+                if (this.textContent === '수정') {
+                    replyDetailTextarea.removeAttribute('readonly');
+                    replyDetailTextarea.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                    replyDetailTextarea.style.padding = '10px';
+                    replyDetailTextarea.style.borderRadius = '5px';
+                    replyDetailTextarea.focus();
+                    this.textContent = '저장';
+                } else {
+                    const updatedReply = replyDetailTextarea.value;
+                    $.ajax({
+                        type: "POST",
+                        url: "/board/updateReply",
+                        data: {replyNo: replyNo, replyDetail: updatedReply, userNo: userNo},
+                        success: data => {
+                            alert("댓글이 수정되었습니다.");
+                            location.reload();
+                        },
+                        error: function(error) {
+                            console.log("댓글 수정 중 오류 발생:", error);
+                        }
+                    });
+                }
+            });
+        });
 
-		document.getElementById('delete').addEventListener('click', () =>{
-			form.action = '/board/deleteRequest';
-			form.submit();
-		})
+        document.querySelectorAll('.deleteReply').forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+                    const replyRow = this.closest('.comment-item');
+                    const replyNo = replyRow.querySelector("input[name='replyId']").value;
 
-		const button = document.querySelector('.button-group').children[0];
-		button.addEventListener('click', ()=>{
-			const pageNo = form.children[1].value
-			window.location.href = "/board/request_list?page=" + pageNo;
-		})
-		console.log(document.querySelectorAll('.updateReply'));
-
-
-
-
-	}
-	let replyModifyDetail = '';
-	document.getElementById('modifyReply').addEventListener('input', function() {
-		replyModifyDetail = this.value;
-		console.log("replyModifyDetail ==========" + replyModifyDetail);
-	});
-
-	document.querySelectorAll('.updateReply').forEach(button => {
-		button.addEventListener('click', function () {
-			const replyRow = this.closest('tr');
-			const replyDetailTextarea = replyRow.querySelector('td textarea');
-			const replyNo = replyRow.querySelector("input[name='replyId']").value;
-			const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value;
-
-			if (!replyDetailTextarea) {
-				console.error("Textarea 요소를 찾을 수 없습니다.");
-				return;
-			}
-
-			// 수정 가능하게 만들기
-			replyDetailTextarea.removeAttribute('readonly');
-			replyDetailTextarea.focus();
-			replyDetailTextarea.setSelectionRange(replyDetailTextarea.value.length, replyDetailTextarea.value.length);
-
-
-			this.textContent = '저장하기';
-			this.classList.remove("updateReply");
-			this.classList.add("saveReply");
-
-			// 새로 수정 버튼을 생성한 뒤, 클릭 이벤트 추가
-			this.replaceWith(this.cloneNode(true));
-			const saveButton = replyRow.querySelector('.saveReply');
-			/*console.log(userNo)*/
-			let isSaving = false;/*저장중인지 확인하는 변수*/
-
-			saveButton.addEventListener('mousedown', function () {
-				isSaving = true;
-			});
-
-			saveButton.addEventListener('click', function () {
-				const updatedReply = replyDetailTextarea.value; // 수정된 값을 여기에 저장
-				console.log("replyDetailTextarea.value : : "+replyDetailTextarea.value);
-				$.ajax({
-					type: "POST",
-					url: "/board/updateReply",
-					data: {replyNo: replyNo, replyDetail: updatedReply, userNo: userNo},
-					success: data => {
-						console.log("data" + data);
-						alert("댓글이 수정되었습니다.");
-
-						location.reload();
-
-					},
-					error: function (error) {
-						console.log("댓글 수정 중 오류 발생:", error);
-					}
-				});
-			});
-
-
-			// 수정 후 포커스를 잃었을 때 원래의 내용으로 되돌리기
-			replyDetailTextarea.addEventListener('blur', function () {
-				if(isSaving){
-					isSaving = false;
-					return;
-				}
-
-				replyDetailTextarea.value = originalReplyDetail;
-				replyDetailTextarea.setAttribute("readonly", true);
-
-				saveButton.textContent = "수정하기";
-				saveButton.classList.remove("saveReply");
-				saveButton.classList.add("updateReply");
-
-			});
-
-
-			// 댓글 삭제 버튼 클릭 시 모달 열기 + 한 번만 리스너 등록
-			replyRow.querySelectorAll('.deleteReply').forEach(deleteBtn => {
-				deleteBtn.addEventListener('click', function () {
-					$('#modalChoice').modal('show');
-
-					// 기존 이벤트 제거 위해 복제 (매번 새로 이벤트 연결)
-					const deleteBtnInModal = document.getElementById('delete');
-					const newBtn = deleteBtnInModal.cloneNode(true);
-					deleteBtnInModal.parentNode.replaceChild(newBtn, deleteBtnInModal);
-
-					// 댓글 삭제용 이벤트 연결
-					newBtn.addEventListener('click', () => {
-						$('#modalChoice').modal('hide');
-						const replyNo = replyRow.querySelector("input[name='replyId']").value;
-
-						$.ajax({
-							url: "/board/deleteReply",
-							data: { replyNo: replyNo },
-							success: data => {
-								if (data === 1) {
-									replyRow.remove();
-								}
-							},
-							error: function (error) {
-								console.log("댓글 삭제 중 오류 발생:", error);
-							}
-						});
-					});
-				});
-			});
-
-
-		});
-		});
-
-
-
-</script>
+                    $.ajax({
+                        url: "/board/deleteReply",
+                        data: { replyNo: replyNo },
+                        success: data => {
+                            if (data === 1) {
+                                replyRow.remove();
+                            }
+                        },
+                        error: function(error) {
+                            console.log("댓글 삭제 중 오류 발생:", error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
