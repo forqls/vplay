@@ -20,8 +20,7 @@
 		<div class="vplay-nav-right">
 			<th:block th:if="${session.loginUser != null}">
 
-				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 
 				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 						<g fill="none" stroke="currentColor" stroke-width="2">
@@ -29,12 +28,11 @@
 							<path d="m4 9l7.106 3.553a2 2 0 0 0 1.788 0L20 9" />
 						</g>
 					</svg>
-					<span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full animate-bounce"></span>
-					</svg> <span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full animate-bounce"></span>
+					<span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-purple-700 text-white text-xs px-1.5 py-0.5 rounded-full animate-bounce"></span>
+					</svg>
 				</a>
 			</th:block>
-			<a onclick="location.href='/users/license'" class="vplay-nav-link">License</a>
-			<a onclick="location.href='/users/price'" class="vplay-nav-link">Pricing</a>
+			<a onclick="location.href='/users/license'" class="vplay-nav-link">License</a> <a onclick="location.href='/users/price'" class="vplay-nav-link">Pricing</a>
 
 			<th:block th:if="${session.loginUser == null}">
 				<a onclick="location.href='/users/signIn'" class="vplay-nav-link vplay-sign-in">Sign in</a>
