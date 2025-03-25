@@ -10,57 +10,18 @@
 <title>My Project</title>
 <style>
 .button {
-	background-color: #5e37e9;
-	color: white;
-	border: none;
-	border-radius: 0.375rem;
 	padding: 6px;
-	font-size: 0.875rem;
-	cursor: pointer;
 	margin-left: auto;
 	margin-top: 2.5px;
 }
 
-.button:hover {
-	background-color: #8137e9;
-}
-
 .dropdown {
-	position: absolute;
 	top: 25%;
-	background-color: #252535;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-	display: none;
-	z-index: 100;
 	right: 0;
 }
 
-.dropdown:hover {
-	background-color: #2a2a3a;
-}
-
 .dropdown.show {
-	display: block;
 	margin-right: 7.5px;
-}
-
-.dropdown-item {
-	display: flex;
-	align-items: center;
-	padding: 3px;
-	gap: 0.5rem;
-	color: #fff;
-	text-decoration: none;
-	font-size: 0.875rem;
-	border-radius: 0.25rem;
-	cursor: pointer;
-}
-
-.dropdown-item i {
-	font-size: 1rem;
-	color: #6f757d;
 }
 </style>
 </head>
@@ -68,7 +29,7 @@
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
-		<div class="container content_wrap">
+		<div class="content_wrap">
 			<div class="content-header">
 				<h1>My Projects</h1>
 			</div>
@@ -101,8 +62,7 @@
 							</div>
 						</div>
 						<div class="item-content">
-							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}" hidden></span>
-							<input type="hidden" th:value="${r.menuName}">
+							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}" hidden></span> <input type="hidden" th:value="${r.menuName}">
 							<div class="item-actions">
 								<span>👁️ [[${r.views}]]</span> <span>❤️ [[${r.likeCount}]]</span>
 							</div>

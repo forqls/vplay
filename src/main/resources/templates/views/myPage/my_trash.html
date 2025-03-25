@@ -10,41 +10,12 @@
 <title>My Trash</title>
 <style>
 .dropdown {
-	position: absolute;
 	top: 25%;
-	background-color: #252535;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	min-width: 40px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-	display: none;
-	z-index: 100;
 	right: 0;
 }
 
 .dropdown.show {
-	display: block;
 	margin-right: 7.5px;
-}
-
-.dropdown-item {
-	display: flex;
-	align-items: center;
-	padding: 3px;
-	color: #fff;
-	text-decoration: none;
-	font-size: 0.875rem;
-	border-radius: 0.25rem;
-	cursor: pointer;
-}
-
-.dropdown:hover {
-	background-color: #2a2a3a;
-}
-
-.dropdown-item i {
-	font-size: 1rem;
-	color: #6f757d;
 }
 </style>
 </head>
@@ -52,7 +23,7 @@
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
-		<div class="container content_wrap">
+		<div class="content_wrap">
 			<div class="content-header">
 				<h1>My Trash</h1>
 			</div>
