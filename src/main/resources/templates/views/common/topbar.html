@@ -20,16 +20,10 @@
 		<div class="vplay-nav-right">
 			<th:block th:if="${session.loginUser != null}">
 
-				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-
-				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-						<g fill="none" stroke="currentColor" stroke-width="2">
-							<rect width="16" height="12" x="4" y="6" rx="2" />
-							<path d="m4 9l7.106 3.553a2 2 0 0 0 1.788 0L20 9" />
-						</g>
-					</svg>
-					<span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-purple-700 text-white text-xs px-1.5 py-0.5 rounded-full animate-bounce"></span>
-					</svg>
+				<a th:href="@{/users/{userNo}(userNo=${session.loginUser.userNo})}" class="relative inline-block"> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24">
+						<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+						<path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+						<path d="m3 7l9 6l9-6" /></g></svg> <span id="unreadMessageCount" class="hidden absolute -top-2 -right-2 bg-purple-700 text-white text-xs px-1.5 py-0.5 rounded-full animate-bounce"></span> </svg>
 				</a>
 			</th:block>
 			<a onclick="location.href='/users/license'" class="vplay-nav-link">License</a> <a onclick="location.href='/users/price'" class="vplay-nav-link">Pricing</a>
