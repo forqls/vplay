@@ -1,31 +1,48 @@
 package pocopoco_vplay.home.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 @Controller
 @RequiredArgsConstructor
+@SessionAttributes("loginUser")
 public class HomeController {
 	
 	private final UsersService uService;
 	private final BoardService bService;
+
 	
 	@GetMapping("/")
-	public String goIndex(Model model) {
+	public String goIndex(Model model, HttpSession session) {
 		ArrayList<Users> user = uService.selectTopUser();
 		ArrayList<Content> mdList = bService.selectMdList();
+		Users u = (Users)session.getAttribute("loginUser");
+		int userNo = 0;
+		if(u != null){
+			userNo = (u).getUserNo();
+		}
+
 		System.out.println(user);
+
+		int num = 0;
+		int result = 0;
+		for (int v = 0; v < mdList.size(); v++) {
+			num = mdList.get(v).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			mdList.get(v).setLikeTo(result);
+		}
 		
 		model.addAttribute("ulist",user);
 		ArrayList<Content> content = bService.selectContentTop();
