@@ -189,12 +189,12 @@ body {
 }
 
 .template-card {
-	background-color: #33333a;
 	border-radius: 8px;
-	overflow: hidden;
 	display: flex;
+	position: relative;
+	overflow: hidden;
+	/*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);*/
 	flex-direction: column;
-	height: 250px;
 }
 
 .template-image {
@@ -307,7 +307,10 @@ body {
 					<input type="hidden" th:value=${md.menuNo}>
 					<div class="template-details">
 						<div class="template-image"></div>
-						<div class="template-title">[[${md.contentTitle}]]</div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<div class="template-title">[[${md.contentTitle}]]</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -417,14 +420,14 @@ body {
 
 	<script>
 		const creatorList = document.querySelector('.creator-grid.top');
-	
+
 		var showAlert = "[[${showAlert}]]";
 		console.log(showAlert);
 		if (showAlert.trim() === "true") {
 			console.log(showAlert);
 			alert("결제일이 지났습니다.");
 		}
-		
+
 		window.onload=()=>{
 			const mdList = document.getElementById('template-grid-wrap');
 			[...mdList.children].map((template, index, array) =>{
@@ -444,18 +447,18 @@ body {
 						const video = document.createElement('video');
 						video.muted = true;
 						video.loop = true;
-						
+
 						const source = document.createElement("source");
 						source.type = "video/mp4";
 						source.src = data.thumbnail;
-						
+
 						video.appendChild(source);
 						thumbnail.appendChild(video);
-						
+
 						video.addEventListener('mouseenter', function(){
 							this.play();
 						});
-						
+
 						video.addEventListener('mouseleave', function(){
 							this.pause();
 							this.currentTime = 0;
@@ -463,15 +466,15 @@ body {
 					}else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2){
 						const img = document.createElement('img');
 						img.src = data.thumbnail;
-						
+
 						thumbnail.appendChild(img);
 					}
-					
+
 				})
 			})
 		}
 
-		
+
 		[...creatorList.children].map((creator, index, array) =>{
 			creator.addEventListener('click', function(){
 				const userNo = this.querySelector('input').value;
@@ -479,7 +482,7 @@ body {
 				location.href = "/users/creator/" + userNo;
 			})
 		})
-		
+
 	</script>
 </body>
 </html>

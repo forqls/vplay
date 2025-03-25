@@ -237,7 +237,6 @@
 
 			<!-- 댓글 내용 -->
 			<td>
-
 				<textarea id="modifyReply" readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea>
 			</td>
 
@@ -365,14 +364,6 @@
 
 						location.reload();
 
-						// replyDetailTextarea.setAttribute("readonly", true);
-						// saveButton.textContent = "수정하기";
-						// saveButton.classList.remove("saveReply");
-						// saveButton.classList.add("updateReply");
-						// //새로 저장된 내용 반영
-						// replyRow.querySelector("input[name='replyDetail']").value = updatedReply;
-						// //저장된 이후엔 다시 수정 버튼으로 등록
-						// saveButton.replaceWith(saveButton.cloneNode(true));
 					},
 					error: function (error) {
 						console.log("댓글 수정 중 오류 발생:", error);
@@ -398,36 +389,39 @@
 			});
 
 
+			// 댓글 삭제 버튼 클릭 시 모달 열기 + 한 번만 리스너 등록
 			replyRow.querySelectorAll('.deleteReply').forEach(deleteBtn => {
-
-
 				deleteBtn.addEventListener('click', function () {
-						$('#modalChoice').modal('show');
+					$('#modalChoice').modal('show');
 
-						document.getElementById('delete').addEventListener('click', () => {
-							$('#modalChoice').modal('hide');
-							//const replyRow = this.closest('tr');
-							const replyNo = replyRow.querySelector("input[name='replyId']").value;
+					// 기존 이벤트 제거 위해 복제 (매번 새로 이벤트 연결)
+					const deleteBtnInModal = document.getElementById('delete');
+					const newBtn = deleteBtnInModal.cloneNode(true);
+					deleteBtnInModal.parentNode.replaceChild(newBtn, deleteBtnInModal);
 
-							$.ajax({
-								url: "/board/deleteReply",
-								data: {replyNo: replyNo},
-								success: data => {
-									if (data === 1) {
-										replyRow.remove();
-									}
-								},
-								error: function (error) {
-									console.log("댓글 삭제 중 오류 발생:", error);
+					// 댓글 삭제용 이벤트 연결
+					newBtn.addEventListener('click', () => {
+						$('#modalChoice').modal('hide');
+						const replyNo = replyRow.querySelector("input[name='replyId']").value;
+
+						$.ajax({
+							url: "/board/deleteReply",
+							data: { replyNo: replyNo },
+							success: data => {
+								if (data === 1) {
+									replyRow.remove();
 								}
-							});
+							},
+							error: function (error) {
+								console.log("댓글 삭제 중 오류 발생:", error);
+							}
 						});
-
-
 					});
-
 				});
 			});
+
+
+		});
 		});
 
 
