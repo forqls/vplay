@@ -21,4 +21,7 @@ public class Reply {
 	private Date modifyDate;
 	private String replyStatus;
 	private String contentNo;
+	private int userNo;
+	private String userNickname;
+	private String userProfile;
 }

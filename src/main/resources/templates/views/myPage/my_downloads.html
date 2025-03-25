@@ -9,58 +9,13 @@
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Downloads</title>
 <style>
-.button {
-	background-color: #5e37e9;
-	color: white;
-	border: none;
-	border-radius: 0.375rem;
-	padding: 6px;
-	font-size: 0.875rem;
-	cursor: pointer;
-	margin-left: auto;
-	margin-top: 2.5px;
-}
-
-.button:hover {
-	background-color: #8137e9;
-}
-
 .dropdown {
-	position: absolute;
-	top: 25%;
-	background-color: #252535;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-	display: none;
-	z-index: 100;
+	top: 15%;
 	right: 0;
 }
 
-.dropdown:hover {
-	background-color: #2a2a3a;
-}
-
 .dropdown.show {
-	display: block;
 	margin-right: 7.5px;
-}
-
-.dropdown-item {
-	display: flex;
-	align-items: center;
-	padding: 3px;
-	gap: 0.5rem;
-	color: #fff;
-	text-decoration: none;
-	font-size: 0.875rem;
-	border-radius: 0.25rem;
-	cursor: pointer;
-}
-
-.dropdown-item i {
-	font-size: 1rem;
-	color: #6f757d;
 }
 </style>
 </head>
@@ -68,7 +23,7 @@
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
-		<div class="container content_wrap">
+		<div class="content_wrap">
 			<div class="content-header">
 				<h1>My Downloads</h1>
 			</div>
@@ -86,7 +41,6 @@
 					<option value="newest">새로운순</option>
 					<option value="mostView">조회수 많은 순</option>
 				</select>
-				<button class="button" id="content-write">컨텐츠 글 쓰기</button>
 			</div>
 			<th:block th:if="${not #lists.isEmpty(list)}">
 				<div class="grid">
@@ -104,10 +58,10 @@
 			<th:block th:if="${#lists.isEmpty(list)}">
 				<p>다운로드 받은 기록이 없습니다!</p>
 			</th:block>
-			</div>
 		</div>
-		
-			<script type="text/javascript">
+	</div>
+
+	<script type="text/javascript">
 			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
 				dropdown.addEventListener('change',(e)=>{
 					let value = document.getElementById('categorySelect').value;
@@ -149,10 +103,10 @@
 			});
 		});
 	</script>
-		
-		
-		
-		
-		
+
+
+
+
+
 </body>
 </html>

@@ -515,10 +515,11 @@ public class BoardController {
 	public String insertReply(@RequestParam(value = "page", defaultValue = "1") int currentPage, @ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") String contentNo) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
-			reply.setWriter(loginUser.getUserNickname());
+			reply.setUserNo(loginUser.getUserNo());
 			reply.setContentNo(contentNo);
 		}
 		int result = bService.insertReply(reply);
+
 		if (result > 0) {
 			ArrayList<Reply> replyList = bService.selectReplyList(Integer.parseInt(contentNo));
 			model.addAttribute("replyList", replyList);
@@ -532,8 +533,16 @@ public class BoardController {
 
 	@PostMapping("updateReply")
 	@ResponseBody
-	public int updateReply(@ModelAttribute Reply r) {
-		return bService.updateReply(r);
+	public int updateReply(@ModelAttribute Reply r, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		r.setUserNo(loginUser.getUserNo());
+		System.out.println("userNo ==================================== " + r.getUserNo());
+		System.out.println("userNo ==================================== " + r.getReplyDetail());
+
+		int result = bService.updateReply(r); // updateReply 호출
+		System.out.println("update 결과 ======================================= " + result);
+
+		return result;
 	}
 
 	@GetMapping("deleteReply")
@@ -565,16 +574,26 @@ public class BoardController {
 		//글추가
 		int result = bService.insertContent(content);
 		int contentNo = content.getContentNo();
+		int result3 = 0;
+		int result4 = 0;
 		
 		try {
-			tFileUrl = r2Service.uploadFile(tFile);
-			cFileUrl = r2Service.uploadFile(cFile);
+			if(!tFile.isEmpty()) {
+				tFileUrl = r2Service.uploadFile(tFile);
+				result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
+			}
+			
+			if(!cFile.isEmpty()) {
+				cFileUrl = r2Service.uploadFile(cFile);
+				result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
-		int result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
+		 
+		
 		
 		System.out.println(content);
 		

@@ -134,6 +134,7 @@ body {
     font-weight: 500;
     margin: 1rem 0;
 }
+<<<<<<< HEAD:src/main/resources/static/css/board/videoTemplates/list.css
 
 
 /* 예비용 */
@@ -239,3 +240,5 @@ body {
 .icon {
   cursor: pointer;
 }
+=======
+>>>>>>> ea18a7d42f54a84766688eaa1eda3f723d31219b:src/main/resources/static/css/board/content_list.css
