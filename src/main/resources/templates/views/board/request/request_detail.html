@@ -203,7 +203,7 @@
 
 				<th:block th:if="${session.loginUser != null}">
 					<span>[[${session.loginUser.userNickname}]]</span>
-					<!--프로필 사진부분--><!--<img src="https://via.placeholder.com/50" alt="Creator Avatar" style="border-radius: 50%; vertical-align: middle;"> -->
+					<span><img th:src="${session.loginUser.userProfile}"></span>
 				</th:block>
 				<th:block th:if="${session.loginUser == null}">
 					<span>로그인을 하여 자유롭게 의견을 남겨보세요.</span>
@@ -213,47 +213,70 @@
 			<button class="btn btn-outline-success" id="replySubmit" type="submit" th:disabled="${session.loginUser == null}">SUBMIT</button>
 		</div>
 	</form>
-		<table class="table custom-table" style="color:#fff; background: #1f1f2c;"><!--원래있는 댓글부분-->
-			<thead>
-			<tr>
-				<th width="130px">작성자</th>
-				<th>작성내용</th>
-				<th width="130px">작성일자</th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr th:each="r:${replyList}"><!--있는댓글 가져오기-->
-				<td>[[${r.writer}]]</td>
-				<td><textarea readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea></td>
-				<td>[[${r.modifyDate}]]</td>
-				<td width="80px">
-					<th:block th:if="${session.loginUser != null && r.writer eq session.loginUser.userNickname}">
-						<input type="hidden" th:value="${r.replyNo}" name="replyId">
-						<span class="updel updateReply">수정하기</span>
-						&nbsp;
-						<span class="updel deleteReply">삭제하기</span>
-						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail"><!-- 댓글 수정은 안하고 원래 댓글로 돌려놓으려고 할 떄 사용 -->
-					</th:block>
-				</td>
-			</tr>
-			</tbody>
-		</table>
+	<table class="table custom-table" style="color:#fff; background: #1f1f2c;"><!--원래있는 댓글부분-->
+		<thead>
+		<tr>
+			<th width="130px">작성자</th>
+			<th>프로필</th>
+			<th>작성내용</th>
+			<th width="130px">작성일자</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="r : ${replyList}">
+			<!-- 닉네임 -->
+			<td>[[${r.userNickname}]]</td>
+
+			<!-- 프로필 이미지 -->
+			<td>
+				<img th:src="@{${r.userProfile}}"
+					 alt="프로필 이미지"
+					 style="width:30px; height:30px; border-radius:50%;">
+			</td>
+
+			<!-- 댓글 내용 -->
+			<td>
+
+				<textarea id="modifyReply" readonly class="replyListDetail" name="replyDetail">[[${r.replyDetail}]]</textarea>
+			</td>
+
+			<!-- 작성일 -->
+			<td>[[${r.modifyDate}]]</td>
+
+			<!-- 수정/삭제 버튼 -->
+			<td width="80px">
+
+				<th:block th:if="${session.loginUser != null && r.userNickname eq session.loginUser.userNickname}">
+					<input type="hidden" th:value="${r.replyNo}" name="replyId">
+					<span class="updel updateReply">수정하기</span>
+					&nbsp;
+					<span class="updel deleteReply">삭제하기</span>
+					<input type="hidden" th:value="${r.replyDetail}" name="replyDetail">
+				</th:block>
+			</td>
+		</tr>
+		</tbody>
+
+	</table>
 
 
-		<div style="text-align: center; margin-top: 20px;">
-			<!--         <button class="button">답글달기</button>-->
-		</div>
+	<div style="text-align: center; margin-top: 20px;">
+		<!--         <button class="button">답글달기</button>-->
+	</div>
 
 </main>
 <script th:inline="javascript">
-
+	let userNo = "";
 	window.onload = () => {
 
 		/*<![CDATA[*/
 		const loginUser = /*[[${session.loginUser}]]*/1;
 		/*]]>*/
 
+		if(loginUser != null){
+			userNo = loginUser.userNo;
+		}
 		const udr = document.getElementById('updateRequest');
 		const form = document.getElementById('requestDetailForm');
 		if(udr != null){
@@ -262,6 +285,8 @@
 				form.submit();
 			});
 		}
+
+
 
 		if(loginUser != null){
 			document.getElementById('deleteModal').addEventListener('click' ,  () =>{
@@ -289,100 +314,98 @@
 
 
 	}
+	let replyModifyDetail = '';
+	document.getElementById('modifyReply').addEventListener('input', function() {
+		replyModifyDetail = this.value;
+		console.log("replyModifyDetail ==========" + replyModifyDetail);
+	});
 	document.querySelectorAll('.updateReply').forEach(button => {
-		button.addEventListener('click', function() {
+		button.addEventListener('click', function () {
 			const replyRow = this.closest('tr');
 			const replyDetailTextarea = replyRow.querySelector('td textarea');
 			const replyNo = replyRow.querySelector("input[name='replyId']").value;
-			const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value; // ✅ 원래 댓글 값 가져오기
-
+			const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value;
 
 			if (!replyDetailTextarea) {
 				console.error("Textarea 요소를 찾을 수 없습니다.");
 				return;
 			}
 
+			// 수정 가능하게 만들기
 			replyDetailTextarea.removeAttribute('readonly');
 			replyDetailTextarea.focus();
 			replyDetailTextarea.setSelectionRange(replyDetailTextarea.value.length, replyDetailTextarea.value.length);
-
 
 			this.textContent = '저장하기';
 			this.classList.remove("updateReply");
 			this.classList.add("saveReply");
 
-
+			// 새로 수정 버튼을 생성한 뒤, 클릭 이벤트 추가
 			this.replaceWith(this.cloneNode(true));
 			const saveButton = replyRow.querySelector('.saveReply');
-
-			saveButton.addEventListener('click', function() {
-				const updatedReply = replyDetailTextarea.value;
+			console.log(userNo)
+			saveButton.addEventListener('click', function () {
+				const updatedReply = replyDetailTextarea.value; // 수정된 값을 여기에 저장
 
 				$.ajax({
 					type: "POST",
 					url: "/board/updateReply",
-					data: { replyNo: replyNo, replyDetail: updatedReply },
+					data: {replyNo: replyNo, replyDetail: updatedReply, userNo: userNo},
 					success: data => {
-						console.log(data);
+						console.log("data" + data);
 						alert("댓글이 수정되었습니다.");
 						replyDetailTextarea.setAttribute("readonly", true);
 						saveButton.textContent = "수정하기";
 						saveButton.classList.remove("saveReply");
 						saveButton.classList.add("updateReply");
 					},
-					error: function(error) {
+					error: function (error) {
 						console.log("댓글 수정 중 오류 발생:", error);
 					}
 				});
 			});
-			replyDetailTextarea.addEventListener('blur', function() {
+
+			// 수정 후 포커스를 잃었을 때 원래의 내용으로 되돌리기
+			replyDetailTextarea.addEventListener('blur', function () {
 				if (!saveButton.classList.contains("saveReply")) return;
 
 				replyDetailTextarea.value = originalReplyDetail;
 				replyDetailTextarea.setAttribute("readonly", true);
 
-				saveButton.textContent = '수정하기';
-				saveButton.classList.remove("saveReply");
-				saveButton.classList.add("updateReply");
-			}, {once: true});
-		});
-	});
-
-	document.querySelectorAll('.deleteReply').forEach(button => {
+				saveButton.textContent = '';
 
 
+				document.querySelectorAll('.deleteReply').forEach(button => {
 
-		button.addEventListener('click', function() {
-			$('#modalChoice').modal('show');
 
-			document.getElementById('delete').addEventListener('click', () =>{
-				$('#modalChoice').modal('hide');
-				const replyRow = this.closest('tr');
-				const replyNo = replyRow.querySelector("input[name='replyId']").value;
-				$.ajax({
-					url: "/board/deleteReply",
-					data: {replyNo : replyNo},
-					success: data => {
-						if(data === 1){
-							replyRow.remove();
-						}
-					},
-					error: function(error) {
-						console.log("댓글 삭제 중 오류 발생:", error);
-					}
-				})
+					button.addEventListener('click', function () {
+						$('#modalChoice').modal('show');
+
+						document.getElementById('delete').addEventListener('click', () => {
+							$('#modalChoice').modal('hide');
+							const replyRow = this.closest('tr');
+							const replyNo = replyRow.querySelector("input[name='replyId']").value;
+							$.ajax({
+								url: "/board/deleteReply",
+								data: {replyNo: replyNo},
+								success: data => {
+									if (data === 1) {
+										replyRow.remove();
+									}
+								},
+								error: function (error) {
+									console.log("댓글 삭제 중 오류 발생:", error);
+								}
+							})
+						});
+
+
+					});
+
+				});
 			});
-
-
-
-
 		});
-
 	});
-
-
-
-
 
 
 
