@@ -16,7 +16,7 @@
         	<form method="post" enctype="multipart/form-data">
 	            <div class="featured-template">
 	            		<th:block th:if="${content.menuNo == 1 || content.menuNo == 5}">
-	                    <video id="video-preview" style="max-width: 1200px; margin-top: 10px;" th:each="f : ${fList}" th:if="${f.fileLevel == 1}" controls>
+	                    <video id="video-preview" style="max-width: 1200px; margin-top: 10px;" th:each="f : ${fList}" th:if="${f.fileLevel == 1}" autoplay muted controls>
 	                    	 <source th:src="@{${f.fileLocation}}" type="video/mp4">
 	                    </video>
 	                    </th:block>
@@ -131,6 +131,9 @@
 	    	console.log(contentNo);
 	    	console.log(form);
 	    	console.log(userNo);
+	    	
+	    	const video = document.querySelector('video');
+
 	    }
     
     

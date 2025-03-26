@@ -19,7 +19,7 @@ public interface UsersMapper {
 
 	int insertUser(Users user);
 
-	ArrayList<HashMap<String, Object>> selectMyProject(int id);
+	ArrayList<Content> selectMyProject(int id);
 
 	ArrayList<Content> selectMyRealProjects(int userNo);
 

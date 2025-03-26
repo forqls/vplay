@@ -21,7 +21,7 @@ public class BoardService {
 
 	private final BoardMapper mapper;
 
-	public ArrayList<HashMap<String, Object>> selectCategory(String menu, int userNo, String sort) {
+	public ArrayList<Content> selectCategory(String menu, int userNo, String sort) {
 		return mapper.selectCategory(menu, userNo, sort);
 	}
 

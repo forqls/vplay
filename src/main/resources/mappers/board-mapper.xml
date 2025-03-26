@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pocopoco_vplay.board.model.mapper.BoardMapper">
-	<select id="selectCategory" resultType="map">
+	<select id="selectCategory">
 		SELECT 
 			content.views,
 			content.content_no,
 			content.content_title,
-			TO_CHAR(content.content_detail) as content_detail,
 			menu.menu_name,
 			likes.user_no as likesUser,
-			COUNT(l2.content_no) AS like_count
+			COUNT(l2.content_no) AS like_count, menu.menu_no
 		FROM content
 		LEFT JOIN board ON content.content_no = board.content_no
 		LEFT JOIN content_category ON content.content_no = content_category.content_no
@@ -24,7 +23,7 @@
 			AND menu.menu_name = #{menu}
 		</if>
 		GROUP BY 
-			content.views, content.content_no, content.content_title, menu.menu_name, likes.user_no, TO_CHAR(content.content_detail),content.create_date
+			content.views, content.content_no, content.content_title, menu.menu_name, likes.user_no, content.create_date, menu.menu_no
 		<if test="sort == 'newest'">
 			ORDER BY content.create_date
 		</if>
@@ -35,7 +34,7 @@
 
 
 	<select id="selectCategoryMyProjects">
-		SELECT c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,c.MD_RECOMMENDATION, b.board_type, m.menu_name,
+		SELECT c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,c.MD_RECOMMENDATION, b.board_type, m.menu_name, m.menu_no,
 		(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name
 		FROM content c
 		left JOIN board b ON c.content_no = b.content_no
@@ -56,7 +55,7 @@
 	        c.USER_NO,
 	        c.VIEWS,
 	        c.MD_RECOMMENDATION,
-	        b.board_type, m.menu_name
+	        b.board_type, m.menu_name, m.menu_no
 		<if test="sort == 'newest'">
 			order by c.create_date
 		</if>
@@ -629,7 +628,7 @@
 		    c.MD_RECOMMENDATION,
 		    (SELECT COUNT(*) FROM likes l WHERE l.content_no = c.content_no) AS like_count,
 		    b.board_type,
-		    m.menu_name,
+		    m.menu_name, m.menu_no,
 		    (
 		        SELECT LISTAGG(cg.category_name, ',') 
 		               WITHIN GROUP (ORDER BY cg.category_name)

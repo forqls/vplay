@@ -284,7 +284,7 @@ public class UsersController {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			int id = loginUser.getUserNo();
-			ArrayList<HashMap<String, Object>> list = uService.selectMyProjects(id); // 좋아요 한 목록가져오기
+			ArrayList<Content> list = uService.selectMyProjects(id); // 좋아요 한 목록가져오기
 			System.out.println("ddd" + list);
 			model.addAttribute("list", list);
 		} else {
