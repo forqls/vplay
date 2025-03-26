@@ -75,4 +75,8 @@ public interface UsersMapper {
 
 
     ArrayList<Users> selectSubscribeList(int userNo);
+
+	Users getInfoUser(int createrNo);
+
+	int isSubscribed(@Param("createrNo") int createrNo, @Param("userNo") int userNo);
 }

@@ -55,11 +55,14 @@
             <div class="grid">
                 <div class="grid-item" th:each="l : ${list}">
                     <button class="menu-dots">⋮</button>
-
                     <div class="item-content">
-                        <span class="item-title" th:text="${l.userNickname}"></span> <img th:src="${l.userProfile}"/>
-                        <span th:text="${l.subscriberCount}"></span>
+                         <img th:src="${l.userProfile}"/>
+                         <span class="item-title" th:text="${l.userNickname}"></span>
                     </div>
+					<div class="item-actions">
+						<span class="qwe">구독자수 : [[${l.subscriberCount}]]</span> <span>닉네임 :  [[${l.userNickname}]]</span>
+						<input type="hidden" th:value="${l.userNo}"/>
+					</div>
                 </div>
             </div>
 
@@ -67,6 +70,48 @@
     </div>
 </div>
 <div th:replace="~{views/common/footer :: footer}"></div>
+<script>
+	const itemContent = document.querySelectorAll('.grid-item');
+	
+	itemContent.forEach(item =>{
+		item.addEventListener('click',(e)=>{
+			const createrNo = item.querySelector('input[type=hidden]').value;
+			const subscriberCount = item.querySelector('.qwe').innerText.split(':')[1].trim();
+// 			console.log(subscriberCount);
+// 			console.log(createrNo);
+			location.href=`/users/createrPage?createrNo=${createrNo}&subscriberCount=${subscriberCount}`;
+		})
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</script>
+
+
+
+
 
 </body>
 </html>

@@ -146,4 +146,12 @@ public class UsersService {
     public ArrayList<Users> selectSubscribeList(int userNo) {
 		return mapper.selectSubscribeList(userNo);
     }
+
+	public Users getInfoUser(int createrNo) {
+		return mapper.getInfoUser(createrNo);
+	}
+
+	public int isSubscribed(int createrNo, int userNo) {
+		return mapper.isSubscribed(createrNo,userNo);
+	}
 }
