@@ -152,24 +152,25 @@ tbody tr:hover {
 }
 
 .create-button {
-	background-color: var(--accent);
-	color: var(--foreground);
-	border: none;
+	background-color: transparent;
+	border: 1px solid #949396;
+	color: #ffffff;
 	padding: 6px 8px;
 	border-radius: 4px;
 	cursor: pointer;
 	transition: background-color 0.3s;
 	margin-left: auto;
+	font-size: 14px;
+	font-weight: 500;
 }
-
-textarea{
-	color: #fff !important;
-}
-
-
 
 .create-button:hover {
-	background-color: #374151;
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+textarea {
+	color: #fff !important;
 }
 
 @media ( max-width : 1024px) {
