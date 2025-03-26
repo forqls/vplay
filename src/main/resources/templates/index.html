@@ -270,6 +270,7 @@
 				const like = template.children[2].children[2].children[1].children[1].children[0];
 				const view = (like.nextElementSibling);
 				
+				//좋아요
 				like.addEventListener('click', function(event){
 					if(loginUser != null){
 						if(this.children[0].getAttribute("fill") == 'white'){
