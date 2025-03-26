@@ -21,5 +21,14 @@ ul, li {
 	z-index: 999;
 	background-color: transparent;
 	border-radius: 50px;
-	border: 1px solid white;
+	border: 2px solid white;
+	transition-duration: 0.2s;
+}
+
+.floatingBtn:hover {
+	border: 2px solid #5e37e9;
+	color: #fff;
+	background: linear-gradient(45deg, #161840, #272A65);
+	box-sizing: border-box;
+	transition-duration: 0.2s;
 }
