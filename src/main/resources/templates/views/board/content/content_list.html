@@ -71,7 +71,7 @@
 			<div class="container">
 				<section class="section">
 	            <div class="template-grid" id="template-grid-wrap">
-	                <div class="template-card" th:each="vl: ${cList}" th:if="${vl.menuNo == 1 || vl.menuNo == 5 || vl.menuNo == 2 || vl.menuNo == 4 || vl.menuNo == 6 || vlmenuNo == 7}">
+	                <div class="template-card" th:each="vl: ${cList}" th:if="${vl.menuNo == 1 || vl.menuNo == 5 || vl.menuNo == 2 || vl.menuNo == 4 || vl.menuNo == 6 || vl.menuNo == 7}">
 						<input type="hidden" th:value=${vl.contentNo}>
 						<input type="hidden" th:value=${vl.menuNo}>
 						<div class="template-details">
