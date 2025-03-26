@@ -7,14 +7,54 @@
     <link href="/css/board/content_list.css" rel="stylesheet">
     <link href="/css/topbar.css" rel="stylesheet" type="text/css">
     <script src="https://unpkg.com/wavesurfer.js"></script>
+    <style>
+    	.hidden {
+			display: none;
+		}
+		
+		.flexdirection{
+			position: absolute;
+			left: 2rem;
+		}
+    </style>
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	
     <div class="main-content">
+    <div class="categorywrap">
+            	<div id="CategoriesViewButton" style="display: inline-block; align-items: center; gap: 8px;cursor: pointer;">
+        		<svg width="42" height="33" viewBox="0 0 42 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<g filter="url(#filter0_d_224_3143)">
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M5.04163 4.16667C5.04163 3.59137 5.508 3.125 6.08329 3.125H35.25C35.8253 3.125 36.2916 3.59137 36.2916 4.16667C36.2916 4.74196 35.8253 5.20833 35.25 5.20833H6.08329C5.508 5.20833 5.04163 4.74196 5.04163 4.16667Z" fill="white"/>
+				<path d="M12.3333 4.16667C12.3333 6.46785 10.4679 8.33333 8.16667 8.33333C5.86548 8.33333 4 6.46785 4 4.16667C4 1.86548 5.86548 0 8.16667 0C10.4679 0 12.3333 1.86548 12.3333 4.16667Z" fill="#191820"/>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M8.16667 6.25C9.31726 6.25 10.25 5.31726 10.25 4.16667C10.25 3.01607 9.31726 2.08333 8.16667 2.08333C7.01607 2.08333 6.08333 3.01607 6.08333 4.16667C6.08333 5.31726 7.01607 6.25 8.16667 6.25ZM8.16667 8.33333C10.4679 8.33333 12.3333 6.46785 12.3333 4.16667C12.3333 1.86548 10.4679 0 8.16667 0C5.86548 0 4 1.86548 4 4.16667C4 6.46785 5.86548 8.33333 8.16667 8.33333Z" fill="white"/>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M5.04211 12.4987C5.04211 11.9234 5.50848 11.457 6.08378 11.457H35.2504C35.8257 11.457 36.2921 11.9234 36.2921 12.4987C36.2921 13.074 35.8257 13.5404 35.2504 13.5404H6.08378C5.50848 13.5404 5.04211 13.074 5.04211 12.4987Z" fill="white"/>
+				<path d="M24.8338 12.4987C24.8338 14.7999 22.9683 16.6654 20.6672 16.6654C18.366 16.6654 16.5005 14.7999 16.5005 12.4987C16.5005 10.1975 18.366 8.33203 20.6672 8.33203C22.9683 8.33203 24.8338 10.1975 24.8338 12.4987Z" fill="#191820"/>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M20.6672 14.582C21.8177 14.582 22.7505 13.6493 22.7505 12.4987C22.7505 11.3481 21.8177 10.4154 20.6672 10.4154C19.5166 10.4154 18.5838 11.3481 18.5838 12.4987C18.5838 13.6493 19.5166 14.582 20.6672 14.582ZM20.6672 16.6654C22.9683 16.6654 24.8338 14.7999 24.8338 12.4987C24.8338 10.1975 22.9683 8.33203 20.6672 8.33203C18.366 8.33203 16.5005 10.1975 16.5005 12.4987C16.5005 14.7999 18.366 16.6654 20.6672 16.6654Z" fill="white"/>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M5.04138 20.8346C5.04138 20.2593 5.50775 19.793 6.08305 19.793H35.2497C35.825 19.793 36.2914 20.2593 36.2914 20.8346C36.2914 21.4099 35.825 21.8763 35.2497 21.8763H6.08305C5.50775 21.8763 5.04138 21.4099 5.04138 20.8346Z" fill="white"/>
+				<path d="M37.3331 20.8346C37.3331 23.1358 35.4676 25.0013 33.1664 25.0013C30.8652 25.0013 28.9998 23.1358 28.9998 20.8346C28.9998 18.5334 30.8652 16.668 33.1664 16.668C35.4676 16.668 37.3331 18.5334 37.3331 20.8346Z" fill="#191820"/>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M33.1664 22.918C34.317 22.918 35.2498 21.9852 35.2498 20.8346C35.2498 19.684 34.317 18.7513 33.1664 18.7513C32.0158 18.7513 31.0831 19.684 31.0831 20.8346C31.0831 21.9852 32.0158 22.918 33.1664 22.918ZM33.1664 25.0013C35.4676 25.0013 37.3331 23.1358 37.3331 20.8346C37.3331 18.5334 35.4676 16.668 33.1664 16.668C30.8652 16.668 28.9998 18.5334 28.9998 20.8346C28.9998 23.1358 30.8652 25.0013 33.1664 25.0013Z" fill="white"/>
+				</g>
+				<defs>
+				<filter id="filter0_d_224_3143" x="0" y="0" width="41.3331" height="33" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+				<feOffset dy="4"/>
+				<feGaussianBlur stdDeviation="2"/>
+				<feComposite in2="hardAlpha" operator="out"/>
+				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_224_3143"/>
+				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_224_3143" result="shape"/>
+				</filter>
+				</defs>
+				</svg>
+				<span>HideFilters</span>
+        	</div>
         <aside class="sidebar">
             <div class="category-title">Categories</div>
             <ul class="category-list">
+
             	<th:block th:each="vc : ${cCategory}">
             	<li>
             	<input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}">
@@ -23,7 +63,7 @@
             	</th:block>
             </ul>
         </aside>
-
+	</div>
         <main class="content">
 
             <div class="search-bar">
@@ -353,8 +393,8 @@
                     const waveformId = "#waveform-" + contentNo;
                     const wavesurfer = WaveSurfer.create({
                         container: waveformId,
-                        waveColor: 'violet',
-                        progressColor: 'purple',
+                        waveColor: 'gray',
+                        progressColor: 'skyblue',
                         height: 64,
                         responsive: true
                     });
@@ -419,7 +459,29 @@
         const sec = Math.floor(seconds % 60);
         return `${min}:${sec.toString().padStart(2, '0')}`;
     }
-	
+	document.getElementById('CategoriesViewButton').addEventListener('click',(e)=>{
+		const list = document.querySelector('.category-list');
+		const title = document.querySelector('.category-title');
+		const videogrid = document.querySelector('.video-grid');
+		const sidebar = document.querySelector('.sidebar');
+		const categoryWrap = document.querySelector('.categorywrap');
+		console.log(categoryWrap);
+// 		console.log(videogrid);
+// 		console.log(list);
+// 		console.log(title);
+		list.classList.toggle('hidden');
+		title.classList.toggle('hidden');
+		sidebar.classList.toggle('hidden');
+		categoryWrap.classList.toggle('flexdirection');
+		
+		
+		if(e.target.closest('span').innerText == 'HideFilters'){
+			e.target.closest('span').innerText = 'ViewFilters';
+		}else if(e.target.closest('span').innerText == 'ViewFilters'){
+			e.target.closest('span').innerText = 'HideFilters';
+		}
+
+	});
 
     
 </script>
