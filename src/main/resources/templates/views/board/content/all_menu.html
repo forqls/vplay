@@ -208,6 +208,8 @@
 					location.href = "/board/video-templates/" + contentNo;
 				})
 				
+				console.log(like);
+				
 				like.addEventListener('click', function(event){
 					if(loginUser != null){
 						if(this.children[0].getAttribute("fill") == 'white'){

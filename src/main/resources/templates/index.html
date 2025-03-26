@@ -126,6 +126,7 @@ body {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 30px;
+	cursor: pointer;
 }
 .template-item {
 	aspect-ratio: 1;
@@ -372,7 +373,7 @@ span.icon_wrap {
 									</svg>
 									<span>[[${md.downloadCount}]]</span>
 								</span>
-								<span class="icon">
+								<span class="icon" id="md-icon">
 									<th:block th:if="${md.likeTo == 1}">
 									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
@@ -485,7 +486,7 @@ span.icon_wrap {
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                         </svg>
-								[[${c.likeCount}]]
+							[[${c.likeCount}]]
 							</button>
 						</div>
 					</div>
@@ -494,7 +495,8 @@ span.icon_wrap {
 		</section>
 	</div>
 
-	<script>
+	<script th:inline="javascript">
+		const loginUser = /*[[${session.loginUser}]]*/'loginUser';
 		const creatorList = document.querySelector('.creator-grid.top');
 
 		var showAlert = "[[${showAlert}]]";
@@ -505,13 +507,16 @@ span.icon_wrap {
 		}
 
 		window.onload=()=>{
+			
+// 			console.log(mdIcon);
 			const mdList = document.getElementById('template-grid-wrap');
 			[...mdList.children].map((template, index, array) =>{
-// 				console.log(template)
+				
 				const thumbnail = template.children[2].children[0];
 				const contentNo = template.children[0].value;
 				const menuNo = template.children[1].value;
-				console.log(menuNo);
+				
+				//썸네일 불러오기
 				fetch("/board/select-thumbnail/" + contentNo,{
 					method : 'get',
 					headers : {'content-type' : 'application/json; charset=UTF-8'}
@@ -531,13 +536,13 @@ span.icon_wrap {
 						video.appendChild(source);
 						thumbnail.appendChild(video);
 
-						video.addEventListener('mouseenter', function(){
-							this.play();
+						template.addEventListener('mouseenter', function(){
+							video.play();
 						});
 
-						video.addEventListener('mouseleave', function(){
-							this.pause();
-							this.currentTime = 0;
+						template.addEventListener('mouseleave', function(){
+							video.pause();
+							video.currentTime = 0;
 						});
 					}else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2){
 						const img = document.createElement('img');
@@ -546,6 +551,62 @@ span.icon_wrap {
 						thumbnail.appendChild(img);
 					}
 
+				})
+				
+				//컨텐츠 이동
+				template.addEventListener('click', function(event){
+					
+					switch(menuNo){
+					case "1": menuName = "video-templates"; break;
+					case "2": menuName = "music"; break;
+					case "3": menuName = "sound-effect"; break;
+					case "4": menuName = "graphic-templates"; break;
+					case "5": menuName = "stock-video"; break;
+					case "6": menuName = "photo"; break;
+					case "7": menuName = "font";
+					}
+					
+// 					console.log(menuName);
+					
+					location.href = "/board/" + menuName + "/" + contentNo;
+				});
+				
+				const like = template.children[2].children[2].children[1].children[1].children[0];
+				const view = (like.nextElementSibling);
+				
+				like.addEventListener('click', function(event){
+					if(loginUser != null){
+						if(this.children[0].getAttribute("fill") == 'white'){
+							fetch('/board/like', {
+								method : 'put',
+								headers : {'content-type':'application/json; charset=UTF-8'},
+								body: JSON.stringify({
+									contentNo: contentNo
+				    			})
+							})
+							.then(response => response.json())
+							.then(data =>{
+								this.children[0].setAttribute("fill", "red");
+								view.innerText = Number((view.innerText)) + 1;
+							})
+						}else if(this.children[0].getAttribute("fill") == 'red'){
+							fetch('/board/like', {
+								method : 'delete',
+								headers : {'content-type':'application/json; charset=UTF-8'},
+								body: JSON.stringify({
+									contentNo: contentNo
+				    			})
+							})
+							.then(response => response.json())
+							.then(data =>{
+								this.children[0].setAttribute("fill", "white");
+								view.innerText = Number((view.innerText)) - 1;
+							})
+						}
+					}else{
+						alert('로그인 후 이용해주세요');
+					}
+					event.stopPropagation();
 				})
 			})
 		}
