@@ -248,7 +248,7 @@ public class AjaxController {
 
 		int currentMdCount = bService.getMdRecommendationCount();
 
-		if ("Y".equals(map.get("column")) && currentMdCount >= 8) {
+		if ("Y".equals(map.get("column")) && currentMdCount >= 6) {
 			return -1;
 		}
 
