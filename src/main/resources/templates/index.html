@@ -7,12 +7,8 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <link href="/css/common.css" rel="stylesheet" type="text/css">
+<link href="/css/index.css" rel="stylesheet" type="text/css">
 <style>
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
 
 body {
 	font-family: Arial, sans-serif;
@@ -346,6 +342,7 @@ button.button-primary:hover {
 	box-sizing: border-box;
 	transition-duration: 0.2s;
 }
+
 </style>
 </head>
 <body>
@@ -550,6 +547,7 @@ button.button-primary:hover {
 			</div>
 		</section>
 	</div>
+	<div th:replace="~{views/common/footer :: footer}"></div>
 
 	<script th:inline="javascript">
 		const loginUser = /*[[${session.loginUser}]]*/'loginUser';
