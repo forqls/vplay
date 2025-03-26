@@ -23,9 +23,8 @@ body {
 }
 
 .container {
-	max-width: 1200px;
+	max-width: 1200px !important;
 	margin: 0 auto;
-	padding: 0 20px;
 }
 
 .post-title {
@@ -437,7 +436,14 @@ body {
 				<div th:each="r : ${replyList}" class="comment-item">
 					<div class="comment-header">
 						<div class="comment-author">
-							<img th:src="${r.userProfile}" alt="프로필 이미지"> <span class="comment-author-name" th:text="${r.userNickname}"></span>
+							<th:block th:if="${r.userProfile == null}">
+								<img src="/img/testProfile.jpg" alt="프로필 이미지">
+								<span class="comment-author-name" th:text="${r.userNickname}"></span>
+							</th:block>
+							<th:block th:unless="${r.userProfile == null}">
+								<img th:src="${r.userProfile}" alt="프로필 이미지">
+								<span class="comment-author-name" th:text="${r.userNickname}"></span>
+							</th:block>
 						</div>
 						<div class="comment-date" th:text="${r.modifyDate}"></div>
 					</div>
@@ -472,9 +478,6 @@ body {
 			</div>
 		</div>
 	</div>
-
-</main>
-
 	<script th:inline="javascript">
         let userNo = "";
         
