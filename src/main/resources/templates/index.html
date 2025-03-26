@@ -9,340 +9,6 @@
 <link href="/css/common.css" rel="stylesheet" type="text/css">
 <link href="/css/index.css" rel="stylesheet" type="text/css">
 <style>
-
-body {
-	font-family: Arial, sans-serif;
-	margin-top: 30px !important;
-	background-color: #191820;
-	color: white;
-}
-
-.container {
-	max-width: 1480px !important;
-	margin: 0 auto !important;
-}
-
-.hero {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 40px;
-	margin-bottom: 60px;
-}
-
-.hero-content h1 {
-	font-size: 3rem;
-	margin-bottom: 20px;
-	line-height: 1.3;
-	font-weight: 600;
-}
-
-.hero-content p {
-	color: #9ca3af;
-	margin-bottom: 30px;
-	font-size: 1.2rem;
-	line-height: 1.4em;
-}
-
-.hero-buttons {
-	display: flex;
-	gap: 12px;
-}
-
-.button-primary {
-	background-color: #5e37e9;
-	color: white;
-	padding: 12px 24px;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	transition-duration: 0.2s;
-	border: 2px solid #5e37e9;
-}
-
-.button-secondary {
-	background-color: transparent;
-	color: white;
-	padding: 12px 24px;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 6px;
-	cursor: pointer;
-}
-
-.hero-image {
-	aspect-ratio: 1; /* 1:1 비율 */
-	/*background-color: rgba(255, 255, 255, 0.1);*/
-	border-radius: 8px;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.section {
-	margin-bottom: 60px;
-}
-
-.section-title {
-	font-size: 1.5rem;
-	margin-bottom: 24px;
-}
-
-.event-carousel {
-	position: relative;
-	display: flex;
-	gap: 20px;
-}
-
-.carousel-arrow {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	width: 40px;
-	height: 40px;
-	background-color: rgba(255, 255, 255, 0.1);
-	border: none;
-	border-radius: 50%;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.carousel-arrow svg {
-	width: 24px;
-	height: 24px;
-}
-
-.carousel-arrow.left {
-	left: -50px;
-}
-
-.carousel-arrow.right {
-	right: -50px;
-}
-
-.carousel-arrow:hover {
-	background-color: rgba(94, 55, 233, 0.8);
-}
-
-.template-grid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 30px;
-	cursor: pointer;
-}
-.template-item {
-	aspect-ratio: 1;
-	background-color: rgba(255, 255, 255, 0.1);
-	border-radius: 8px;
-}
-
-.creator-grid {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 20px;
-}
-
-.creator-card {
-	background-color: rgba(255, 255, 255, 0.05);
-	border-radius: 12px;
-	padding: 16px;
-}
-
-.creator-header {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	margin-bottom: 16px;
-}
-
-.creator-avatar {
-	width: 32px;
-	height: 32px;
-	border-radius: 50%;
-	background-color: rgba(255, 255, 255, 0.1);
-}
-
-.creator-info h3 {
-	font-size: 0.9rem;
-	margin-bottom: 4px;
-}
-
-.creator-info p {
-	font-size: 0.8rem;
-	color: #9ca3af;
-}
-
-.creator-content {
-	aspect-ratio: 1;
-	background-color: rgba(255, 255, 255, 0.1);
-	border-radius: 8px;
-	margin-bottom: 16px;
-}
-
-.subscribe-button {
-	width: 100%;
-	padding: 8px;
-	background-color: rgba(255, 255, 255, 0.1);
-	color: white;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: 0.9rem;
-}
-.template-card {
-	border-radius: 12px;
-	display: flex;
-	position: relative;
-	overflow: hidden;
-	flex-direction: column;
-	height: 18rem;
-}
-
-.template-card:hover .overlay {
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-}
-
-.template-image img{
-    transition-duration: 0.3s;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.template-card:hover .template-image img {
-    scale: 1.1;
-}
-
-.template-image video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.template-image {
-	width: 100%;
-	height: 100%;
-}
-
-.content_wrap {
-	display: flex;
-	position: absolute;
-	bottom: 0;
-	z-index: 2;
-	color: white;
-	padding: 0.5rem 1.1rem;
-	width: 100%;
-	flex-direction: row;
-	justify-content: space-between;
-	height: 5.2rem;
-}
-
-.overlay {
-	position: absolute;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.2);
-	backdrop-filter: blur(4px);
-	-webkit-backdrop-filter: blur(4px);
-	z-index: 1;
-	height: 6rem;
-	top: 67%;
-	transition-duration: 0.3s;
-}
-
-span.icon {
-	margin-left: 0.7rem;
-}
-
-span.icon_wrap span {
-	display: flex;
-	flex-direction: column;
-	align-content: center;
-	flex-wrap: wrap;
-}
-
-span.icon_wrap {
-	display: flex;
-	align-items: flex-end;
-}
-
-.template-info {
-	padding: 12px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	background-color: rgba(255, 255, 255, 0.1);
-	flex-grow: 1;
-}
-
-.template-details {
-	height: 100%;
-}
-
-.template-title {
-	font-size: 1.1rem;
-	font-weight: 600;
-	line-height: 1.1em;
-	color: #ffffff;
-	margin-bottom: 0.4rem;
-}
-
-.template-writer {
-	font-size: 0.8rem;
-	color: #e9e9e9;
-}
-
-.template-creator {
-	font-size: 12px;
-	color: #d9d9d9;
-}
-
-.template-actions {
-	display: flex;
-	gap: 8px;
-}
-
-.action-button {
-	width: 24px;
-	height: 24px;
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.bookmark-icon {
-	color: #ffffff;
-}
-
-.like-icon {
-	color: #ff4d4d;
-}
-
-.title_wrap{
-	margin-top: 7rem;
-	position: relative;
-}
-
-.title_wrap span {
-	position: sticky;
-	z-index: 1;
-}
-
-.title_wrap img {
-	position: absolute;
-	right: 11.5rem;
-	top: -8.5rem;
-}
-
-button.button-primary:hover {
-	border: 2px solid #5e37e9;
-	color: #fff;
-	background: linear-gradient(45deg, #161840, #272A65);
-	box-sizing: border-box;
-	transition-duration: 0.2s;
-}
-
 </style>
 </head>
 <body>
@@ -440,6 +106,59 @@ button.button-primary:hover {
 			</div>
 		</section>
 
+<<<<<<< HEAD
+=======
+		<!-- 크리에이터 섹션 -->
+		<!--<section class="section">
+			<h2 class="section-title">최근 인기 크리에이터 추천</h2>
+			<div class="creator-grid">
+				<div class="creator-card">
+					<div class="creator-header">
+						<div class="creator-avatar"></div>
+						<div class="creator-info">
+							<h3>Creator</h3>
+							<p>Handsome/given</p>
+						</div>
+					</div>
+					<div class="creator-content"></div>
+					<button class="subscribe-button">Subscribe</button>
+				</div>
+				<div class="creator-card">
+					<div class="creator-header">
+						<div class="creator-avatar"></div>
+						<div class="creator-info">
+							<h3>Creator</h3>
+							<p>Handsome/given</p>
+						</div>
+					</div>
+					<div class="creator-content"></div>
+					<button class="subscribe-button">Subscribe</button>
+				</div>
+				<div class="creator-card">
+					<div class="creator-header">
+						<div class="creator-avatar"></div>
+						<div class="creator-info">
+							<h3>Creator</h3>
+							<p>Handsome/given</p>
+						</div>
+					</div>
+					<div class="creator-content"></div>
+					<button class="subscribe-button">Subscribe</button>
+				</div>
+				<div class="creator-card">
+					<div class="creator-header">
+						<div class="creator-avatar"></div>
+						<div class="creator-info">
+							<h3>Creator</h3>
+							<p>Handsome/given</p>
+						</div>
+					</div>
+					<div class="creator-content"></div>
+					<button class="subscribe-button">Subscribe</button>
+				</div>
+			</div>
+		</section>-->
+>>>>>>> a3236ae47de5bba0700d71cc9ecbc05953c427df
 
 		<section class="section">
 			<h2 class="section-title">탑 크리에이터 추천</h2>
@@ -447,16 +166,26 @@ button.button-primary:hover {
 				<div class="creator-card" th:each="l, rank : ${ulist}">
 					<input type="hidden" th:value="${l.userNo}">
 					<div class="creator-header">
-						<div class="creator-avatar"></div>
+						<div class="creator_profile_wrap">
+							<div class="creator_profile">
+								<img th:src="${l.userProfile}" class="creator-avatar" alt="creator_profile"/>
+							</div>
+							<div class="verified-badge_wrap">
+								<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.88965 0.873047C8.4502 0.314453 9.20898 0 10 0C10.2432 0 10.4854 0.03125 10.7207 0.0878906C10.8643 0.123047 11.0049 0.169922 11.1426 0.226562C11.5039 0.376953 11.833 0.597656 12.1104 0.875L13.0029 1.76758C13.0596 1.82227 13.1221 1.87109 13.1885 1.91211C13.3408 2.00391 13.5176 2.05469 13.6992 2.05664H14.9609C15.4102 2.05664 15.8496 2.1582 16.2471 2.34766C16.5498 2.49219 16.8291 2.6875 17.0713 2.92969C17.3154 3.17383 17.5137 3.45703 17.6592 3.76367C17.8457 4.16016 17.9453 4.59375 17.9453 5.03906V6.30273C17.9463 6.5625 18.0498 6.8125 18.2334 6.99805L19.126 7.89062C19.3955 8.16016 19.6074 8.47656 19.7559 8.82031C19.915 9.18945 20 9.58984 20 10.002C20 10.793 19.6855 11.5508 19.126 12.1113L18.2334 13.0039C18.1553 13.082 18.0918 13.1719 18.0439 13.2695C17.9795 13.4023 17.9453 13.5488 17.9453 13.6992V14.9629C17.9453 15.7539 17.6309 16.5117 17.0713 17.0723C16.5117 17.6309 15.752 17.9453 14.9609 17.9453H13.6992C13.4385 17.9473 13.1885 18.0508 13.0029 18.2344L12.1104 19.127C11.5508 19.6875 10.791 20.002 10 20.002C9.20898 20.002 8.44922 19.6875 7.88965 19.127L6.99707 18.2344C6.8125 18.0508 6.56152 17.9453 6.30078 17.9453H5.03906C4.24805 17.9453 3.48828 17.6309 2.92871 17.0723C2.36914 16.5117 2.05469 15.7539 2.05469 14.9629V13.6992C2.05371 13.4395 1.9502 13.1895 1.7666 13.0039L0.874023 12.1113C0.314453 11.5508 0 10.793 0 10.002C0 9.20898 0.314453 8.45117 0.874023 7.89062L1.7666 6.99805C1.88477 6.87891 1.96973 6.73242 2.01562 6.57422C2.04102 6.48633 2.05469 6.39453 2.05469 6.30273V5.03906C2.05469 4.64844 2.13184 4.25977 2.28223 3.89844C2.43164 3.53516 2.65137 3.20703 2.92871 2.92969C3.20605 2.65234 3.53516 2.43164 3.89746 2.28125C4.25977 2.13281 4.64844 2.05469 5.04004 2.05469H6.30078C6.56152 2.05273 6.81152 1.94922 6.99707 1.76758L7.88965 0.873047Z" fill="#8137E9"/>
+								</svg>
+								<div class="creator-content">[[${rank.index + 1}]]</div>
+							</div>
+						</div>
 						<div class="creator-info">
 							<h3>[[${l.userNickname}]]</h3>
-							<p>팔로잉 : [[${l.subscriber}]]</p>
+							<span><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M4.20042 5.60056C4.9431 5.60056 5.65536 5.30553 6.18052 4.78038C6.70567 4.25522 7.0007 3.54296 7.0007 2.80028C7.0007 2.0576 6.70567 1.34534 6.18052 0.820183C5.65536 0.295029 4.9431 0 4.20042 0C3.45774 0 2.74548 0.295029 2.22032 0.820183C1.69517 1.34534 1.40014 2.0576 1.40014 2.80028C1.40014 3.54296 1.69517 4.25522 2.22032 4.78038C2.74548 5.30553 3.45774 5.60056 4.20042 5.60056ZM10.501 5.60056C11.0581 5.60056 11.5923 5.37929 11.9861 4.98542C12.38 4.59156 12.6013 4.05736 12.6013 3.50035C12.6013 2.94334 12.38 2.40914 11.9861 2.01528C11.5923 1.62141 11.0581 1.40014 10.501 1.40014C9.94404 1.40014 9.40984 1.62141 9.01598 2.01528C8.62211 2.40914 8.40084 2.94334 8.40084 3.50035C8.40084 4.05736 8.62211 4.59156 9.01598 4.98542C9.40984 5.37929 9.94404 5.60056 10.501 5.60056ZM1.75017 7.0007C0.784078 7.0007 0 7.78478 0 8.75088C0 8.75088 0 11.9012 4.20042 11.9012C7.52995 11.9012 8.22022 9.92139 8.36304 9.10091C8.40084 8.88669 8.40084 8.75088 8.40084 8.75088C8.40084 7.78478 7.61676 7.0007 6.65067 7.0007H1.75017ZM9.79538 9.24092C9.79258 9.29693 9.78698 9.3632 9.77858 9.43974C9.70132 10.017 9.50076 10.571 9.19052 11.0639C9.56156 11.1493 9.9942 11.2011 10.4997 11.2011C14 11.2011 14 8.75088 14 8.75088C14 7.78478 13.2159 7.0007 12.2498 7.0007H9.26893C9.60496 7.50195 9.79958 8.10261 9.79958 8.75088V9.10091L9.79538 9.24092Z" fill="#6F757D"/>
+							</svg> <span class="subscriber_count" onclick="location.herf=''">[[${l.subscriber}]]</span></span>
 						</div>
+						<button class="subscribe-button">+</button>
 					</div>
-					<div class="creator-content">
-						<p>순위 : #[[${rank.index + 1}]]</p>
-					</div>
-					<button class="subscribe-button">+</button>
+
 				</div>
 			</div>
 		</section>
