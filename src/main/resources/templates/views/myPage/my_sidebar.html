@@ -77,12 +77,14 @@
 	</div>
 	<script th:inline="javascript">
     window.onload = () => {
+    	thumbnailPlay();
         /*<![CDATA[*/
         const loginUser = /*[[${session.loginUser}]]*/ 'loginUser';
         /*]]>*/
         const currentAddress = window.location.pathname;
         const arr = currentAddress.split('/');
-        console.log(arr[2]);
+        console.log("사이드바 : " + arr);
+        console.log("사이드바 : " + arr[2]);
         let currentPage = null;
 
         switch (arr[2]) {
@@ -183,6 +185,80 @@
         })
         .catch(error => console.log(error)); // 오류 처리
     }
+    
+  //썸네일 불러오기
+    function thumbnailPlay(r) {
+		console.log("r : " + r);
+        const thumbnailList = document.querySelectorAll('.item-thumbnail'); // 둘 다 잡아줌
+        console.log(thumbnailList);
+        
+        [...thumbnailList].forEach((thumbnail) => {
+        	 const contentNo = thumbnail.previousElementSibling.previousElementSibling.value;
+        	 const menuNo = thumbnail.previousElementSibling.value;
+        	 
+//         	 console.log("contentNo : " + contentNo);
+//         	 console.log("menuNo : " + menuNo);
+        	 
+        	 
+        	 console.log(menuNo);
+            fetch("/board/select-thumbnail/" + contentNo, {
+                method: "get",
+                headers: { 'content-type': 'application/json; charset=UTF-8' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (menuNo == 1 || menuNo == 5) {
+                    const video = thumbnail.children[0];
+                	
+                    console.log(video);
+                    const source = video?.children[0];
+                    if (source) {
+                        source.src = data.thumbnail;
+                        video.appendChild(source);
+                        thumbnail.appendChild(video);
+                        video.addEventListener('mouseenter', () => {
+                        	video.play()
+                        });
+                        video.addEventListener('mouseleave', () => {
+                            video.pause();
+                            video.currentTime = 0;
+                        });
+                    }
+                } else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2) {
+                    const img = thumbnail.children[0];
+                    if (img) img.src = data.thumbnail;
+                }
+            });
+        });
+    }
+  
+  //디테일 페이지 들어가기
+    function clickDetail(list) {
+    	console.log(list);
+        [...list].map((content, index, array) => {
+        	console.log(content);
+            content.addEventListener('click', function(event) {
+                const contentNo = this.children[0].value;
+                console.log(contentNo);
+                let menuName = this.querySelector('.item-content').children[1].value;
+                console.log(contentNo);
+                console.log(menuName);
+                switch(menuName) {
+                    case "video Templates":  menuName = "video-templates"; break;
+                    case "Stock Video" : menuName = "stock-video"; break;
+                    case "Sound Effects" : menuName = "sound-effects"; break;
+                    case "Photos" : menuName = "photo"; break;
+                    case "Music" : menuName = "music"; break;
+                    case "Fonts" : menuName = "fonts"; break;
+                    case "Graphic Templates" : menuName = "graphic-templates"; break;
+                }
+                location.href = "/board/" + menuName + "/" + contentNo;
+                event.stopPropagation();
+            })
+        })
+    }
+  
+  	
 	</script>
 </body>
 </html>

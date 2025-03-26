@@ -130,12 +130,12 @@ public class BoardController {
 
 	@GetMapping("selectCategory")
 	@ResponseBody
-	public ArrayList<HashMap<String, Object>> selectCategory(@RequestParam("value") String menu, @RequestParam("sortValue") String sort, Model model, HttpSession session) {
+	public ArrayList<Content> selectCategory(@RequestParam("value") String menu, @RequestParam("sortValue") String sort, Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser == null)
 			throw new UsersException("로그인하삼");
 		int userNo = loginUser.getUserNo();
-		ArrayList<HashMap<String, Object>> list = bService.selectCategory(menu, userNo, sort);
+		ArrayList<Content> list = bService.selectCategory(menu, userNo, sort);
 		System.out.println("셀렉트 카테고리 골랐을때 == " + list);
 		return list;
 	}

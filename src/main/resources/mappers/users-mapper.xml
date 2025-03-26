@@ -19,10 +19,10 @@
 		) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, default, #{loginType},#{kakaoId})
 	</insert>
 
-	<select id="selectMyProject" resultType="map">
+	<select id="selectMyProject">
 		SELECT
 		c.content_title, c.VIEWS,
-		c.content_no,
+		c.content_no, menu.menu_no, menu.menu_name,
 		(SELECT COUNT(*) FROM likes l2 WHERE l2.content_no = c.content_no) AS like_count
 		FROM content c
 		left JOIN likes l ON c.content_no = l.content_no
@@ -31,7 +31,7 @@
 		left join category on content_category.category_no = category.category_no
 		left JOIN menu ON category.menu_no = menu.menu_no
 		WHERE l.user_no =#{id} and b.board_type is null and menu_name is not null
-		GROUP BY c.content_no, c.content_title, c.views
+		GROUP BY c.content_no, c.content_title, c.views, menu.menu_no, menu.menu_name
 	</select>
 
 	<select id="selectMyRealProjects">
@@ -240,7 +240,7 @@
 		c.MD_RECOMMENDATION,
 		(SELECT COUNT(*) FROM likes l WHERE l.content_no = c.content_no) AS like_count,
 		b.board_type,
-		m.menu_name,
+		m.menu_name, m.menu_no,
 		(
 		SELECT LISTAGG(cg.category_name, ',')
 		WITHIN GROUP (ORDER BY cg.category_name)

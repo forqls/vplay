@@ -29,7 +29,7 @@ public class UsersService {
 		return mapper.insertUser(user);
 	}
 
-	public ArrayList<HashMap<String, Object>> selectMyProjects(int id) {
+	public ArrayList<Content> selectMyProjects(int id) {
 		return mapper.selectMyProject(id);
 	}
 
