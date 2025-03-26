@@ -207,6 +207,9 @@ body {
 
 .template-image img{
     transition-duration: 0.3s;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .template-card:hover .template-image img {
@@ -508,28 +511,39 @@ button.button-primary:hover {
 
 		<section class="section">
 			<h2 class="section-title">탑 템플릿 리스트</h2>
-			<div class="template-grid">
+			<div class="template-grid" id="template-grid-wrap-top">
 				<div class="template-card" th:each="c, rank : ${clist}">
-					<div class="template-image"></div>
-					<div class="template-info">
-						<div class="template-details">
-							<div class="template-title">[[${c.contentTitle}]]</div>
-							<div class="template-creator">[[${c.userNickName}]]</div>
-						</div>
-						<div class="template-actions">
-							<button class="action-button bookmark-icon">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-							</button>
-							[[${c.views}]]
-							<button class="action-button like-icon">
-								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-							[[${c.likeCount}]]
-							</button>
+					<input type="hidden" th:value=${c.contentNo}>
+					<input type="hidden" th:value=${c.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${c.contentTitle}]]</div>
+								<div class="template-writer">[[${c.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${c.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${c.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${c.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${c.likeCount}]]</span>
+								</span>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -547,12 +561,17 @@ button.button-primary:hover {
 			console.log(showAlert);
 			alert("결제일이 지났습니다.");
 		}
+		
+		const topList = document.getElementById('template-grid-wrap-top');
+		const mdList = document.getElementById('template-grid-wrap');
 
 		window.onload=()=>{
-			
-// 			console.log(mdIcon);
-			const mdList = document.getElementById('template-grid-wrap');
-			[...mdList.children].map((template, index, array) =>{
+			listPlay(topList);
+			listPlay(mdList);
+		}
+		
+		function listPlay(list){
+				[...list.children].map((template, index, array) =>{
 				
 				const thumbnail = template.children[2].children[0];
 				const contentNo = template.children[0].value;
@@ -590,6 +609,11 @@ button.button-primary:hover {
 						const img = document.createElement('img');
 						img.src = data.thumbnail;
 
+						thumbnail.appendChild(img);
+					}else{
+						const img = document.createElement('img');
+						img.src = "/img/sound-effects.png";
+						
 						thumbnail.appendChild(img);
 					}
 

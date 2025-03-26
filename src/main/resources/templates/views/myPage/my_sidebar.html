@@ -75,6 +75,11 @@
 
 		</div>
 	</div>
+	
+	
+	<!-- 전체 이름 -->
+	<div id="tooltip" class="tooltip"></div>
+	
 	<script th:inline="javascript">
     window.onload = () => {
     	thumbnailPlay();
@@ -232,7 +237,9 @@
         });
     }
   
-  //디테일 페이지 들어가기
+  //디테일 페이지 들어가기 및 제목 마우스 
+  	const tooltip = document.getElementById('tooltip');
+  
     function clickDetail(list) {
     	console.log(list);
         [...list].map((content, index, array) => {
@@ -254,6 +261,21 @@
                 }
                 location.href = "/board/" + menuName + "/" + contentNo;
                 event.stopPropagation();
+            })
+            
+            
+            content.addEventListener('mousemove', function(e){
+            	console.log(this);
+            	const title = this.children[5].children[0].innerText;
+//             	console.log(tooltip);
+            	tooltip.style.display = 'block';
+            	tooltip.textContent = title;
+//             	console.log(this);
+            	tooltip.style.left = `${e.clientX + 10}px`;
+            	tooltip.style.top = `${e.clientY + 10}px`;
+            })
+            content.addEventListener('mouseleave', function(){
+            	tooltip.style.display = 'none';
             })
         })
     }

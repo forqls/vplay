@@ -46,8 +46,15 @@ public class HomeController {
 		
 		model.addAttribute("ulist",user);
 		ArrayList<Content> content = bService.selectContentTop();
+		for(int v =0; v< content.size();v++) {
+			num = content.get(v).getContentNo();
+			result = bService.menuLikeTo(num, userNo);
+			content.get(v).setLikeTo(result);
+		}
 //		System.out.println("컨텐츠 보드의 조회수 뷰 12개 보드 : " + content + content.size() + "\n");
 		int flag = 0;
+		
+		System.out.println("select :" + content);
 		
 		for(Content c : content) {
 			c.setOverallScore((c.getLikeCount()*70 + c.getViews()*30)/100);
@@ -57,7 +64,7 @@ public class HomeController {
 	    for(Content c : content) {
 	    	System.out.println(c.getOverallScore());
 	    }
-	    System.out.println(content);
+//	    System.out.println(content);
 		
 		model.addAttribute("clist",content).addAttribute("mdList", mdList);
 		return "index";
