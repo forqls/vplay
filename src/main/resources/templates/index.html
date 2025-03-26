@@ -43,8 +43,8 @@ body {
 .hero-content p {
 	color: #9ca3af;
 	margin-bottom: 30px;
-	font-size: 0.95rem;
-	line-height: 1.6;
+	font-size: 1.2rem;
+	line-height: 1.4em;
 }
 
 .hero-buttons {
@@ -59,6 +59,8 @@ body {
 	border: none;
 	border-radius: 6px;
 	cursor: pointer;
+	transition-duration: 0.2s;
+	border: 2px solid #5e37e9;
 }
 
 .button-secondary {
@@ -72,8 +74,9 @@ body {
 
 .hero-image {
 	aspect-ratio: 1; /* 1:1 비율 */
-	background-color: rgba(255, 255, 255, 0.1);
+	/*background-color: rgba(255, 255, 255, 0.1);*/
 	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .section {
@@ -331,6 +334,14 @@ span.icon_wrap {
 	right: 11.5rem;
 	top: -8.5rem;
 }
+
+button.button-primary:hover {
+	border: 2px solid #5e37e9;
+	color: #fff;
+	background: linear-gradient(45deg, #161840, #272A65);
+	box-sizing: border-box;
+	transition-duration: 0.2s;
+}
 </style>
 </head>
 <body>
@@ -345,13 +356,15 @@ span.icon_wrap {
 					<img src="/img/slider-bg.png" alt="몽글한 부분 배경">
 				</h1>
 				<p>
-					지금 바로 크리에이터님의 무한 가능성을 경험해 보세요.<br> 디자인 자산을 자유롭게 활용하여 새로운 가능성을 발견할 수 있습니다.
+					지금 바로 크리에이터님의 <br> 무한 가능성을 경험해 보세요.
 				</p>
 				<div class="hero-buttons">
 					<button class="button-primary" onclick="location.href='/board/all_menu'">All Menu</button>
 				</div>
 			</div>
-			<div class="hero-image"></div>
+			<div class="hero-image hero-image-wrap">
+
+			</div>
 		</section>
 
 		<!-- 이벤트 섹션 -->
