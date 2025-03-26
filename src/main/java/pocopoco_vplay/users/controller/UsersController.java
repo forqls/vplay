@@ -529,12 +529,17 @@ public class UsersController {
 		Users loginUser = (Users)session.getAttribute("loginUser");
 		if(loginUser != null){
 			int userNo = loginUser.getUserNo();
-			ArrayList<Users> list = uService.selectSubscribeList(userNo);
-			System.out.println("userNo" + userNo);
-//			System.out.println(list);
-			for(Users u : list){
-				System.out.println(u.getUserId() + "    " + u.getSubscriberCount());
+			ArrayList<Users> l = uService.selectSubscribeList(userNo);
+			HashMap<Integer,Users> map = new HashMap<Integer,Users>();
+			
+			for(Users u : l) {
+				map.put(u.getUserNo(), u);
 			}
+			ArrayList<Users> list = new ArrayList<Users>(map.values());
+			
+//			System.out.println("userNo" + userNo);
+//			System.out.println(list);
+				System.out.println(list);
 			model.addAttribute("list",list);
 		}else {
 			throw new UsersException("로그인이 풀렸3");
