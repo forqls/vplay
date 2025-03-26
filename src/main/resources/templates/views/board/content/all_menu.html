@@ -30,7 +30,7 @@
                 <div class="content-card dark" th:each="v : ${videoTemplateList}">
                 	<input type="hidden" th:value="${v.contentNo}">
                     <div class="card-image">
-                        <img src="/img/simple.jpg" alt="Big Game Grunge">
+                        <img th:src="${v.}" alt="">
                     </div>
                     <div class="card-info">
                         <h3>[[${v.contentTitle}]]</h3>
