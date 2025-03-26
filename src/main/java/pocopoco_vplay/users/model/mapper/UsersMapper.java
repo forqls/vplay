@@ -74,4 +74,5 @@ public interface UsersMapper {
 	ArrayList<Content> selectMyDownloads(int userNo);
 
 
+    ArrayList<Users> selectSubscribeList(int userNo);
 }

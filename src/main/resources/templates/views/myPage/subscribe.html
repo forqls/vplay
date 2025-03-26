@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+    <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+    <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+    <title>My Project</title>
+    <style>
+        .button {
+            padding: 6px;
+            margin-left: auto;
+            margin-top: 2.5px;
+        }
+
+        .dropdown {
+            top: 15%;
+            right: 0;
+        }
+
+        .dropdown.show {
+            margin-right: 7.5px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{views/common/topbar :: topbar}"></div>
+<div class="main-content">
+    <div th:replace="~{views/myPage/my_sidebar}"></div>
+    <div class="content_wrap">
+        <div class="content-header">
+            <h1>My Projects</h1>
+        </div>
+        <div class="filter-buttons">
+            <select class="filter-dropdown" id="categorySelect">
+                <option value="All">All</option>
+                <option value="video Templates">Video Templates</option>
+                <option value="Stock Video">Stock Video</option>
+                <option value="Graphic Templates">Graphic Templates</option>
+                <option value="Music">Music</option>
+                <option value="Sound Effects">Sound Effects</option>
+                <option value="Photos">Photos</option>
+                <option value="Fonts">Fonts</option>
+            </select> <select class="filter-dropdown" id="sortSelect">
+            <option value="newest">새로운순</option>
+            <option value="mostView">조회수 많은 순</option>
+        </select>
+            <button class="button" id="content-write">컨텐츠 글 쓰기</button>
+        </div>
+
+
+            <div class="grid">
+                <div class="grid-item" th:each="l : ${list}">
+                    <button class="menu-dots">⋮</button>
+
+                    <div class="item-content">
+                        <span class="item-title" th:text="${l.userNickname}"></span> <img th:src="${l.userProfile}"/>
+                        <span th:text="${l.subscriberCount}"></span>
+                    </div>
+                </div>
+            </div>
+
+
+    </div>
+</div>
+<div th:replace="~{views/common/footer :: footer}"></div>
+
+</body>
+</html>

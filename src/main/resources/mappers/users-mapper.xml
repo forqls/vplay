@@ -264,7 +264,24 @@
 		AND m.menu_name IS NOT NULL
 		AND c.content_status = 'Y'
 	</select>
-
+	<select id="selectSubscribeList">
+		SELECT s.creater_no,
+		c.*,
+		sc.subscriberCount,
+		u2.*
+			FROM users u
+			JOIN
+			subscribe s ON u.user_no = s.user_no
+			JOIN
+			content c ON c.user_no = s.creater_no
+			JOIN (SELECT creater_no,
+			COUNT(user_no) AS subscriberCount
+			FROM subscribe
+			GROUP BY creater_no) sc ON sc.creater_no = s.creater_no
+			JOIN
+			users u2 ON u2.user_no = s.creater_no
+		WHERE s.user_no = #{userNo}
+	</select>
 
 
 

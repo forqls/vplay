@@ -143,4 +143,7 @@ public class UsersService {
 		return mapper.selectMyDownloads(userNo);
 	}
 
+    public ArrayList<Users> selectSubscribeList(int userNo) {
+		return mapper.selectSubscribeList(userNo);
+    }
 }

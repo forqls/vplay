@@ -522,7 +522,25 @@ public class UsersController {
 		}
 		return "my_downloads";
 	}
-	
+
+
+	@GetMapping("subscribe")
+	public String subscribe(HttpSession session, Model model) {
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		if(loginUser != null){
+			int userNo = loginUser.getUserNo();
+			ArrayList<Users> list = uService.selectSubscribeList(userNo);
+			System.out.println("userNo" + userNo);
+//			System.out.println(list);
+			for(Users u : list){
+				System.out.println(u.getUserId() + "    " + u.getSubscriberCount());
+			}
+			model.addAttribute("list",list);
+		}else {
+			throw new UsersException("로그인이 풀렸3");
+		}
+		return "subscribe";
+	}
 	
 	
 	
