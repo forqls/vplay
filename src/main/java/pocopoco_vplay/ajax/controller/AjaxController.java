@@ -291,5 +291,26 @@ public class AjaxController {
 	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
 	            .body(responseBody);
 	}
+	
+	@PostMapping("updateSubscribe")
+	public int updateSubscribe(@RequestBody HashMap<String,Object> map , HttpSession session) {
+		
+		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
+		int createrNo = (int)map.get("createrNo");
+		boolean isCancel = (Boolean)map.get("isCancel");
+		
+		System.out.println("여기 전부 다 있어요 " + userNo + createrNo + isCancel);
+		
+		return 0;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

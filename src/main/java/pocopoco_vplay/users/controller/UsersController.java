@@ -537,14 +537,35 @@ public class UsersController {
 			}
 			ArrayList<Users> list = new ArrayList<Users>(map.values());
 			
-//			System.out.println("userNo" + userNo);
+//			for(Users i : list) {
+//				System.out.println("dddddddddd" + i.getUserNo());
+//			}
 //			System.out.println(list);
-				System.out.println(list);
+//				System.out.println(list);
 			model.addAttribute("list",list);
 		}else {
 			throw new UsersException("로그인이 풀렸3");
 		}
 		return "subscribe";
+	}
+	@GetMapping("createrPage")
+	public String goToCreaterPage(@RequestParam("createrNo") int createrNo,@RequestParam("subscriberCount") int subscriberCount,HttpSession session , Model model) {
+//		System.out.println("크리에이터 번호 ㅋㅋ : " + createrNo);
+//		System.out.println("구독자 수 ㅋㅋ : " + subscriberCount);
+		
+		Users loginUser = (Users)session.getAttribute("loginUser");
+		ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
+		Users createrUser = uService.getInfoUser(createrNo);
+		int isSubscribed = uService.isSubscribed(createrNo,loginUser.getUserNo());
+		System.out.println("들어온 리스트  =  " + list);
+		System.out.println(createrUser);
+		model.addAttribute("list",list).addAttribute("createrUser",createrUser).addAttribute("subscriberCount",subscriberCount)
+		.addAttribute("isSubscribed",isSubscribed).addAttribute("createrNo",createrNo);
+		
+		
+		
+		
+		return "createrPage";
 	}
 	
 	

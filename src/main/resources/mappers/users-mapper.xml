@@ -282,8 +282,12 @@
 			users u2 ON u2.user_no = s.creater_no
 		WHERE s.user_no = #{userNo}
 	</select>
-
-
+	<select id="getInfoUser">
+		select * from users where user_no=#{createrNo}
+	</select>
+	<select id="isSubscribed">
+		select count(*) from subscribe where creater_no =#{createrNo} and user_no =#{userNo} 
+	</select>
 
 
 </mapper>
