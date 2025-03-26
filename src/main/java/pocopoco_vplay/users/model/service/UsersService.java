@@ -154,4 +154,8 @@ public class UsersService {
 	public int isSubscribed(int createrNo, int userNo) {
 		return mapper.isSubscribed(createrNo,userNo);
 	}
+
+	public int updateSubscribe(HashMap<String, Object> map) {
+		return mapper.updateSubscribe(map);
+	}
 }

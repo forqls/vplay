@@ -126,13 +126,8 @@
 				</svg>
 				  팔로잉 수 : [[${subscriberCount}]]
             </p>
-            <th:block th:if="${isSubscribed != 1}">
-          		<button id="button1">구독하기</button>
-            </th:block>
-            <th:block th:if="${isSubscribed == 1}">
-          		<button id="button2">구독 중</button>
-            </th:block>
-            <input type="hidden" id="createrNo" th:value="createrNo">
+			<button id="subscribeBtn" th:text="${isSubscribed == 1 ? '구독 중' : '구독하기'}"></button>
+            <input type="hidden" id="createrNo" th:value="${createrNo}">
         </div>
 
         <div class="project-section">
@@ -168,27 +163,28 @@
     </div>
     
     <script type="text/javascript">
-    const button1 = document.getElementById('button1');
-    const button2 = document.getElementById('button2');
+    const button = document.getElementById("subscribeBtn");
     const createrNo = document.getElementById('createrNo').value;
-    let isCancel = true;
-    button1.addEventListener('click',(e)=>{
-    	isCancel = false;
-    	fetch("users/updateSubscribe",{
-    		 method: "POST",
-             headers: { 'content-type': 'application/json; charset=UTF-8' },
-             body: JSON.stringify({
-                 createrNo: createrNo,
-                 isCancel: isCancel
-             })
-    	})
-    	.then(response=>response.json())
-    	.then(data=>{
-    		console.log(data);
-    	});
+    button.addEventListener("click", () => {
+        const isCancel = button.innerText == "구독 중";
+
+        fetch("/users/post/updateSubscribe", {
+            method: "POST",
+            headers: { 'content-type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify({
+                createrNo: createrNo,
+                isCancel: isCancel
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data === 1) {
+                button.innerText = isCancel ? "구독하기" : "구독 중";
+            }
+        });
     });
-    
-    
+
+ 
     
     
     

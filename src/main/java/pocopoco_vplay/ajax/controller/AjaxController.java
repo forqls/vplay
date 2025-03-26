@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +30,7 @@ import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
+import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
@@ -292,16 +292,24 @@ public class AjaxController {
 	            .body(responseBody);
 	}
 	
-	@PostMapping("updateSubscribe")
+	@PostMapping("post/updateSubscribe")
 	public int updateSubscribe(@RequestBody HashMap<String,Object> map , HttpSession session) {
-		
+		System.out.println("dddd");
 		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
-		int createrNo = (int)map.get("createrNo");
+		int createrNo = Integer.parseInt(map.get("createrNo").toString());
 		boolean isCancel = (Boolean)map.get("isCancel");
 		
-		System.out.println("여기 전부 다 있어요 " + userNo + createrNo + isCancel);
+//		System.out.println("여기 전부 다 있어요 " + userNo + createrNo + isCancel);
+		map.put("userNo", userNo);
 		
-		return 0;
+		int result = uService.updateSubscribe(map);
+		System.out.println(map);
+		if(result == 1 ) {
+			return result;
+		}else {
+			throw new UsersException("ㅋㅋ");
+		}
+		
 	}
 	
 	
