@@ -37,7 +37,7 @@
 	<select id="selectMyRealProjects">
 		select c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,
 		c.MD_RECOMMENDATION,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count ,
-		b.board_type,m.menu_name, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name
+		b.board_type,m.menu_name, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name, m.menu_no
 		from content c
 		left join board b on c.content_no = b.content_no
 		left JOIN content_category cc on c.content_no = cc.content_no
@@ -54,7 +54,7 @@
 		c.USER_NO,
 		c.VIEWS,
 		c.MD_RECOMMENDATION,
-		b.board_type, m.menu_name
+		b.board_type, m.menu_name, m.menu_no
 	</select>
 
 	<select id="selectuserIdPhone">

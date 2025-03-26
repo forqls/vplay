@@ -53,6 +53,18 @@
 			<th:block th:if="${not #lists.isEmpty(list)}">
 				<div class="grid">
 					<div class="grid-item" th:each="r : ${list}">
+						<input type="hidden" th:value="${r.contentNo}">
+						<input type="hidden" th:value="${r.menuNo}">
+						<div class="item-thumbnail">
+							<th:block th:if="${r.menuNo == 1 || r.menuNo == 5}">
+		                    <video id="item-preview" muted loop>
+			                	<source type="video/mp4">
+			                </video>
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 4 || r.menuNo == 6 || r.menuNo == 7}">
+			               		 <img id="item-preview">
+			                </th:block>
+						</div>
 						<button class="menu-dots">⋮</button>
 						<div class="dropdown">
 							<div class="dropdown-item">
@@ -61,6 +73,8 @@
 </svg> </span> 삭제
 							</div>
 						</div>
+						
+						<!-- 컨텐츠 -->
 						<div class="item-content">
 							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}" hidden></span> <input type="hidden" th:value="${r.menuName}">
 							<div class="item-actions">
@@ -87,6 +101,10 @@
     const list = document.querySelectorAll(".grid-item");
     clickDetail(list);
     
+    window.onload=()=>{
+    	thumbnailPlay()
+    }
+    
     //디테일 페이지 들어가기
     function clickDetail(list) {
         [...list].map((content, index, array) => {
@@ -108,6 +126,44 @@
                 event.stopPropagation();
             })
         })
+    }
+    
+    //썸네일 불러오기
+    function thumbnailPlay() {
+        const thumbnailList = document.querySelectorAll('.item-thumbnail'); // 둘 다 잡아줌
+        console.log(thumbnailList);
+        
+        [...thumbnailList].forEach((thumbnail) => {
+//             console.log(thumbnail);
+        	 const contentNo = thumbnail.previousElementSibling.previousElementSibling.value;
+        	 const menuNo = thumbnail.previousElementSibling.value;
+        	 
+        	 console.log(menuNo);
+            fetch("/board/select-thumbnail/" + contentNo, {
+                method: "get",
+                headers: { 'content-type': 'application/json; charset=UTF-8' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (menuNo == 1 || menuNo == 5) {
+                    const video = thumbnail.children[0];
+                    const source = video?.children[0];
+                    if (source) {
+                        source.src = data.thumbnail;
+                        video.appendChild(source);
+                        thumbnail.appendChild(video);
+                        video.addEventListener('mouseenter', () => video.play());
+                        video.addEventListener('mouseleave', () => {
+                            video.pause();
+                            video.currentTime = 0;
+                        });
+                    }
+                } else {
+                    const img = thumbnail.children[0];
+                    if (img) img.src = data.thumbnail;
+                }
+            });
+        });
     }
     
     //... 선택 후 삭제
@@ -156,6 +212,7 @@
         });
     }
 
+   	//필터 작업
     document.querySelectorAll('.filter-dropdown').forEach((dropdown) => {
         dropdown.addEventListener('change', (e) => {
             let value = document.getElementById('categorySelect').value;
@@ -207,6 +264,7 @@
             });
         });
     });
+   	
 	</script>
 </body>
 </html>

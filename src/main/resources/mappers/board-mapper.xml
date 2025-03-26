@@ -367,29 +367,39 @@
 	</update>
 
 	<select id="allMenuDetail" parameterType="int">
-		select c.content_no, c.content_title, to_char(c.content_detail) as content_detail, c.create_date, u.user_profile,
-		c.modify_date, c.content_status, u.user_no, u.user_id,
-		u.user_nickname, u.user_email,u.user_profile, listagg(category_name, ',') within group(order by category_name) as category_name, m.menu_name, m.menu_no
+		select 
+		  c.content_no,
+		  c.content_title,
+		  c.content_detail,
+		  c.create_date,
+		  u.user_profile,
+		  c.modify_date,
+		  c.content_status,
+		  u.user_no,
+		  u.user_id,
+		  u.user_nickname,
+		  u.user_email,
+		  u.user_profile,
+		  m.menu_name,
+		  m.menu_no,
+		  (
+		    select listagg(category_name, ',') within group(order by category_name)
+		    from content_category cc
+		    join category cg on cc.category_no = cg.category_no
+		    where cc.content_no = c.content_no
+		  ) as category_name
 		from content c
-		join users u on(c.user_no = u.user_no)
-		join content_category cc on(c.content_no = cc.content_no)
-		join category cg on(cc.category_no = cg.category_no)
-		join menu m on(cg.menu_no = m.menu_no)
+		join users u on c.user_no = u.user_no
+		join menu m on (
+		  m.menu_no = (
+		    select cg.menu_no
+		    from content_category cc
+		    join category cg on cc.category_no = cg.category_no
+		    where cc.content_no = c.content_no
+		    fetch first 1 row only
+		  )
+		)
 		where c.content_no = #{contentNo}
-		group by
-		c.content_no,
-		c.content_title,
-		to_char(c.content_detail),
-		c.create_date,
-		c.modify_date,
-		c.content_status,
-		u.user_no,
-		u.user_id,
-		u.user_nickname,
-		u.user_email,
-		u.user_profile,
-		m.menu_name,
-		m.menu_no
 	</select>
 	
 	<select id="contentFile">
