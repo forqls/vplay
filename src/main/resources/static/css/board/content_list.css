@@ -239,3 +239,126 @@ body {
 .icon {
   cursor: pointer;
 }
+
+
+
+
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    cursor: pointer;
+}
+
+.template-card {
+    border-radius: 12px;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    height: 18rem;
+}
+
+.template-card:hover .overlay {
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+}
+
+.template-image img {
+    transition-duration: 0.3s;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.template-card:hover .template-image img {
+    scale: 1.1;
+}
+
+.template-image video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.template-image {
+    width: 100%;
+    height: 100%;
+}
+
+.content_wrap {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+    color: white;
+    padding: 0.5rem 1.1rem;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 5.2rem;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1;
+    height: 6rem;
+    top: 67%;
+    transition-duration: 0.3s;
+}
+
+span.icon {
+    margin-left: 0.7rem;
+}
+
+span.icon_wrap span {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+span.icon_wrap {
+    display: flex;
+    align-items: flex-end;
+}
+
+.template-info {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.1);
+    flex-grow: 1;
+}
+
+.template-details {
+    height: 100%;
+}
+
+.template-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.1em;
+    color: #ffffff;
+    margin-bottom: 0.4rem;
+}
+
+.template-writer {
+    font-size: 0.8rem;
+    color: #e9e9e9;
+}
+
+.template-creator {
+    font-size: 12px;
+    color: #d9d9d9;
+}
+
+.template-actions {
+    display: flex;
+    gap: 8px;
+}

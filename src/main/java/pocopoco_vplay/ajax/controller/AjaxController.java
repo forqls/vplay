@@ -127,7 +127,13 @@ public class AjaxController {
 	}
 	
 	@PostMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z가-힣0-9\\+&-]+}")
-	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName){
+	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName, HttpSession session){
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = 0;
+		if(loginUser != null) {
+			 userNo = loginUser.getUserNo();
+		}
+		
 		System.out.println(categoryTagName);
 		System.out.println("수정 전 : " + menuName);
 		
@@ -176,6 +182,11 @@ public class AjaxController {
 		
 		
 		ArrayList<Content> cList = bService.allTemplateList(map);
+		for (int v = 0; v < cList.size(); v++) {
+			int num = cList.get(v).getContentNo();
+			int result2 = bService.menuLikeTo(num, userNo);
+			cList.get(v).setLikeTo(result2);
+		}
 		
 		for(Content c : cList) {
 			System.out.println(c);
