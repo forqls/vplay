@@ -17,6 +17,7 @@ body {
 }
 
 .hero {
+	padding-right:2rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
@@ -33,7 +34,7 @@ body {
     display: inline-block;
     padding: 0.5rem;
     /* aspect-ratio: 1; */
-    width: auto;
+    width: 29rem;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     animation: moveLocation 6s linear infinite;
@@ -72,12 +73,20 @@ img.bee {
 
 }
 
+.Ghost_custom02 {
+	position: absolute;
+    right: -20px;
+    top: 90px;
+	animation: upDown 3s ease-in-out infinite;
+}
+
 img.snail {
     position: absolute;
     bottom: -30px;
     left: -45px;
     animation: snailLocation 4s linear infinite;
 }
+
 
 @keyframes snailLocation {
     0% {
@@ -90,6 +99,25 @@ img.snail {
         left: -45px;
     }
 
+}
+
+img.Ghost_custom{
+	position: absolute;
+    bottom: -30px;
+    left: -45px;
+	animation: upDown 3s ease-in-out infinite;
+}
+
+@keyframes upDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-13px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .hero-content h1 {
