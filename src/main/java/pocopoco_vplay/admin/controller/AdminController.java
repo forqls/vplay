@@ -304,10 +304,12 @@ public class AdminController {
 	public int insertReply(@ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") String contentNo) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
+			reply.setUserNo(loginUser.getUserNo());
 			reply.setWriter(loginUser.getUserNickname());
 			reply.setContentNo(contentNo);
 		}
 		try {
+			System.out.println(reply);
 			int result = aService.insertReply(reply);
 			if (result > 0) {
 				return 1;
