@@ -8,7 +8,20 @@
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
 <link href="/css/common.css" rel="stylesheet" type="text/css">
 <link href="/css/index.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <style>
+	.swiper-button-prev, .swiper-rtl .swiper-button-next {
+	    left: var(--swiper-navigation-sides-offset, 150px) !important;
+	    right: auto;
+	}
+	.swiper-button-next, .swiper-rtl .swiper-button-prev {
+	    right: var(--swiper-navigation-sides-offset, 195px) !important;
+	    left: auto;
+	}
+	.Ghost {
+    	width: 130px;
+	}
+	
 </style>
 </head>
 <body>
@@ -16,54 +29,90 @@
 	<div th:replace="~{views/common/floatingBtn}"></div>
 
 	<div class="container">
-		<section class="hero">
-			<div class="hero-content">
-				<h1 class="title_wrap">
-					아이디어가 샘<span>솟는</span><br/>
-					무제한 크리에<span>이티브</span> 공간
-					<img src="/img/slider-bg.png" alt="몽글한 부분 배경">
-				</h1>
-				<p>
-					지금 바로 크리에이터님의 <br> 무한 가능성을 경험해 보세요.
-				</p>
-				<div class="hero-buttons">
-					<button class="button-primary" onclick="location.href='/board/all_menu'">All Menu</button>
+		<div class="swiper mySwiper">
+		<!-- 첫번째 슬라이드ㅋㅋ -->
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<section class="hero">
+						<div class="hero-content">
+							<h1 class="title_wrap">
+								아이디어가 샘<span>솟는</span><br/>
+								무제한 크리에<span>이티브</span> 공간
+								<img src="/img/slider-bg.png" alt="몽글한 부분 배경">
+							</h1>
+							<p>
+								지금 바로 크리에이터님의 <br> 무한 가능성을 경험해 보세요.
+							</p>
+							<div class="hero-buttons">
+								<button class="button-primary" onclick="location.href='/board/all_menu'">All Menu</button>
+							</div>
+						</div>
+						<div class="hero-image-wrap">
+							<div class="hero-image">
+								<img src="/img/main_img.png" alt="Boy crossing a stream bridge"/>
+							</div>
+							<img class="snail" src="/img/snail.png" alt="snail"/>
+							<img class="bee" src="/img/bee.png" alt="bee"/>
+						</div>
+					</section>
+				</div>
+				<!-- 두번쨰 슬라이드ㅋ -->
+				<div class="swiper-slide">
+					<section class="hero">
+						<div class="hero-content">
+							<h1 class="title_wrap">
+								아이디어가 샘<span>솟는</span><br/>
+								무제한 크리에<span>이티브</span> 공간
+								<img src="/img/slider-bg.png" alt="몽글한 부분 배경">
+							</h1>
+							<p>
+								지금 바로 크리에이터님의 <br> 무한 가능성을 경험해 보세요.
+							</p>
+							<div class="hero-buttons">
+								<button class="button-primary" onclick="location.href='/board/all_menu'">All Menu</button>
+							</div>
+						</div>
+						<div class="hero-image-wrap hero-imageCustom">
+							<div class="hero-image">
+								<img src="/img/GhostKing.jpg" alt="Boy crossing a stream bridge"/>
+							</div>
+							<img class="Ghost_custom Ghost" src="/img/GhostChild.png" alt="GhostBaby"/>
+							<img class="Ghost_custom02 Ghost" src="/img/GhostBaby.png" alt="GhostChild"/>
+						</div>
+					</section>
+				</div>
+				<!-- 셋~번~쨰~ -->
+				<div class="swiper-slide">
+					<section class="hero">
+						<div class="hero-content">
+							<h1 class="title_wrap">
+								아이디어가 샘<span>솟는</span><br/>
+								무제한 크리에<span>이티브</span> 공간
+								<img src="/img/slider-bg.png" alt="몽글한 부분 배경">
+							</h1>
+							<p>
+								지금 바로 크리에이터님의 <br> 무한 가능성을 경험해 보세요.
+							</p>
+							<div class="hero-buttons">
+								<button class="button-primary" onclick="location.href='/board/all_menu'">All Menu</button>
+							</div>
+						</div>
+						<div class="hero-image-wrap">
+							<div class="hero-image">
+								<img src="/img/main_img.png" alt="Boy crossing a stream bridge"/>
+							</div>
+							<img class="snail" src="/img/snail.png" alt="snail"/>
+							<img class="bee" src="/img/bee.png" alt="bee"/>
+						</div>
+					</section>
 				</div>
 			</div>
-			<div class="hero-image-wrap">
-				<div class="hero-image">
-					<img src="/img/main_img.png" alt="Boy crossing a stream bridge"/>
-				</div>
-				<img class="snail" src="/img/snail.png" alt="snail"/>
-				<img class="bee" src="/img/bee.png" alt="bee"/>
-			</div>
 
-		</section>
-
-		<!-- 이벤트 섹션 -->
-<!--		<section class="section">-->
-<!--			<h2 class="section-title">진행중인 이벤트</h2>-->
-<!--			<div class="event-carousel">-->
-<!--				<button class="carousel-arrow left" aria-label="Previous Event">-->
-<!--					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">-->
-<!--        <path d="M15.75 19.5L8.25 12l7.5-7.5"></path>-->
-<!--      </svg>-->
-<!--				</button>-->
-<!--				<button class="carousel-arrow right" aria-label="Next Event">-->
-<!--					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">-->
-<!--        <path d="M8.25 4.5L15.75 12l-7.5 7.5"></path>-->
-<!--      </svg>-->
-<!--				</button>-->
-<!--			</div>-->
-<!--			<div class="template-grid">-->
-<!--				<div class="template-item">-->
-<!--					<h3 id="monthlyEvent"></h3>-->
-<!--				</div>-->
-<!--				<div class="template-item"></div>-->
-<!--				<div class="template-item"></div>-->
-<!--				<div class="template-item"></div>-->
-<!--			</div>-->
-<!--		</section>-->
+		</div>
+		<span class="buttonWrap">
+			  <div class="swiper-button-prev"></div>
+			  <div class="swiper-button-next"></div>
+		</span>
 
 		<!-- MD 추천 템플릿 -->
 		<section class="section">
@@ -107,59 +156,7 @@
 			</div>
 		</section>
 
-<<<<<<< HEAD
-=======
-		<!-- 크리에이터 섹션 -->
-		<!--<section class="section">
-			<h2 class="section-title">최근 인기 크리에이터 추천</h2>
-			<div class="creator-grid">
-				<div class="creator-card">
-					<div class="creator-header">
-						<div class="creator-avatar"></div>
-						<div class="creator-info">
-							<h3>Creator</h3>
-							<p>Handsome/given</p>
-						</div>
-					</div>
-					<div class="creator-content"></div>
-					<button class="subscribe-button">Subscribe</button>
-				</div>
-				<div class="creator-card">
-					<div class="creator-header">
-						<div class="creator-avatar"></div>
-						<div class="creator-info">
-							<h3>Creator</h3>
-							<p>Handsome/given</p>
-						</div>
-					</div>
-					<div class="creator-content"></div>
-					<button class="subscribe-button">Subscribe</button>
-				</div>
-				<div class="creator-card">
-					<div class="creator-header">
-						<div class="creator-avatar"></div>
-						<div class="creator-info">
-							<h3>Creator</h3>
-							<p>Handsome/given</p>
-						</div>
-					</div>
-					<div class="creator-content"></div>
-					<button class="subscribe-button">Subscribe</button>
-				</div>
-				<div class="creator-card">
-					<div class="creator-header">
-						<div class="creator-avatar"></div>
-						<div class="creator-info">
-							<h3>Creator</h3>
-							<p>Handsome/given</p>
-						</div>
-					</div>
-					<div class="creator-content"></div>
-					<button class="subscribe-button">Subscribe</button>
-				</div>
-			</div>
-		</section>-->
->>>>>>> a3236ae47de5bba0700d71cc9ecbc05953c427df
+
 
 		<section class="section">
 			<h2 class="section-title">탑 크리에이터 추천</h2>
@@ -232,7 +229,7 @@
 		</section>
 	</div>
 	<div th:replace="~{views/common/footer :: footer}"></div>
-
+	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<script th:inline="javascript">
 		const loginUser = /*[[${session.loginUser}]]*/'loginUser';
 		const creatorList = document.querySelector('.creator-grid.top');
@@ -368,7 +365,18 @@
 				location.href = "/users/creator/" + userNo;
 			})
 		})
-
+		
+		const mySwiper = new Swiper('.mySwiper', {
+		  loop: true,
+		  pagination: {
+		    el: '.swiper-pagination',
+		    clickable: true,
+		  },
+		  navigation: {
+		    nextEl: '.swiper-button-next',
+		    prevEl: '.swiper-button-prev',
+		  },
+		});
 	</script>
 </body>
 </html>
