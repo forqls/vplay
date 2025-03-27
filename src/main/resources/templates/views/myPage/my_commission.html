@@ -64,7 +64,7 @@
 
 				else if (commissionItem && !target.closest('.dropdown-item')) {
 					const contentNo = commissionItem.dataset.contentNo;
-					location.href = '/board/commissionDetail?contentNo=' + contentNo;
+					location.href = '/board/' + contentNo + "/1";
 				}
 
 				if (target.closest('.delete-commission')) {
