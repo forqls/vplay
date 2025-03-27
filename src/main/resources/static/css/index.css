@@ -184,6 +184,7 @@ img.Ghost_custom{
     padding: 16px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition-duration: 0.3s;
+    cursor: pointer;
 }
 
 .creator-header {

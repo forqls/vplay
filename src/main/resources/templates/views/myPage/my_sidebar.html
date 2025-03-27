@@ -175,7 +175,10 @@
         if(file != undefined) {
             const reader = new FileReader()
             reader.addEventListener('load', function() {
-                file.previousElementSibling.children[0].src = this.result;
+//             	console.log(this);
+//             	console.log(file.previousElementSibling);
+//             	console.log(file.previousElementSibling.children[0]);
+                file.previousElementSibling.src = this.result;
             });
             imgFile = file.files[0];
             reader.readAsDataURL(imgFile);
