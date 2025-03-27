@@ -339,6 +339,7 @@ span.icon_wrap {
 }
 
 .template-title {
+	display: inline-block;
 	font-size: 1.1rem;
 	font-weight: 600;
 	line-height: 1.1em;
@@ -347,7 +348,7 @@ span.icon_wrap {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: 330px;
+	max-width: 300px;
 }
 
 .template-writer {

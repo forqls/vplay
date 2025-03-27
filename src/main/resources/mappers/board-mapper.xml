@@ -151,7 +151,7 @@
 		</if>
 		<if test="menuNameNum == 'Sound Effects'">
 			where rownum <![CDATA[<]]>=
-			5
+			6
 		</if>
 		<if test="menuNameNum == 'Graphic Templates'">
 			where rownum <![CDATA[<]]>=
@@ -167,7 +167,7 @@
 		</if>
 		<if test="menuNameNum == 'Fonts'">
 			where rownum <![CDATA[<]]>=
-			5
+			6
 		</if>
 		<if test="recentList != null">
 			where rownum <![CDATA[<]]>=
