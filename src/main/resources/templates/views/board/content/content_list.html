@@ -1,110 +1,239 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPLAY - Stock Videos</title>
-    <link href="/css/board/content_list.css" rel="stylesheet">
-    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
-    <script src="https://unpkg.com/wavesurfer.js"></script>
-    <style>
-    	.hidden {
-			display: none;
-		}
-		
-		.flexdirection{
-			position: absolute;
-			left: 2rem;
-		}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPLAY</title>
+<link href="/css/board/content_list.css" rel="stylesheet">
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<script src="https://unpkg.com/wavesurfer.js"></script>
+<style>
+/* 향상된 hidden 클래스와 부드러운 트랜지션 */
+.hidden {
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+/* Flexbox를 사용한 메인 콘텐츠 레이아웃 */
+.main-content {
+	display: flex;
+	min-height: calc(100vh - 64px);
+	transition: all 0.3s ease;
+	position: relative;
+}
+
+/* 트랜지션이 적용된 사이드바 컨테이너 */
+.categorywrap {
+	transition: width 0.3s ease;
+	width: 250px;
+	flex-shrink: 0;
+	margin-top: 45px;
+}
+
+/* 사이드바가 숨겨졌을 때 (flexdirection 클래스 적용) */
+.categorywrap.flexdirection {
+	width: 60px;
+}
+
+/* Flex grow를 사용한 콘텐츠 영역 */
+.content {
+	flex: 1;
+	padding: 2rem;
+	transition: all 0.3s ease;
+}
+
+/* 사이드바가 숨겨졌을 때 콘텐츠 영역 확장 */
+.categorywrap.flexdirection+.content {
+	margin-left: 60px;
+}
+
+/* 숨길 수 있는 요소들의 기본 스타일 */
+.category-list, .category-title, .sidebar {
+	opacity: 1;
+	max-height: 1000px; /* 충분히 큰 값으로 설정 */
+	overflow: hidden;
+	transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+/* 개선된 flexdirection 클래스 */
+.flexdirection {
+	position: absolute;
+	left: 0;
+	transition: left 0.3s ease;
+	z-index: 10;
+}
+
+/* 향상된 사이드바 스타일링 */
+.sidebar {
+	position: fixed;
+	top: 20;
+	left: 20;
+	width: 250px;
+	padding: 1.5rem;
+	background-color: #1f1f2c;
+	border-radius: 0 10px 10px 0;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	transition: width 0.3s ease, padding 0.3s ease;
+	z-index: 0;
+}
+
+/* 사이드바가 숨겨졌을 때 */
+.categorywrap.flexdirection .sidebar {
+	width: 60px;
+	padding: 1.5rem 0;
+}
+
+/* 개선된 카테고리 리스트 스타일링 */
+.category-list {
+	list-style: none;
+	overflow-y: auto;
+	max-height: calc(100vh - 200px);
+}
+
+.category-list::-webkit-scrollbar {
+	width: 5px;
+}
+
+.category-list::-webkit-scrollbar-thumb {
+	background-color: #6137e9;
+	border-radius: 5px;
+}
+
+.category-list li {
+	padding: 0.5rem 0;
+	color: #6f757d;
+	cursor: pointer;
+	transition: color 0.2s ease;
+}
+
+.category-list li:hover {
+	color: #ffffff;
+}
+
+/* 개선된 카테고리 제목 */
+.category-title {
+	color: #ffffff;
+	font-weight: 500;
+	margin: 1rem 0;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 토글 버튼의 고정 위치 */
+#CategoriesViewButton {
+	position: fixed;
+	top: 80px;
+	left: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	cursor: pointer;
+	padding: 10px;
+	transition: transform 0.2s ease, background-color 0.2s ease;
+	border-radius: 8px;
+	background-color: #1f1f2c;
+	z-index: 1000;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+	width: 45px;
+	height: 45px;
+}
+
+#CategoriesViewButton:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	transform: scale(1.05);
+}
+
+/* 반응형 템플릿 그리드 - 사이드바 상태와 관계없이 3개 항목 유지 */
+.template-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 30px;
+	transition: all 0.3s ease;
+}
+
+/* 템플릿 카드의 종횡비 유지 */
+.template-card {
+	border-radius: 12px;
+	display: flex;
+	position: relative;
+	overflow: hidden;
+	flex-direction: column;
+	height: 18rem;
+	transition: all 0.3s ease;
+}
+
+/* 작은 화면에 대한 반응형 조정 */
+@media ( max-width : 1400px) {
+	.template-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media ( max-width : 768px) {
+	.template-grid {
+		grid-template-columns: repeat(1, 1fr);
+	}
+	#CategoriesViewButton {
+		top: 70px;
+		left: 10px;
+	}
+}
+</style>
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
-	
-    <div class="main-content">
-    <div class="categorywrap">
-            	<div id="CategoriesViewButton" style="display: inline-block; align-items: center; gap: 8px;cursor: pointer;">
-        		<svg width="42" height="33" viewBox="0 0 42 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<g filter="url(#filter0_d_224_3143)">
-				<path fill-rule="evenodd" clip-rule="evenodd" d="M5.04163 4.16667C5.04163 3.59137 5.508 3.125 6.08329 3.125H35.25C35.8253 3.125 36.2916 3.59137 36.2916 4.16667C36.2916 4.74196 35.8253 5.20833 35.25 5.20833H6.08329C5.508 5.20833 5.04163 4.74196 5.04163 4.16667Z" fill="white"/>
-				<path d="M12.3333 4.16667C12.3333 6.46785 10.4679 8.33333 8.16667 8.33333C5.86548 8.33333 4 6.46785 4 4.16667C4 1.86548 5.86548 0 8.16667 0C10.4679 0 12.3333 1.86548 12.3333 4.16667Z" fill="#191820"/>
-				<path fill-rule="evenodd" clip-rule="evenodd" d="M8.16667 6.25C9.31726 6.25 10.25 5.31726 10.25 4.16667C10.25 3.01607 9.31726 2.08333 8.16667 2.08333C7.01607 2.08333 6.08333 3.01607 6.08333 4.16667C6.08333 5.31726 7.01607 6.25 8.16667 6.25ZM8.16667 8.33333C10.4679 8.33333 12.3333 6.46785 12.3333 4.16667C12.3333 1.86548 10.4679 0 8.16667 0C5.86548 0 4 1.86548 4 4.16667C4 6.46785 5.86548 8.33333 8.16667 8.33333Z" fill="white"/>
-				<path fill-rule="evenodd" clip-rule="evenodd" d="M5.04211 12.4987C5.04211 11.9234 5.50848 11.457 6.08378 11.457H35.2504C35.8257 11.457 36.2921 11.9234 36.2921 12.4987C36.2921 13.074 35.8257 13.5404 35.2504 13.5404H6.08378C5.50848 13.5404 5.04211 13.074 5.04211 12.4987Z" fill="white"/>
-				<path d="M24.8338 12.4987C24.8338 14.7999 22.9683 16.6654 20.6672 16.6654C18.366 16.6654 16.5005 14.7999 16.5005 12.4987C16.5005 10.1975 18.366 8.33203 20.6672 8.33203C22.9683 8.33203 24.8338 10.1975 24.8338 12.4987Z" fill="#191820"/>
-				<path fill-rule="evenodd" clip-rule="evenodd" d="M20.6672 14.582C21.8177 14.582 22.7505 13.6493 22.7505 12.4987C22.7505 11.3481 21.8177 10.4154 20.6672 10.4154C19.5166 10.4154 18.5838 11.3481 18.5838 12.4987C18.5838 13.6493 19.5166 14.582 20.6672 14.582ZM20.6672 16.6654C22.9683 16.6654 24.8338 14.7999 24.8338 12.4987C24.8338 10.1975 22.9683 8.33203 20.6672 8.33203C18.366 8.33203 16.5005 10.1975 16.5005 12.4987C16.5005 14.7999 18.366 16.6654 20.6672 16.6654Z" fill="white"/>
-				<path fill-rule="evenodd" clip-rule="evenodd" d="M5.04138 20.8346C5.04138 20.2593 5.50775 19.793 6.08305 19.793H35.2497C35.825 19.793 36.2914 20.2593 36.2914 20.8346C36.2914 21.4099 35.825 21.8763 35.2497 21.8763H6.08305C5.50775 21.8763 5.04138 21.4099 5.04138 20.8346Z" fill="white"/>
-				<path d="M37.3331 20.8346C37.3331 23.1358 35.4676 25.0013 33.1664 25.0013C30.8652 25.0013 28.9998 23.1358 28.9998 20.8346C28.9998 18.5334 30.8652 16.668 33.1664 16.668C35.4676 16.668 37.3331 18.5334 37.3331 20.8346Z" fill="#191820"/>
-				<path fill-rule="evenodd" clip-rule="evenodd" d="M33.1664 22.918C34.317 22.918 35.2498 21.9852 35.2498 20.8346C35.2498 19.684 34.317 18.7513 33.1664 18.7513C32.0158 18.7513 31.0831 19.684 31.0831 20.8346C31.0831 21.9852 32.0158 22.918 33.1664 22.918ZM33.1664 25.0013C35.4676 25.0013 37.3331 23.1358 37.3331 20.8346C37.3331 18.5334 35.4676 16.668 33.1664 16.668C30.8652 16.668 28.9998 18.5334 28.9998 20.8346C28.9998 23.1358 30.8652 25.0013 33.1664 25.0013Z" fill="white"/>
-				</g>
-				<defs>
-				<filter id="filter0_d_224_3143" x="0" y="0" width="41.3331" height="33" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-				<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-				<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-				<feOffset dy="4"/>
-				<feGaussianBlur stdDeviation="2"/>
-				<feComposite in2="hardAlpha" operator="out"/>
-				<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-				<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_224_3143"/>
-				<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_224_3143" result="shape"/>
-				</filter>
-				</defs>
-				</svg>
-        	</div>
-        <aside class="sidebar">
-            <div class="category-title">Categories</div>
-            <ul class="category-list">
 
-            	<th:block th:each="vc : ${cCategory}">
-            	<li>
-            	<input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}">
-            	<a>[[${vc.categoryName}]]</a>
-            	</li>
-            	</th:block>
-            </ul>
-        </aside>
-	</div>
-        <main class="content">
-
-<!--             <div class="search-bar"> -->
-<!--                 <input type="text" placeholder="Search"> -->
-<!--             </div> -->
-			<div class="container">
+	<div class="main-content">
+		<div id="CategoriesViewButton">
+			<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
+				<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5" d="M21.25 12H8.895m-4.361 0H2.75m18.5 6.607h-5.748m-4.361 0H2.75m18.5-13.214h-3.105m-4.361 0H2.75m13.214 2.18a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm-9.25 6.607a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm6.607 6.608a2.18 2.18 0 1 0 0-4.361a2.18 2.18 0 0 0 0 4.36Z" />
+			</svg>
+		</div>
+		<div class="categorywrap">
+			<aside class="sidebar">
+				<div class="category-title">Categories</div>
+				<ul class="category-list">
+					<th:block th:each="vc : ${cCategory}">
+						<li><input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}"> <a>[[${vc.categoryName}]]</a></li>
+					</th:block>
+				</ul>
+			</aside>
+		</div>
+		<main class="content">
+			<div class="container" style="margin-top: 20px">
 				<section class="section">
-	            <div class="template-grid" id="template-grid-wrap">
-	                <div class="template-card" th:each="vl: ${cList}" th:if="${vl.menuNo == 1 || vl.menuNo == 5 || vl.menuNo == 2 || vl.menuNo == 4 || vl.menuNo == 6 || vl.menuNo == 7}">
-						<input type="hidden" th:value=${vl.contentNo}>
-						<input type="hidden" th:value=${vl.menuNo}>
-						<div class="template-details">
-							<div class="template-image"></div>
-							<div class="overlay"></div>
-							<div class="content_wrap">
-								<span class="content_title_wrap">
-									<div class="template-title">[[${vl.contentTitle}]]</div>
-									<div class="template-writer">[[${vl.userNickName}]]</div>
-								</span>
-								<span class="icon_wrap">
-									<span class="icon">
-										<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+					<div class="template-grid" id="template-grid-wrap">
+						<div class="template-card" th:each="vl: ${cList}" th:if="${vl.menuNo == 1 || vl.menuNo == 5 || vl.menuNo == 2 || vl.menuNo == 4 || vl.menuNo == 6 || vl.menuNo == 7}">
+							<input type="hidden" th:value=${vl.contentNo}> <input type="hidden" th:value=${vl.menuNo}>
+							<div class="template-details">
+								<div class="template-image"></div>
+								<div class="overlay"></div>
+								<div class="content_wrap">
+									<span class="content_title_wrap">
+										<div class="template-title">[[${vl.contentTitle}]]</div>
+										<div class="template-writer">[[${vl.userNickName}]]</div>
+									</span> <span class="icon_wrap"> <span class="icon"> <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd"
+													d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z"
+													fill="white" />
+										</svg> <span>[[${vl.downloadCount}]]</span>
+									</span> <span class="icon" id="md-icon"> <th:block th:if="${vl.likeTo == 1}">
+												<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red" />
 										</svg>
-										<span>[[${vl.downloadCount}]]</span>
+											</th:block> <th:block th:unless="${vl.likeTo == 1}">
+												<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white" />
+										</svg>
+											</th:block> <span>[[${vl.likeCount}]]</span>
 									</span>
-									<span class="icon" id="md-icon">
-										<th:block th:if="${vl.likeTo == 1}">
-										<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
-										</svg>
-										</th:block>
-										<th:block th:unless="${vl.likeTo == 1}">
-										<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
-										</svg>
-										</th:block>
-										<span>[[${vl.likeCount}]]</span>
 									</span>
-								</span>
 								</div>
 							</div>
+
 	                	</div>
 	            	</div>
 	            </section>
@@ -124,11 +253,12 @@
 				        <span class="icon heart">❤️</span>
 				      </div>
 				    </div>
+
 				</div>
 			</div>
-        </main>
-    </div>
-    <script th:inline="javascript">
+		</main>
+	</div>
+	<script th:inline="javascript">
     const divs = document.querySelector('.template-grid');
     const loginUser = /*[[${session.loginUser}]]*/'loginUser';
     const waveMap = {};
@@ -143,7 +273,7 @@
 		console.log(musicList);
 		listPlay(topList);
 		listPlay(musicList);
-//     	console.log(divs);
+
     	
     	const checkbox = document.querySelectorAll(".category-checkbox");
     	/*<![CDATA[*/
@@ -168,7 +298,6 @@
     	}
     	
     	const categoryList = document.querySelector('.category-list');
-//     	console.log(categoryList);
     	const checkboxArr = [];
     	[...categoryList.children].map((category, index, array) =>{
     		const checkbox = category.children[0];
@@ -198,28 +327,11 @@
 				
     		})
     	})
-//     	//검색
-// 		const input = document.getElementsByTagName("input")[5];
-//     	console.log(input);
-// 		input.addEventListener('keyup', (event)=>{
-// 			event.preventDefault();
-// 			if(event.key == 'Enter'){
-// 				const search = input.value;
-				
-// 				lastSegment = window.location.pathname.split("/").pop();
-// 				lastSegment2 = lastSegment.split("-").pop();
-				
-// 				console.log("엔터 누르고 나서 : " + search);
-// 				console.log("엔터 누르고 나서 : " + lastSegment2);
-// 				updatePage(lastSegment2, 0 ,search);
-// 			}
-// 		});
     }
     
 	window.addEventListener("popstate", (event) =>{
 	    	if(event.state){
 	    		console.log("뒤로 가기 감지, 이전 상태:", event);
-// 				console.log(event.state.data);
 	    		
 	    		let check = event.state.checkboxValue;
 	    		console.log(check);
@@ -228,8 +340,6 @@
 	    		
 	    		checkboxValue = check.replaceAll("-", " ");
 	    		
-// 				console.log(checkboxValue);
-				
 				const cArr = checkboxValue.split("+");
 				
 				const checkbox = document.querySelectorAll(".category-checkbox");
@@ -249,7 +359,7 @@
     function updatePage(checkboxValue, flag, search) {
 //     	console.log("updatePage에 들어옴 : " + checkboxValue);
         // 여기에 실제 페이지를 갱신하는 로직을 작성 (AJAX 요청 가능)
-        
+
         let url = "";
         
         if(search != null){
@@ -379,7 +489,6 @@
 			})
     }
     
-    
 	function listPlay(list){
 		[...list.children].map((template, index, array) =>{
 // 		console.log(template);
@@ -387,7 +496,7 @@
 		const contentNo = template.children[0].value;
 		const menuNo = template.children[1].value;
 		
-		//썸네일 불러오기
+		// 썸네일 불러오기
 		fetch("/board/select-thumbnail/" + contentNo,{
 			method : 'get',
 			headers : {'content-type' : 'application/json; charset=UTF-8'}
@@ -483,7 +592,7 @@
 
 		})
 		
-		//컨텐츠 이동
+		// 컨텐츠 이동
 		template.addEventListener('click', function(event){
 			
 			switch(menuNo){
@@ -495,9 +604,6 @@
 			case "6": menuName = "photo"; break;
 			case "7": menuName = "font";
 			}
-			
-//				console.log(menuName);
-			
 			location.href = "/board/" + menuName + "/" + contentNo;
 		});
 		
@@ -543,7 +649,6 @@
 
 	})
 }
-    
     function formatTime(seconds) {
         const min = Math.floor(seconds / 60);
         const sec = Math.floor(seconds % 60);
@@ -572,16 +677,10 @@
 		const videogrid = document.querySelector('.video-grid');
 		const sidebar = document.querySelector('.sidebar');
 		const categoryWrap = document.querySelector('.categorywrap');
-		console.log(categoryWrap);
-// 		console.log(videogrid);
-// 		console.log(list);
-// 		console.log(title);
 		list.classList.toggle('hidden');
 		title.classList.toggle('hidden');
 		sidebar.classList.toggle('hidden');
 		categoryWrap.classList.toggle('flexdirection');
-		
-		
 		if(e.target.closest('span').innerText == 'HideFilters'){
 			e.target.closest('span').innerText = 'ViewFilters';
 		}else if(e.target.closest('span').innerText == 'ViewFilters'){
@@ -589,7 +688,6 @@
 		}
 	});
 
-    
 </script>
 </body>
 </html>
