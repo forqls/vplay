@@ -40,6 +40,7 @@ public class Users {
     private int alertShown;
     private String googleId;
     private int subscriberCount;
+    private int isSubscribed;
     
 //    게터세터 재정의한거라 절대절대 건들지마셈
     public boolean isAlertShown() {
