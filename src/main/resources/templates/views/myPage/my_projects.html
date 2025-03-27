@@ -133,8 +133,10 @@
                 console.log(e.target);
                 let gridItem = e.target.closest('.grid-item');
                 let span = gridItem.querySelectorAll('span');
-                let contentNo = span[2].textContent.trim();
-                console.log(contentNo);
+                let inputs = gridItem.querySelectorAll('input');
+                let contentNo = inputs[0].value;
+                let menuNo = inputs[1].value;
+                console.log("컨텐트 넘버 : " + contentNo);
                 $.ajax({
                     url: '/board/throwBoardTrash',
                     data: {contentNo: contentNo, trash: "0"},
