@@ -214,8 +214,8 @@
 								<div class="overlay"></div>
 								<div class="content_wrap">
 									<span class="content_title_wrap">
-										<div class="template-title">[[${vl.contentTitle}]]</div>
-										<div class="template-writer">[[${vl.userNickName}]]</div>
+										<a class="template-title">[[${vl.contentTitle}]]</a>
+										<a class="template-writer">[[${vl.userNickName}]]</a>
 									</span> <span class="icon_wrap"> <span class="icon"> <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path fill-rule="evenodd" clip-rule="evenodd"
 													d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z"
@@ -234,26 +234,23 @@
 									</span>
 								</div>
 							</div>
+						</div>
+					</div>
+				</section>
+			</div>
 
-	                	</div>
-	            	</div>
-	            </section>
-	            
-            <div class="music-grid" id="music-grid-wrap">
+			<div class="music-grid" id="music-grid-wrap">
 				<div class="music-card" th:each="vl : ${cList}" th:if="${vl.menuNo == 3}">
-					<input type="hidden" th:value="${vl.contentNo}" />
-				     <input type="hidden" th:value="${vl.menuNo}" />
-				    <div class="audio-card">
-				      <div class="audio-left">
-				        <button class="play-btn" th:attr="data-id=${vl.contentNo}">▶</button>
-				      </div>
-				      <div class="audio-middle" th:attr="id='waveform-' + ${vl.contentNo}"></div>
-				      <div class="audio-right">
-				        <span class="duration">0:00</span>
-				        <span class="icon download">💾</span>
-				        <span class="icon heart">❤️</span>
-				      </div>
-				    </div>
+					<input type="hidden" th:value="${vl.contentNo}" /> <input type="hidden" th:value="${vl.menuNo}" />
+					<div class="audio-card">
+						<div class="audio-left">
+							<button class="play-btn" th:attr="data-id=${vl.contentNo}">▶</button>
+						</div>
+						<div class="audio-middle" th:attr="id='waveform-' + ${vl.contentNo}"></div>
+						<div class="audio-right">
+							<span class="duration">0:00</span> <span class="icon download">💾</span> <span class="icon heart">❤️</span>
+						</div>
+					</div>
 
 				</div>
 			</div>
