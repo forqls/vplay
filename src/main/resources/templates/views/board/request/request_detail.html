@@ -414,7 +414,12 @@ body {
 
 					<div class="comment-user">
 						<th:block th:if="${session.loginUser != null}">
-							<img th:src="${session.loginUser.userProfile}" alt="프로필 이미지">
+							<th:block th:if="${session.loginUser.userProfile == null}">
+								<img src="/img/testProfile.jpg" alt="기본 프로필 이미지">
+							</th:block>
+							<th:block th:unless="${session.loginUser.userProfile == null}">
+								<img th:src="${session.loginUser.userProfile}" alt="프로필 이미지">
+							</th:block>
 							<span th:text="${session.loginUser.userNickname}" style="font-weight: 500;"></span>
 						</th:block>
 						<th:block th:if="${session.loginUser == null}">
