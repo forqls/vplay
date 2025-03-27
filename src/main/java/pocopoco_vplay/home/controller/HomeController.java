@@ -26,16 +26,22 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String goIndex(Model model, HttpSession session) {
+		
 		ArrayList<Users> user = uService.selectTopUser();
-		for (Users u1 : user) {
-			System.out.println("닉네임: " + u1.getUserNickname() + ", 프로필: " + u1.getUserProfile());
-		}
-		ArrayList<Content> mdList = bService.selectMdList();
 		Users u = (Users)session.getAttribute("loginUser");
 		int userNo = 0;
 		if(u != null){
 			userNo = (u).getUserNo();
 		}
+		
+		for (Users u1 : user) {
+//			System.out.println("닉네임: " + u1.getUserNickname() + ", 프로필: " + u1.getUserProfile());
+			int createrNo = u1.getUserNo();
+			int isSubscribed = uService.isSubscribed(createrNo, userNo);
+			u1.setIsSubscribed(isSubscribed);
+		}
+		ArrayList<Content> mdList = bService.selectMdList();
+		
 
 		System.out.println(user);
 
@@ -47,7 +53,6 @@ public class HomeController {
 			mdList.get(v).setLikeTo(result);
 		}
 		
-		model.addAttribute("ulist",user);
 		ArrayList<Content> content = bService.selectContentTop();
 		for(int v =0; v< content.size();v++) {
 			num = content.get(v).getContentNo();
@@ -69,7 +74,7 @@ public class HomeController {
 	    }
 //	    System.out.println(content);
 		
-		model.addAttribute("clist",content).addAttribute("mdList", mdList);
+		model.addAttribute("clist",content).addAttribute("mdList", mdList).addAttribute("ulist",user);;
 		return "index";
 	}
 }
