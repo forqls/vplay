@@ -203,6 +203,7 @@ public class AjaxController {
 			
 			String fileUrl = null;
 			
+			System.out.println(file);
 			System.out.println("여기까지 옴 ㅋㅋ");
 			
 			
@@ -218,6 +219,8 @@ public class AjaxController {
 			
 			System.out.println(fileUrl);
 			map.put("userId", loginUser.getUserId());
+			System.out.println(loginUser.toString());
+			System.out.println(map);
 			
 			String originalProfile = uService.selectProfile(map);
 			System.out.println(originalProfile);
