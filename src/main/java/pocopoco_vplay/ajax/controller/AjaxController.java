@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +30,7 @@ import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
+import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
@@ -127,7 +127,13 @@ public class AjaxController {
 	}
 	
 	@PostMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z가-힣0-9\\+&-]+}")
-	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName){
+	public ArrayList<Content> selectCategory(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName, HttpSession session){
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = 0;
+		if(loginUser != null) {
+			 userNo = loginUser.getUserNo();
+		}
+		
 		System.out.println(categoryTagName);
 		System.out.println("수정 전 : " + menuName);
 		
@@ -176,6 +182,11 @@ public class AjaxController {
 		
 		
 		ArrayList<Content> cList = bService.allTemplateList(map);
+		for (int v = 0; v < cList.size(); v++) {
+			int num = cList.get(v).getContentNo();
+			int result2 = bService.menuLikeTo(num, userNo);
+			cList.get(v).setLikeTo(result2);
+		}
 		
 		for(Content c : cList) {
 			System.out.println(c);
@@ -192,6 +203,7 @@ public class AjaxController {
 			
 			String fileUrl = null;
 			
+			System.out.println(file);
 			System.out.println("여기까지 옴 ㅋㅋ");
 			
 			
@@ -207,6 +219,8 @@ public class AjaxController {
 			
 			System.out.println(fileUrl);
 			map.put("userId", loginUser.getUserId());
+			System.out.println(loginUser.toString());
+			System.out.println(map);
 			
 			String originalProfile = uService.selectProfile(map);
 			System.out.println(originalProfile);
@@ -248,7 +262,7 @@ public class AjaxController {
 
 		int currentMdCount = bService.getMdRecommendationCount();
 
-		if ("Y".equals(map.get("column")) && currentMdCount >= 8) {
+		if ("Y".equals(map.get("column")) && currentMdCount >= 6) {
 			return -1;
 		}
 
@@ -259,13 +273,6 @@ public class AjaxController {
 		}else{
 			throw new BoardException("상태값 업데이트 중 오류 발생 컨트롤러를 보세용");
 		}
-	}
-
-	@GetMapping("mdList")
-	public ArrayList<Content>  selectmdList() {
-		ArrayList<Content> list = bService.selectMdList();
-		System.out.println("md추천리스트들 : " + list);
-		return list;
 	}
 	
 	@GetMapping("download/{fileName}/{contentNo}/{userNo}")
@@ -298,5 +305,34 @@ public class AjaxController {
 	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
 	            .body(responseBody);
 	}
+	
+	@PostMapping("post/updateSubscribe")
+	public int updateSubscribe(@RequestBody HashMap<String,Object> map , HttpSession session) {
+		System.out.println("dddd");
+		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
+		int createrNo = Integer.parseInt(map.get("createrNo").toString());
+		boolean isCancel = (Boolean)map.get("isCancel");
+		
+//		System.out.println("여기 전부 다 있어요 " + userNo + createrNo + isCancel);
+		map.put("userNo", userNo);
+		
+		int result = uService.updateSubscribe(map);
+		System.out.println(map);
+		if(result == 1 ) {
+			return result;
+		}else {
+			throw new UsersException("ㅋㅋ");
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

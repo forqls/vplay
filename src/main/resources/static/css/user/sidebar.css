@@ -21,7 +21,7 @@
 	margin: 0 auto 16px;
 	overflow: hidden;
 	position: relative;
-	border: 1px solid #5e37e9;
+	border: 1.5px solid #5e37e9;
 }
 
 .profile-image img {
@@ -122,4 +122,19 @@
 	.sidebar {
 		width: 100%;
 	}
+}
+
+
+.tooltip {
+  position: fixed;
+  padding: 6px 12px;
+  background: #333;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 1000;
+  display: none;
+  max-width: 300px;
+  white-space: normal;
 }

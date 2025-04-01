@@ -1,90 +1,277 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPLAY - Stock Videos</title>
-    <link href="/css/board/videoTemplates/list.css" rel="stylesheet">
-    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPLAY</title>
+<link href="/css/board/content_list.css" rel="stylesheet">
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<script src="https://unpkg.com/wavesurfer.js"></script>
+<style>
+/* 향상된 hidden 클래스와 부드러운 트랜지션 */
+.hidden {
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+/* Flexbox를 사용한 메인 콘텐츠 레이아웃 */
+.main-content {
+	display: flex;
+	min-height: calc(100vh - 64px);
+	transition: all 0.3s ease;
+	position: relative;
+}
+
+/* 트랜지션이 적용된 사이드바 컨테이너 */
+.categorywrap {
+	transition: width 0.3s ease;
+	width: 250px;
+	flex-shrink: 0;
+	margin-top: 45px;
+}
+
+/* 사이드바가 숨겨졌을 때 (flexdirection 클래스 적용) */
+.categorywrap.flexdirection {
+	width: 60px;
+}
+
+/* Flex grow를 사용한 콘텐츠 영역 */
+.content {
+	flex: 1;
+	padding: 2rem;
+	transition: all 0.3s ease;
+}
+
+/* 사이드바가 숨겨졌을 때 콘텐츠 영역 확장 */
+.categorywrap.flexdirection+.content {
+	margin-left: 60px;
+}
+
+/* 숨길 수 있는 요소들의 기본 스타일 */
+.category-list, .category-title, .sidebar {
+	opacity: 1;
+	max-height: 1000px; /* 충분히 큰 값으로 설정 */
+	overflow: hidden;
+	transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+/* 개선된 flexdirection 클래스 */
+.flexdirection {
+	position: absolute;
+	left: 0;
+	transition: left 0.3s ease;
+	z-index: 10;
+}
+
+/* 향상된 사이드바 스타일링 */
+.sidebar {
+	position: fixed;
+	top: 20;
+	left: 20;
+	width: 250px;
+	padding: 1.5rem;
+	background-color: #1f1f2c;
+	border-radius: 0 10px 10px 0;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	transition: width 0.3s ease, padding 0.3s ease;
+	z-index: 0;
+}
+
+/* 사이드바가 숨겨졌을 때 */
+.categorywrap.flexdirection .sidebar {
+	width: 60px;
+	padding: 1.5rem 0;
+}
+
+/* 개선된 카테고리 리스트 스타일링 */
+.category-list {
+	list-style: none;
+	overflow-y: auto;
+	max-height: calc(100vh - 200px);
+}
+
+.category-list::-webkit-scrollbar {
+	width: 5px;
+}
+
+.category-list::-webkit-scrollbar-thumb {
+	background-color: #6137e9;
+	border-radius: 5px;
+}
+
+.category-list li {
+	padding: 0.5rem 0;
+	color: #6f757d;
+	cursor: pointer;
+	transition: color 0.2s ease;
+}
+
+.category-list li:hover {
+	color: #ffffff;
+}
+
+/* 개선된 카테고리 제목 */
+.category-title {
+	color: #ffffff;
+	font-weight: 500;
+	margin: 1rem 0;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 토글 버튼의 고정 위치 */
+#CategoriesViewButton {
+	position: fixed;
+	top: 80px;
+	left: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	cursor: pointer;
+	padding: 10px;
+	transition: transform 0.2s ease, background-color 0.2s ease;
+	border-radius: 8px;
+	background-color: #1f1f2c;
+	z-index: 1000;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+	width: 45px;
+	height: 45px;
+}
+
+#CategoriesViewButton:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	transform: scale(1.05);
+}
+
+/* 반응형 템플릿 그리드 - 사이드바 상태와 관계없이 3개 항목 유지 */
+.template-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 30px;
+	transition: all 0.3s ease;
+}
+
+/* 템플릿 카드의 종횡비 유지 */
+.template-card {
+	border-radius: 12px;
+	display: flex;
+	position: relative;
+	overflow: hidden;
+	flex-direction: column;
+	height: 18rem;
+	transition: all 0.3s ease;
+}
+
+/* 작은 화면에 대한 반응형 조정 */
+@media ( max-width : 1400px) {
+	.template-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media ( max-width : 768px) {
+	.template-grid {
+		grid-template-columns: repeat(1, 1fr);
+	}
+	#CategoriesViewButton {
+		top: 70px;
+		left: 10px;
+	}
+}
+</style>
 </head>
 <body>
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
-	
-    <div class="main-content">
-        <aside class="sidebar">
-            <div class="category-title">Categories</div>
-            <ul class="category-list">
-            	<th:block th:each="vc : ${cCategory}">
-            	<li>
-            	<input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}">
-            	<a>[[${vc.categoryName}]]</a>
-            	</li>
-            	</th:block>
-            </ul>
-        </aside>
 
-        <main class="content">
 
-<!--             <div class="search-bar"> -->
-<!--                 <input type="text" placeholder="Search"> -->
-<!--             </div> -->
+	<div class="main-content">
+		<div id="CategoriesViewButton">
+			<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
+				<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5" d="M21.25 12H8.895m-4.361 0H2.75m18.5 6.607h-5.748m-4.361 0H2.75m18.5-13.214h-3.105m-4.361 0H2.75m13.214 2.18a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm-9.25 6.607a2.18 2.18 0 1 0 0-4.36a2.18 2.18 0 0 0 0 4.36Zm6.607 6.608a2.18 2.18 0 1 0 0-4.361a2.18 2.18 0 0 0 0 4.36Z" />
+			</svg>
+		</div>
+		<div class="categorywrap">
+			<aside class="sidebar">
+				<div class="category-title">Categories</div>
+				<ul class="category-list">
+					<th:block th:each="vc : ${cCategory}">
+						<li><input type="checkbox" class="category-checkbox" th:value="${vc.categoryName}"> <a>[[${vc.categoryName}]]</a></li>
+					</th:block>
+				</ul>
+			</aside>
+		</div>
+		<main class="content">
+			<div class="container" style="margin-top: 20px">
+				<section class="section">
+					<div class="template-grid" id="template-grid-wrap">
+						<div class="template-card" th:each="vl: ${cList}" th:if="${vl.menuNo == 1 || vl.menuNo == 5 || vl.menuNo == 2 || vl.menuNo == 4 || vl.menuNo == 6 || vl.menuNo == 7}">
+							<input type="hidden" th:value=${vl.contentNo}> <input type="hidden" th:value=${vl.menuNo}>
+							<div class="template-details">
+								<div class="template-image"></div>
+								<div class="overlay"></div>
+								<div class="content_wrap">
+									<span class="content_title_wrap">
+										<div class="template-title">[[${vl.contentTitle}]]</div>
+										<div class="template-writer" th:text="${vl.userNickName}"></div>
+									</span> <span class="icon_wrap"> <span class="icon"> <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd"
+													d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z"
+													fill="white" />
+										</svg> <span>[[${vl.downloadCount}]]</span>
+									</span> <span class="icon" id="md-icon"> <th:block th:if="${vl.likeTo == 1}">
+												<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red" />
+										</svg>
+											</th:block> <th:block th:unless="${vl.likeTo == 1}">
+												<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white" />
+										</svg>
+											</th:block> <span>[[${vl.likeCount}]]</span>
+									</span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
 
-            <div class="video-grid">
-                <div class="video-card" th:each="vl: ${cList}">
-                    <div class="video-thumbnail">
-                    	<th:block th:if="${vl.menuNo == 1 || vl.menuNo == 5}">
-	                    <video id="video-preview" muted loop>
-		                	<source type="video/mp4">
-		                </video>
-		                </th:block>
-		                <th:block th:if="${vl.menuNo == 4 || vl.menuNo == 6 || vl.menuNo == 7}">
-		                <img id="video-preview">
-		                </th:block>
-                    </div>
-                    <div class="video-info">
-                    	<input type="hidden" th:value="${vl.contentNo}"/>
-                    	<input type="hidden" th:value="${vl.menuNo}">
-                        <h3>[[${vl.contentTitle}]]</h3>
-                        <p>[[${vl.userNickName}]]</p>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    <script th:inline="javascript">
-    const divs = document.querySelector('.video-grid');
-    
-    [...divs.children].map((video, index, array) =>{
-		video.addEventListener('click', function(){
-			const contentNo = video.children[1].children[0].value;
-			const menuNo = video.children[1].children[1].value;
-			let menuName = "";
-			console.log(contentNo);
-			console.log(menuNo);
-			switch(menuNo){
-			case "1": menuName = "video-templates"; break;
-			case "2": menuName = "music"; break;
-			case "3": menuName = "sound-effect"; break;
-			case "4": menuName = "graphic-templates"; break;
-			case "5": menuName = "stock-video"; break;
-			case "6": menuName = "photo"; break;
-			case "7": menuName = "font";
-			}
-			
-			console.log(menuName);
-			
-			location.href = "/board/" + menuName + "/" + contentNo;
-		})
-	})
+			<div class="music-grid" id="music-grid-wrap">
+				<div class="music-card" th:each="vl : ${cList}" th:if="${vl.menuNo == 3}">
+					<input type="hidden" th:value="${vl.contentNo}" /> <input type="hidden" th:value="${vl.menuNo}" />
+					<div class="audio-card">
+						<div class="audio-left">
+							<button class="play-btn" th:attr="data-id=${vl.contentNo}">▶</button>
+						</div>
+						<div class="audio-middle" th:attr="id='waveform-' + ${vl.contentNo}"></div>
+						<div class="audio-right">
+							<span class="duration">0:00</span> <span class="icon download">💾</span> <span class="icon heart">❤️</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</main>
+	</div>
+	<script th:inline="javascript">
+    const divs = document.querySelector('.template-grid');
+    const loginUser = /*[[${session.loginUser}]]*/'loginUser';
+    const waveMap = {};
 	
 	const menuNameURL = (window.location.pathname).split("/")[2];
     console.log(menuNameURL);
     
-    
+    const topList = document.getElementById('template-grid-wrap');
+    const musicList = document.getElementById('music-grid-wrap');
     
 	window.onload=()=>{
-		thumbnailPlay();
-//     	console.log(divs);
+		console.log(musicList);
+		listPlay(topList);
+		listPlay(musicList);
+
     	
     	const checkbox = document.querySelectorAll(".category-checkbox");
     	/*<![CDATA[*/
@@ -109,7 +296,6 @@
     	}
     	
     	const categoryList = document.querySelector('.category-list');
-//     	console.log(categoryList);
     	const checkboxArr = [];
     	[...categoryList.children].map((category, index, array) =>{
     		const checkbox = category.children[0];
@@ -120,7 +306,6 @@
     					checkboxArr.push(c.children[0].value);
     				}
     			}
-    			
     			let newUrl = null;
     			let checkboxValue = "";
     			
@@ -140,30 +325,11 @@
 				
     		})
     	})
-    	
-    	//검색
-		const input = document.getElementsByTagName("input")[5];
-    	console.log(input);
-		input.addEventListener('keyup', (event)=>{
-			event.preventDefault();
-			if(event.key == 'Enter'){
-				const search = input.value;
-				
-				lastSegment = window.location.pathname.split("/").pop();
-				lastSegment2 = lastSegment.split("-").pop();
-				
-				console.log("엔터 누르고 나서 : " + search);
-				console.log("엔터 누르고 나서 : " + lastSegment2);
-				updatePage(lastSegment2, 0 ,search);
-			}
-		});
-    	
     }
     
 	window.addEventListener("popstate", (event) =>{
 	    	if(event.state){
 	    		console.log("뒤로 가기 감지, 이전 상태:", event);
-// 				console.log(event.state.data);
 	    		
 	    		let check = event.state.checkboxValue;
 	    		console.log(check);
@@ -172,8 +338,6 @@
 	    		
 	    		checkboxValue = check.replaceAll("-", " ");
 	    		
-// 				console.log(checkboxValue);
-				
 				const cArr = checkboxValue.split("+");
 				
 				const checkbox = document.querySelectorAll(".category-checkbox");
@@ -187,14 +351,13 @@
 						}
 					}
 				})
-				
 	    	}
 	    });
     
     function updatePage(checkboxValue, flag, search) {
-    	console.log("updatePage에 들어옴 : " + checkboxValue);
+//     	console.log("updatePage에 들어옴 : " + checkboxValue);
         // 여기에 실제 페이지를 갱신하는 로직을 작성 (AJAX 요청 가능)
-        
+
         let url = "";
         
         if(search != null){
@@ -223,54 +386,83 @@
 			    	for(const i of data){
 			    		console.log("이거보는 중 :" + i.menuNo);
 						const div1 = document.createElement("div");
-						div1.className = "video-card";
+						div1.className = "template-card";
 						
-						const div2 = document.createElement("div");
-						div2.className = "video-thumbnail";
-						
-						if(i.menuNo == 1 || i.menuNo == 5){
-							const video = document.createElement("video");
-							video.id = "video-preview";
-							video.muted = true;
-							video.loop = true;
-							
-							const source = document.createElement("source");
-							source.type = "video/mp4";
-							
-							video.appendChild(source);
-							div2.appendChild(video);
-						}else if(i.menuNo == 4 || i.menuNo == 6 || i.menuNo == 7){
-							const img = document.createElement("img");
-							img.id="video-preview";
-							
-							div2.appendChild(img);
-						}
-						
-						
-						const div3 = document.createElement("div");
-						div3.className = "video-info";
-						
-						const input = document.createElement("input");
-						input.setAttribute("type", "hidden");
-						input.setAttribute("value", i.contentNo);
+						const input1 = document.createElement("input");
+						input1.type = "hidden";
+						input1.value = i.contentNo;
 						
 						const input2 = document.createElement("input");
-						input2.setAttribute("type", "hidden");
-						input2.setAttribute("value", i.menuNo);
+						input2.type = "hidden";
+						input2.value = i.menuNo;
 						
-						const h3 = document.createElement("h3");
-						h3.innerText = i.contentTitle;
+						const div2 = document.createElement('div');
+						div2.className= "template-details";
 						
-						const p = document.createElement("p");
-						p.innerText = i.userNickName;
+						const divc1 = document.createElement('div');
+						divc1.className = "template-image";
 						
+						const divc2 = document.createElement('div');
+						divc2.className = "overlay";
+						
+						const divc3 = document.createElement('div');
+						divc3.className = "content_wrap";
+						
+						const span1 = document.createElement('span');
+						span1.className = "content_title_wrap";
+						
+						const divsc1= document.createElement('div');
+						divsc1.className = "template-title";
+						divsc1.innerText = i.contentTitle;
+						
+						const divsc2= document.createElement('div');
+						divsc2.className = "template-writer";
+						divsc2.innerHTML = i.userNickName;
+						
+						const span2 = document.createElement('span');
+						span2.className = "icon_wrap";
+						
+						const spanc1 = document.createElement('span');
+						spanc1.className = "icon";
+						spanc1.innerHTML = `<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+											</svg>
+											<span>${i.downloadCount}</span>`;
+						
+						
+						const spanc2 = document.createElement('span');
+						spanc2.className = "icon";
+						spanc2.id = "md-icon";
+						
+						let spanc2p = '';
+						if(i.likeTo == 1){
+							spanc2p = '<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">'
+								 	  + '<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>'
+									  + '</svg>';
+						}else{
+							spanc2p = '<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">'
+									  + '<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>'
+								      + '</svg>';
+						}
+						
+						spanc2.innerHTML = spanc2p + `<span>${i.likeCount}</span>`;
+						
+						span2.appendChild(spanc1);
+						span2.appendChild(spanc2);
+						
+						span1.appendChild(divsc1);
+						span1.appendChild(divsc2);
+						
+						divc3.appendChild(span1);
+						divc3.appendChild(span2);
+						
+						div2.appendChild(divc1);
+						div2.appendChild(divc2);
+						div2.appendChild(divc3);
+						
+						div1.appendChild(input1);
+						div1.appendChild(input2);
 						div1.appendChild(div2);
-						div1.appendChild(div3);
-						
-						div3.appendChild(input);
-						div3.appendChild(input2);
-						div3.appendChild(h3);
-						div3.appendChild(p);
 						
 						divs.appendChild(div1);
 						
@@ -282,8 +474,10 @@
 						
 						
 					}
+			    	const topList = document.getElementById('template-grid-wrap');
+			    	console.log("topList" + topList);
 			    	
-			    	thumbnailPlay();
+			    	listPlay(topList);
 				}
 				
 				if(flag == 1){
@@ -293,47 +487,205 @@
 			})
     }
     
-    function thumbnailPlay(){
-    	const thumbnailList = document.querySelectorAll('.video-thumbnail');
-    	console.log("썸네일 로드");
-		//썸네일
-    	[...thumbnailList].map((thumbnail, index, array)=>{
-    		const contentNo = thumbnail.parentElement.children[1].children[0].value;
-    		const menuNo = thumbnail.parentElement.children[1].children[1].value;
-    		console.log(menuNo);
-    		
-    		fetch("/board/select-thumbnail/" + contentNo,{
-    			method : "get",
-    			headers : {'content-type' : 'application/json; charset=UTF-8'}
-    			})
-				.then(response => response.json())
-				.then(data=>{
-					if(menuNo == 1 || menuNo == 5){
-						const video = thumbnail.children[0];
-						
-						const source = thumbnail.children[0].children[0];
-						console.log(source);
-						source.src = data.thumbnail;
-						
-						video.appendChild(source);
-						
-						thumbnail.appendChild(video);
-						
-						video.addEventListener('mouseenter', function(){
-							this.play();
-						});
-						
-						video.addEventListener('mouseleave', function(){
-							this.pause();
-							this.currentTime = 0;
-						});
-					}else{
-						const img = thumbnail.children[0];
-						img.src = data.thumbnail;
+	function listPlay(list){
+		[...list.children].map((template, index, array) =>{
+// 		console.log(template);
+		const thumbnail = template.children[2].children[0];
+		const contentNo = template.children[0].value;
+		const menuNo = template.children[1].value;
+		
+		// 썸네일 불러오기
+		fetch("/board/select-thumbnail/" + contentNo,{
+			method : 'get',
+			headers : {'content-type' : 'application/json; charset=UTF-8'}
+		})
+		.then(response => response.json())
+		.then(data=>{
+// 			console.log(data);
+			if(menuNo == 1 || menuNo == 5){
+				const video = document.createElement('video');
+				video.muted = true;
+				video.loop = true;
+
+				const source = document.createElement("source");
+				source.type = "video/mp4";
+				source.src = data.thumbnail;
+
+				video.appendChild(source);
+				thumbnail.appendChild(video);
+
+				template.addEventListener('mouseenter', function(){
+					video.play();
+				});
+
+				template.addEventListener('mouseleave', function(){
+					video.pause();
+					video.currentTime = 0;
+				});
+			}else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2){
+				const img = document.createElement('img');
+				img.src = data.thumbnail;
+
+				thumbnail.appendChild(img);
+			}else{
+// 				console.log("음악바 들어옴");
+                const waveformId = "#waveform-" + contentNo;
+                const wavesurfer = WaveSurfer.create({
+                    container: waveformId,
+                    waveColor: 'violet',
+                    progressColor: 'purple',
+                    height: 64,
+                    responsive: true
+                });
+
+                wavesurfer.load(data.file);
+                waveMap[contentNo] = wavesurfer;
+                wavesurfer.on('ready', () => {
+                    const totalSec = Math.floor(wavesurfer.getDuration());
+                    durationSpan.innerText = `0:00 / ${formatTime(totalSec)}`;
+                });
+
+                wavesurfer.on('audioprocess', () => {
+                    const currentTime = wavesurfer.getCurrentTime();
+                    const totalTime = wavesurfer.getDuration();
+                    durationSpan.innerText = `${formatTime(currentTime)} / ${formatTime(totalTime)}`;
+                });
+
+                wavesurfer.on('seek', () => {
+                    if (!wavesurfer.isPlaying()) {
+                        wavesurfer.play();
+                    }
+                });
+
+                wavesurfer.on('finish', () => {
+                    durationSpan.innerText = `0:00 / ${formatTime(wavesurfer.getDuration())}`;
+                    const playBtn = document.querySelector(`.play-btn[data-id='${contentNo}']`);
+                    if (playBtn) playBtn.innerText = '▶';
+                });
+
+                const durationSpan = document.querySelector(`#waveform-${contentNo}`)
+                                            .closest('.audio-card')
+                                            .querySelector('.duration');
+
+                wavesurfer.on('ready', () => {
+                    const totalSec = Math.floor(wavesurfer.getDuration());
+                    durationSpan.innerText = formatTime(totalSec);
+                });
+                
+                wavesurfer.on('ready', () => {
+                    const totalDuration = formatTime(wavesurfer.getDuration());
+                    durationSpan.textContent = `00:00 / ${totalDuration}`;
+                  });
+
+                const playBtn = document.querySelector(`.play-btn[data-id='${contentNo}']`);
+                playBtn.addEventListener('click', () => {
+                    wavesurfer.playPause();
+                    if (wavesurfer.isPlaying()) {
+                        playBtn.innerText = '⏸';
+                    } else {
+                        playBtn.innerText = '▶';
+                    }
+                });
+			}
+
+		})
+		
+		// 컨텐츠 이동
+		template.addEventListener('click', function(event){
+			
+			switch(menuNo){
+			case "1": menuName = "video-templates"; break;
+			case "2": menuName = "music"; break;
+			case "3": menuName = "sound-effect"; break;
+			case "4": menuName = "graphic-templates"; break;
+			case "5": menuName = "stock-video"; break;
+			case "6": menuName = "photo"; break;
+			case "7": menuName = "font";
+			}
+			location.href = "/board/" + menuName + "/" + contentNo;
+		});
+		
+		if(menuNo != 3){
+			const like = template.children[2].children[2].children[1].children[1].children[0];
+			const view = (like.nextElementSibling);
+			
+			like.addEventListener('click', function(event){
+				if(loginUser != null){
+					if(this.children[0].getAttribute("fill") == 'white'){
+						fetch('/board/like', {
+							method : 'put',
+							headers : {'content-type':'application/json; charset=UTF-8'},
+							body: JSON.stringify({
+								contentNo: contentNo
+			    			})
+						})
+						.then(response => response.json())
+						.then(data =>{
+							this.children[0].setAttribute("fill", "red");
+							view.innerText = Number((view.innerText)) + 1;
+						})
+					}else if(this.children[0].getAttribute("fill") == 'red'){
+						fetch('/board/like', {
+							method : 'delete',
+							headers : {'content-type':'application/json; charset=UTF-8'},
+							body: JSON.stringify({
+								contentNo: contentNo
+			    			})
+						})
+						.then(response => response.json())
+						.then(data =>{
+							this.children[0].setAttribute("fill", "white");
+							view.innerText = Number((view.innerText)) - 1;
+						})
 					}
-				})
-    	})   	
+				}else{
+					alert('로그인 후 이용해주세요');
+				}
+				event.stopPropagation();
+			})			
+		}
+
+	})
+}
+    function formatTime(seconds) {
+        const min = Math.floor(seconds / 60);
+        const sec = Math.floor(seconds % 60);
+        return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     }
-    </script>
+    document.querySelectorAll('.play-btn').forEach(btn => {
+    	  btn.addEventListener('click', function(e) {
+    	    e.stopPropagation(); // 상위 div 클릭 막기
+    	    const contentNo = this.getAttribute('data-id');
+    	    console.log('플레이 버튼 클릭됨! contentNo:', contentNo);
+    	    // 재생 로직 넣기
+    	  });
+    	});
+    
+    document.querySelectorAll('.audio-middle').forEach(el => {
+    	  el.addEventListener('click', function(e) {
+    	    e.stopPropagation(); // 상세 페이지 이동 막기
+    	    console.log('waveform 영역 클릭됨!');
+    	    // 필요하면 여기서 재생바 관련 이벤트도 넣을 수 있음
+    	  });
+    	});
+    
+	document.getElementById('CategoriesViewButton').addEventListener('click',(e)=>{
+		const list = document.querySelector('.category-list');
+		const title = document.querySelector('.category-title');
+		const videogrid = document.querySelector('.video-grid');
+		const sidebar = document.querySelector('.sidebar');
+		const categoryWrap = document.querySelector('.categorywrap');
+		list.classList.toggle('hidden');
+		title.classList.toggle('hidden');
+		sidebar.classList.toggle('hidden');
+		categoryWrap.classList.toggle('flexdirection');
+		if(e.target.closest('span').innerText == 'HideFilters'){
+			e.target.closest('span').innerText = 'ViewFilters';
+		}else if(e.target.closest('span').innerText == 'ViewFilters'){
+			e.target.closest('span').innerText = 'HideFilters';
+		}
+	});
+
+</script>
 </body>
 </html>

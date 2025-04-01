@@ -130,12 +130,12 @@ public class BoardController {
 
 	@GetMapping("selectCategory")
 	@ResponseBody
-	public ArrayList<HashMap<String, Object>> selectCategory(@RequestParam("value") String menu, @RequestParam("sortValue") String sort, Model model, HttpSession session) {
+	public ArrayList<Content> selectCategory(@RequestParam("value") String menu, @RequestParam("sortValue") String sort, Model model, HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser == null)
 			throw new UsersException("로그인하삼");
 		int userNo = loginUser.getUserNo();
-		ArrayList<HashMap<String, Object>> list = bService.selectCategory(menu, userNo, sort);
+		ArrayList<Content> list = bService.selectCategory(menu, userNo, sort);
 		System.out.println("셀렉트 카테고리 골랐을때 == " + list);
 		return list;
 	}
@@ -247,7 +247,13 @@ public class BoardController {
 	}
 
 	@GetMapping("{menuName:[a-zA-Z-]+}")
-	public String templateList(@PathVariable("menuName") String menuName, Model model) {
+	public String templateList(@PathVariable("menuName") String menuName, Model model, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = 0;
+		if(loginUser != null) {
+			 userNo = loginUser.getUserNo();
+		}
+		
 		HashMap<String, Object> map = new HashMap<>();
 		int menuNum = 0;
 		switch (menuName) {
@@ -280,7 +286,15 @@ public class BoardController {
 			menuNum = 7;
 		}
 		map.put("menuName", menuName);
+		
 		ArrayList<Content> cList = bService.allTemplateList(map);
+		
+		for (int v = 0; v < cList.size(); v++) {
+			int num = cList.get(v).getContentNo();
+			int result = bService.menuLikeTo(num, userNo);
+			cList.get(v).setLikeTo(result);
+		}
+		
 		ArrayList<Content> cCategory = bService.allCategory(menuNum);
 		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
 		System.out.println(cList);
@@ -289,7 +303,12 @@ public class BoardController {
 	}
 
 	@GetMapping("{menuName:[a-zA-Z-]+}/{categoryTagName:[a-zA-Z\\\\+&-]+}")
-	public String templateList(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName, Model model) {
+	public String templateList(@PathVariable("menuName") String menuName, @PathVariable("categoryTagName") String categoryTagName, Model model, HttpSession session) {
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = 0;
+		if(loginUser != null) {
+			 userNo = loginUser.getUserNo();
+		}
 		HashMap<String, Object> map = new HashMap<>();
 		String[] result = {};
 		int menuNum = 0;
@@ -338,6 +357,13 @@ public class BoardController {
 			System.out.println("empty 맞음");
 		}
 		ArrayList<Content> cList = bService.allTemplateList(map);
+		
+		for (int v = 0; v < cList.size(); v++) {
+			int num = cList.get(v).getContentNo();
+			int result2 = bService.menuLikeTo(num, userNo);
+			cList.get(v).setLikeTo(result2);
+		}
+		
 		ArrayList<Content> cCategory = bService.allCategory(menuNum);
 		ArrayList<Content> cPopularCategory = bService.allPopularCate(menuNum);
 		model.addAttribute("cList", cList).addAttribute("cCategory", cCategory).addAttribute("cPopularCategory", cPopularCategory);
@@ -574,16 +600,26 @@ public class BoardController {
 		//글추가
 		int result = bService.insertContent(content);
 		int contentNo = content.getContentNo();
+		int result3 = 0;
+		int result4 = 0;
 		
 		try {
-			tFileUrl = r2Service.uploadFile(tFile);
-			cFileUrl = r2Service.uploadFile(cFile);
+			if(!tFile.isEmpty()) {
+				tFileUrl = r2Service.uploadFile(tFile);
+				result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
+			}
+			
+			if(!cFile.isEmpty()) {
+				cFileUrl = r2Service.uploadFile(cFile);
+				result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		int result3 = bService.insertThumbnailFile(tFileUrl, contentNo, tFileOriginalName);
-		int result4 = bService.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
+		 
+		
 		
 		System.out.println(content);
 		

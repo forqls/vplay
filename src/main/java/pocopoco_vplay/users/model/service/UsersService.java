@@ -29,7 +29,7 @@ public class UsersService {
 		return mapper.insertUser(user);
 	}
 
-	public ArrayList<HashMap<String, Object>> selectMyProjects(int id) {
+	public ArrayList<Content> selectMyProjects(int id) {
 		return mapper.selectMyProject(id);
 	}
 
@@ -143,4 +143,19 @@ public class UsersService {
 		return mapper.selectMyDownloads(userNo);
 	}
 
+    public ArrayList<Users> selectSubscribeList(int userNo) {
+		return mapper.selectSubscribeList(userNo);
+    }
+
+	public Users getInfoUser(int createrNo) {
+		return mapper.getInfoUser(createrNo);
+	}
+
+	public int isSubscribed(int createrNo, int userNo) {
+		return mapper.isSubscribed(createrNo,userNo);
+	}
+
+	public int updateSubscribe(HashMap<String, Object> map) {
+		return mapper.updateSubscribe(map);
+	}
 }

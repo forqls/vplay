@@ -53,6 +53,7 @@ body {
 	background: none;
 	border: none;
 	padding: 0.5rem;
+	cursor: default;
 }
 
 .category span {
@@ -163,7 +164,7 @@ body {
 .footer-text {
 	text-align: center;
 	color: #9ca3af;
-	margin-top: 5rem;
+	margin-top: 4.5rem;
 	padding: 0 1rem;
 }
 
@@ -305,7 +306,7 @@ body {
 					buyer_email:userEmail
 				},function(rsp){
 					if(rsp.success){
-						alert("결제가 완료됐슴 결제 금액 ->"+ parseInt(rsp.paid_amount,10));
+						alert("결제가 완료되었습니다. 결제 금액 ->"+ parseInt(rsp.paid_amount,10));
 						
 						fetch('/payment/success',{
 							method:'POST',
@@ -330,7 +331,6 @@ body {
 					}
 				});
 			});
-			
 		});
 	</script>
 </body>

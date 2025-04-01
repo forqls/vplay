@@ -10,57 +10,18 @@
 <title>My Project</title>
 <style>
 .button {
-	background-color: #5e37e9;
-	color: white;
-	border: none;
-	border-radius: 0.375rem;
 	padding: 6px;
-	font-size: 0.875rem;
-	cursor: pointer;
 	margin-left: auto;
 	margin-top: 2.5px;
 }
 
-.button:hover {
-	background-color: #8137e9;
-}
-
 .dropdown {
-	position: absolute;
-	top: 25%;
-	background-color: #252535;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-	display: none;
-	z-index: 100;
+	top: 15%;
 	right: 0;
 }
 
-.dropdown:hover {
-	background-color: #2a2a3a;
-}
-
 .dropdown.show {
-	display: block;
 	margin-right: 7.5px;
-}
-
-.dropdown-item {
-	display: flex;
-	align-items: center;
-	padding: 3px;
-	gap: 0.5rem;
-	color: #fff;
-	text-decoration: none;
-	font-size: 0.875rem;
-	border-radius: 0.25rem;
-	cursor: pointer;
-}
-
-.dropdown-item i {
-	font-size: 1rem;
-	color: #6f757d;
 }
 </style>
 </head>
@@ -68,7 +29,7 @@
 	<div th:replace="~{views/common/topbar :: topbar}"></div>
 	<div class="main-content">
 		<div th:replace="~{views/myPage/my_sidebar}"></div>
-		<div class="container content_wrap">
+		<div class="content_wrap">
 			<div class="content-header">
 				<h1>My Projects</h1>
 			</div>
@@ -92,6 +53,21 @@
 			<th:block th:if="${not #lists.isEmpty(list)}">
 				<div class="grid">
 					<div class="grid-item" th:each="r : ${list}">
+						<input type="hidden" th:value="${r.contentNo}">
+						<input type="hidden" th:value="${r.menuNo}">
+						<div class="item-thumbnail">
+							<th:block th:if="${r.menuNo == 1 || r.menuNo == 5}">
+		                    <video id="item-preview" muted loop>
+			                	<source type="video/mp4">
+			                </video>
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 4 || r.menuNo == 6 || r.menuNo == 7 || r.menuNo == 2}">
+			               		 <img id="item-preview">
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 3}">
+			                	<img id="item-preview" src="/img/sound-effects.png">
+			                </th:block>
+						</div>
 						<button class="menu-dots">⋮</button>
 						<div class="dropdown">
 							<div class="dropdown-item">
@@ -100,8 +76,10 @@
 </svg> </span> 삭제
 							</div>
 						</div>
+						
+						<!-- 컨텐츠 -->
 						<div class="item-content">
-							<span class="item-title" th:text="${r.contentTitle}"></span> <span th:text="${r.contentNo}" hidden=""></span>
+							<span class="item-title" th:text="${r.contentTitle}"></span> <input type="hidden" th:value="${r.menuName}">
 							<div class="item-actions">
 								<span>👁️ [[${r.views}]]</span> <span>❤️ [[${r.likeCount}]]</span>
 							</div>
@@ -114,6 +92,9 @@
 			</th:block>
 		</div>
 	</div>
+	
+	<div id="tooltip" class="tooltip"></div>
+	
 	<div th:replace="~{views/common/footer :: footer}"></div>
 	<script type="text/javascript">
     document.getElementById("content-write").addEventListener("click", () => {
@@ -125,26 +106,6 @@
     
     const list = document.querySelectorAll(".grid-item");
     clickDetail(list);
-    
-    //디테일 페이지 들어가기
-    function clickDetail(list) {
-        [...list].map((content, index, array) => {
-            content.addEventListener('click', function(event) {
-                const contentNo = this.querySelector(".item-content").children[1].innerText;
-                let menuName = this.querySelector(".item-content").children[2].value;
-                console.log(contentNo);
-                console.log(menuName);
-                switch(menuName) {
-                    case "video Templates":  menuName = "video-templates"; break;
-                    case "Stock Video" : menuName = "stock-video"; break;
-                    case "Sound Effects" : menuName = "sound-effects"; break;
-                    case "Graphic Templates" : menuName = "graphic-templates"; break;
-                }
-                location.href = "/board/" + menuName + "/" + contentNo;
-                event.stopPropagation();
-            })
-        })
-    }
     
     //... 선택 후 삭제
     function menuOption(menuDots) {
@@ -172,8 +133,10 @@
                 console.log(e.target);
                 let gridItem = e.target.closest('.grid-item');
                 let span = gridItem.querySelectorAll('span');
-                let contentNo = span[2].textContent.trim();
-                console.log(contentNo);
+                let inputs = gridItem.querySelectorAll('input');
+                let contentNo = inputs[0].value;
+                let menuNo = inputs[1].value;
+                console.log("컨텐트 넘버 : " + contentNo);
                 $.ajax({
                     url: '/board/throwBoardTrash',
                     data: {contentNo: contentNo, trash: "0"},
@@ -187,11 +150,30 @@
                     },
                     error: data => alert('서버오류')
                 })
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 event.stopPropagation();
             });
         });
     }
 
+   	//필터 작업
     document.querySelectorAll('.filter-dropdown').forEach((dropdown) => {
         dropdown.addEventListener('change', (e) => {
             let value = document.getElementById('categorySelect').value;
@@ -212,24 +194,37 @@
                     }
                     data.forEach((r) => {
                         console.log(r.contentTitle);
-                        let gridItem = `
-                            <div class="grid-item">
-                                <button class="menu-dots">⋮</button>
-                                <div class="dropdown" >
-                                    <div class="dropdown-item">
-                                        <span class="trash-icon"></span> Delete
-                                    </div>
-                                </div>
-                                <div class="item-content">
-                                    <span class="item-title">${r.contentTitle}</span> 
-                                    <span>${r.contentNo}</span>
-                                    <input type="hidden" value="${r.menuName}">
-                                    <div class="item-actions">
-                                        <span>👁️ ${r.views}</span> <span>❤️ ${r.likeCount}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
+						let imgHTML = "";
+							if(r.menuNo ==1 || r.menuNo ==5){
+								imgHTML = '<video id="item-preview" muted loop><source type="video/mp4"></video>';
+							}else if(r.menuNo ==4 || r.menuNo ==6 || r.menuNo ==7 || r.menuNo ==2){
+								imgHTML = '<img id="item-preview">';
+							}else{
+								imgHTML = '<img id="item-preview" src="/img/sound-effects.png">';
+							}
+						let gridItem = `
+							<div class="grid-item">
+							<input type="hidden" value="${r.contentNo}">
+							<input type="hidden" value="${r.menuNo}">
+							<div class="item-thumbnail">`
+							+ imgHTML +
+							`	
+							</div>
+	                        <button class="menu-dots">⋮</button>
+	                        <div class="dropdown" >
+	                            <div class="dropdown-item">
+	                                <span class="trash-icon"></span> Delete
+	                            </div>
+	                        </div>
+	                        <div class="item-content">
+	                            <span class="item-title">${r.contentTitle}</span>
+	                            <input type="hidden" value="${r.menuName}">
+	                            <div class="item-actions">
+	                                <span>👁️ ${r.views}</span> <span>❤️ ${r.likeCount}</span>
+	                            </div>
+	                        </div>
+	                    </div>
+						`;
                         grids[0].innerHTML += gridItem;
                         
                         const list = document.querySelectorAll(".grid-item");
@@ -238,11 +233,15 @@
                         menuOption(menuDots);
                     });
                     console.log(data);
+                    
+                    thumbnailPlay("r");
                 },
                 error: data => console.log(data)
             });
         });
     });
+   	
+   	
 	</script>
 </body>
 </html>

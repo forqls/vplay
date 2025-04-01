@@ -19,7 +19,7 @@ public interface UsersMapper {
 
 	int insertUser(Users user);
 
-	ArrayList<HashMap<String, Object>> selectMyProject(int id);
+	ArrayList<Content> selectMyProject(int id);
 
 	ArrayList<Content> selectMyRealProjects(int userNo);
 
@@ -74,4 +74,11 @@ public interface UsersMapper {
 	ArrayList<Content> selectMyDownloads(int userNo);
 
 
+    ArrayList<Users> selectSubscribeList(int userNo);
+
+	Users getInfoUser(int createrNo);
+
+	int isSubscribed(@Param("createrNo") int createrNo, @Param("userNo") int userNo);
+
+	int updateSubscribe(HashMap<String, Object> map);
 }

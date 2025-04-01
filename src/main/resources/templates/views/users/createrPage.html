@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>크리에이터 페이지</title>
+    <link href="/css/topbar.css" rel="stylesheet">
+    <link href="/css/creator.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1e1d24;
+            color: white;
+            font-family: 'Pretendard', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-content {
+            display: flex;
+            padding: 40px;
+            gap: 40px;
+        }
+
+        .creator-profile {
+            background-color: #2b2a33;
+            border: 1px solid #4e4e5e;
+            padding: 24px;
+            border-radius: 12px;
+            width: 280px;
+            text-align: center;
+			display: flex;
+			flex-direction: column;
+			align-content: center;
+			align-items: center;
+        }
+
+        .creator-profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #444;
+            margin-bottom: 16px;
+        }
+
+        .creator-profile h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .creator-profile p {
+            font-size: 14px;
+            color: #aaa;
+            margin: 8px 0 16px;
+        }
+
+        .creator-profile button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #6941c6;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .project-section {
+            flex: 1;
+        }
+
+        .project-section h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        } 
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-item {
+            background-color: #2b2a33;
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .item-thumbnail img,
+        .item-thumbnail video {
+            width: 100%;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #444;
+        }
+
+        .item-content {
+            margin-top: 12px;
+        }
+
+        .item-title {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .item-actions {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #ccc;
+            display: flex;
+            justify-content: space-between;
+        }
+        p {
+			display: flex;
+			align-items: center;
+		}
+    </style>
+</head>
+<body>
+    <div th:replace="~{views/common/topbar :: topbar}"></div>
+    <div class="main-content">
+        <div class="creator-profile">
+            <img th:src="${createrUser.userProfile}" alt="프로필 이미지">
+            <h2 th:text="${createrUser.userNickname}">크리에이터 이름</h2>
+            <p th:text="${createrUser.userComment}">소개 문구가 들어갑니다</p>
+            <p><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M4.20042 5.60056C4.9431 5.60056 5.65536 5.30553 6.18052 4.78038C6.70567 4.25522 7.0007 3.54296 7.0007 2.80028C7.0007 2.0576 6.70567 1.34534 6.18052 0.820183C5.65536 0.295029 4.9431 0 4.20042 0C3.45774 0 2.74548 0.295029 2.22032 0.820183C1.69517 1.34534 1.40014 2.0576 1.40014 2.80028C1.40014 3.54296 1.69517 4.25522 2.22032 4.78038C2.74548 5.30553 3.45774 5.60056 4.20042 5.60056ZM10.501 5.60056C11.0581 5.60056 11.5923 5.37929 11.9861 4.98542C12.38 4.59156 12.6013 4.05736 12.6013 3.50035C12.6013 2.94334 12.38 2.40914 11.9861 2.01528C11.5923 1.62141 11.0581 1.40014 10.501 1.40014C9.94404 1.40014 9.40984 1.62141 9.01598 2.01528C8.62211 2.40914 8.40084 2.94334 8.40084 3.50035C8.40084 4.05736 8.62211 4.59156 9.01598 4.98542C9.40984 5.37929 9.94404 5.60056 10.501 5.60056ZM1.75017 7.0007C0.784078 7.0007 0 7.78478 0 8.75088C0 8.75088 0 11.9012 4.20042 11.9012C7.52995 11.9012 8.22022 9.92139 8.36304 9.10091C8.40084 8.88669 8.40084 8.75088 8.40084 8.75088C8.40084 7.78478 7.61676 7.0007 6.65067 7.0007H1.75017ZM9.79538 9.24092C9.79258 9.29693 9.78698 9.3632 9.77858 9.43974C9.70132 10.017 9.50076 10.571 9.19052 11.0639C9.56156 11.1493 9.9942 11.2011 10.4997 11.2011C14 11.2011 14 8.75088 14 8.75088C14 7.78478 13.2159 7.0007 12.2498 7.0007H9.26893C9.60496 7.50195 9.79958 8.10261 9.79958 8.75088V9.10091L9.79538 9.24092Z" fill="#6F757D"/>
+				</svg>
+				  팔로잉 수 : [[${subscriberCount}]]
+            </p>
+			<button id="subscribeBtn" th:text="${isSubscribed == 1 ? '구독 중' : '구독하기'}"></button>
+            <input type="hidden" id="createrNo" th:value="${createrNo}">
+        </div>
+
+        <div class="project-section">
+            <h2>전체 작업물</h2>
+            <div class="grid">
+					<div class="grid-item" th:each="r : ${list}">
+						<input type="hidden" th:value="${r.contentNo}">
+						<input type="hidden" th:value="${r.menuNo}">
+						<div class="item-thumbnail">
+							<th:block th:if="${r.menuNo == 1 || r.menuNo == 5}">
+		                    <video id="item-preview" muted loop>
+			                	<source type="video/mp4">
+			                </video>
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 4 || r.menuNo == 6 || r.menuNo == 7 || r.menuNo == 2}">
+			               		 <img id="item-preview">
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 3}">
+			                	<img id="item-preview" src="/img/sound-effects.png">
+			                </th:block>
+						</div>
+
+						<!-- 컨텐츠 -->
+						<div class="item-content">
+							<span class="item-title" th:text="${r.contentTitle}"></span> <input type="hidden" th:value="${r.menuName}">
+							<div class="item-actions">
+								<span>👁️ [[${r.views}]]</span> <span>❤️ [[${r.likeCount}]]</span>
+							</div>
+						</div>
+					</div>
+				</div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    const button = document.getElementById("subscribeBtn");
+    const createrNo = document.getElementById('createrNo').value;
+    button.addEventListener("click", () => {
+        const isCancel = button.innerText == "구독 중";
+
+        fetch("/users/post/updateSubscribe", {
+            method: "POST",
+            headers: { 'content-type': 'application/json; charset=UTF-8' },
+            body: JSON.stringify({
+                createrNo: createrNo,
+                isCancel: isCancel
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data === 1) {
+                button.innerText = isCancel ? "구독하기" : "구독 중";
+            }
+        });
+    });
+
+ 
+    window.onload=()=>{
+    	thumbnailPlay();
+    }
+    
+    
+    //썸네일 불러오기
+    function thumbnailPlay() {
+        const thumbnailList = document.querySelectorAll('.item-thumbnail'); // 둘 다 잡아줌
+        console.log(thumbnailList);
+        
+        [...thumbnailList].forEach((thumbnail) => {
+        	 const contentNo = thumbnail.previousElementSibling.previousElementSibling.value;
+        	 const menuNo = thumbnail.previousElementSibling.value;
+        	 
+//         	 console.log("contentNo : " + contentNo);
+//         	 console.log("menuNo : " + menuNo);
+        	 
+        	 
+        	 console.log(menuNo);
+            fetch("/board/select-thumbnail/" + contentNo, {
+                method: "get",
+                headers: { 'content-type': 'application/json; charset=UTF-8' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (menuNo == 1 || menuNo == 5) {
+                    const video = thumbnail.children[0];
+                	
+                    console.log(video);
+                    const source = video?.children[0];
+                    if (source) {
+                        source.src = data.thumbnail;
+                        video.appendChild(source);
+                        thumbnail.appendChild(video);
+                        video.addEventListener('mouseenter', () => {
+                        	video.play()
+                        });
+                        video.addEventListener('mouseleave', () => {
+                            video.pause();
+                            video.currentTime = 0;
+                        });
+                    }
+                } else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2) {
+                    const img = thumbnail.children[0];
+                    if (img) img.src = data.thumbnail;
+                }
+            });
+        });
+    }
+    
+    </script>
+</body>
+</html>

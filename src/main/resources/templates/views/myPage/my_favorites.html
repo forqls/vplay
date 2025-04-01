@@ -9,58 +9,13 @@
 <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>My Favorite</title>
 <style>
-.button {
-	background-color: #5e37e9;
-	color: white;
-	border: none;
-	border-radius: 0.375rem;
-	padding: 6px;
-	font-size: 0.875rem;
-	cursor: pointer;
-	margin-left: auto;
-	margin-top: 2.5px;
-}
-
-.button:hover {
-	background-color: #8137e9;
-}
-
 .dropdown {
-	position: absolute;
-	top: 25%;
-	background-color: #252535;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-	display: none;
-	z-index: 100;
+	top: 15%;
 	right: 0;
 }
 
-.dropdown:hover {
-	background-color: #2a2a3a;
-}
-
 .dropdown.show {
-	display: block;
 	margin-right: 7.5px;
-}
-
-.dropdown-item {
-	display: flex;
-	align-items: center;
-	padding: 3px;
-	gap: 0.5rem;
-	color: #fff;
-	text-decoration: none;
-	font-size: 0.875rem;
-	border-radius: 0.25rem;
-	cursor: pointer;
-}
-
-.dropdown-item i {
-	font-size: 1rem;
-	color: #6f757d;
 }
 </style>
 </head>
@@ -90,12 +45,35 @@
 			<th:block th:if="${not #lists.isEmpty(list)}">
 				<div class="grid">
 					<div class="grid-item" th:each="r : ${list}">
+						<input type="hidden" th:value="${r.contentNo}">
+						<input type="hidden" th:value="${r.menuNo}">
+						<div class="item-thumbnail">
+							<th:block th:if="${r.menuNo == 1 || r.menuNo == 5}">
+		                    <video id="item-preview" muted loop>
+			                	<source type="video/mp4">
+			                </video>
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 4 || r.menuNo == 6 || r.menuNo == 7 || r.menuNo == 2}">
+			               		 <img id="item-preview">
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 3}">
+			                	 <img id="item-preview" src="/img/sound-effects.png">
+			                </th:block>
+						</div>
 						<button class="menu-dots">⋮</button>
-
+						<div class="dropdown">
+							<div class="dropdown-item">
+								<span class="trash-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+  <path transform="translate(0, 10)" fill="currentColor" d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0" />
+</svg> </span> 삭제
+							</div>
+						</div>
+						
+						<!-- 컨텐츠 -->
 						<div class="item-content">
-							<span class="item-title">[[${r.CONTENT_TITLE}]]</span> <span hidden="">[[${r.CONTENT_NO}]]</span>
+							<span class="item-title" th:text="${r.contentTitle}"></span><input type="hidden" th:value="${r.menuName}">
 							<div class="item-actions">
-								<span>👁️ [[${r.VIEWS}]]</span> <span>❤️ [[${r.LIKE_COUNT}]]</span>
+								<span>👁️ [[${r.views}]]</span> <span>❤️ [[${r.likeCount}]]</span>
 							</div>
 						</div>
 					</div>
@@ -108,8 +86,13 @@
 
 		</div>
 	</div>
-
+	
+	<div th:replace="~{views/common/footer :: footer}"></div>
 	<script type="text/javascript">
+	
+	const list = document.querySelectorAll(".grid-item");
+    clickDetail(list);
+    
 			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
 				dropdown.addEventListener('change',(e)=>{
 					let value = document.getElementById('categorySelect').value;
@@ -132,24 +115,49 @@
 								return;
 							}
 							data.forEach((r)=>{
+								console.log(r);
+								let imgHTML = "";
+								if(r.menuNo ==1 || r.menuNo ==2){
+									imgHTML = '<video id="item-preview" muted loop><source type="video/mp4"></video>';
+								}else if(r.menuNo ==4 || r.menuNo ==6 || r.menuNo ==7 || r.menuNo ==2){
+									imgHTML = '<img id="item-preview">';
+								}else{
+									imgHTML = '<img id="item-preview" src="/img/sound-effects.png">';
+								}
 								let gridItem = `
 									<div class="grid-item">
-				                           <button class="menu-dots">⋮</button>
-				                           <div class="item-content">
-				                               <span class="item-title">${r.CONTENT_TITLE}</span> ${r.CONTENT_NO}
-				                               <div class="item-actions">
-				                                   <span>👁️ ${r.VIEWS}</span> <span>❤️ ${r.LIKE_COUNT}</span>
-				                               </div>
-				                           </div>
-				                       </div>
-									`;
+									<input type="hidden" value="${r.contentNo}">
+									<input type="hidden" value="${r.menuNo}">
+									<div class="item-thumbnail">`
+									+ imgHTML +
+									`	
+									</div>
+			                        <button class="menu-dots">⋮</button>
+			                        <div class="dropdown" >
+			                            <div class="dropdown-item">
+			                                <span class="trash-icon"></span> Delete
+			                            </div>
+			                        </div>
+			                        <div class="item-content">
+			                            <span class="item-title">${r.contentTitle}</span> 
+			                            <input type="hidden" value="${r.menuName}">
+			                            <div class="item-actions">
+			                                <span>👁️ ${r.views}</span> <span>❤️ ${r.likeCount}</span>
+			                            </div>
+			                        </div>
+			                    </div>
+								`;
 								grids[0].innerHTML += gridItem;
 							});
+							const list = document.querySelectorAll(".grid-item");
+						    clickDetail(list);
+							thumbnailPlay("r");
 					},
 					error:data=>console.log(data)
 				});
 			});
 		});
+			
 	</script>
 </body>
 </html>

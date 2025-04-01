@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
 <title>License</title>
 <style>
 * {
@@ -40,7 +41,7 @@ h1 {
 h2 {
 	text-align: center !important;
 	font-size: 28px !important;
-	margin-bottom: 50px !important;
+	margin-bottom: 40px !important;
 	color: white !important;
 }
 
@@ -110,8 +111,10 @@ li {
 	padding: 12px 24px;
 	border-radius: 4px;
 	text-decoration: none;
+	font-size: 20px;
 	font-weight: 600;
 	transition: background-color 0.3s;
+	font-weight: 600;
 }
 
 .button:hover {
@@ -132,6 +135,7 @@ a {
 </head>
 <div th:replace="~{views/common/topbar :: topbar}"></div>
 <body>
+
 	<div class="container">
 		<div class="header">
 			<h1>Making it easy to license your assets</h1>
@@ -177,6 +181,7 @@ a {
 				</div>
 				<h3 class="feature-title">Clear guidelines on what's not allowed</h3>
 				<p class="feature-text">다음과 같은 상식적인 제한이 적용됩니다 :</p>
+				<br />
 				<ul>
 					<li>항목을 재판매하거나 재배포할 수 없습니다.</li>
 					<li>주문형 서비스(on-demand services)에서 항목을 사용할 수 없습니다.</li>
@@ -199,7 +204,7 @@ a {
 
 		<div class="cta">
 			<h2>Subscribe to VPLAY Elements</h2>
-			<a href="#" class="button">Get unlimited downloads</a>
+			<a onclick="location.href='/users/price'" class="button">Get unlimited downloads</a>
 		</div>
 	</div>
 </body>

@@ -15,14 +15,14 @@
 	</select>
 
 	<insert id="insertUser">
-		insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK,USER_PLAN, USER_PROFILE,LOGIN_TYPE,KAKAO_ID
+		insert into users (USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME, USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS, IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK, USER_PLAN, USER_PROFILE, LOGIN_TYPE, KAKAO_ID
 		) values (user_seq.nextval, #{userId}, #{userPw}, #{userNickname}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y', 'N', sysdate, default, default, default, default, #{loginType},#{kakaoId})
 	</insert>
 
-	<select id="selectMyProject" resultType="map">
+	<select id="selectMyProject">
 		SELECT
 		c.content_title, c.VIEWS,
-		c.content_no,
+		c.content_no, menu.menu_no, menu.menu_name,
 		(SELECT COUNT(*) FROM likes l2 WHERE l2.content_no = c.content_no) AS like_count
 		FROM content c
 		left JOIN likes l ON c.content_no = l.content_no
@@ -31,13 +31,13 @@
 		left join category on content_category.category_no = category.category_no
 		left JOIN menu ON category.menu_no = menu.menu_no
 		WHERE l.user_no =#{id} and b.board_type is null and menu_name is not null
-		GROUP BY c.content_no, c.content_title, c.views
+		GROUP BY c.content_no, c.content_title, c.views, menu.menu_no, menu.menu_name
 	</select>
 
 	<select id="selectMyRealProjects">
 		select c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,
 		c.MD_RECOMMENDATION,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count ,
-		b.board_type,m.menu_name, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name
+		b.board_type,m.menu_name, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name, m.menu_no
 		from content c
 		left join board b on c.content_no = b.content_no
 		left JOIN content_category cc on c.content_no = cc.content_no
@@ -54,7 +54,7 @@
 		c.USER_NO,
 		c.VIEWS,
 		c.MD_RECOMMENDATION,
-		b.board_type, m.menu_name
+		b.board_type, m.menu_name, m.menu_no
 	</select>
 
 	<select id="selectuserIdPhone">
@@ -119,21 +119,23 @@
 
 	<select id="selectTopUser">
 		select U.USER_NO,
-		U.USER_ID,
-		U.USER_NICKNAME,
-		U.USER_NAME,
-		U.USER_PHONE,
-		U.USER_EMAIL,
-		U.USER_COMMENT, count(s.subscribe_no) as subscriber
+		   U.USER_ID,
+		   U.USER_NICKNAME,
+		   U.USER_NAME,
+		   U.USER_PHONE,
+		   U.USER_EMAIL,
+		   U.USER_COMMENT,
+		   u.user_profile,count(s.subscribe_no) as subscriber
 		from users u
-		join subscribe s on u.user_no = s.creater_no
+			 join subscribe s on u.user_no = s.creater_no
 		group by U.USER_NO,
-		U.USER_ID,
-		U.USER_NICKNAME,
-		U.USER_NAME,
-		U.USER_PHONE,
-		U.USER_EMAIL,
-		U.USER_COMMENT
+			 U.USER_ID,
+			 U.USER_NICKNAME,
+			 U.USER_NAME,
+			 U.USER_PHONE,
+			 U.USER_EMAIL,
+			 U.USER_COMMENT,
+			 u.user_profile
 		order by subscriber desc
 		fetch first 12 rows only
 	</select>
@@ -240,7 +242,7 @@
 		c.MD_RECOMMENDATION,
 		(SELECT COUNT(*) FROM likes l WHERE l.content_no = c.content_no) AS like_count,
 		b.board_type,
-		m.menu_name,
+		m.menu_name, m.menu_no,
 		(
 		SELECT LISTAGG(cg.category_name, ',')
 		WITHIN GROUP (ORDER BY cg.category_name)
@@ -264,9 +266,42 @@
 		AND m.menu_name IS NOT NULL
 		AND c.content_status = 'Y'
 	</select>
-
-
-
-
+	<select id="selectSubscribeList">
+		SELECT s.creater_no,
+		c.*,
+		sc.subscriberCount,
+		u2.*
+			FROM users u
+			JOIN
+			subscribe s ON u.user_no = s.user_no
+			JOIN
+			content c ON c.user_no = s.creater_no
+			JOIN (SELECT creater_no,
+			COUNT(user_no) AS subscriberCount
+			FROM subscribe
+			GROUP BY creater_no) sc ON sc.creater_no = s.creater_no
+			JOIN
+			users u2 ON u2.user_no = s.creater_no
+		WHERE s.user_no = #{userNo}
+	</select>
+	<select id="getInfoUser">
+		select * from users where user_no=#{createrNo}
+	</select>
+	<select id="isSubscribed">
+		select count(*) from subscribe where creater_no =#{createrNo} and user_no =#{userNo} 
+	</select>
+	<insert id="updateSubscribe" parameterType="map">
+	    <choose>
+	        <when test="isCancel == true">
+	            DELETE FROM subscribe
+	            WHERE creater_no = #{createrNo}
+	              AND user_no = #{userNo}
+	        </when>
+	        <otherwise>
+	            INSERT INTO subscribe
+	            VALUES (subscribe_seq.nextval, #{createrNo}, #{userNo})
+	        </otherwise>
+	    </choose>
+</insert>
 
 </mapper>

@@ -56,26 +56,26 @@
 	</select>
 
 
-<!-- 	<select id="getTemplatesCount"> -->
-<!-- 		select count(*) -->
-<!-- 		from content c -->
-<!-- 		left join content_category cc on c.content_no = cc.content_no -->
-<!-- 		left join category cat on cc.category_no = cat.category_no -->
-<!-- 		left join menu m on cat.menu_no = m.menu_no -->
-<!-- 		where not exists ( -->
-<!-- 		select 1 -->
-<!-- 		from board b -->
-<!-- 		where c.content_no = b.content_no -->
-<!-- 		) -->
-<!-- 		<if test="menuNo != null"> -->
-<!-- 			and m.menu_no = #{menuNo} -->
-<!-- 		</if> -->
-<!-- 	</select> -->
-	
+	<!-- <select id="getTemplatesCount"> -->
+	<!-- select count(*) -->
+	<!-- from content c -->
+	<!-- left join content_category cc on c.content_no = cc.content_no -->
+	<!-- left join category cat on cc.category_no = cat.category_no -->
+	<!-- left join menu m on cat.menu_no = m.menu_no -->
+	<!-- where not exists ( -->
+	<!-- select 1 -->
+	<!-- from board b -->
+	<!-- where c.content_no = b.content_no -->
+	<!-- ) -->
+	<!-- <if test="menuNo != null"> -->
+	<!-- and m.menu_no = #{menuNo} -->
+	<!-- </if> -->
+	<!-- </select> -->
+
 	<select id="getTemplatesCount">
 		select count(*)
 		from (select c.content_no, c.content_title, c.create_date, c.modify_date, c.content_status, c.delete_status, c.user_no, c.md_recommendation, m.menu_name,
-			   LISTAGG(cat.category_name, ',') WITHIN GROUP (ORDER BY cat.category_name) AS category_name
+		LISTAGG(cat.category_name, ',') WITHIN GROUP (ORDER BY cat.category_name) AS category_name
 		from content c
 		left join content_category cc on c.content_no = cc.content_no
 		left join category cat on cc.category_no = cat.category_no
@@ -93,7 +93,7 @@
 
 	<select id="selectAllTemplates">
 		select c.content_no, c.content_title, c.create_date, c.modify_date, c.content_status, c.delete_status, c.user_no, c.md_recommendation, m.menu_name,
-			   LISTAGG(cat.category_name, ',') WITHIN GROUP (ORDER BY cat.category_name) AS category_name
+		LISTAGG(cat.category_name, ',') WITHIN GROUP (ORDER BY cat.category_name) AS category_name
 		from content c
 		left join content_category cc on c.content_no = cc.content_no
 		left join category cat on cc.category_no = cat.category_no
@@ -110,7 +110,9 @@
 			and (c.content_title like '%${search}%' or c.content_detail like '%${search}%')
 		</if>
 		group by c.content_no, c.content_title, c.create_date, c.modify_date, c.content_status, c.delete_status, c.user_no, c.md_recommendation, m.menu_name
-		order by c.content_no desc
+		order by
+		CASE WHEN c.md_recommendation = 'Y' THEN 0 ELSE 1 END,
+		c.content_no desc
 	</select>
 
 	<select id="getrequestPostCount">
@@ -198,6 +200,6 @@
 
 	<insert id="insertReply">
 		insert into reply
-		values(REPLY_SEQ.nextval, #{writer}, #{replyDetail}, sysdate, sysdate, default, #{contentNo})
+		values(REPLY_SEQ.nextval, #{replyDetail}, sysdate, sysdate, 'Y', #{contentNo}, #{userNo})
 	</insert>
 </mapper>
