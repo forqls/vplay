@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+<title>쪽지함</title>
+<style>
+.message-main-content {
+	max-width: 65%;
+	margin: 3rem auto;
+}
+
+.message-main-content .relative {
+	position: inherit;
+}
+
+.title {
+	font-size: 1.5rem;
+	margin-bottom: 2rem;
+	text-align: center;
+}
+
+.write-button {
+	background-color: #5e37e9;
+	color: white;
+	border: none;
+	border-radius: 0.375rem;
+	padding: 8px 10px;
+	font-size: 0.85rem;
+	cursor: pointer;
+}
+
+.write-button:hover {
+	background-color: #8137e9;
+}
+</style>
+
+</head>
+<body class="text-white">
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="message-main-content">
+		<div class="title" style="background: transparent; padding: 16px;">
+			<h1 class="text-xl font-semibold" style="font-size: 30px">쪽지함</h1>
+		</div>
+		<div style="display: flex; justify-content: space-between; padding: 16px; align-items: center;">
+			<select id="filter-dropdown" class="filter-dropdown">
+				<option value="received">받은 메일</option>
+				<option value="sent">보낸 메일</option>
+			</select>
+			<button onclick="openWriteMessageModal()" class="write-button">쪽지 쓰기</button>
+		</div>
+		<div id="writeMessageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center" style="z-index: 999">
+			<div class="bg-gray-900 text-white p-6 rounded-lg shadow-lg w-1/3">
+				<h2 class="text-lg font-bold mb-4">쪽지 작성</h2>
+				<label class="block text-sm font-semibold">받는 사람</label> <input type="text" id="recipient" placeholder="닉네임" class="w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style="color: black; margin-top: 5px;"> <label class="block text-sm font-semibold mt-4">쪽지 내용</label>
+				<textarea id="messageContent" rows="4" placeholder="내용을 입력하세요." class="w-full px-3 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style="color: black"></textarea>
+				<div class="mt-6 flex justify-end gap-2">
+					<button onclick="closeWriteMessageModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg">취소</button>
+					<button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">보내기</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="p-4">
+			<div class="message-card p-4 rounded-lg shadow-lg relative cursor-pointer" th:each="l:${list}" th:if="${l.receiverNo == session.loginUser.userNo}" data-type="received" th:classappend="${l.readStatus == 'N' ? 'bg-blue-900 text-white' : 'bg-gray-800 text-gray-100'}" onclick="openMessage(this)" style="margin-top: 20px;">
+				<p class="text-sm opacity-80">
+					보낸 사람: <strong>[[${l.senderName}]]</strong>
+				</p>
+				<p class="mt-2 font-semibold">[[${#strings.length(l.content) > 20 ? #strings.substring(l.content, 0, 20) + '...' : l.content}]]</p>
+				<p hidden id="messageContent" th:text="${l.content}" />
+				<p hidden id="messageNo" th:text="${l.messageNo}" />
+				<p hidden id="messageStatus" th:text="${l.readStatus}" />
+
+				<p class="mt-2 text-xs opacity-70">[[${l.sentTime}]]</p>
+
+				<span class="absolute top-2 right-2 bg-red-500 text-xs px-2 py-1 rounded-full" th:if="${l.readStatus == 'N'}">새 쪽지</span>
+			</div>
+
+			<div class="message-card p-4 bg-gray-800 text-gray-100 rounded-lg shadow-lg relative cursor-pointer hidden" th:each="l:${list}" th:if="${l.senderNo == session.loginUser.userNo}" data-type="sent" onclick="openMessage(this)" style="margin-top: 20px;">
+				<p class="text-sm opacity-80">
+					받는 사람: <strong>[[${l.receiverName}]]</strong>
+				</p>
+				<p class="mt-2 font-semibold">[[${#strings.length(l.content) > 20 ? #strings.substring(l.content, 0, 20) + '...' : l.content}]]</p>
+				<p class="mt-2 text-xs opacity-50">[[${l.sentTime}]]</p>
+				<p hidden id="messageContent" th:text="${l.content}" />
+			</div>
+
+		</div>
+	</div>
+
+	<div id="messageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+		<div class="bg-gray-900 text-white p-6 rounded-lg shadow-lg w-1/3">
+			<h2 id="modalTitle" class="text-lg font-bold">쪽지 내용</h2>
+			<p id="modalSender" class="text-sm text-gray-100 mt-2"></p>
+			<p id="modalTime" class="text-xs text-gray-100 mt-1"></p>
+			<div id="modalContent" class="mt-4 text-gray-100"></div>
+			<div class="mt-6 flex justify-end">
+				<button onclick="closeMessage(this)" class="px-4 py-2 bg-gray-700 text-white rounded-lg">닫기</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	let messageNoToUpdate = null;
+	document.getElementById("filter-dropdown").addEventListener("change", function() {
+	    let selectedType = this.value; 
+	    let messages = document.querySelectorAll(".message-card");
+	
+	    messages.forEach(msg => {
+	        let msgType = msg.getAttribute("data-type");
+	
+	        if (selectedType === "received" && msgType === "received") {
+	            msg.classList.remove("hidden"); 
+	        } else if (selectedType === "sent" && msgType === "sent") {
+	            msg.classList.remove("hidden"); 
+	        } else {
+	            msg.classList.add("hidden"); 
+	        }
+	    });
+	});
+
+    function openMessage(element) {
+        let messageType = element.getAttribute("data-type"); 
+        let sender, recipient;
+
+        if (messageType === "received") {
+            sender = element.querySelector("p:nth-child(1) strong").innerText;
+            recipient = "나";
+        } else if (messageType === "sent") {
+            recipient = element.querySelector("p:nth-child(1) strong").innerText;
+            sender = "나";
+        }
+
+        let contentElement = element.querySelector("#messageContent");
+        let content = contentElement ? contentElement.innerText : "내용을 불러올 수 없습니다.";
+
+        let timeElement = element.querySelector("p:nth-last-child(2)");
+        let time = timeElement ? timeElement.innerText : "시간 정보 없음";
+
+        document.getElementById("modalSender").innerText = `보낸 사람: ${sender}`;
+        document.getElementById("modalContent").innerText = content;
+        document.getElementById("modalTime").innerText = time;
+
+        document.getElementById("messageModal").classList.remove("hidden");
+
+        // 받은 메시지 중 읽지 않은 경우 상태 업데이트
+        let statusElement = element.querySelector("#messageStatus");
+        if (messageType === "received" && statusElement && statusElement.innerText === "N") {
+            let messageNoElement = element.querySelector("#messageNo");
+            if (messageNoElement) {
+                messageNoToUpdate = messageNoElement.innerText;
+            }
+        }
+    }
+    function closeMessage() {
+        document.getElementById("messageModal").classList.add("hidden");
+        if(messageNoToUpdate){
+//         	console.log('읽음');
+			$.ajax({
+				url:'/users/updateMessageStatus',
+				data:{messageNo:messageNoToUpdate},
+				success:data=>{
+// 					console.log('업뎃성공');
+					window.location.reload();
+				},error:data=>console.log(data)
+			})
+        }
+    }
+    
+    function openWriteMessageModal() {
+        document.getElementById("writeMessageModal").classList.remove("hidden");
+    }
+    function closeWriteMessageModal() {
+        document.getElementById("writeMessageModal").classList.add("hidden");
+    }
+    function sendMessage() {
+        let recipient = document.getElementById("recipient").value;
+        let content = document.getElementById("messageContent").value;
+        
+        let currentUserNickname = "[[${session.loginUser.userNickname}]]";
+
+        if (recipient.trim() === "" || content.trim() === "") {
+            alert("받는 사람과 내용을 입력해주세요!");
+            return;
+        }
+
+        if (recipient === currentUserNickname) {
+            alert("본인에게는 쪽지를 작성할 수 없습니다.");
+            return;
+        }
+        
+        $.ajax({
+            url:"/users/existReceiver",
+            data:{receiver:recipient},
+            success:data=>{
+                if(data != 1){
+                    alert('받는 사람의 닉네임을 확인해주세요!');
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/users/sendMessage",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        receiverName: recipient,
+                        content: content
+                    }),
+                    success: function(response) {
+                        alert("쪽지가 성공적으로 전송되었습니다!");
+                        closeWriteMessageModal();
+                        location.reload();
+                    },
+                    error: function(error) {
+                        alert("쪽지 전송에 실패했습니다. 다시 시도해주세요.");
+                        console.error(error);
+                    }
+                });
+            },error:data=>console.log(data)
+        });
+    }
+</script>
+</body>
+</html>

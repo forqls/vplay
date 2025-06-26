@@ -1,10 +1,574 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>의뢰 게시판 상세</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #191820;
+	color: white;
+	min-height: 100vh;
+}
+
+.container {
+	max-width: 1200px !important;
+	margin: 0 auto;
+}
+
+.post-title {
+	font-size: 24px;
+	font-weight: 600;
+	text-align: center;
+	margin-top: 80px;
+	margin-bottom: 50px;
+}
+
+.author-info {
+	display: flex;
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+.author-avatar {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	border: 1.5px solid #5e37e9;
+	overflow: hidden;
+	margin-right: 15px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.author-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.author-meta {
+	display: flex;
+	flex-direction: column;
+}
+
+.author-name {
+	font-weight: 600;
+	font-size: 16px;
+}
+
+.post-date {
+	color: #949396;
+	font-size: 14px;
+}
+
+.post-category {
+	margin-bottom: 20px;
+}
+
+.category-label {
+	display: inline-block;
+	background-color: #1f1f2c;
+	padding: 5px 15px;
+	border-radius: 20px;
+	font-size: 14px;
+}
+
+.post-content {
+	background-color: #1f1f2c;
+	border-radius: 10px;
+	padding: 30px;
+	margin-bottom: 40px;
+	line-height: 1.8;
+}
+
+.action-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin: 40px 0;
+}
+
+.left-buttons {
+	display: flex;
+}
+
+.right-buttons {
+	display: flex;
+	gap: 15px;
+}
+
+.btn {
+	padding: 10px 25px;
+	border-radius: 5px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: none;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-primary {
+	background-color: #8137e9;
+	color: white;
+}
+
+.btn-primary:hover {
+	background-color: #9550ff;
+	color: white;
+}
+
+.btn-outline {
+	background-color: transparent;
+	border: 1px solid #949396;
+	color: #ffffff;
+}
+
+.btn-outline:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger {
+	background-color: #d46868;
+	color: white;
+}
+
+.btn-danger:hover {
+	background-color: #e57979;
+}
+
+.comments-section {
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+.comments-title {
+	font-size: 22px;
+	margin-bottom: 30px;
+	font-weight: 600;
+}
+
+.comment-form {
+	margin-bottom: 40px;
+}
+
+.comment-user {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	margin-left: 5px;
+}
+
+.comment-user img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 1.5px solid #5e37e9;
+	margin-right: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.comment-textarea {
+	width: 100%;
+	background-color: #1f1f2c;
+	color: #ffffff;
+	border: none;
+	border-radius: 10px;
+	padding: 20px;
+	font-size: 15px;
+	resize: none;
+	min-height: 120px;
+	margin-bottom: 15px;
+}
+
+.comment-textarea:focus {
+	outline: 1px solid #8137e9;
+}
+
+.comment-list {
+	margin-top: 40px;
+}
+
+.comment-item {
+	background-color: #1f1f2c;
+	border-radius: 10px;
+	padding: 20px;
+	margin-bottom: 15px;
+}
+
+.comment-header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 15px;
+}
+
+.comment-author {
+	display: flex;
+	align-items: center;
+}
+
+.comment-author img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 1.5px solid #5e37e9;
+	margin-right: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.comment-author-name {
+	font-weight: 600;
+}
+
+.comment-date {
+	color: #949396;
+	font-size: 14px;
+}
+
+.comment-content {
+	width: 100%;
+	background-color: transparent;
+	color: #ffffff;
+	border: none;
+	resize: none;
+	font-size: 15px;
+	padding: 0;
+}
+
+.comment-content:focus {
+	outline: 1px solid #8137e9;
+}
+
+.comment-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.comment-btn {
+	padding: 5px 15px;
+	border-radius: 5px;
+	font-size: 13px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: none;
+}
+
+.comment-btn-edit {
+	background-color: #8137e9;
+	color: white;
+}
+
+.comment-btn-edit:hover {
+	background-color: #9550ff;
+}
+
+.comment-btn-delete {
+	background-color: #d46868;
+	color: white;
+}
+
+.comment-btn-delete:hover {
+	background-color: #e57979;
+}
+
+/* Modal styling */
+.modal-content {
+	background-color: #1f1f2c;
+	color: #ffffff;
+	border: none;
+	border-radius: 10px;
+}
+
+.modal-body {
+	padding: 30px;
+}
+
+.modal-title {
+	font-size: 20px;
+	margin-bottom: 15px;
+}
+
+.modal-footer {
+	border-top: none;
+	padding: 0 30px 30px 30px;
+}
+
+.purple-button {
+	background-color: #8137e9;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	text-align: center;
+	display: inline-block;
+}
+
+.purple-button:hover {
+	background-color: #9550ff;
+}
+
+/* Responsive adjustments */
+@media ( max-width : 768px) {
+	.post-title {
+		font-size: 24px;
+	}
+	.action-buttons {
+		flex-direction: column;
+	}
+	.btn {
+		width: 100%;
+	}
+}
+
+@media ( max-width : 768px) {
+	.action-buttons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.left-buttons, .right-buttons {
+		justify-content: center;
+		margin-bottom: 15px;
+	}
+}
+</style>
 </head>
 <body>
-	<h1>의뢰 게시판 상세페이지</h1>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="container">
+		<form method="post" id="requestDetailForm">
+			<input type="hidden" name="contentNo" th:value="${c.contentNo}"> <input type="hidden" name="page" th:value="${page}">
+
+			<!-- Post Title -->
+			<h1 class="post-title" th:text="${c.contentTitle}"></h1>
+
+			<!-- Author Info -->
+			<div class="author-info">
+				<div class="author-avatar">
+					<th:block th:if="${c.userProfile == null}">
+						<img src="/img/testProfile.jpg" width="100%" height="100%">
+					</th:block>
+					<th:block th:unless="${c.userProfile == null}">
+						<img th:src="${c.userProfile}" alt="프로필 이미지" width="100%" height="100%">
+					</th:block>
+				</div>
+				<div class="author-meta">
+					<div class="author-name" th:text="${c.userNickName}"></div>
+					<div class="post-date" th:text="${c.modifyDate}"></div>
+				</div>
+			</div>
+
+			<!-- Category -->
+			<div class="post-category">
+				<div class="category-label" th:text="${c.menuName}"></div>
+				<span style="margin-left: 15px; color: #949396;"> <i class="fas fa-eye"></i> <span th:text="${c.views}"></span>
+				</span>
+			</div>
+
+			<!-- Post Content -->
+			<div class="post-content" th:utext="${c.contentDetail}"></div>
+
+			<!-- Action Buttons -->
+			<div class="action-buttons">
+				<div class="left-buttons">
+					<a th:href="@{/board/request_list(page=${page})}" class="btn btn-outline"> <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> 목록으로
+					</a>
+				</div>
+				<div class="right-buttons">
+					<th:block th:if="${session.loginUser != null && session.loginUser.userNo == c.userNo}">
+						<button type="button" id="updateRequest" class="btn btn-primary">
+							<i class="fas fa-edit" style="margin-right: 8px;"></i> 수정하기
+						</button>
+						<button type="button" id="deleteModal" class="btn btn-danger">
+							<i class="fas fa-trash-alt" style="margin-right: 8px;"></i> 삭제하기
+						</button>
+					</th:block>
+				</div>
+			</div>
+		</form>
+
+		<!-- Comments Section -->
+		<div class="comments-section">
+			<h2 class="comments-title">댓글</h2>
+
+			<!-- Comment Form -->
+			<div class="comment-form">
+				<form method="post" id="replyForm" action="/board/insertReply">
+					<input type="hidden" name="contentNo" th:value="${c.contentNo}"> <input type="hidden" name="page" th:value="${page}">
+
+					<div class="comment-user">
+						<th:block th:if="${session.loginUser != null}">
+							<th:block th:if="${session.loginUser.userProfile == null}">
+								<img src="/img/testProfile.jpg" alt="기본 프로필 이미지">
+							</th:block>
+							<th:block th:unless="${session.loginUser.userProfile == null}">
+								<img th:src="${session.loginUser.userProfile}" alt="프로필 이미지">
+							</th:block>
+							<span th:text="${session.loginUser.userNickname}" style="font-weight: 500;"></span>
+						</th:block>
+						<th:block th:if="${session.loginUser == null}">
+							<i class="fas fa-user-circle" style="font-size: 40px; color: #949396; margin-right: 10px;"></i>
+							<span style="color: #949396;">로그인을 하여 자유롭게 의견을 남겨보세요.</span>
+						</th:block>
+					</div>
+
+					<textarea class="comment-textarea" id="replyContent" name="replyDetail" placeholder="댓글을 작성해주세요."></textarea>
+
+					<div style="text-align: right;">
+						<button class="purple-button" id="replySubmit" type="submit" th:disabled="${session.loginUser == null}">댓글 작성</button>
+					</div>
+				</form>
+			</div>
+
+			<!-- Comment List -->
+			<div class="comment-list">
+				<div th:each="r : ${replyList}" class="comment-item">
+					<div class="comment-header">
+						<div class="comment-author">
+							<th:block th:if="${r.userProfile == null}">
+								<img src="/img/testProfile.jpg" alt="프로필 이미지">
+								<span class="comment-author-name" th:text="${r.userNickname}"></span>
+							</th:block>
+							<th:block th:unless="${r.userProfile == null}">
+								<img th:src="${r.userProfile}" alt="프로필 이미지">
+								<span class="comment-author-name" th:text="${r.userNickname}"></span>
+							</th:block>
+						</div>
+						<div class="comment-date" th:text="${r.modifyDate}"></div>
+					</div>
+
+					<textarea id="modifyReply" readonly class="comment-content replyListDetail" name="replyDetail" th:text="${r.replyDetail}"></textarea>
+
+					<th:block th:if="${session.loginUser != null && r.userNickname eq session.loginUser.userNickname}">
+						<input type="hidden" th:value="${r.replyNo}" name="replyId">
+						<div class="comment-actions">
+							<button class="comment-btn comment-btn-edit updateReply">수정</button>
+							<button class="comment-btn comment-btn-delete deleteReply">삭제</button>
+						</div>
+						<input type="hidden" th:value="${r.replyDetail}" name="replyDetail">
+					</th:block>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 삭제 확인 모달 -->
+	<div class="modal fade" id="modalChoice" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<h5 class="modal-title">정말로 삭제하시겠습니까?</h5>
+					<p>삭제 후 게시글은 복구할 수 없습니다.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="delete" class="btn btn-danger">네</button>
+					<button type="button" class="btn btn-outline" data-bs-dismiss="modal">아니오</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript">
+        let userNo = "";
+
+        window.onload = () => {
+            const loginUser = /*[[${session.loginUser}]]*/ null;
+            if (loginUser != null) {
+                userNo = loginUser.userNo;
+            }
+
+            const updateRequestBtn = document.getElementById('updateRequest');
+            const form = document.getElementById('requestDetailForm');
+
+            if (updateRequestBtn) {
+                updateRequestBtn.addEventListener('click', () => {
+                    form.action = '/board/updateRequestForm';
+                    form.submit();
+                });
+            }
+
+            const deleteModalBtn = document.getElementById('deleteModal');
+            if (deleteModalBtn) {
+                deleteModalBtn.addEventListener('click', () => {
+                    $('#modalChoice').modal('show');
+                });
+            }
+
+            document.getElementById('delete').addEventListener('click', () => {
+                form.action = '/board/deleteRequest';
+                form.submit();
+            });
+        }
+
+        // 댓글 수정 및 삭제 기능
+        document.querySelectorAll('.updateReply').forEach(button => {
+            button.addEventListener('click', function() {
+                const replyRow = this.closest('.comment-item');
+                const replyDetailTextarea = replyRow.querySelector('textarea.replyListDetail');
+                const replyNo = replyRow.querySelector("input[name='replyId']").value;
+                const originalReplyDetail = replyRow.querySelector("input[name='replyDetail']").value;
+
+                if (this.textContent === '수정') {
+                    replyDetailTextarea.removeAttribute('readonly');
+                    replyDetailTextarea.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                    replyDetailTextarea.style.padding = '10px';
+                    replyDetailTextarea.style.borderRadius = '5px';
+                    replyDetailTextarea.focus();
+                    this.textContent = '저장';
+                } else {
+                    const updatedReply = replyDetailTextarea.value;
+                    $.ajax({
+                        type: "POST",
+                        url: "/board/updateReply",
+                        data: {replyNo: replyNo, replyDetail: updatedReply, userNo: userNo},
+                        success: data => {
+                            alert("댓글이 수정되었습니다.");
+                            location.reload();
+                        },
+                        error: function(error) {
+                            console.log("댓글 수정 중 오류 발생:", error);
+                        }
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.deleteReply').forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+                    const replyRow = this.closest('.comment-item');
+                    const replyNo = replyRow.querySelector("input[name='replyId']").value;
+
+                    $.ajax({
+                        url: "/board/deleteReply",
+                        data: { replyNo: replyNo },
+                        success: data => {
+                            if (data === 1) {
+                                replyRow.remove();
+                            }
+                        },
+                        error: function(error) {
+                            console.log("댓글 삭제 중 오류 발생:", error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

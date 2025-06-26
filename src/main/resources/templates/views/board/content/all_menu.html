@@ -1,10 +1,459 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/board/all_menu.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	
+	    <!-- 메인 컨텐츠 -->
+    <main>
+        <!-- 히어로 섹션 -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2>수천개의 아티스트 제작 에셋을 만나보세요!</h2>
+                <p>영상, 오디오, 사진, 그래픽, 폰트 등 창작자들을 위한 프리미엄 콘텐츠 모든 것이 여기에 모여있습니다.</p>
+                <p>모든 에셋들 무제한 다운로드 크리에이터의 작업이 완벽해질 것입니다.</p>
+            </div>
+        </section>
 
+        <!-- 비디오 템플릿 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>비디오 템플릿</h2>
+                <a href="/board/video-template-list" class="view-all">view all</a>
+            </div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="v : ${videoTemplateList}">
+					<input type="hidden" th:value=${v.contentNo}>
+					<input type="hidden" th:value=${v.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${v.contentTitle}]]</div>
+								<div class="template-writer">[[${v.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${v.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${v.likeCount}]]</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+        </section>
+
+        <!-- 음악 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>음악</h2>
+                <a href="/board/music-list" class="view-all">view all</a>
+            </div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="v : ${musicList}">
+					<input type="hidden" th:value=${v.contentNo}>
+					<input type="hidden" th:value=${v.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${v.contentTitle}]]</div>
+								<div class="template-writer">[[${v.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${v.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${v.likeCount}]]</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+        </section>
+
+        <!-- 효과음 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>효과음</h2>
+                <a href="/board/sound-effects-list" class="view-all">view all</a>
+            </div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="v : ${soundEffectsList}">
+					<input type="hidden" th:value=${v.contentNo}>
+					<input type="hidden" th:value=${v.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${v.contentTitle}]]</div>
+								<div class="template-writer">[[${v.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${v.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${v.likeCount}]]</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+        </section>
+
+        <!-- 그래픽 템플릿 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>그래픽 템플릿</h2>
+                <a href="/board/graphic-template-list" class="view-all">view all</a>
+            </div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="v : ${graphicTemplateList}">
+					<input type="hidden" th:value=${v.contentNo}>
+					<input type="hidden" th:value=${v.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${v.contentTitle}]]</div>
+								<div class="template-writer">[[${v.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${v.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${v.likeCount}]]</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+        </section>
+
+        <!-- 스톡 비디오 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>스톡 비디오</h2>
+                <a href="/board/stock-video-list" class="view-all">view all</a>
+            </div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="v : ${stockVideoList}">
+					<input type="hidden" th:value=${v.contentNo}>
+					<input type="hidden" th:value=${v.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${v.contentTitle}]]</div>
+								<div class="template-writer">[[${v.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${v.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${v.likeCount}]]</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+        </section>
+
+        <!-- 사진 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>사진</h2>
+                <a href="/board/photo-list" class="view-all">view all</a>
+            </div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="v : ${photosList}">
+					<input type="hidden" th:value=${v.contentNo}>
+					<input type="hidden" th:value=${v.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${v.contentTitle}]]</div>
+								<div class="template-writer">[[${v.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${v.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${v.likeCount}]]</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+        </section>
+
+        <!-- 폰트 섹션 -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2>폰트</h2>
+                <a href="/board/font-list" class="view-all">view all</a>
+            </div>
+			<div class="template-grid" id="template-grid-wrap">
+				<div class="template-card" th:each="v : ${fontList}">
+					<input type="hidden" th:value=${v.contentNo}>
+					<input type="hidden" th:value=${v.menuNo}>
+					<div class="template-details">
+						<div class="template-image"></div>
+						<div class="overlay"></div>
+						<div class="content_wrap">
+							<span class="content_title_wrap">
+								<div class="template-title">[[${v.contentTitle}]]</div>
+								<div class="template-writer">[[${v.userNickName}]]</div>
+							</span>
+							<span class="icon_wrap">
+								<span class="icon">
+									<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M7.9973 0C7.76163 0 7.53562 0.0894793 7.36897 0.248754C7.20233 0.408028 7.10871 0.62405 7.10871 0.849298V2.54789H1.77718C1.30584 2.54789 0.853809 2.72685 0.520523 3.0454C0.187238 3.36395 0 3.79599 0 4.24649V15.2874C0 15.7379 0.187238 16.1699 0.520523 16.4885C0.853809 16.807 1.30584 16.986 1.77718 16.986H14.2174C14.6888 16.986 15.1408 16.807 15.4741 16.4885C15.8074 16.1699 15.9946 15.7379 15.9946 15.2874V4.24649C15.9946 3.79599 15.8074 3.36395 15.4741 3.0454C15.1408 2.72685 14.6888 2.54789 14.2174 2.54789H8.88589V0.849298C8.88589 0.62405 8.79227 0.408028 8.62563 0.248754C8.45899 0.0894793 8.23297 0 7.9973 0ZM8.88589 2.54789V10.0455L10.5102 8.49298C10.6768 8.33362 10.9029 8.24404 11.1386 8.24396C11.3743 8.24388 11.6004 8.3333 11.7671 8.49255C11.9339 8.6518 12.0276 8.86784 12.0277 9.09313C12.0278 9.31843 11.9342 9.53452 11.7676 9.69389L8.78193 12.5467C8.57365 12.7456 8.29128 12.8573 7.99686 12.8573C7.70244 12.8573 7.42006 12.7456 7.21179 12.5467L4.22702 9.69389C4.14452 9.61498 4.07909 9.52131 4.03446 9.41823C3.98983 9.31516 3.96688 9.20469 3.96693 9.09313C3.96697 8.98158 3.99 8.87112 4.0347 8.76808C4.0794 8.66503 4.1449 8.57141 4.22746 8.49255C4.31002 8.4137 4.40802 8.35116 4.51587 8.30851C4.62371 8.26586 4.73929 8.24392 4.85601 8.24396C4.97272 8.244 5.08829 8.26601 5.1961 8.30874C5.30392 8.35147 5.40187 8.41407 5.48437 8.49298L7.10871 10.0455V2.54789H8.88589Z" fill="white"/>
+									</svg>
+									<span>[[${v.downloadCount}]]</span>
+								</span>
+								<span class="icon" id="md-icon">
+									<th:block th:if="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="red"/>
+									</svg>
+									</th:block>
+									<th:block th:unless="${v.likeTo == 1}">
+									<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M8.40374 1.14511C8.17373 1.34511 7.82073 1.34511 7.59173 1.14511C5.80971 -0.404898 3.16169 -0.462898 1.34268 1.47411C-2.64136 6.51912 3.14269 10.9711 6.95772 13.6691C7.2618 13.8844 7.62518 14 7.99773 14C8.37029 14 8.73366 13.8844 9.03774 13.6691C12.8808 10.9581 18.6378 6.51912 14.6528 1.47411C12.8348 -0.462898 10.1848 -0.404898 8.40274 1.14511" fill="white"/>
+									</svg>
+									</th:block>
+									<span>[[${v.likeCount}]]</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+        </section>
+    </main>
+	<script th:inline="javascript">
+		const loginUser = /*[[${session.loginUser}]]*/'loginUser';
+		const list = document.querySelectorAll('.template-grid');
+		
+		window.onload = () =>{
+// 			listPlay(list);
+			[...list].map((menuList, index, array)=>{
+				listPlay(menuList);
+			})
+			
+		}
+		
+		function listPlay(list){
+			[...list.children].map((template, index, array) =>{
+			
+			const thumbnail = template.children[2].children[0];
+			const contentNo = template.children[0].value;
+			const menuNo = template.children[1].value;
+			
+			//썸네일 불러오기
+			fetch("/board/select-thumbnail/" + contentNo,{
+				method : 'get',
+				headers : {'content-type' : 'application/json; charset=UTF-8'}
+			})
+			.then(response => response.json())
+			.then(data=>{
+				console.log(data);
+				if(menuNo == 1 || menuNo == 5){
+					const video = document.createElement('video');
+					video.muted = true;
+					video.loop = true;
+
+					const source = document.createElement("source");
+					source.type = "video/mp4";
+					source.src = data.thumbnail;
+
+					video.appendChild(source);
+					thumbnail.appendChild(video);
+
+					template.addEventListener('mouseenter', function(){
+						video.play();
+					});
+
+					template.addEventListener('mouseleave', function(){
+						video.pause();
+						video.currentTime = 0;
+					});
+				}else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2){
+					const img = document.createElement('img');
+					img.src = data.thumbnail;
+
+					thumbnail.appendChild(img);
+				}else{
+					const img = document.createElement('img');
+					img.src = "/img/sound-effects.png";
+					
+					thumbnail.appendChild(img);
+				}
+
+			})
+			
+			//컨텐츠 이동
+			template.addEventListener('click', function(event){
+				
+				switch(menuNo){
+				case "1": menuName = "video-templates"; break;
+				case "2": menuName = "music"; break;
+				case "3": menuName = "sound-effect"; break;
+				case "4": menuName = "graphic-templates"; break;
+				case "5": menuName = "stock-video"; break;
+				case "6": menuName = "photo"; break;
+				case "7": menuName = "font";
+				}
+				
+//					console.log(menuName);
+				
+				location.href = "/board/" + menuName + "/" + contentNo;
+			});
+			
+			const like = template.children[2].children[2].children[1].children[1].children[0];
+			const view = (like.nextElementSibling);
+			
+			//좋아요
+			like.addEventListener('click', function(event){
+				if(loginUser != null){
+					if(this.children[0].getAttribute("fill") == 'white'){
+						fetch('/board/like', {
+							method : 'put',
+							headers : {'content-type':'application/json; charset=UTF-8'},
+							body: JSON.stringify({
+								contentNo: contentNo
+			    			})
+						})
+						.then(response => response.json())
+						.then(data =>{
+							this.children[0].setAttribute("fill", "red");
+							view.innerText = Number((view.innerText)) + 1;
+						})
+					}else if(this.children[0].getAttribute("fill") == 'red'){
+						fetch('/board/like', {
+							method : 'delete',
+							headers : {'content-type':'application/json; charset=UTF-8'},
+							body: JSON.stringify({
+								contentNo: contentNo
+			    			})
+						})
+						.then(response => response.json())
+						.then(data =>{
+							this.children[0].setAttribute("fill", "white");
+							view.innerText = Number((view.innerText)) - 1;
+						})
+					}
+				}else{
+					alert('로그인 후 이용해주세요');
+				}
+				event.stopPropagation();
+			})
+		})
+	}
+	</script>
 </body>
 </html>

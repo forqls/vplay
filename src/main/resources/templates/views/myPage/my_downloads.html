@@ -1,10 +1,166 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+<title>My Downloads</title>
+<style>
+.dropdown {
+	top: 15%;
+	right: 0;
+}
+
+.dropdown.show {
+	margin-right: 7.5px;
+}
+</style>
 </head>
 <body>
-	<h1>내 다운로드 내역 페이지</h1>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="main-content">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class="content_wrap">
+			<div class="content-header">
+				<h1>My Downloads</h1>
+			</div>
+			<div class="filter-buttons">
+				<select class="filter-dropdown" id="categorySelect">
+					<option value="All">All</option>
+					<option value="video Templates">Video Templates</option>
+					<option value="Stock Video">Stock Video</option>
+					<option value="Graphic Templates">Graphic Templates</option>
+					<option value="Music">Music</option>
+					<option value="Sound Effects">Sound Effects</option>
+					<option value="Photos">Photos</option>
+					<option value="Fonts">Fonts</option>
+				</select> <select class="filter-dropdown" id="sortSelect">
+					<option value="newest">새로운순</option>
+					<option value="mostView">조회수 많은 순</option>
+				</select>
+			</div>
+			<th:block th:if="${not #lists.isEmpty(list)}">
+				<div class="grid">
+					<div class="grid-item" th:each="r : ${list}">
+						<input type="hidden" th:value="${r.contentNo}">
+						<input type="hidden" th:value="${r.menuNo}">
+						<div class="item-thumbnail">
+							<th:block th:if="${r.menuNo == 1 || r.menuNo == 5}">
+		                    <video id="item-preview" muted loop>
+			                	<source type="video/mp4">
+			                </video>
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 4 || r.menuNo == 6 || r.menuNo == 7 || r.menuNo == 2}">
+			               		 <img id="item-preview">
+			                </th:block>
+			                <th:block th:if="${r.menuNo == 3}">
+			                	<img id="item-preview" src="/img/sound-effects.png">
+			                </th:block>
+						</div>
+						<button class="menu-dots">⋮</button>
+						<div class="dropdown">
+							<div class="dropdown-item">
+								<span class="trash-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+  <path transform="translate(0, 10)" fill="currentColor" d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0" />
+</svg> </span> 삭제
+							</div>
+						</div>
+						
+						<!-- 컨텐츠 -->
+						<div class="item-content">
+							<span class="item-title" th:text="${r.contentTitle}"></span><input type="hidden" th:value="${r.menuName}">
+							<div class="item-actions">
+								<span>👁️ [[${r.views}]]</span> <span>❤️ [[${r.likeCount}]]</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</th:block>
+			<th:block th:if="${#lists.isEmpty(list)}">
+				<p>다운로드 받은 기록이 없습니다!</p>
+			</th:block>
+		</div>
+	</div>
+	
+	<div id="tooltip" class="tooltip"></div>
+	
+	<div th:replace="~{views/common/footer :: footer}"></div>
+	<script type="text/javascript">
+	
+	const list = document.querySelectorAll(".grid-item");
+    clickDetail(list);
+    
+			document.querySelectorAll('.filter-dropdown').forEach((dropdown)=>{
+				dropdown.addEventListener('change',(e)=>{
+					let value = document.getElementById('categorySelect').value;
+					let sortValue = document.getElementById('sortSelect').value;
+					console.log(sortValue);
+					console.log(value);
+					$.ajax({
+						url:'/board/selectDownloadsCategorySort',
+						data:{value:value,sortValue:sortValue},
+						success:data=>{
+							console.log(data);
+							let grids = document.querySelectorAll('.grid');
+							
+							grids.forEach(grid=>{
+								grid.innerHTML='';
+							});
+							
+							if(!data || data.length == 0){
+								grids[0].innerHTML='<p>검색된 다운로드 목록이 없습니다! 좋아요를 눌러보세요!</p>';
+								return;
+							}
+							data.forEach((r)=>{
+								let imgHTML = "";
+								if(r.menuNo ==1 || r.menuNo ==2){
+									imgHTML = '<video id="item-preview" muted loop><source type="video/mp4"></video>';
+								}else if(r.menuNo ==4 || r.menuNo ==6 || r.menuNo ==7 || r.menuNo ==2){
+									imgHTML = '<img id="item-preview">';
+								}else{
+									imgHTML = '<img id="item-preview" src="/img/sound-effects.png">';
+								}
+								let gridItem = `
+									<div class="grid-item">
+									<input type="hidden" value="${r.contentNo}">
+									<input type="hidden" value="${r.menuNo}">
+									<div class="item-thumbnail">`
+									+ imgHTML +
+									`	
+									</div>
+			                        <button class="menu-dots">⋮</button>
+			                        <div class="dropdown" >
+			                            <div class="dropdown-item">
+			                                <span class="trash-icon"></span> Delete
+			                            </div>
+			                        </div>
+			                        <div class="item-content">
+			                            <span class="item-title">${r.contentTitle}</span> 
+			                            <input type="hidden" value="${r.menuName}">
+			                            <div class="item-actions">
+			                                <span>👁️ ${r.views}</span> <span>❤️ ${r.likeCount}</span>
+			                            </div>
+			                        </div>
+			                    </div>
+								`;
+								grids[0].innerHTML += gridItem;
+							});
+							const list = document.querySelectorAll(".grid-item");
+						    clickDetail(list);
+							thumbnailPlay("r");
+					},
+					error:data=>console.log(data)
+				});
+			});
+		});
+	</script>
+
+
+
+
+
 </body>
 </html>

@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 32px;
+	cursor: pointer;
+}
+
+.logo-circle {
+	width: 32px;
+	height: 32px;
+	background-color: #d46868;
+	border-radius: 50%;
+}
+
+.logo-text {
+	color: white;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #9ca3af;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.sidebar-nav-item:hover {
+    background-color: #2c343d;
+}
+
+.sidebar-nav-item.active {
+    background-color: #5e37e9;
+    color: white;
+}

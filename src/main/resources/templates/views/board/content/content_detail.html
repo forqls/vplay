@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPLAY - Video Templates</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+    <link href="/css/board/videoTemplates/detail.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div th:replace="~{views/common/topbar :: topbar}"></div>
+
+    <main>
+        <div class="content">
+        	<form method="post" enctype="multipart/form-data">
+	            <div class="featured-template">
+	            		<th:block th:if="${content.menuNo == 1 || content.menuNo == 5}">
+	                    <video id="video-preview" style="max-width: 1200px; margin-top: 10px;" th:each="f : ${fList}" th:if="${f.fileLevel == 1}" autoplay muted controls>
+	                    	 <source th:src="@{${f.fileLocation}}" type="video/mp4">
+	                    </video>
+	                    </th:block>
+	                    <th:block th:if="${content.menuNo == 4 || content.menuNo == 6 || content.menuNo == 7 || content.menuNo == 2}" th:each="f : ${fList}">
+	                    	<img id="img-preview" style="max-width: 1000px; margin-top: 10px;" th:src="@{${f.fileLocation}}" th:if="${f.fileLevel == 1}">
+	                    </th:block>
+	                <div class="item-tags">
+	                    <h3>Item Tags</h3>
+	                    <div class="tags">
+	                    	<th:block th:each="category : ${categories}">
+	                        	<span class="tag" th:text="${category}"></span>
+	                        </th:block>
+	                    </div>
+	                </div>
+	                <div class="item-detail">
+	                    <h3>Item Detail</h3>
+	                    <p th:utext="${content.contentDetail}"></p>
+	                </div>
+	                
+	                <input type="hidden" name="contentNo" id="contentNo" th:value="${content.contentNo}">
+	                <th:block th:each="l : ${fList}">
+		                <input type="file" name="t-file" id="tFile" th:value="${l}" th:if="${l.fileLevel == 1}" style="display: none;">
+		                <input type="file" name="c-file" id="cFile" th:value="${l}" th:if="${l.fileLevel == 2}" style="display: none;">
+	                </th:block>
+	            </div>
+             </form>
+        </div>
+
+        <aside class="sidebar">
+            <div class="template-info-card">
+                <h2 th:text="${content.menuName}"></h2>
+                <h3 th:text="${content.contentTitle}"></h3>
+                <p>by [[${content.userNickName}]]</p>
+                
+                <!-- 비디오 템플릿, 스톡비디오, 뮤직, 이펙트 -->
+                
+                <th:block th:if='${content.menuNo == 1 || content.menuNo == 5 || content.menuNo == 2 || content.menuNo == 3}'>
+                <th:block th:if='${session.loginUser == null || (session.loginUser.userPlan != "Frame Pro" && session.loginUser.userPlan != "All Rounder")}'>
+                <div class="pricing-box">
+                    <h3>Frame Pro</h3>
+                    <div class="price">
+                        <span class="amount">15,000</span>
+                        <span class="period">/30</span>
+                    </div>
+                    <button type="button" onclick="location.href='/users/price'" class="start-btn">Start now</button>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <span class="free-tag">FREE</span>
+                            <span>Video Templates</span>
+<!--                             <p>VPLAY의 비디오 콘텐츠를 즐겨보세요!</p> -->
+                        </div>
+                        <div class="feature">
+                            <span class="free-tag">FREE</span>
+                            <span>Stock Video</span>
+                        </div>
+                        <div class="feature">
+                            <span class="free-tag">FREE</span>
+                            <span>Sound Effects</span>
+                        </div>
+                        <div class="feature">
+                            <span class="free-tag">FREE</span>
+                            <span>Music</span>
+                        </div>
+                    </div>
+                </div>
+                </th:block>
+				
+                <div class="action-buttons" th:if='${session.loginUser != null && (session.loginUser.userPlan == "Frame Pro" || session.loginUser.userPlan == "All Rounder")}'>
+                    <button type="button" class="download-btn" onclick="downloadFile()">Download</button>
+                    <th:block th:each="f : ${fList}" th:if="${f.fileLevel == 2}" controls>
+                    <input id="download-file-location" type="hidden" th:value="${f.fileLocation}"> 
+                    </th:block>
+                    <div class="secondary-actions">
+<!--                         <button class="action-btn"><i class="fa-solid fa-share-nodes"></i></button> -->
+<!--                         <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button> -->
+<!--                         <button class="action-btn"><i class="fa-regular fa-heart"></i></button> -->
+                        <th:block th:if="${session.loginUser.userNo == content.userNo}">
+                        <button class="action-btn" onclick="contentUpdate();">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM13.1 5.07C13.24 5.07 13.38 5.12 13.5 5.23L14.77 6.5C15 6.72 15 7.07 14.77 7.28L13.77 8.28L11.72 6.23L12.72 5.23C12.82 5.12 12.96 5.07 13.1 5.07ZM11.13 6.81L13.19 8.87L7.13 14.93H5.07V12.87L11.13 6.81Z" fill="white"/>
+</svg>
+                        </button>
+                        </th:block>
+                    </div>
+                </div>
+                </th:block>
+                <!-- 포토, 폰트, 그래픽 템플릿 -->
+                <th:block th:if='${content.menuNo == 6 || content.menuNo == 7 || content.menuNo == 4}'>
+                <th:block th:if='${session.loginUser == null || (session.loginUser.userPlan != "Graphic Pro" && session.loginUser.userPlan != "All Rounder")}'>
+                <div class="pricing-box">
+                    <h3>Graphic Pro</h3>
+                    <div class="price">
+                        <span class="amount">12,500</span>
+                        <span class="period">/30</span>
+                    </div>
+                    <button type="button" onclick="location.href='/users/price'" class="start-btn">Start now</button>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <span class="free-tag">FREE</span>
+                            <span>Graphic Templates</span>
+<!--                             <p>VPLAY의 모든 영상을 무료로 즐겨보세요!</p> -->
+                        </div>
+                        <div class="feature">
+                            <span class="free-tag">FREE</span>
+                            <span>Photo</span>
+                        </div>
+                        <div class="feature">
+                            <span class="free-tag">FREE</span>
+                            <span>Font</span>
+                        </div>
+                    </div>
+                </div>
+                </th:block>
+				
+                <div class="action-buttons" th:if='${session.loginUser != null && (session.loginUser.userPlan == "Graphic Pro" || session.loginUser.userPlan == "All Rounder")}'>
+                    <button type="button" class="download-btn" onclick="downloadFile()">Download</button>
+                    <th:block th:each="f : ${fList}" th:if="${f.fileLevel == 2}" controls>
+                    <input id="download-file-location" type="hidden" th:value="${f.fileLocation}"> 
+                    </th:block>
+                    <div class="secondary-actions">
+<!--                         <button class="action-btn"><i class="fa-solid fa-share-nodes"></i></button> -->
+<!--                         <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button> -->
+<!--                         <button class="action-btn"><i class="fa-regular fa-heart"></i></button> -->
+                        <th:block th:if="${session.loginUser.userNo == content.userNo}">
+                        <button class="action-btn" onclick="contentUpdate();">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM13.1 5.07C13.24 5.07 13.38 5.12 13.5 5.23L14.77 6.5C15 6.72 15 7.07 14.77 7.28L13.77 8.28L11.72 6.23L12.72 5.23C12.82 5.12 12.96 5.07 13.1 5.07ZM11.13 6.81L13.19 8.87L7.13 14.93H5.07V12.87L11.13 6.81Z" fill="white"/>
+</svg>
+                        
+                        </button>
+                        </th:block>
+                    </div>
+                </div>
+                </th:block>
+            </div>
+        </aside>
+    </main>
+    <script th:inline="javascript">
+	    /*<![CDATA[*/
+	    const loginUser = /*[[${session.loginUser}]]*/ 'loginUser';
+	    /*]]>*/
+	    const userNo = loginUser.userNo;
+	    const fileLocation = document.getElementById('download-file-location').value;
+	    const fileName = fileLocation.split("/").pop();
+	    const contentNo = document.getElementById('contentNo').value;
+	    const form = document.querySelector('form');
+	    
+	    window.onload=()=>{
+	    	console.log(fileLocation);
+	    	console.log(fileName);
+	    	console.log(contentNo);
+	    	console.log(form);
+	    	console.log(userNo);
+	    	
+	    	const video = document.querySelector('video');
+
+	    }
+    
+    
+    	function downloadFile(){
+    		fetch("/board/download/" + fileName + "/" + contentNo + "/" + userNo, {
+				method : 'get',
+				headers : {'content-type' : 'application/json; charset=UTF-8'}
+			})
+			.then(response => {
+			 if(!response.ok) throw new Error("다운로드 실패");
+
+		      return response.blob();	// 응답을 blob(파일 데이터)으로 파싱
+			})
+			.then(blob =>{
+				const url = window.URL.createObjectURL(blob);	// blob 데이터를 가리키는 가짜 URL 생성
+				const a= document.createElement("a");			// <a> 태그 동적으로 생성
+				a.href = url;
+				a.download = fileName;							//다운로드 파일 이름 설정
+				document.body.appendChild(a);				// 페이지에 <a>추가
+				a.click();										// 강제로 클릭 이벤트 발생시켜 다운로드 실행
+				a.remove();										// 다 쓰고 <a>태그 제거
+				window.URL.revokeObjectURL(url);				// 가짜 URL 해제해서 메모리 누수 방지
+			})
+			.catch(error =>{
+				console.error("에러 발생 : " + error);
+			})
+    	}
+    	
+    	function contentUpdate(){
+    		form.action = "/board/updateContentJoin";
+    		form.submit();
+    	}
+    </script>
+    
+</body>
+</html>

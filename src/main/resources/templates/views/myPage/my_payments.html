@@ -1,10 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+<title>My Payments</title>
+<style>
+.pricing {
+	display: flex;
+	gap: 1.5rem;
+	width: 100%;
+}
+
+.card {
+	background-color: #1f1f2c;
+	border: 2px solid rgba(129, 55, 233, 0.2);
+	border-radius: 0.5rem;
+	padding: 1.5rem;
+	width: calc(33.33% - 1rem);
+	position: relative;
+}
+
+.card h3 {
+	font-size: 1.25rem;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+}
+
+.current-plan {
+	background-color: #2a2936;
+	border: 2px solid #8137e9;
+	animation: border-animation 2s ease-in-out infinite;
+}
+
+.current-plan::after {
+	content: "사용 중";
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	background-color: #5e37e9;
+	color: white;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.25rem;
+	font-size: 0.75rem;
+}
+
+@keyframes border-animation {
+  0% {
+    border-color: #8137e9;
+  }
+  50% {
+    border-color: #C07AEF;
+  }
+  100% {
+    border-color: #8137e9;
+  }
+}
+
+.price {
+	font-size: 1.3rem;
+	font-weight: bold;
+	margin-bottom: 1.5rem;
+}
+
+.price span {
+	font-size: 0.875rem;
+	color: #9ca3af;
+}
+
+.features {
+	list-style: none;
+	color: #9ca3af;
+	margin-bottom: 1.5rem;
+}
+
+.features li {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.features li::before {
+	content: "•";
+	margin-right: 0.5rem;
+}
+
+.content_wrap {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	gap: 1rem;
+}
+
+@media ( max-width : 768px) {
+	.pricing {
+		flex-direction: column;
+	}
+	.card {
+		width: 100%;
+	}
+}
+</style>
 </head>
 <body>
-	<h1>내 요금제 페이지</h1>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="main-content">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class="container content_wrap flex_custom_wrap">
+			<div class="content-header">
+				<h1>My Payments</h1>
+			</div>
+			<div class="pricing">
+
+				<!-- All Rounder 카드 -->
+				<div th:class="${loginUser.userPlan == 'All Rounder'} ? 'card current-plan' : 'card'">
+					<h3>All Rounder</h3>
+					<div class="price">
+						26,000<span>/30</span>
+					</div>
+					<ul class="features">
+						<li>All Content for Free on VPLAY</li>
+						<li>FREE Stock Video</li>
+						<li>FREE Graphic Templates & Photo</li>
+						<li>FREE Sound Effects</li>
+						<li>FREE Fonts</li>
+					</ul>
+				</div>
+
+				<!-- Graphic Pro 카드 -->
+				<div th:class="${loginUser.userPlan == 'Graphic Pro'} ? 'card current-plan' : 'card'">
+					<h3>Graphic Pro</h3>
+					<div class="price">
+						12,500<span>/30</span>
+					</div>
+					<ul class="features">
+						<li>FREE Graphic Templates & Photo</li>
+						<li>FREE Sound Effects</li>
+						<li>FREE Fonts</li>
+					</ul>
+				</div>
+
+				<!-- Frame Pro 카드 -->
+				<div th:class="${loginUser.userPlan == 'Frame Pro'} ? 'card current-plan' : 'card'">
+					<h3>Frame Pro</h3>
+					<div class="price">
+						16,500<span>/30</span>
+					</div>
+					<ul class="features">
+						<li>FREE Stock Video</li>
+						<li>FREE Sound Effects</li>
+						<li>FREE Fonts</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			var currentPlanCard = $('.card.current-plan');
+
+			if (currentPlanCard.length) {
+				currentPlanCard.prependTo('.pricing');
+			}
+		});
+	</script>
 </body>
 </html>

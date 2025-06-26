@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link href="/css/topbar.css" rel="stylesheet" type="text/css">
+    <link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+    <link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+    <title>My Project</title>
+    <style>
+        .button {
+            padding: 6px;
+            margin-left: auto;
+            margin-top: 2.5px;
+        }
+
+        .dropdown {
+            top: 15%;
+            right: 0;
+        }
+
+        .dropdown.show {
+            margin-right: 7.5px;
+        }
+        .creator-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .creator-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition-duration: 0.3s;
+        }
+
+        .creator-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+        .creator_profile {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 100%;
+            overflow: hidden;
+        }
+
+        .creator-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .creator-info h3 {
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            transition-duration: 0.3s;
+        }
+
+        .creator-info span {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+        }
+
+        span.subscriber_count {
+            margin-bottom: -0.1rem;
+            margin-left: 0.4rem;
+        }
+
+        .creator_profile_wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .creator-info {
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+
+        button.subscribe-button {
+            position: absolute;
+            top: 35%;
+            right: 0;
+            font-size: 1.2rem;
+            line-height: 1em;
+        }
+        .subscribe-button:hover {
+            color: #ECDEFF;
+        }
+
+        .creator-card:hover {
+            border: 1px solid #8137E9;
+            transition-duration: 0.3s;
+        }
+
+        .creator-card:hover .creator-info h3{
+            color: #ECDEFF;
+            transition-duration: 0.3s;
+        }
+
+        .creator-content {
+            aspect-ratio: 1;
+            width: 1.5rem;
+            position: absolute;
+            text-align: center;
+            line-height: 1.5rem;
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="~{views/common/topbar :: topbar}"></div>
+<div class="main-content">
+    <div th:replace="~{views/myPage/my_sidebar}"></div>
+    <div class="content_wrap">
+        <div class="content-header">
+            <h1>My Projects</h1>
+        </div>
+        <div class="filter-buttons">
+            <select class="filter-dropdown" id="categorySelect">
+                <option value="All">All</option>
+                <option value="video Templates">Video Templates</option>
+                <option value="Stock Video">Stock Video</option>
+                <option value="Graphic Templates">Graphic Templates</option>
+                <option value="Music">Music</option>
+                <option value="Sound Effects">Sound Effects</option>
+                <option value="Photos">Photos</option>
+                <option value="Fonts">Fonts</option>
+            </select> <select class="filter-dropdown" id="sortSelect">
+            <option value="newest">새로운순</option>
+            <option value="mostView">조회수 많은 순</option>
+        </select>
+            <button class="button" id="content-write">컨텐츠 글 쓰기</button>
+        </div>
+
+        <div class="creator-grid top">
+            <div class="creator-card" th:each="l : ${list}">
+                <div class="creator-header">
+                    <div class="creator_profile_wrap">
+                        <div class="creator_profile">
+                            <img th:src="${l.userProfile}" class="creator-avatar" alt="creator_profile"/>
+                        </div>
+                    </div>
+                    <div class="creator-info">
+                        <h3 class="item-title" th:text="${l.userNickname}"></h3>
+                        <span><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.20042 5.60056C4.9431 5.60056 5.65536 5.30553 6.18052 4.78038C6.70567 4.25522 7.0007 3.54296 7.0007 2.80028C7.0007 2.0576 6.70567 1.34534 6.18052 0.820183C5.65536 0.295029 4.9431 0 4.20042 0C3.45774 0 2.74548 0.295029 2.22032 0.820183C1.69517 1.34534 1.40014 2.0576 1.40014 2.80028C1.40014 3.54296 1.69517 4.25522 2.22032 4.78038C2.74548 5.30553 3.45774 5.60056 4.20042 5.60056ZM10.501 5.60056C11.0581 5.60056 11.5923 5.37929 11.9861 4.98542C12.38 4.59156 12.6013 4.05736 12.6013 3.50035C12.6013 2.94334 12.38 2.40914 11.9861 2.01528C11.5923 1.62141 11.0581 1.40014 10.501 1.40014C9.94404 1.40014 9.40984 1.62141 9.01598 2.01528C8.62211 2.40914 8.40084 2.94334 8.40084 3.50035C8.40084 4.05736 8.62211 4.59156 9.01598 4.98542C9.40984 5.37929 9.94404 5.60056 10.501 5.60056ZM1.75017 7.0007C0.784078 7.0007 0 7.78478 0 8.75088C0 8.75088 0 11.9012 4.20042 11.9012C7.52995 11.9012 8.22022 9.92139 8.36304 9.10091C8.40084 8.88669 8.40084 8.75088 8.40084 8.75088C8.40084 7.78478 7.61676 7.0007 6.65067 7.0007H1.75017ZM9.79538 9.24092C9.79258 9.29693 9.78698 9.3632 9.77858 9.43974C9.70132 10.017 9.50076 10.571 9.19052 11.0639C9.56156 11.1493 9.9942 11.2011 10.4997 11.2011C14 11.2011 14 8.75088 14 8.75088C14 7.78478 13.2159 7.0007 12.2498 7.0007H9.26893C9.60496 7.50195 9.79958 8.10261 9.79958 8.75088V9.10091L9.79538 9.24092Z" fill="#6F757D"/>
+                                </svg> <span class="subscriber_count" onclick="location.herf=''">[[${l.subscriberCount}]]</span></span>
+                    </div>
+                    <button class="subscribe-button">+</button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+<div th:replace="~{views/common/footer :: footer}"></div>
+
+</body>
+</html>

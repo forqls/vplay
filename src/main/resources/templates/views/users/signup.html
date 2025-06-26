@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SignUp</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #191820;
+	color: #ffffff;
+	min-height: 100vh;
+}
+
+.breadcrumb {
+	padding: 1rem 2rem;
+	color: #949396;
+}
+
+.breadcrumb a {
+	color: #949396;
+	text-decoration: none;
+}
+
+.breadcrumb .current {
+	color: #5e37e9;
+}
+
+.signup-container {
+	max-width: 400px;
+	margin: 2rem auto;
+	padding: 2rem;
+	text-align: center;
+}
+
+.signup-title {
+	font-size: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.input-group {
+	position: relative;
+	display: flex;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	align-items: center;
+}
+
+.input-field {
+	width: 100%;
+	padding: 0.8rem;
+	background-color: #1f1f2c;
+	border: none;
+	border-radius: 4px;
+	color: #ffffff;
+	font-family: sans-serif;
+	outline: none;
+}
+
+.input-label {
+	position: absolute;
+	left: 0.8rem;
+	top: 0.95rem;
+	color: #949396;
+	pointer-events: none;
+	transition: 0.2s ease all;
+	font-size: 0.85rem;
+}
+
+.input-field:focus ~ .input-label, .input-field:not(:placeholder-shown) ~ .input-label {
+	top: -0.45rem;
+	left: 0.5rem;
+	font-size: 0.8rem;
+	color: #ffffff;
+	background-color: transparent;
+	padding: 0;
+}
+
+.input-field::placeholder {
+	color: transparent;
+}
+
+input[type="date"] {
+	font-family: sans-serif;
+}
+
+.radio-group {
+	display: flex;
+	width: 100%;
+	padding: 0.8rem;
+	background-color: #1f1f2c;
+	border: none;
+	border-radius: 4px;
+	gap: 0.5rem;
+	margin-top: -22.5px;
+	padding: 0.8rem;
+	background-color: #1f1f2c;
+	border: none;
+	border-radius: 4px;
+}
+
+.radio-group span {
+	font-size: 0.9rem;
+}
+
+.radio-input {
+	accent-color: #5e37e9;
+}
+
+.button {
+	background-color: #5e37e9;
+	color: #ffffff;
+	border: none;
+	border-radius: 4px;
+	padding: 0.75rem 1rem;
+	cursor: pointer;
+	font-size: 0.9rem;
+	white-space: nowrap;
+	margin-left: 0.5rem;
+	height: 100%;
+}
+
+.verify-button {
+	width: 100px;
+}
+
+.verification-section {
+	display: none;
+}
+
+.verification-section.active {
+	display: block;
+}
+
+.signup-btn {
+	width: 100%;
+	padding: 0.8rem;
+	background-color: #5e37e9;
+	color: #ffffff;
+	border: none;
+	border-radius: 25px;
+	cursor: pointer;
+	margin-top: 2rem;
+	font-size: 1rem;
+}
+
+@media ( max-width : 768px) {
+	.signup-container {
+		margin: 1rem;
+		padding: 1rem;
+	}
+	.input-group {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.button {
+		margin-left: 0;
+		margin-top: 0.5rem;
+		width: 100%;
+	}
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+	background-color: white;
+	color: black;
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#confirmIdText {
+	font-size: 13px;
+}
+
+#confirmPwText {
+	font-size: 13px;
+}
+</style>
+</head>
+<body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="breadcrumb">
+		<a href="/">Home</a> > <span class="current">Sign Up</span>
+	</div>
+	<main class="signup-container">
+		<h1 class="signup-title" th:text="${session.kakaoUser != null ? ' 카카오 유저 회원가입' : '회원가입'}"></h1>
+		<form id="signupForm" method="post" action="/users/signUp">
+			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
+				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID" required><label class="input-label">ID</label>
+				<button type="button" id="checkIdBtn" class="button verify-button">중복확인</button>
+			</div>
+			<div id="confirmIdText"></div>
+			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
+				<input type="password" placeholder="Password" class="input-field" name="userPw" id="password"><label class="input-label">Password</label>
+			</div>
+			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
+				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword"><label class="input-label">Password 확인</label>
+			</div>
+			<div id="confirmPwText"></div>
+			<div class="input-group">
+				<input type="text" placeholder="User name" class="input-field" name="userName" id="name"><label class="input-label">User name</label>
+			</div>
+			<div class="input-group">
+				<input type="text" placeholder="Nick name" class="input-field" name="userNickname" id="nickName" th:value="${session.kakaoUser != null ? session.kakaoUser.userNickname : ''}"><label class="input-label">Nickname</label>
+			</div>
+			<div class="input-group">
+				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel"><label class="input-label">Phone</label>
+			</div>
+			<div class="input-group">
+				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email"><label class="input-label">Email</label>
+				<button type="button" class="button verify-button" id="emailBtn">인증하기</button>
+			</div>
+			<div class="verification-section" id="verificationSection">
+				<div class="input-group">
+					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi" id="confirmVerifi">
+					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
+				</div>
+			</div>
+			<div class="input-group">
+				<input type="date" placeholder="Birth day" class="input-field" name="userBirth"><label class="input-label">BirthDay</label>
+			</div>
+			<div style="text-align: left; font-size: 0.8rem; margin-left: 8px; position: relative; z-index: 10;">Gender</div>
+			<div class="input-group">
+				<div class="radio-group">
+					<input type="radio" name="userGender" value="M" class="radio-input" id="male"> <span>남자</span> <input type="radio" name="userGender" value="F" class="radio-input" id="female"> <span>여자</span>
+				</div>
+			</div>
+			<button type="button" class="signup-btn" onclick="joinBtn()" id="join">회원가입</button>
+		</form>
+		<div id="successModal" class="modal">
+			<div class="modal-content">
+				<p>회원가입이 완료되었습니다!</p>
+				<button onclick="redirectHome()">확인</button>
+			</div>
+		</div>
+	</main>
+	<script th:inline="javascript">
+		let idCheck = false;
+		let pwdCheck = false;
+		let emailCheck = false;
+		let nameCheck = false;
+		let nickNameCheck = false;
+		let phoneCheck = false;
+		let confirmEmail = '';
+		/*<![CDATA[*/
+		let kakaoUser = /*[[${session.kakaoUser != null}]]*/false; 
+		/*]]>*/
+		window.onload = () => {
+		    const nameInput = document.getElementById('name');
+		    const nickNameInput = document.getElementById('nickName');
+		    const telInput = document.getElementById('tel');
+		    
+		    
+		    if(kakaoUser){
+		    	idCheck = true;
+		    	pwdCheck = true;
+		    }
+		    
+		    nameInput.addEventListener('input', () => {
+		        const name = nameInput.value.trim();
+		        nameCheck = name !== '';
+		    });
+
+		    nickNameInput.addEventListener('input', () => {
+		        const nickName = nickNameInput.value.trim();
+		        nickNameCheck = nickName !== '';
+		    });
+
+		    telInput.addEventListener('input', () => {
+		        const tel = telInput.value.trim();
+		        phoneCheck = tel !== '';
+		    });
+		};
+		
+		document.getElementById('checkIdBtn').addEventListener('click',()=>{
+			const id = document.getElementById('ID').value;
+			const confirmIdText = document.getElementById('confirmIdText');
+			if(id.trim() !=''){
+				$.ajax({
+					url:'/users/idCheck',
+					method:'post',
+					data:{id:id},
+					success:(data)=>{
+// 						console.log(data);
+						if(data == 1){
+							confirmIdText.innerText = '이미 존재하는 아이디입니다.';
+							confirmIdText.style.color='red';
+							idCheck = false;
+						}else{
+							confirmIdText.innerText = '사용 가능한 아이디입니다.';
+							confirmIdText.style.color='green';
+							idCheck = true;
+						}
+					},error:data=>console.log(data)
+				});
+			}else{
+				alert('아이디를 입력하세요!');
+			}
+		});
+		
+		document.getElementById('confirmPassword').addEventListener('change',()=>{
+			const password = document.getElementById('password').value;
+			const confirmPassword = document.getElementById('confirmPassword').value;
+			const confirmPwText = document.getElementById('confirmPwText');
+			
+			if(password != confirmPassword){
+				confirmPwText.innerText = '비밀번호가 일치하지 않습니다.';
+				confirmPwText.style.color='red';
+				pwdCheck = false;
+			}else{
+				confirmPwText.innerText= '비밀번호가 일치합니다.';
+				confirmPwText.style.color='green';
+				pwdCheck = true;
+			}
+		});
+		
+		const showVerification=()=>{
+			const email = document.getElementById('email').value.trim();
+			const verification  = document.getElementById('verificationSection');
+			const emailBtn = document.getElementById('emailBtn');
+			console.log(document.getElementById('email').value.trim());
+			if(email ==''){
+				alert('이메일을 입력해주세요.');
+				verification.style.display='none';
+			}else{
+				$.ajax({
+					url:'/users/emailCheck',
+					data:{email:email},
+					success:data=>{
+						alert('이메일이 발송되었습니다.');
+						verification .style.display='block';
+						confirmEmail = data;
+						emailBtn.disabled = true;
+					},error:data=>console.log(data)
+				});
+			}
+		}
+		
+		document.addEventListener("DOMContentLoaded", function () {
+		    const emailBtn = document.getElementById("emailBtn");
+
+		    if (emailBtn) {
+		        emailBtn.addEventListener("click", showVerification);
+		    }else{
+		    	console.log("하");
+		    }
+		});
+		
+		confirmEmailBtn.addEventListener('click',()=> {
+			const confirmEmailBtn = document.getElementById('confirmEmailBtn');
+			const confirmVerifi = document.getElementById('confirmVerifi').value.trim();
+			const verfication = document.getElementById('verificationSection');
+			if(confirmVerifi == ''){
+				alert('인증번호를 입력해주세요');
+			}else if(confirmVerifi == confirmEmail){
+				alert('이메일 인증이 완료되었습니다.');
+				emailCheck = true;
+				verfication.style.display = 'none';
+			}else{
+				alert('인증번호가 틀렸습니다.');
+				emailCheck = false;
+			}
+		});
+		
+		const joinBtn = () => {
+			if(!idCheck){
+				alert('아이디를 입력하세요!');
+			}else if(!pwdCheck){
+				alert('비밀번호를 입력하세요!');
+			}else if(!emailCheck){
+				alert('이메일 인증을 성공하지 못했습니다.');
+			}else if(!nameCheck){
+				alert('이름을 확인하세요!');
+			}else if(!nickNameCheck){
+				alert('사용하실 활동명(닉네임)을 적어주세요.');
+			}else if(!phoneCheck){
+				alert('핸드폰 번호를 입력해주세요!');
+			}else{
+				document.getElementById('signupForm').submit();
+			}
+		};
+	</script>
+</body>
+</html>

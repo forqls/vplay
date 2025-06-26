@@ -1,10 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+<title>My Inquiry</title>
 </head>
 <body>
-	<h1>내 문의 페이지</h1>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="main-content">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class="content_wrap">
+			<div class="content-header">
+				<h1>My Inquiry</h1>
+				<button class="button" onclick="location.href='/board/inquiry_write'">작성하기</button>
+			</div>
+			<div class="list" id="inquiry">
+				<div class="item" th:each="i : ${list}" th:data-content-no="${i.contentNo}" style="cursor: pointer;">
+					<div class="date" th:text="${i.createDate}"></div>
+					<div class="title" th:text="${i.contentTitle}"></div>
+					<div class="actions">
+						<span class="status-badge" th:text="${i.reply != null ? '답변 완료' : '답변 대기'}" th:classappend="${i.reply != null ? 'completed' : ''}"> </span>
+						<div class="options-wrapper">
+							<button class="options-btn">⋮</button>
+							<div class="dropdown">
+								<div class="dropdown-item delete-inquiry">
+									<span class="trash-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+  <path transform="translate(0, 10)" fill="currentColor" d="M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0" />
+</svg> </span>Delete
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const inquiryList = document.getElementById('inquiry');
+
+			inquiryList.addEventListener('click', function(event) {
+				const target = event.target;
+				const inquiryItem = target.closest('.item');
+
+				if (target.classList.contains('options-btn')) {
+					const optionsWrapper = target.closest('.options-wrapper');
+					const dropdown = optionsWrapper.querySelector('.dropdown');
+
+					document.querySelectorAll('.dropdown.show').forEach(
+							openDropdown => {
+								if (openDropdown !== dropdown) {
+									openDropdown.classList.remove('show');
+								}
+							});
+					dropdown.classList.toggle('show');
+					event.stopPropagation();
+				}
+
+				else if (inquiryItem && !target.closest('.dropdown-item')) {
+					const contentNo = inquiryItem.dataset.contentNo;
+					location.href = '/board/inquiryDetail?contentNo=' + contentNo;
+				}
+
+				if (target.closest('.delete-inquiry')) {
+					const contentNo = inquiryItem.dataset.contentNo;
+					deleteInquiry(contentNo, inquiryItem);
+				}
+			});
+
+			document.addEventListener('click', function(event) {
+				if (!event.target.closest('.options-wrapper')) {
+					document.querySelectorAll('.dropdown.show').forEach(
+					function(dropdown) {
+						dropdown.classList.remove('show');
+					});
+				}
+			});
+
+			function deleteInquiry(contentNo, inquiryItem) {
+				$.ajax({
+					url : '/board/throwBoardTrash',
+					data : {contentNo : contentNo},
+					type : 'POST',
+					success : function(data) {
+						if (data == 1) {
+							alert('문의가 성공적으로 삭제되었습니다.');
+							inquiryItem.remove();
+						} else {
+							alert('문의 삭제 중 오류 발생.');
+						}
+					},
+					error : function(data) {
+						alert('서버 오류');
+					}
+				});
+			}
+		});
+	</script>
 </body>
 </html>

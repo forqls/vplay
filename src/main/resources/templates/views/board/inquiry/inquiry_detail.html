@@ -1,10 +1,205 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<title>문의 내용</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #191820;
+	color: #ffffff;
+	min-height: 100vh;
+}
+
+.inquiryWrite-container {
+	max-width: 1200px;
+	margin: 2rem auto;
+	padding: 2rem;
+}
+
+.inquiryWrite-title {
+	font-size: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+.form-label {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.filter-dropdown {
+	padding: 8px 16px;
+	background-color: #33333e;
+	border: none;
+	border-radius: 6px;
+	color: white;
+	font-size: 14px;
+	text-align: center;
+	cursor: pointer;
+	appearance: none;
+	margin-left: 10px;
+	margin-top: 3px;
+	pointer-events: none;
+	cursor: default;
+}
+
+input[type="text"], textarea {
+	width: 100%;
+	padding: 12px 16px;
+	border: 1px solid #28303f;
+	border-radius: 4px;
+	background-color: #1f1f2c;
+	color: #ffffff;
+	cursor: default;
+	font-family: sans-serif;
+}
+
+input[type="text"]::placeholder, textarea::placeholder {
+	color: #6a6a6a;
+}
+
+textarea{
+	min-height: 370px;
+	resize: none;
+}
+
+.button-group {
+	display: flex;
+	justify-content: space-between;
+}
+
+.button {
+	background-color: #5e37e9;
+	color: white;
+	border: none;
+	border-radius: 0.375rem;
+	padding: 0.75rem;
+	font-size: 0.875rem;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.button:hover {
+	background-color: #8137e9;
+}
+
+.reply-container {
+	margin-top: 50px;
+	text-align: left;
+}
+
+.reply-title {
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.reply-textarea {
+	width: 100%;
+	padding: 12px 16px;
+	border: 1px solid #28303f;
+	border-radius: 4px;
+	background-color: #1f1f2c;
+	color: #ffffff;
+	min-height: 300px;
+	resize: none;
+}
+
+.empty-reply {
+	font-style: italic;
+	color: #6a6a6a;
+}
+
+.reply-button-group {
+	display: flex;
+	justify-content: flex-end;
+}
+</style>
 </head>
 <body>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<main class="inquiryWrite-container">
+		<h1 class="inquiryWrite-title">문의 내용</h1>
+		<div class="form-group">
+			<div class="form-label">
+				<span>문의 종류</span> <select class="filter-dropdown" disabled style="width: 110px;">
+					<option th:selected="${inquiry.menuNo == 11}" value="11">시스템 문의</option>
+					<option th:selected="${inquiry.menuNo == 12}" value="12">결제 문의</option>
+					<option th:selected="${inquiry.menuNo == 13}" value="13">컨텐츠 문의</option>
+					<option th:selected="${inquiry.menuNo == 14}" value="14">기타 문의</option>
+				</select>
+			</div>
+		</div>
 
+		<div class="form-group">
+			<div class="form-label">제목</div>
+			<input type="text" th:value="${inquiry.contentTitle}" readonly style="pointer-events: none">
+		</div>
+		<div class="form-group">
+			<div class="form-label">내용</div>
+			<div class="textarea" th:utext="${inquiry.contentDetail}" style="pointer-events: none"></div>
+		</div>
+		<div class="button-group">
+			<button type="button" class="button" onclick="javascript:history.back();">목록으로</button>
+			<a th:if="${session.loginUser != null and session.loginUser.userNo == inquiry.userNo and (reply == null or #strings.isEmpty(reply.replyDetail))}"
+			th:href="@{/board/inquiryUpdate(contentNo=${inquiry.contentNo})}" class="button">수정 하기</a>
+
+		</div>
+
+		<div class="reply-container">
+			<h1 class="reply-title">문의 답변</h1>
+			<div class="form-group">
+				<textarea class="reply-textarea" th:attr="readonly=${session.loginUser != null and session.loginUser.isAdmin != 'Y' ? 'readonly' : null}"
+				th:style="${session.loginUser != null and session.loginUser.isAdmin == 'Y' and (reply == null or #strings.isEmpty(reply.replyDetail))} ? 'cursor: text' : 'pointer-events: none; cursor: default'"
+				th:text="${reply != null ? reply.replyDetail : ''}" th:placeholder="${(reply != null and #strings.isEmpty(reply.replyDetail)) or (session.loginUser != null and session.loginUser.isAdmin == 'Y') ? '답변 내용을 입력해주세요' : '답변이 아직 등록되지 않았습니다.'}"></textarea>
+			</div>
+			<div class="reply-button-group" th:if="${session.loginUser != null and session.loginUser.isAdmin == 'Y' and (reply == null or #strings.isEmpty(reply.replyDetail))}">
+				<button type="button" class="button" onclick="submitReply()">답변 등록</button>
+			</div>
+		</div>
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			const contentNo = /*[[${inquiry.contentNo}]]*/null;
+			/*]]>*/
+			function submitReply() {
+				const replyContent = $('.reply-textarea').val();
+				$.ajax({
+					url : '/admin/insertReply',
+					method : 'post',
+					data : {
+						contentNo : contentNo,
+						replyDetail : replyContent
+					},
+					success : function(response) {
+						if (response == 1) {
+							alert('답변이 성공적으로 등록되었습니다');
+							location.reload();
+						} else {
+							alert('답변 등록에 실패했습니다.');
+						}
+					},
+					error : function(xhr, status, error) {
+						console.error('오류가 발생했습니다. 다시 시도해주세요.', status, error);
+					}
+				});
+			}
+		</script>
+
+	</main>
 </body>
 </html>

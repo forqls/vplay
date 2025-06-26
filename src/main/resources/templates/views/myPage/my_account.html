@@ -1,10 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="/css/topbar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/sidebar.css" rel="stylesheet" type="text/css">
+<link href="/css/user/myPage.css" rel="stylesheet" type="text/css">
+<title>My Account</title>
 </head>
 <body>
-	<h1>내 정보 수정 페이지</h1>
+	<div th:replace="~{views/common/topbar :: topbar}"></div>
+	<div class="main-content">
+		<div th:replace="~{views/myPage/my_sidebar}"></div>
+		<div class="content_wrap">
+			<div class="content-header">
+				<h1>My Account</h1>
+			</div>
+			<section class="section">
+				<form action="updateInfo" method="post">
+					<div class="form-group">
+						<label class="form-label" for="id">아이디</label> <input type="text" id="id" class="form-control" th:value="${session.loginUser.userId}" readonly>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="name">이름</label> <input type="text" name="userName" id="name" class="form-control" th:value="${session.loginUser.userName}">
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="nickname">닉네임</label> <input type="text" name="userNickname" id="nickname" class="form-control" th:value="${session.loginUser.userNickname}">
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="tel">전화번호</label> <input type="tel" name="userPhone" id="tel" class="form-control" th:value="${session.loginUser.userPhone}">
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="email">이메일</label>
+						<div class="email-container">
+							<input type="email" placeholder="Email" class="form-control" name="userEmail" id="email" th:value="${session.loginUser.userEmail}">
+							<button type="button" class="button verify-button" onclick="showVerification()" id="emailBtn">인증하기</button>
+						</div>
+					</div>
+
+					<div class="verification-section" id="verificationSection">
+						<div class="form-group">
+							<div class="verification-container">
+								<input type="text" placeholder="인증번호 입력" class="form-control" name="confirmVerifi" id="confirmVerifi">
+								<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="birthdate">생년월일</label> <input type="date" name="userBirth" id="birthdate" class="form-control" th:value="${session.loginUser.userBirth}">
+					</div>
+
+					<div class="form-group">
+						<label class="form-label">성별</label>
+						<div class="radio-group">
+							<input type="radio" value="M" class="radio-input" name="userGender" id="male" th:checked="${session.loginUser.userGender == 'M'}"> <span>남자</span> <input type="radio" name="userGender" value="F" class="radio-input" id="female" th:checked="${session.loginUser.userGender == 'F'}"> <span>여자</span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="description">한마디</label>
+						<textarea name="userComment" id="description" class="form-control">[[${session.loginUser.userComment}]]</textarea>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="password">비밀번호 *</label> <input type="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요.">
+					</div>
+
+					<div id="confirmPwText"></div>
+					<button type="button" class="btn" id="update">Update</button>
+
+				</form>
+			</section>
+
+			<!-- Change Password -->
+			<div class="content-header">
+				<h1>Change password</h1>
+			</div>
+			<section class="section">
+				<form action="changePw" method="post">
+					<div class="form-group">
+						<label class="form-label" for="currentPwd">현재 비밀번호</label> <input type="password" name="currentPwd" id="currentPwd" class="form-control" placeholder="현재 비밀번호를 입력하세요.">
+					</div>
+					<div id="ChangeConfirmPwText"></div>
+					<div class="form-group">
+						<label class="form-label" for="newPwd">새 비밀번호</label> <input type="password" name="newPwd" id="newPwd" class="form-control" placeholder="새로운 비밀번호를 입력하세요.">
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="newPwdConfirm">새 비밀번호 확인</label> <input type="password" name="newPwdConfirm" id="newPwdConfirm" class="form-control" placeholder="새로운 비밀번호를 확인 다시 입력하세요.">
+					</div>
+					<div id="ChangeConfirmPwTextCheck"></div>
+					<button type="button" class="btn" id="changePw">Change Password</button>
+				</form>
+			</section>
+		</div>
+	</div>
+	<script>
+      const showVerification=()=>{
+         const email = document.getElementById('email').value.trim();
+         const verification  = document.getElementById('verificationSection');
+         const emailBtn = document.getElementById('emailBtn');
+         console.log(document.getElementById('email').value.trim());
+         if(email ==''){
+            alert('이메일을 입력해주세요.');
+            verification.style.display='none';
+         }else{
+            $.ajax({
+               url:'/users/emailCheck',
+               data:{email:email},
+               success:data=>{
+                  alert('이메일이 발송되었습니다.');
+                  verification.style.display='block';
+                  confirmEmail = data;
+                  emailBtn.disabled = true;
+                  },
+               error:data=>console.log(data)
+            });
+         }
+      }
+      
+      confirmEmailBtn.addEventListener('click',()=> {
+         const confirmEmailBtn = document.getElementById('confirmEmailBtn');
+         const confirmVerifi = document.getElementById('confirmVerifi').value.trim();
+         const verfication = document.getElementById('verificationSection');
+         if(confirmVerifi == ''){
+            alert('인증번호를 입력해주세요');
+         }else if(confirmVerifi == confirmEmail){
+            alert('이메일 인증이 완료되었습니다.');
+            emailCheck = true;
+            verfication.style.display = 'none';
+         }else{
+            alert('인증번호가 틀렸습니다.');
+            emailCheck = false;
+         }
+      });
+      
+      const password = document.getElementById('password').value;
+
+      document.getElementById('update').addEventListener('click', () => {
+    	    const password = document.getElementById('password').value;
+    	    const confirmPwText = document.getElementById('confirmPwText');
+    	    $.ajax({
+    	        url: '/users/checkPw',
+    	        data: {password:password},
+    	        success: data => {
+    	            if (data == 1) {
+    	                confirmPwText.innerText = '비밀번호가 일치합니다.';
+    	                confirmPwText.style.color = 'green';
+    	                document.querySelector('form[action="updateInfo"]').submit();
+    	            } else {
+    	                confirmPwText.innerText = '비밀번호가 일치하지 않습니다.';
+    	                confirmPwText.style.color = 'red';
+    	            }
+    	        }
+    	    });
+    	});
+
+    	document.getElementById('changePw').addEventListener('click', () => {
+    	    const currentPwd = document.getElementById('currentPwd').value;
+    	    const newPwd = document.getElementById('newPwd').value;
+    	    const newPwdConfirm = document.getElementById('newPwdConfirm').value;
+    	    const ChangeConfirmPwText = document.getElementById('ChangeConfirmPwText');
+    	    const ChangeConfirmPwTextCheck = document.getElementById('ChangeConfirmPwTextCheck');
+
+    	    if(newPwd == newPwdConfirm){
+    	        $.ajax({
+    	            url: '/users/changeCheckPw',
+    	            data: {currentPwd:currentPwd},
+    	            success: data => {
+    	                if(data == 1) {
+    	                    ChangeConfirmPwText.innerText = '비밀번호가 일치합니다.';
+    	                    ChangeConfirmPwText.style.color = 'green';
+    	                    document.querySelector('form[action="changePw"]').submit();
+    	                }else {
+    	                    ChangeConfirmPwText.innerText = '비밀번호가 일치하지 않습니다.';
+    	                    ChangeConfirmPwText.style.color = 'red';
+    	                }
+    	            }
+    	        });
+    	    }else {
+    	        ChangeConfirmPwTextCheck.innerText = '새 비밀번호가 일치하지 않습니다.';
+    	        ChangeConfirmPwTextCheck.style.color = 'red';
+    	    }
+    	});
+
+   </script>
 </body>
 </html>

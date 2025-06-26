@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPLAY - 회원 관리</title>
+<link href="/css/admin/admin_page.css" rel="stylesheet">
+</head>
+<body>
+	<div th:replace="~{admin_sidebar}"></div>
+	<main class="main-content">
+		<h1 class="page-title">회원 관리</h1>
+		<div class="content-card">
+			<div class="search-bar">
+				<form>
+					<input type="search" name="search" placeholder="Search" th:value="${searchValue}">
+				</form>
+			</div>
+			<div class="table-container">
+				<table>
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>User ID</th>
+							<th>User name</th>
+							<th>Nick name</th>
+							<th>Email</th>
+							<th>Phone</th>
+							<th>Join date</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="user-list" th:each="u : ${list}">
+							<td th:text="${u.userNo}"></td>
+							<td th:text="${u.userId}"></td>
+							<td th:text="${u.userName}"></td>
+							<td th:text="${u.userNickname}"></td>
+							<td th:text="${u.userEmail}"></td>
+							<td th:text="${u.userPhone}"></td>
+							<td th:text="${u.joinDate}"></td>
+							<td><span class="status" th:data-userno="${u.userNo}" th:onclick="updateStatus(this)" th:classappend="${u.status == 'Y' ? 'active' : 'inactive'}" th:text="${u.status}"></span></td>
+							<td>⋮</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="pagination">
+				<ul>
+					<th:block th:if="${pi.currentPage > 1}">
+						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName})}" aria-label="Previous"> < </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage <= 1}">
+						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
+					</th:block>
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"></a></li>
+					<th:block th:if="${pi.currentPage < pi.MaxPage}">
+						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1})}" aria-label="Next"> > </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
+						<li class="next chevron-right"><a aria-label="Next"> > </a></li>
+					</th:block>
+				</ul>
+			</div>
+		</div>
+	</main>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+        function updateStatus(element) {
+            const currentStatus = element.innerText;
+            const newStatus = currentStatus === "Y" ? "N" : "Y";
+            const userNo = element.getAttribute("data-userno");
+
+            $.ajax({
+                url: "/admin/mupdate",
+                data: { userNo: userNo, status: newStatus },
+                success: data => {
+                    if (data == 1) {
+                        element.innerText = newStatus;
+                        element.classList.remove(currentStatus === "Y" ? "active" : "inactive");
+                        element.classList.add(newStatus === "Y" ? "active" : "inactive");
+                    }
+                },
+                error: data => console.log(data)
+            });
+        }
+    </script>
+</body>
+</html>

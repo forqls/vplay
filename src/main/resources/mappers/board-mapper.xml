@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pocopoco_vplay.board.model.mapper.BoardMapper">
+	<select id="selectCategory">
+		SELECT 
+			content.views,
+			content.content_no,
+			content.content_title,
+			menu.menu_name,
+			likes.user_no as likesUser,
+			COUNT(l2.content_no) AS like_count, menu.menu_no
+		FROM content
+		LEFT JOIN board ON content.content_no = board.content_no
+		LEFT JOIN content_category ON content.content_no = content_category.content_no
+		LEFT JOIN category ON content_category.category_no = category.category_no
+		LEFT JOIN menu ON category.menu_no = menu.menu_no
+		LEFT JOIN likes ON content.content_no = likes.content_no
+		LEFT JOIN likes l2 ON l2.content_no = content.content_no
+		WHERE board.board_type IS NULL
+		  AND likes.user_no = #{userNo}
+		  AND menu.menu_name IS NOT NULL
+		<if test="menu != 'All'">
+			AND menu.menu_name = #{menu}
+		</if>
+		GROUP BY 
+			content.views, content.content_no, content.content_title, menu.menu_name, likes.user_no, content.create_date, menu.menu_no
+		<if test="sort == 'newest'">
+			ORDER BY content.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			ORDER BY content.views DESC
+		</if>
+	</select>
+
+
+	<select id="selectCategoryMyProjects">
+		SELECT c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,c.MD_RECOMMENDATION, b.board_type, m.menu_name, m.menu_no,
+		(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name
+		FROM content c
+		left JOIN board b ON c.content_no = b.content_no
+		left JOIN content_category cc on c.content_no = cc.content_no
+		left join category ccc on cc.category_no = ccc.category_no
+		left JOIN menu m ON ccc.menu_no = m.menu_no
+		WHERE c.user_no =#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='Y'
+		<if test="menu != 'All'">
+			AND m.menu_name =#{menu}
+		</if>
+		group by 
+	        c.CONTENT_NO,
+	        c.CONTENT_TITLE,
+	        c.CREATE_DATE,
+	        c.MODIFY_DATE,
+	        c.CONTENT_STATUS,
+	        c.DELETE_STATUS,
+	        c.USER_NO,
+	        c.VIEWS,
+	        c.MD_RECOMMENDATION,
+	        b.board_type, m.menu_name, m.menu_no
+		<if test="sort == 'newest'">
+			order by c.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by c.views desc
+		</if>
+	</select>
+
+	<update id="throwBoardTrash">
+		<if test="trashYN == 0">
+			update content set content_status ='N' where content_no=#{contentNo}
+		</if>
+		<if test="trashYN == 1">
+			update content set content_status ='Y' where content_no=#{contentNo}
+		</if>
+	</update>
+
+	<select id="selectMyTrash">
+		select c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,
+        	   c.MD_RECOMMENDATION,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count , 
+        	   b.board_type,m.menu_name, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name
+		from content c
+		left join board b on c.content_no = b.content_no
+		left JOIN content_category cc on c.content_no = cc.content_no
+		left join category ccc on cc.category_no = ccc.category_no
+		left JOIN menu m ON ccc.menu_no = m.menu_no
+		where c.user_no=#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='N'
+        group by 
+	        c.CONTENT_NO,
+	        c.CONTENT_TITLE,
+	        c.CREATE_DATE,
+	        c.MODIFY_DATE,
+	        c.CONTENT_STATUS,
+	        c.DELETE_STATUS,
+	        c.USER_NO,
+	        c.VIEWS,
+	        c.MD_RECOMMENDATION,
+	        b.board_type, m.menu_name
+	</select>
+
+	<select id="selectCategoryMyTrash">
+		SELECT c.*,
+		(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count
+		FROM content c
+		left JOIN board b ON c.content_no = b.content_no
+		left JOIN content_category cc on c.content_no = cc.content_no
+		left join category ccc on cc.category_no = ccc.category_no
+		left JOIN menu m ON ccc.menu_no = m.menu_no
+		WHERE c.user_no =#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='N'
+		<if test="menu != 'All'">
+			AND m.menu_name =#{menu}
+		</if>
+		<if test="sort == 'newest'">
+			order by c.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by c.views desc
+		</if>
+	</select>
+
+	<select id="allTemplateList" parameterType="string">
+		select *
+		from (
+			select 
+			LISTAGG(cg.category_name, ',') WITHIN GROUP (ORDER BY cg.category_name) AS category_name, c.content_no, c.content_title, u.user_nickname,m.menu_no, m.menu_name,
+			(select count(*) from likes lk where lk.content_no = c.content_no) as like_count, (select count(*) from downloads d where d.content_no = c.content_no) AS download_count
+			from content c
+			left join users u on(c.user_no = u.user_no)
+			left join board b on(c.content_no = b.content_no)
+			left join content_category cc on(c.content_no = cc.content_no)
+			left join category cg on(cc.category_no = cg.category_no)
+			left join menu m on(cg.menu_no = m.menu_no)
+			left join likes lk2 on (c.content_no = lk2.content_no)
+			where b.board_type is null and m.menu_name = #{menuName} and c.content_status='Y'
+		<if test="categoryArray != null">
+			and cg.category_name in
+			<foreach item="category" collection="categoryArray" open="(" separator="," close=")">
+				#{category}
+			</foreach>
+		</if>
+		<if test="search != null">
+			and CONTENT_TITLE like '%' || #{search} || '%'
+		</if>
+		group by c.content_no, c.content_title, u.user_nickname, m.menu_no, m.menu_name
+		order by c.content_no desc)
+		<if test="menuNameNum == 'video Templates'">
+			where rownum <![CDATA[<]]>=
+			3
+		</if>
+		<if test="menuNameNum == 'Music'">
+			where rownum <![CDATA[<]]>=
+			6
+		</if>
+		<if test="menuNameNum == 'Sound Effects'">
+			where rownum <![CDATA[<]]>=
+			6
+		</if>
+		<if test="menuNameNum == 'Graphic Templates'">
+			where rownum <![CDATA[<]]>=
+			3
+		</if>
+		<if test="menuNameNum == 'Stock Video'">
+			where rownum <![CDATA[<]]>=
+			3
+		</if>
+		<if test="menuNameNum == 'Photos'">
+			where rownum <![CDATA[<]]>=
+			3
+		</if>
+		<if test="menuNameNum == 'Fonts'">
+			where rownum <![CDATA[<]]>=
+			6
+		</if>
+		<if test="recentList != null">
+			where rownum <![CDATA[<]]>=
+			6
+		</if>
+	</select>
+
+	<select id="menuLikeTo">
+		select count(*)
+		from likes
+		where user_no = #{userNo} and content_no = #{contentNo}
+		order by content_no desc
+	</select>
+
+	<select id="selectMyInquiry">
+		SELECT *
+		FROM content
+		JOIN board USING(content_no)
+		WHERE board_type = 1
+		AND user_no = #{userNo}
+		AND content_status = 'Y'
+		ORDER BY create_date DESC
+	</select>
+
+	<select id="selectMyCommission">
+		SELECT *
+		FROM content
+		JOIN board USING(content_no)
+		WHERE board_type = 2
+		AND user_no = #{userNo}
+		AND content_status = 'Y'
+		ORDER BY create_date DESC
+	</select>
+
+	<insert id="insertInquiry" parameterType="Content">
+		<selectKey resultType="int" keyProperty="contentNo" order="BEFORE">
+			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO CONTENT (
+		CONTENT_NO,USER_NO,
+		CONTENT_TITLE,
+		CONTENT_DETAIL,
+		CREATE_DATE,
+		MODIFY_DATE,
+		CONTENT_STATUS,
+		VIEWS
+		) VALUES (
+		#{contentNo},
+		#{userNo},
+		#{contentTitle},
+		#{contentDetail},
+		SYSDATE,
+		SYSDATE,
+		'Y',
+		0
+		)
+	</insert>
+
+	<insert id="insertBoard">
+		INSERT INTO BOARD (
+		CONTENT_NO,
+		BOARD_TYPE,
+		MENU_NO
+		) VALUES (
+		#{contentNo},
+		1,
+		#{menuNo}
+		)
+	</insert>
+
+	<update id="updateInquiry" parameterType="Content">
+		UPDATE CONTENT
+		SET
+		CONTENT_TITLE = #{contentTitle},
+		CONTENT_DETAIL = #{contentDetail},
+		MODIFY_DATE = SYSDATE
+		WHERE
+		CONTENT_NO = #{contentNo}
+	</update>
+
+	<update id="updateBoard">
+		UPDATE BOARD
+		SET
+		MENU_NO = #{menuNo}
+		WHERE
+		CONTENT_NO = #{contentNo}
+
+	</update>
+
+	<select id="selectInquiry" resultType="Content">
+		SELECT
+		C.CONTENT_NO,
+		C.USER_NO,
+		C.CONTENT_TITLE,
+		C.CONTENT_DETAIL,
+		C.CREATE_DATE,
+		C.MODIFY_DATE,
+		C.CONTENT_STATUS,
+		C.VIEWS,
+		B.MENU_NO
+		FROM
+		CONTENT C
+		JOIN
+		BOARD B ON C.CONTENT_NO = B.CONTENT_NO
+		WHERE
+		C.CONTENT_NO = #{contentNo}
+	</select>
+
+	<select id="selectReply">
+		SELECT REPLY_DETAIL
+		FROM REPLY
+		WHERE CONTENT_NO = #{contentNo}
+	</select>
+
+	<select id="countReply">
+		SELECT count(*)
+		FROM REPLY
+		WHERE CONTENT_NO = #{contentNo}
+	</select>
+
+	<select id="allCategory">
+		select *
+		from category
+		where menu_no = #{menuNo}
+	</select>
+
+	<!-- 일단은 기본 쿼리랑 동일 -->
+	<select id="allPopularCate">
+		select *
+		from category
+		where menu_no = #{menuNo}
+	</select>
+
+	<select id="getrequestPostCount">
+		select count(*)
+		from content
+		join board using(content_no)
+		where board_type = 2 and content_status = 'Y'
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
+		</if>
+	</select>
+
+	<select id="selectAllRequestPost">
+		select *
+		from content
+		join board using(content_no)
+		join menu using(menu_no)
+		where board_type = 2 and content_status = 'Y'
+		<if test="menuNo != null">
+			and menu_no = #{menuNo}
+		</if>
+		<if test="search != null and search != ''">
+			and (content_title like '%${search}%' or content_detail like '%${search}%')
+		</if>
+		order by content_no desc
+	</select>
+
+	<select id="selectUser">
+		select user_nickname
+		from users
+		where user_no = #{userNo}
+	</select>
+
+	<insert id="insertRequest">
+		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">
+			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO content (content_no, content_title, content_detail, create_date, modify_date, content_status, delete_status, user_no, views)
+		VALUES (#{contentNo}, #{contentTitle}, #{contentDetail}, SYSDATE, SYSDATE, DEFAULT, DEFAULT, #{userNo}, DEFAULT)
+	</insert>
+
+	<insert id="insertRequestBoard">
+		insert into board (CONTENT_NO, BOARD_TYPE, MENU_NO)
+		values (#{contentNo}, 2, #{menuNo})
+	</insert>
+
+	<select id="selectRequest">
+		select *
+		from content
+		left join users using(user_no)
+		left join board using(content_no)
+		left join menu using(menu_no)
+		left join content_category using(content_no)
+		left join category using(CATEGORY_NO)
+		where content_status ='Y' and content_no =#{bId}
+	</select>
+
+	<update id="updateCount">
+		update content
+		set views = views+1
+		where content_no = #{bId}
+	</update>
+
+	<select id="allMenuDetail" parameterType="int">
+		select
+		  c.content_no,
+		  c.content_title,
+		  c.content_detail,
+		  c.create_date,
+		  u.user_profile,
+		  c.modify_date,
+		  c.content_status,
+		  u.user_no,
+		  u.user_id,
+		  u.user_nickname,
+		  u.user_email,
+		  u.user_profile,
+		  m.menu_name,
+		  m.menu_no,
+		  (
+		    select listagg(category_name, ',') within group(order by category_name)
+		    from content_category cc
+		    join category cg on cc.category_no = cg.category_no
+		    where cc.content_no = c.content_no
+		  ) as category_name
+		from content c
+		join users u on c.user_no = u.user_no
+		join menu m on (
+		  m.menu_no = (
+		    select cg.menu_no
+		    from content_category cc
+		    join category cg on cc.category_no = cg.category_no
+		    where cc.content_no = c.content_no
+		    fetch first 1 row only
+		  )
+		)
+		where c.content_no = #{contentNo}
+	</select>
+	
+	<select id="contentFile">
+		select *
+		from files
+		where ref_content_no = #{contentNo}	
+	</select>
+
+	<select id="selectReplyList">
+		SELECT
+			r.reply_no,
+			r.reply_detail,
+			r.modify_date,
+			u.user_nickname,
+			u.user_profile AS userProfile
+		FROM reply r
+				 JOIN users u ON r.user_no = u.user_no
+		WHERE r.content_no = #{bId}
+		  AND r.reply_status = 'Y'
+		ORDER BY r.reply_no DESC
+	</select>
+
+	<insert id="allTempLike">
+		insert into likes
+		values(#{userNo},#{contentNo})
+	</insert>
+
+	<delete id="unAllTempLike">
+		delete from likes
+		where user_no = #{userNo} and content_no = #{contentNo}
+	</delete>
+
+	<update id="updateRequest">
+		UPDATE content
+		SET content_title = #{contentTitle},
+		modify_date = SYSDATE,
+		content_detail = #{contentDetail}
+		WHERE content_no = #{contentNo}
+	</update>
+
+	<update id="updateRequestMenu">
+		update board
+		set menu_no = #{menuNo}
+		where content_no = #{contentNo}
+	</update>
+
+	<update id="deleteBoard">
+		update content
+		set content_status = 'N'
+		where content_no =#{bId}
+	</update>
+
+	<select id="selectContentTop">
+		SELECT
+		c.content_no,
+		c.content_title,
+		c.create_date,
+		c.modify_date,
+		c.user_no,
+		c.views,
+		u.user_nickname, m.menu_no, m.menu_name,
+		(select count(*) from likes l where l.content_no = c.content_no) as like_count, (select count(*) from downloads d where d.content_no = c.content_no) AS download_count
+		FROM content c
+			 JOIN users u ON c.user_no = u.user_no
+			 left join board b on(c.content_no = b.content_no)
+			 left join content_category cc on(c.content_no = cc.content_no)
+			 left join category cg on(cc.category_no = cg.category_no)
+			 left join menu m on(cg.menu_no = m.menu_no)
+			 LEFT JOIN likes l ON c.content_no = l.content_no
+		where b.board_type is null and m.menu_name is not null and c.content_status='Y'
+		GROUP BY c.content_no, c.content_title, c.create_date,
+		c.modify_date, c.user_no, c.views, u.user_nickname, u.user_nickname, m.menu_no, m.menu_name
+		ORDER BY c.views DESC
+		fetch first 12 rows only
+	</select>
+
+
+	<select id="selectOrderByViews">
+		select * from content order by views desc
+		fetch first 12 rows only
+	</select>
+
+	<insert id="insertReply">
+		insert into reply
+		values(REPLY_SEQ.nextval,#{replyDetail},sysdate,sysdate,'Y', #{contentNo},#{userNo})
+	</insert>
+
+	<update id="updateReply">
+		UPDATE reply
+		SET reply_detail = #{replyDetail},
+			modify_date = SYSDATE
+		WHERE reply_no = #{replyNo}
+		  AND user_no = #{userNo}
+	</update>
+
+	<delete id="deleteReply">
+		delete from reply
+		where reply_no =#{replyNo}
+	</delete>
+
+	<select id="selectRequestList">
+		select * from content
+		join board using(content_no)
+		join menu using(menu_no)
+		join users using(user_no)
+		where menu_no =#{menuNo} and CONTENT_STATUS ='Y'
+	</select>
+
+	<select id="searchRequest">
+		SELECT *
+		FROM content
+		JOIN users USING(user_no)
+		join board using(content_no)
+		join menu using(menu_no)
+		<if test="searchValue != null and searchValue.trim() != ''">
+			WHERE content_title LIKE CONCAT(CONCAT('%', #{searchValue}), '%') and board_type = 2 and CONTENT_STATUS = 'Y'
+		</if>
+	</select>
+
+	<select id="menuCategoryList" resultType="map">
+		select category_name, category_no
+		from category
+		where menu_no = #{menuNo}
+	</select>
+	
+	<!-- 컨텐츠 글 등록 -->
+	<insert id="insertContent">
+		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">
+			SELECT VPLAY.CONTENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into content
+		values(#{contentNo}, #{contentTitle}, #{contentDetail}, default, default, default, default, #{userNo}, default, default)
+	</insert>
+	
+	<!-- 컨텐츠 글 카테고리 등록 -->
+	<insert id="insertContentCategory">
+		insert all
+		<foreach collection="categoryNo" item="no" separator=" ">
+			into content_category 
+			values(#{contentNo}, #{no})
+		</foreach>
+		select * from dual
+	</insert>
+	
+	<insert id="insertThumbnailFile">
+		insert into Files
+		values(file_seq.nextval, #{contentNo}, #{tFileUrl}, default, 1, #{tFileOriginalName} )
+	</insert>
+	
+	<insert id="insertContentFile">
+		insert into Files
+		values(file_seq.nextval, #{contentNo}, #{cFileUrl}, default, 2, #{cFileOriginalName})
+	</insert>
+
+	<update id="updateRecommendation">
+		update content
+		set MD_RECOMMENDATION = #{column}
+		where content_no = #{contentNo}
+	</update>
+
+	<select id="getMdRecommendationCount">
+		select count(*) from content where md_recommendation = 'Y'
+	</select>
+
+	<select id="selectMdList">
+		select *
+		from (
+			select
+			LISTAGG(cg.category_name, ',') WITHIN GROUP (ORDER BY cg.category_name) AS category_name, c.content_no, c.content_title, u.user_nickname,m.menu_no,
+			(select count(*) from likes lk where lk.content_no = c.content_no) as like_count, (select count(*) from downloads d where d.content_no = c.content_no) AS download_count
+			from content c
+			left join users u on(c.user_no = u.user_no)
+			left join board b on(c.content_no = b.content_no)
+			left join content_category cc on(c.content_no = cc.content_no)
+			left join category cg on(cc.category_no = cg.category_no)
+			left join menu m on(cg.menu_no = m.menu_no)
+			left join likes lk2 on (c.content_no = lk2.content_no)
+			where c.md_recommendation = 'Y'
+			group by c.content_no, c.content_title, u.user_nickname, m.menu_no)
+	</select>
+	
+	<select id="checkDownload">
+		select count(*)
+		from downloads
+		where user_no = #{userNo} and content_no = #{contentNo}
+	</select>
+	
+	<insert id="downloadRecord">
+		insert into downloads
+		values(DOWNLOADS_SEQ.nextval, #{userNo}, #{contentNo})
+	</insert>
+	
+	<update id="updateContent">
+		update content
+		set content_title = #{contentTitle}, content_detail = #{contentDetail}, modify_date = sysdate
+		where content_no = #{contentNo}
+	</update>
+	
+	<select id="selectFiles">
+		select *
+		from files
+		where ref_content_no = #{contentNo}
+	</select>
+	
+	<update id="updateTFile">
+		update files
+		set FILE_LOCATION = #{newTFileURL}, ORIGINAL_FILE_NAME = #{tFileOriginalName}
+		where ref_content_no = #{contentNo} and FILE_LEVEL = 1
+	</update>
+	
+	<update id="updateCFile">
+		update files
+		set FILE_LOCATION = #{newCFileURL}, ORIGINAL_FILE_NAME = #{cFileOriginalName}
+		where ref_content_no = #{contentNo} and FILE_LEVEL = 2
+	</update>
+	
+	<delete id="deleteContentCategory">
+		delete from content_category
+		where content_no = #{contentNo}
+	</delete>
+	
+	<select id="selectDownloadsCategorySort">
+		SELECT 
+		    c.CONTENT_NO,
+		    c.CONTENT_TITLE,
+		    c.CREATE_DATE,
+		    c.MODIFY_DATE,
+		    c.CONTENT_STATUS,
+		    c.DELETE_STATUS,
+		    c.USER_NO,
+		    c.VIEWS,
+		    c.MD_RECOMMENDATION,
+		    (SELECT COUNT(*) FROM likes l WHERE l.content_no = c.content_no) AS like_count,
+		    b.board_type,
+		    m.menu_name, m.menu_no,
+		    (
+		        SELECT LISTAGG(cg.category_name, ',') 
+		               WITHIN GROUP (ORDER BY cg.category_name)
+		        FROM content_category cc
+		        JOIN category cg ON cc.category_no = cg.category_no
+		        WHERE cc.content_no = c.content_no
+		    ) AS category_name
+		FROM content c
+		LEFT JOIN board b ON c.content_no = b.content_no
+		LEFT JOIN users u ON c.user_no = u.user_no
+		LEFT JOIN downloads d ON c.content_no = d.content_no
+		LEFT JOIN menu m ON (
+		    SELECT cg.menu_no
+		    FROM content_category cc
+		    JOIN category cg ON cc.category_no = cg.category_no
+		    WHERE cc.content_no = c.content_no
+		    FETCH FIRST 1 ROWS ONLY
+		) = m.menu_no
+		WHERE d.user_no = #{userNo}
+		  AND b.board_type IS NULL
+		  AND m.menu_name IS NOT NULL
+		  AND c.content_status = 'Y'
+		<if test="menu != 'All'">
+			AND m.menu_name =#{menu}
+		</if>
+		<if test="sort == 'newest'">
+			order by c.create_date
+		</if>
+		<if test="sort == 'mostView'">
+			order by c.views desc
+		</if>
+	</select>
+	
+</mapper>

@@ -1,0 +1,140 @@
+.sidebar_wrap {
+	display: inline-block;
+	position: sticky;
+	top: 60px;
+}
+
+.sidebar {
+	width: 240px;
+	padding: 2rem;
+}
+
+.profile {
+	text-align: center;
+	margin-bottom: 24px;
+}
+
+.profile-image {
+	width: 130px;
+	height: 130px;
+	border-radius: 50%;
+	margin: 0 auto 16px;
+	overflow: hidden;
+	position: relative;
+	border: 1.5px solid #5e37e9;
+}
+
+.profile-image img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	object-fit: cover;
+}
+
+.profile-image .dropdown-menu {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	padding: 15px;
+}
+
+.profile-image:hover .dropdown-menu {
+	opacity: 1;
+}
+
+.profile-image .dropdown-menu li {
+	margin: 5px 0;
+	list-style: none;
+}
+
+.profile-image .dropdown-menu button {
+	background-color: rgba(0, 0, 0, 0);
+	color: #ffffff;
+	border: none;
+	cursor: pointer;
+}
+
+.profile h2 {
+	font-size: 18px;
+	margin-bottom: 8px;
+}
+
+.profile p {
+	color: #6f757d;
+	font-size: 14px;
+	line-height: 1.5;
+	margin-bottom: 16px;
+}
+
+.follower {
+	display: flex;
+	justify-content: center;
+}
+
+.menu-list {
+	list-style: none;
+}
+
+.menu-item {
+	display: flex;
+	align-items: center;
+	padding: 12px;
+	color: #6f757d;
+	border-radius: 8px;
+	margin-bottom: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+	background-color: #33333e;
+	color: white;
+}
+
+.menu-item.active {
+	background-color: #33333e;
+	color: white;
+}
+
+.menu-item span {
+	margin-right: 8px;
+}
+
+.menu-item.active {
+	border: 1px solid #5e37e9;
+	color: #fff;
+	background: linear-gradient(45deg, #161840, #272A65);
+}
+
+.active svg {
+	color: #8137E9;
+}
+
+@media ( max-width : 768px) {
+	.sidebar {
+		width: 100%;
+	}
+}
+
+
+.tooltip {
+  position: fixed;
+  padding: 6px 12px;
+  background: #333;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 1000;
+  display: none;
+  max-width: 300px;
+  white-space: normal;
+}

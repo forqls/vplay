@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPLAY - 템플릿 게시물 관리</title>
+<link href="/css/admin/admin_page.css" rel="stylesheet">
+</head>
+<body>
+	<div th:replace="~{admin_sidebar}"></div>
+	<main class="main-content">
+		<h1 class="page-title">템플릿 게시물 관리</h1>
+		<div class="content-card">
+			<div class="table-container">
+				<div class="search-bar">
+					<select class="filter-dropdown" name="menuName" id="menuName" onchange="filterTable()">
+						<option value="All">All</option>
+						<option value="video-Templates" th:selected="${menuName == 'video-Templates'}">video Templates</option>
+						<option value="Graphic-Templates" th:selected="${menuName == 'Graphic-Templates'}">Graphic Templates</option>
+						<option value="Stock-Video" th:selected="${menuName == 'Stock-Video'}">Stock Video</option>
+						<option value="Photos" th:selected="${menuName == 'Photos'}">Photos</option>
+						<option value="Music" th:selected="${menuName == 'Music'}">Music</option>
+						<option value="Sound-Effects" th:selected="${menuName == 'Sound-Effects'}">Sound Effects</option>
+						<option value="Fonts" th:selected="${menuName == 'Fonts'}">Fonts</option>
+					</select>
+					<form>
+						<input type="search" name="search" placeholder="Search" th:value="${searchValue}">
+					</form>
+				</div>
+				<table>
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>template type</th>
+							<th>User ID</th>
+							<th>title</th>
+							<th>inquiry date</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody class="request-list-body">
+						<tr class="request-list" th:each="t : ${list}" th:classappend="${t.mdRecommendation == 'Y' ? 'recommended' : ''}">
+							<td>[[${t.contentNo}]]</td>
+							<td>[[${t.menuName}]]</td>
+							<td>[[${t.userId}]]</td>
+							<td>[[${t.contentTitle}]]</td>
+							<td>[[${t.modifyDate}]]</td>
+							<td><span class="status" th:data-contentno="${t.contentNo}" th:onclick="updateStatus(this)" th:classappend="${t.contentStatus == 'Y' ? 'active' : 'inactive'}">[[${t.contentStatus}]]</span></td>
+							<td class="AddSettings">
+								<div>⋮</div>
+								<span id="RecommendedBtn" class="hover_action">
+									<span th:style="${t.mdRecommendation == 'Y' ? 'display: none;' : ''}" class="mdRec">MD추천</span>
+									<span th:style="${t.mdRecommendation == 'N' ? 'display: none;' : ''}" class="mdCancel">MD추천 취소</span>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="pagination">
+				<ul>
+					<th:block th:if="${pi.currentPage > 1}">
+						<li class="prev chevron-left"><a th:href="@{${Loc}(page=${pi.currentPage-1}, menuName=${menuName}, search=${searchValue})}" aria-label="Previous"> < </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage <=1}">
+						<li class="prev chevron-left"><a aria-label="Previous"> < </a></li>
+					</th:block>
+					<li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"><a th:href="@{${Loc}(page=${p}, menuName=${menuName}, search=${searchValue})}" th:text="${p}" th:class="${p == pi.currentPage ? 'active' : ''}"> </a></li>
+					<th:block th:if="${pi.currentPage < pi.MaxPage}">
+						<li class="next chevron-right"><a th:href="@{${Loc}(page=${pi.currentPage+1}, menuName=${menuName}, search=${searchValue})}" aria-label="Next"> > </a></li>
+					</th:block>
+					<th:block th:if="${pi.currentPage >= pi.MaxPage}">
+						<li class="next chevron-right"><a aria-label="Next"> > </a></li>
+					</th:block>
+				</ul>
+			</div>
+		</div>
+	</main>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+        function updateStatus(element) {
+            const currentStatus = element.innerText;
+            const newStatus = currentStatus === "Y" ? "N" : "Y";
+            const contentNo = element.getAttribute("data-contentno");
+
+            $.ajax({
+                url: "/admin/rupdate",
+                data: { contentNo: contentNo, contentStatus: newStatus },
+                success: data => {
+                    if (data == 1) {
+                        element.innerText = newStatus;
+                        element.classList.remove(currentStatus === "Y" ? "active" : "inactive");
+                        element.classList.add(newStatus === "Y" ? "active" : "inactive");
+                    }
+                },
+                error: data => console.log(data)
+            });
+        }
+
+		document.getElementById("menuName").addEventListener('change', function() {
+			const menuName = this.value;
+			console.log(menuName);
+
+			if(menuName == "All"){
+				location.href= "/admin/templates";
+			}else{
+				location.href= "/admin/templates/" + menuName;
+			}
+		});
+
+		document.addEventListener("DOMContentLoaded", function () {
+	        document.querySelectorAll(".AddSettings").forEach(td => {
+	            let clickFlag = true;
+
+	            let hoverAction = td.querySelector(".hover_action");
+
+	            td.addEventListener("click", function () {
+	                if (clickFlag) {
+	                    console.log(clickFlag);
+
+	                    let rect = td.getBoundingClientRect(); // 현재 td의 화면 내 위치 가져오기
+
+	                    hoverAction.style.position = "fixed"; // 화면 기준으로 위치 설정
+	                    hoverAction.style.top = `${rect.top + window.scrollY}px`; // td와 같은 높이에 위치
+	                    hoverAction.style.left = `${rect.right - 30}px`; // td 바로 오른쪽에 위치 (+10px 여백)
+	                    hoverAction.style.display = "block";
+	                    hoverAction.style.zIndex = "99999"; // 최상단으로 설정
+	                    clickFlag = false;
+	                }else{
+	                    clickFlag = true;
+	                    hoverAction.style.display = "none";
+
+	                }
+
+	                document.addEventListener("click", function (event) {
+	                    if (!td.contains(event.target)) {
+	                        hoverAction.style.display = "none";
+	                        //console.log(clickFlag);
+	                    }
+	                });
+	            });
+	        });
+	    });
+
+
+
+	const mdButtons = document.querySelectorAll("#RecommendedBtn .mdRec, #RecommendedBtn .mdCancel");
+
+	for (const button of mdButtons) {
+		button.addEventListener('click', function () {
+			let tr = this.closest("tr");
+			let mdRecButton = tr.querySelector(".mdRec");
+			let mdCancelButton = tr.querySelector(".mdCancel");
+
+			fetch("/admin/mdRecommendation", {
+				method: "put",
+				headers: { 'content-type': 'application/json; charset=UTF-8' },
+				body: JSON.stringify({
+					contentNo: tr.querySelector('td:first-child').innerText.trim(),
+					column: this.classList.contains("mdRec") ? "Y" : "N"
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data === 1) {
+					if (this.classList.contains("mdRec")) {
+						mdRecButton.style.display = "none";
+						mdCancelButton.style.display = "inline";
+						tr.style.backgroundColor = "#162331";
+						alert("MD추천이 적용되었습니다.");
+						location.href = "/admin/templates";
+					} else {
+						mdCancelButton.style.display = "none";
+						mdRecButton.style.display = "inline";
+						tr.style.backgroundColor = "#262d34";
+						alert("MD추천이 취소되었습니다.");
+						location.href = "/admin/templates";
+					}
+				}else if(data === -1){
+					console.log(data);
+					alert("MD추천 최대 갯수는 8개까지 입니다.");
+				}
+				else {
+					alert('상태변경에 실패하여 페이지가 새로고침 됩니다.');
+					location.reload();
+				}
+			});
+
+
+		});
+	}
+
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="/css/admin/admin_sidebar.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="sidebar">
+		<div class="logo" onclick="location.href = '/'">
+			<div class="logo-circle"></div>
+			<div class="logo-text">VPLAY</div>
+		</div>
+		<nav>
+			<a id="dashboard" onclick="location.href = '/admin/dashboard'" class="sidebar-nav-item active"> <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                </svg> Dashboard
+			</a> <a id="users" onclick="location.href = '/admin/users'" class="sidebar-nav-item">회원 관리</a> <a id="inquiry" onclick="location.href = '/admin/inquiry'" class="sidebar-nav-item">문의 관리</a> <a id="templates" onclick="location.href = '/admin/templates'" class="sidebar-nav-item">템플릿 관리</a> <a id="request" onclick="location.href = '/admin/request'" class="sidebar-nav-item">의뢰 게시물 관리</a>
+		</nav>
+	</div>
+	<script>
+		window.onload = () => {
+		    const currentAddress = window.location.pathname;
+		    const arr = currentAddress.split("/");
+		    
+		    let currentPage = null;
+		    
+		    switch(arr[2]){
+		        case "users": currentPage = "회원 관리"; break;
+		        case "inquiry": currentPage = "문의 관리"; break;
+		        case "templates": currentPage = "템플릿 관리"; break;
+		        case "request": currentPage = "의뢰 게시물 관리"; break;
+		        default: currentPage = "Dashboard";
+		    }
+		    
+		    const aTags = document.querySelectorAll(".sidebar-nav-item");
+		    aTags.forEach(function(aTag){
+		        if(currentPage == aTag.innerText){
+		            aTag.className = "sidebar-nav-item active";
+		        }else{
+		            aTag.className = "sidebar-nav-item";
+		        }
+		    })
+		}
+    </script>
+</body>
+</html>
