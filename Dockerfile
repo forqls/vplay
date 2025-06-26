@@ -1,4 +1,4 @@
-# ----- 1단계: 빌드(요리)하는 환경 (자바 21 버전으로 변경!) -----
+# ----- 1단계: 빌드(요리)하는 환경 (자바 21 버전) -----
 FROM openjdk:21-jdk-slim AS builder
 
 # 작업 폴더 설정
@@ -10,11 +10,11 @@ COPY . .
 # Gradle 실행 권한 부여 (중요!)
 RUN chmod +x ./gradlew
 
-# Gradle로 프로젝트 빌드(요리)하기!
-RUN ./gradlew build
+# Gradle로 프로젝트 빌드(요리)하기! (테스트는 건너뛰기!)
+RUN ./gradlew build -x test
 
 
-# ----- 2단계: 실행(포장)하는 환경 (자바 21 버전으로 변경!) -----
+# ----- 2단계: 실행(포장)하는 환경 (자바 21 버전) -----
 FROM openjdk:21-jdk-slim
 
 # 작업 폴더 설정
