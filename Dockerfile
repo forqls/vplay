@@ -1,11 +1,27 @@
-# 1. 베이스 이미지 선택 (Java 17 버전을 사용)
-FROM openjdk:17-jdk-slim
+# ----- 1단계: 빌드(요리)하는 환경 -----
+FROM openjdk:17-jdk-slim AS builder
 
-# 2. 작업 폴더 설정
+# 작업 폴더 설정
 WORKDIR /app
 
-# 3. Gradle 빌드 결과물(.jar 파일)을 복사할 준비
-COPY build/libs/*.jar app.jar
+# 프로젝트 파일 전체 복사
+COPY . .
 
-# 4. 애플리케이션 실행 (Start Command와 같은 역할)
+# Gradle 실행 권한 부여 (중요!)
+RUN chmod +x ./gradlew
+
+# Gradle로 프로젝트 빌드(요리)하기!
+RUN ./gradlew build
+
+
+# ----- 2단계: 실행(포장)하는 환경 -----
+FROM openjdk:17-jdk-slim
+
+# 작업 폴더 설정
+WORKDIR /app
+
+# 1단계(builder)에서 만들어진 완성품(.jar)만 복사해오기
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# 애플리케이션 실행
 ENTRYPOINT ["java","-jar","app.jar"]
