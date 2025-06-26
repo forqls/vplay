@@ -440,6 +440,7 @@ public class BoardController {
 		int result2 = bService.insertRequestBoard(content);
 		if (result + result2 == 2) {
 			int contentNo = content.getContentNo();
+			
 			return "redirect:/board/" + contentNo + "/" + page;
 		} else {
 			throw new BoardException("제작 의뢰 게시글 작성 실패");
