@@ -1,5 +1,5 @@
-# ----- 1단계: 빌드(요리)하는 환경 -----
-FROM openjdk:17-jdk-slim AS builder
+# ----- 1단계: 빌드(요리)하는 환경 (자바 21 버전으로 변경!) -----
+FROM openjdk:21-jdk-slim AS builder
 
 # 작업 폴더 설정
 WORKDIR /app
@@ -14,8 +14,8 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build
 
 
-# ----- 2단계: 실행(포장)하는 환경 -----
-FROM openjdk:17-jdk-slim
+# ----- 2단계: 실행(포장)하는 환경 (자바 21 버전으로 변경!) -----
+FROM openjdk:21-jdk-slim
 
 # 작업 폴더 설정
 WORKDIR /app
