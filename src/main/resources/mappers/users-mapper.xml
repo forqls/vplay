@@ -218,3 +218,6 @@
 	<update id="updateMessageStatus">
 		update message
 		set read_status
+	</update>
+
+</mapper>
