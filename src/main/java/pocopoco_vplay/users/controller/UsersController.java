@@ -574,12 +574,11 @@ public class UsersController {
 		int userNo = ((Users) session.getAttribute("loginUser")).getUserNo();
 		int createrNo = Integer.parseInt(map.get("createrNo").toString());
 
-
+		// 핵심! Boolean 처리 후 다시 map에 넣어주기
 		Object isCancelObj = map.get("isCancel");
 		boolean isCancel = Boolean.parseBoolean(String.valueOf(isCancelObj));
-
-		map.put("userNo", userNo);
 		map.put("isCancel", isCancel);
+		map.put("userNo", userNo);
 
 		int result = uService.updateSubscribe(map);
 		if (result == 1) {
@@ -588,6 +587,7 @@ public class UsersController {
 			throw new UsersException("구독 업데이트 실패");
 		}
 	}
+
 
 
 
