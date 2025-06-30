@@ -197,6 +197,100 @@
 		WHERE LOGIN_TYPE='G' AND USER_ID IS NULL AND GOOGLE_ID=#{googleId}
 	</select>
 
+	<update id="updateMessageStatus">
+		UPDATE message
+		SET read_status = 'Y'
+		WHERE message_no = #{messageNo}
+	</update>
+
+	<select id="existReceiver" resultType="int">
+		SELECT COUNT(*) FROM users WHERE user_nickname = #{receiverName}
+	</select>
+
+	<insert id="insertMessage">
+		INSERT INTO message (
+		message_no, sender_no, receiver_no, content, sent_time, read_status, conversation_id
+		)
+		VALUES (
+		nextval('message_seq'),
+		#{senderNo},
+		#{receiverNo},
+		#{content},
+		current_timestamp,
+		default,
+		CASE
+		WHEN #{senderNo} < #{receiverNo} THEN CONCAT(#{senderNo}, '_', #{receiverNo})
+		ELSE CONCAT(#{receiverNo}, '_', #{senderNo})
+		END
+		)
+	</insert>
+
+	<select id="getReceiverNo" resultType="int">
+		SELECT user_no FROM users WHERE user_nickname = #{receiverName}
+	</select>
+
+	<select id="getUnreadMessageCount" resultType="int">
+		SELECT COUNT(*) FROM message WHERE receiver_no = #{userNo} AND read_status = 'N'
+	</select>
+
+	<select id="selectMyDownloads">
+		SELECT
+			c.content_no,
+			c.content_title,
+			c.create_date,
+			c.modify_date,
+			c.content_status,
+			c.delete_status,
+			c.user_no,
+			c.views,
+			c.md_recommendation,
+			(SELECT COUNT(*) FROM likes l WHERE l.content_no = c.content_no) AS like_count,
+			b.board_type,
+			m.menu_name,
+			m.menu_no,
+			(
+				SELECT STRING_AGG(cg.category_name, ',' ORDER BY cg.category_name)
+				FROM content_category cc
+						 JOIN category cg ON cc.category_no = cg.category_no
+				WHERE cc.content_no = c.content_no
+			) AS category_name
+		FROM content c
+				 LEFT JOIN board b ON c.content_no = b.content_no
+				 LEFT JOIN users u ON c.user_no = u.user_no
+				 LEFT JOIN downloads d ON c.content_no = d.content_no
+				 LEFT JOIN menu m ON (
+			SELECT cg.menu_no
+			FROM content_category cc
+					 JOIN category cg ON cc.category_no = cg.category_no
+			WHERE cc.content_no = c.content_no
+			LIMIT 1
+			) = m.menu_no
+		WHERE d.user_no = #{userNo}
+		  AND b.board_type IS NULL
+		  AND m.menu_name IS NOT NULL
+		  AND c.content_status = 'Y'
+	</select>
+
+
+	<select id="selectSubscribeList">
+		SELECT
+			s.creater_no,
+			c.*,
+			sc.subscriber_count,
+			u2.*
+		FROM users u
+				 JOIN subscribe s ON u.user_no = s.user_no
+				 JOIN content c ON c.user_no = s.creater_no
+				 JOIN (
+			SELECT creater_no, COUNT(user_no) AS subscriber_count
+			FROM subscribe
+			GROUP BY creater_no
+		) sc ON sc.creater_no = s.creater_no
+				 JOIN users u2 ON u2.user_no = s.creater_no
+		WHERE s.user_no = #{userNo}
+	</select>
+
+
 	<select id="selectMyMessage">
 		SELECT
 		m.message_no,
@@ -219,5 +313,28 @@
 		update message
 		set read_status
 	</update>
+
+	<select id="isSubscribed" resultType="boolean">
+		SELECT COUNT(*) > 0
+		FROM subscribe
+		WHERE creater_no = #{createrNo}
+		  AND user_no = #{userNo}
+	</select>
+
+	<insert id="updateSubscribe" parameterType="map">
+		<choose>
+			<when test="isCancel == true">
+				DELETE FROM subscribe
+				WHERE creater_no = #{createrNo}
+				AND user_no = #{userNo}
+			</when>
+			<otherwise>
+				INSERT INTO subscribe (subscribe_no, creater_no, user_no)
+				VALUES (nextval('subscribe_seq'), #{createrNo}, #{userNo})
+			</otherwise>
+		</choose>
+	</insert>
+
+
 
 </mapper>
