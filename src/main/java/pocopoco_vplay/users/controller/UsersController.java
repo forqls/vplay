@@ -569,21 +569,23 @@ public class UsersController {
 	}
 
 	@PostMapping("post/updateSubscribe")
-	public int updateSubscribe(@RequestBody HashMap<String,Object> map , HttpSession session) {
-		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
+	@ResponseBody
+	public int updateSubscribe(@RequestBody HashMap<String, Object> map, HttpSession session) {
+		int userNo = ((Users) session.getAttribute("loginUser")).getUserNo();
 		int createrNo = Integer.parseInt(map.get("createrNo").toString());
 
-		// 여기서 Boolean → Integer 변환이 핵심!!
-		boolean isCancel = (Boolean) map.get("isCancel");
-		map.put("isCancel", isCancel ? 1 : 0); // ✅ 이 한 줄이 핵심!!
+
+		Object isCancelObj = map.get("isCancel");
+		boolean isCancel = Boolean.parseBoolean(String.valueOf(isCancelObj));
 
 		map.put("userNo", userNo);
+		map.put("isCancel", isCancel);
 
 		int result = uService.updateSubscribe(map);
-		if(result == 1 ) {
+		if (result == 1) {
 			return result;
 		} else {
-			throw new UsersException("구독 처리 실패");
+			throw new UsersException("구독 업데이트 실패");
 		}
 	}
 

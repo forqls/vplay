@@ -165,24 +165,24 @@
     <script type="text/javascript">
     const button = document.getElementById("subscribeBtn");
     const createrNo = document.getElementById('createrNo').value;
-    button.addEventListener("click", () => {
-        const isCancel = button.innerText == "구독 중";
+	button.addEventListener("click", () => {
+		const isCancel = button.innerText === "구독 중";
 
-        fetch("/users/post/updateSubscribe", {
-            method: "POST",
-            headers: { 'content-type': 'application/json; charset=UTF-8' },
-            body: JSON.stringify({
-                createrNo: createrNo,
-                isCancel: isCancel
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data === 1) {
-                button.innerText = isCancel ? "구독하기" : "구독 중";
-            }
-        });
-    });
+		fetch("/users/post/updateSubscribe", {
+			method: "POST",
+			headers: { 'content-type': 'application/json; charset=UTF-8' },
+			body: JSON.stringify({
+				createrNo: parseInt(createrNo),
+				isCancel: isCancel
+			})
+		})
+				.then(response => response.json())
+				.then(data => {
+					if (data === 1) {
+						button.innerText = isCancel ? "구독하기" : "구독 중";
+					}
+				});
+	});
 
  
     window.onload=()=>{
