@@ -309,11 +309,12 @@
 	</update>
 
 	<select id="isSubscribed" resultType="boolean">
-		SELECT COUNT(*) > 0
+		SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END
 		FROM subscribe
 		WHERE creater_no = #{createrNo}
 		  AND user_no = #{userNo}
 	</select>
+
 
 	<insert id="updateSubscribe" parameterType="map">
 		<choose>

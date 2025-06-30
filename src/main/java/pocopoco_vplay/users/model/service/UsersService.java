@@ -151,8 +151,9 @@ public class UsersService {
 		return mapper.getInfoUser(createrNo);
 	}
 
-	public int isSubscribed(int createrNo, int userNo) {
-		return mapper.isSubscribed(createrNo,userNo);
+	public boolean isSubscribed(int createrNo, int userNo) {
+		int count = mapper.isSubscribed(createrNo, userNo);
+		return count > 0;
 	}
 
 	public int updateSubscribe(HashMap<String, Object> map) {

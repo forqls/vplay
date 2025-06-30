@@ -549,24 +549,26 @@ public class UsersController {
 		return "subscribe";
 	}
 	@GetMapping("createrPage")
-	public String goToCreaterPage(@RequestParam("createrNo") int createrNo,@RequestParam("subscriberCount") int subscriberCount,HttpSession session , Model model) {
-//		System.out.println("크리에이터 번호 ㅋㅋ : " + createrNo);
-//		System.out.println("구독자 수 ㅋㅋ : " + subscriberCount);
+	public String goToCreaterPage(@RequestParam("createrNo") int createrNo,
+								  @RequestParam("subscriberCount") int subscriberCount,
+								  HttpSession session,
+								  Model model) {
 
-		Users loginUser = (Users)session.getAttribute("loginUser");
+		Users loginUser = (Users) session.getAttribute("loginUser");
 		ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
 		Users createrUser = uService.getInfoUser(createrNo);
-		int isSubscribed = uService.isSubscribed(createrNo,loginUser.getUserNo());
-		System.out.println("들어온 리스트  =  " + list);
-		System.out.println(createrUser);
-		model.addAttribute("list",list).addAttribute("createrUser",createrUser).addAttribute("subscriberCount",subscriberCount)
-				.addAttribute("isSubscribed",isSubscribed).addAttribute("createrNo",createrNo);
 
+		boolean isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo()); // ★ 요기 수정
 
-
+		model.addAttribute("list", list)
+				.addAttribute("createrUser", createrUser)
+				.addAttribute("subscriberCount", subscriberCount)
+				.addAttribute("isSubscribed", isSubscribed)  // ★ boolean 그대로 전달
+				.addAttribute("createrNo", createrNo);
 
 		return "createrPage";
 	}
+
 
 	@PostMapping("post/updateSubscribe")
 	@ResponseBody
