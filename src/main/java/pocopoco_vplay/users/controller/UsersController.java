@@ -576,17 +576,17 @@ public class UsersController {
 		int userNo = ((Users) session.getAttribute("loginUser")).getUserNo();
 		int createrNo = Integer.parseInt(map.get("createrNo").toString());
 
-		// 핵심 수정 (Boolean → String)
 		Object isCancelObj = map.get("isCancel");
-		String isCancel = String.valueOf(isCancelObj);  // "true" 또는 "false"
-		map.put("isCancel", isCancel);
+		boolean isCancel = Boolean.parseBoolean(String.valueOf(isCancelObj));
+		map.put("isCancel", isCancel ? 1 : 0); // mapper에 int로 전달
+
 		map.put("userNo", userNo);
 
 		int result = uService.updateSubscribe(map);
 		if (result == 1) {
 			return result;
 		} else {
-			throw new UsersException("구독 업데이트 실패");
+			throw new UsersException("구독 처리 실패!");
 		}
 	}
 

@@ -28,19 +28,15 @@ public class HomeController {
 	public String goIndex(Model model, HttpSession session) {
 		
 		ArrayList<Users> user = uService.selectTopUser();
-		Users u = (Users)session.getAttribute("loginUser");
-		int userNo = 0;
-		if(u != null){
-			userNo = (u).getUserNo();
-		}
-		
-		for (Users u1 : user) {
-//			System.out.println("닉네임: " + u1.getUserNickname() + ", 프로필: " + u1.getUserProfile());
-			int createrNo = u1.getUserNo();
-			boolean isSubscribed = uService.isSubscribed(createrNo, userNo);
-			u1.setIsSubscribed(isSubscribed ? 1 : 0);
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		int userNo = (loginUser != null) ? loginUser.getUserNo() : 0;
 
+		for (Users u1 : user) {
+			int createrNo = u1.getUserNo();
+			int isSubscribed = uService.isSubscribed(createrNo, userNo);
+			u1.setIsSubscribed(isSubscribed);  // 모델 add는 안해도 되면 생략
 		}
+
 		ArrayList<Content> mdList = bService.selectMdList();
 		
 
