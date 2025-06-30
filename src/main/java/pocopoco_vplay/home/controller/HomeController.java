@@ -37,8 +37,9 @@ public class HomeController {
 		for (Users u1 : user) {
 //			System.out.println("닉네임: " + u1.getUserNickname() + ", 프로필: " + u1.getUserProfile());
 			int createrNo = u1.getUserNo();
-			int isSubscribed = uService.isSubscribed(createrNo, userNo);
-			u1.setIsSubscribed(isSubscribed);
+			boolean isSubscribed = uService.isSubscribed(createrNo, userNo);
+			u1.setIsSubscribed(isSubscribed ? 1 : 0);
+
 		}
 		ArrayList<Content> mdList = bService.selectMdList();
 		
