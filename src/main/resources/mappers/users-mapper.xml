@@ -197,12 +197,6 @@
 		WHERE LOGIN_TYPE='G' AND USER_ID IS NULL AND GOOGLE_ID=#{googleId}
 	</select>
 
-	<update id="updateMessageStatus">
-		UPDATE message
-		SET read_status = 'Y'
-		WHERE message_no = #{messageNo}
-	</update>
-
 	<select id="existReceiver" resultType="int">
 		SELECT COUNT(*) FROM users WHERE user_nickname = #{receiverName}
 	</select>
