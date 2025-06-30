@@ -1,4 +1,8 @@
-<!-- 생략 없이 완전한 수정 XML 파일 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="pocopoco_vplay.users.model.mapper.UsersMapper">
 	<select id="checkId">
 		select count(*)
