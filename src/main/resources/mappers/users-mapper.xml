@@ -317,7 +317,7 @@
 
 	<insert id="updateSubscribe" parameterType="map">
 		<choose>
-			<when test="isCancel == true">
+			<when test="isCancel">
 				DELETE FROM subscribe
 				WHERE creater_no = #{createrNo}
 				AND user_no = #{userNo}

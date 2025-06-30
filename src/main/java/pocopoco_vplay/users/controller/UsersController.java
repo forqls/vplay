@@ -504,11 +504,11 @@ public class UsersController {
 		Users u = new Users();
 		u.setUserNo(userNo);
 		Users user = uService.signIn(u);
-		
+
 		model.addAttribute("Users", user);
 		return "creator_page";
 	}
-	
+
 	@GetMapping("my_downloads")
 	public String myDownloads(Model model , HttpSession session) {
 		Users loginUser = (Users)session.getAttribute("loginUser");
@@ -531,12 +531,12 @@ public class UsersController {
 			int userNo = loginUser.getUserNo();
 			ArrayList<Users> l = uService.selectSubscribeList(userNo);
 			HashMap<Integer,Users> map = new HashMap<Integer,Users>();
-			
+
 			for(Users u : l) {
 				map.put(u.getUserNo(), u);
 			}
 			ArrayList<Users> list = new ArrayList<Users>(map.values());
-			
+
 //			for(Users i : list) {
 //				System.out.println("dddddddddd" + i.getUserNo());
 //			}
@@ -552,7 +552,7 @@ public class UsersController {
 	public String goToCreaterPage(@RequestParam("createrNo") int createrNo,@RequestParam("subscriberCount") int subscriberCount,HttpSession session , Model model) {
 //		System.out.println("크리에이터 번호 ㅋㅋ : " + createrNo);
 //		System.out.println("구독자 수 ㅋㅋ : " + subscriberCount);
-		
+
 		Users loginUser = (Users)session.getAttribute("loginUser");
 		ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
 		Users createrUser = uService.getInfoUser(createrNo);
@@ -560,16 +560,34 @@ public class UsersController {
 		System.out.println("들어온 리스트  =  " + list);
 		System.out.println(createrUser);
 		model.addAttribute("list",list).addAttribute("createrUser",createrUser).addAttribute("subscriberCount",subscriberCount)
-		.addAttribute("isSubscribed",isSubscribed).addAttribute("createrNo",createrNo);
-		
-		
-		
-		
+				.addAttribute("isSubscribed",isSubscribed).addAttribute("createrNo",createrNo);
+
+
+
+
 		return "createrPage";
 	}
-	
-	
-	
-	
-	
+	@PostMapping("post/updateSubscribe")
+	@ResponseBody
+	public int updateSubscribe(@RequestBody HashMap<String, Object> map, HttpSession session) {
+		int userNo = ((Users) session.getAttribute("loginUser")).getUserNo();
+		int createrNo = Integer.parseInt(map.get("createrNo").toString());
+		boolean isCancel = (Boolean) map.get("isCancel");
+
+		map.put("userNo", userNo);
+		map.put("isCancel", isCancel ? 1 : 0); // 여기 중요!!
+
+		int result = uService.updateSubscribe(map);
+		if (result == 1) {
+			return result;
+		} else {
+			throw new UsersException("구독 업데이트 실패");
+		}
+	}
+
+
+
+
+
+
 }
