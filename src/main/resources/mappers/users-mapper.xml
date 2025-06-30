@@ -308,13 +308,11 @@
 		set read_status
 	</update>
 
-	<select id="isSubscribed" resultType="boolean">
-		SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END
-		FROM subscribe
+	<select id="isSubscribed" resultType="int">
+		SELECT COUNT(*) FROM subscribe
 		WHERE creater_no = #{createrNo}
 		  AND user_no = #{userNo}
 	</select>
-
 
 	<insert id="updateSubscribe" parameterType="map">
 		<choose>

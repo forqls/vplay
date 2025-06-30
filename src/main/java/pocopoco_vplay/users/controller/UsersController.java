@@ -558,12 +558,13 @@ public class UsersController {
 		ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
 		Users createrUser = uService.getInfoUser(createrNo);
 
-		boolean isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo()); // ★ 요기 수정
+		boolean isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
+
 
 		model.addAttribute("list", list)
 				.addAttribute("createrUser", createrUser)
 				.addAttribute("subscriberCount", subscriberCount)
-				.addAttribute("isSubscribed", isSubscribed)  // ★ boolean 그대로 전달
+				.addAttribute("isSubscribed", isSubscribed)
 				.addAttribute("createrNo", createrNo);
 
 		return "createrPage";
