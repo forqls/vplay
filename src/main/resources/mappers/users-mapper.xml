@@ -219,7 +219,7 @@
 		current_timestamp,
 		default,
 		CASE
-		WHEN #{senderNo} < #{receiverNo} THEN CONCAT(#{senderNo}, '_', #{receiverNo})
+		WHEN #{senderNo} &lt; #{receiverNo} THEN CONCAT(#{senderNo}, '_', #{receiverNo})
 		ELSE CONCAT(#{receiverNo}, '_', #{senderNo})
 		END
 		)
