@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pocopoco_vplay.payment.model.mapper.PaymentMapper">
 	<insert id="insertPaymentInfo">
-		insert into payment values(#{paymentId},#{paymentDate},#{amount},#{userNo})
+		INSERT INTO payment (payment_id, payment_date, amount, user_no)
+		VALUES (#{paymentId}, #{paymentDate}, #{amount}, #{userNo})
 	</insert>
 </mapper>
