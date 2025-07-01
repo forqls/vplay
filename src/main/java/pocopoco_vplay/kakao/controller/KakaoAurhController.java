@@ -22,6 +22,8 @@ import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
+import org.springframework.beans.factory.annotation.Value;
+
 @Controller
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
@@ -29,16 +31,19 @@ public class KakaoAurhController {
     private final UsersService uService;
     private final GoogleOAuthConfig googleOAuthConfig;
     private final String KAKAO_CLIENT_ID = "ffd6b91df4ad805e542c6a8a450195b3";
-    private final String KAKAO_REDIRECT_URI = "http://192.168.40.21:8080/oauth/kakao";
+
+    @Value("${kakao.redirect.uri}")
+    private String KAKAO_REDIRECT_URI;
+
     private final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private final String KAKAO_USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
 
 
+    @Value("${google.redirect.uri}")
+    private String GOOGLE_REDIRECT_URI;
 
-    private final String GOOGLE_REDIRECT_URI = "http://localhost:8080/oauth/google";
     private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
     private final String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
-
 
 
     @GetMapping("/kakao")
