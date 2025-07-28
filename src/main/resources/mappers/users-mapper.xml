@@ -128,7 +128,7 @@
 		WHERE LOGIN_TYPE='K' AND USER_ID IS NULL AND KAKAO_ID=#{KAKAOID}
 	</select>
 
-	<select id="selectTopUser">
+	<select id="selectTopUser" resultType="pocopoco_vplay.users.model.vo.Users">
 		select u.USER_NO,
 		u.USER_ID,
 		u.USER_NICKNAME,
