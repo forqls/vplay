@@ -24,4 +24,4 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 # 컨테이너가 시작될 때 실행할 기본 명령어를 설정
-CMD java -jar app.jar
+CMD ["java", "-jar", "app.jar", "--server.port=${PORT}"]
