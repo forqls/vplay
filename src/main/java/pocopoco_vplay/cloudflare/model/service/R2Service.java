@@ -27,11 +27,11 @@ public class R2Service {
 	private final String publicUrl;
 	
 	public R2Service(
-			@Value("${aws.credentials.access-key}") String accessKey,
-            @Value("${aws.credentials.secret-key}") String secretKey,
-            @Value("${aws.s3.bucket-name}") String bucketName,
-            @Value("${cloudflare.r2.public-url}") String publicUrl,
-            @Value("${aws.s3.endpoint}") String endpoint) {
+			@Value("${AWS_CREDENTIALS_ACCESS_KEY}") String accessKey,
+			@Value("${AWS_CREDENTIALS_SECRET_KEY}") String secretKey,
+			@Value("${AWS_S3_BUCKET_NAME}") String bucketName,
+			@Value("${CLOUDFLARE_R2_PUBLIC_URL}") String publicUrl,
+			@Value("${AWS_S3_ENDPOINT}") String endpoint) {
 		
 		 this.s3Client = S3Client.builder()
 	                .region(Region.of("auto")) // R2는 region 개념 없음
