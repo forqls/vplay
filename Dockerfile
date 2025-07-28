@@ -23,5 +23,5 @@ WORKDIR /app
 # 1단계(builder)에서 만들어진 완성품(.jar)만 복사해오기
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# 애플리케이션 실행
-ENTRYPOINT ["java","-jar","app.jar"]
+# 컨테이너가 시작될 때 실행할 기본 명령어를 설정
+CMD java -jar app.jar
