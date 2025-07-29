@@ -25,17 +25,6 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
-// ===============================================
-//         '최후의 일격'
-// ===============================================
-sourceSets {
-	main {
-		resources {
-			srcDirs = ["src/main/resources"]
-		}
-	}
-}
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -73,4 +62,11 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+processResources {
+	from('src/main/resources/mappers') {
+		include '*.xml'
+		into 'mappers'
+	}
 }
