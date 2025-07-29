@@ -129,29 +129,22 @@
 	</select>
 
 	<select id="selectTopUser" resultType="pocopoco_vplay.users.model.vo.Users">
-		select u.USER_NO,
-		u.USER_ID,
-		u.USER_NICKNAME,
-		u.USER_NAME,
-		u.USER_PHONE,
-		u.USER_EMAIL,
-		u.USER_COMMENT,
-		u.user_profile,
-		count(s.subscribe_no) as subscriber
-		from users u
-		join subscribe s on u.user_no = s.creater_no
-		group by u.USER_NO,
-		u.USER_ID,
-		u.USER_NICKNAME,
-		u.USER_NAME,
-		u.USER_PHONE,
-		u.USER_EMAIL,
-		u.USER_COMMENT,
-		u.user_profile
-		order by subscriber desc
-		fetch first 12 rows only
+		SELECT
+			U.USER_NO,
+			U.USER_ID,
+			U.USER_NICKNAME,
+			U.USER_NAME,
+			U.USER_PHONE,
+			U.USER_EMAIL,
+			U.USER_COMMENT,
+			U.USER_PROFILE,
+			(SELECT COUNT(*) FROM SUBSCRIBE S WHERE S.CREATER_NO = U.USER_NO) AS SUBSCRIBER
+		FROM
+			USERS U
+		ORDER BY
+			SUBSCRIBER DESC
+			FETCH FIRST 12 ROWS ONLY
 	</select>
-
 	<update id="updateUserPlan">
 		update users
 		set user_plan = #{userPlan}

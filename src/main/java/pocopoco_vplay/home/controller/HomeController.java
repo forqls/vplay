@@ -31,11 +31,11 @@ public class HomeController {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		int userNo = (loginUser != null) ? loginUser.getUserNo() : 0;
 
-		for (Users u1 : user) {
-			int createrNo = u1.getUserNo();
-			boolean isSubscribed = uService.isSubscribed(createrNo, userNo);
-			u1.setIsSubscribed(isSubscribed ? 1 : 0);   // 모델 add는 안해도 되면 생략
-		}
+//		for (Users u1 : user) {
+//			int createrNo = u1.getUserNo();
+//			boolean isSubscribed = uService.isSubscribed(createrNo, userNo);
+//			u1.setIsSubscribed(isSubscribed ? 1 : 0);   // 모델 add는 안해도 되면 생략
+//		}
 
 		ArrayList<Content> mdList = bService.selectMdList();
 		
