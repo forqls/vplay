@@ -64,10 +64,3 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-processResources {
-	duplicatesStrategy = 'exclude'
-	from('src/main/resources/mappers') {
-		include '*.xml'
-		into 'mappers'
-	}
-}
