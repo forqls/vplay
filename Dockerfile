@@ -23,5 +23,7 @@ WORKDIR /app
 # 1단계(builder)에서 만들어진 완성품(.jar)만 복사해오기
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# 컨테이너가 시작될 때 실행할 기본 명령어를 설정
-CMD ["java", "-jar", "app.jar"]
+# =================================================================
+# === 이 아랫부분으로 교체해주세요! (데이터베이스 정보 강제 주입) ===
+# =================================================================
+CMD ["sh", "-c", "java -Dspring.datasource.url=${DATABASE_URL} -Dspring.datasource.username=${PGUSER} -Dspring.datasource.password=${PGPASSWORD} -Dspring.datasource.driver-class-name=org.postgresql.Driver -jar app.jar --server.port=${PORT}"]
