@@ -3,3 +3,6 @@
 
 <h1>요구사항 정의서</h1>
 <link>https://docs.google.com/spreadsheets/d/10CiUG18fGrM2qKxKslMeXjslcGnF8abdkhVaAl-C9Gc/edit?gid=0#gid=0</link>
+
+
+#재배포
