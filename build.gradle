@@ -69,9 +69,6 @@ dependencies {
 	//의존성 추가 확인
 	implementation 'org.postgresql:postgresql:42.7.3'
 
-	implementation 'org.springframework.security:spring-security-config'
-	implementation 'org.springframework.security:spring-security-web'
-
 
 
 }
