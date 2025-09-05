@@ -140,11 +140,12 @@
 			U.USER_PROFILE,
 			(SELECT COUNT(*) FROM SUBSCRIBE S WHERE S.CREATER_NO = U.USER_NO) AS SUBSCRIBER
 		FROM
-			USERS U
+			users u
 		ORDER BY
 			SUBSCRIBER DESC
-			FETCH FIRST 12 ROWS ONLY
+			LIMIT 12
 	</select>
+
 	<update id="updateUserPlan">
 		update users
 		set user_plan = #{userPlan}
