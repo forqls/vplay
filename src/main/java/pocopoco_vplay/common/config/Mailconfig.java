@@ -1,4 +1,4 @@
-package pocopoco_vplay.commom.config;
+package pocopoco_vplay.common.config;
 
 import java.util.Properties;
 

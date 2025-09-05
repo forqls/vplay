@@ -26,8 +26,8 @@ import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.cloudflare.model.service.R2Service;
-import pocopoco_vplay.commom.Pagination;
-import pocopoco_vplay.commom.model.vo.PageInfo;
+import pocopoco_vplay.common.Pagination;
+import pocopoco_vplay.common.model.vo.PageInfo;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.vo.Users;
 

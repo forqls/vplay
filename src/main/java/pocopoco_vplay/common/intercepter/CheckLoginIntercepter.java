@@ -1,4 +1,4 @@
-package pocopoco_vplay.commom.intercepter;
+package pocopoco_vplay.common.intercepter;
 
 
 import jakarta.servlet.http.HttpServletRequest;

@@ -24,8 +24,8 @@ import pocopoco_vplay.admin.model.service.AdminService;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Reply;
-import pocopoco_vplay.commom.Pagination;
-import pocopoco_vplay.commom.model.vo.PageInfo;
+import pocopoco_vplay.common.Pagination;
+import pocopoco_vplay.common.model.vo.PageInfo;
 import pocopoco_vplay.users.model.vo.Users;
 
 @Controller

@@ -1,4 +1,4 @@
-package pocopoco_vplay.commom.model.vo;
+package pocopoco_vplay.common.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

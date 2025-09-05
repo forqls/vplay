@@ -1,10 +1,10 @@
-package pocopoco_vplay.commom.config;
+package pocopoco_vplay.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import pocopoco_vplay.commom.intercepter.CheckLoginIntercepter;
+import pocopoco_vplay.common.intercepter.CheckLoginIntercepter;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {

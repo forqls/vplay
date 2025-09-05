@@ -2,8 +2,6 @@ package pocopoco_vplay.board.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,7 @@ import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
-import pocopoco_vplay.commom.model.vo.PageInfo;
+import pocopoco_vplay.common.model.vo.PageInfo;
 
 @Service
 @RequiredArgsConstructor
