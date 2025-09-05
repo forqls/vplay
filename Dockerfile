@@ -24,15 +24,4 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 # 컨테이너가 시작될 때 실행할 기본 명령어를 설정
-CMD ["sh", "-c", "echo '--- Railway 환경 변수 확인 ---' && \
-                   echo 'PGHOST: ' ${PGHOST:+'존재함'} && \
-                   echo 'PGPORT: ' ${PGPORT:+'존재함'} && \
-                   echo 'PGDATABASE: ' ${PGDATABASE:+'존재함'} && \
-                   echo 'PGUSER: ' ${PGUSER:+'존재함'} && \
-                   echo 'PGPASSWORD: ' ${PGPASSWORD:+'존재함'} && \
-                   echo '--- 애플리케이션 시작 ---' && \
-                   java -Dspring.datasource.url=jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE} \
-                        -Dspring.datasource.username=${PGUSER} \
-                        -Dspring.datasource.password=${PGPASSWORD} \
-                        -Dspring.datasource.driver-class-name=org.postgresql.Driver \
-                        -jar app.jar --server.port=${PORT}"]
+CMD ["java", "-jar", "app.jar"]
