@@ -168,7 +168,7 @@ body {
 			<a th:href="@{'https://kauth.kakao.com/oauth/authorize?client_id=' + ${@environment.getProperty('kakao.client.id')} + '&redirect_uri=' + ${@environment.getProperty('kakao.redirect.uri')} + '&response_type=code&prompt=login'}">
 				<img class="social-btn" src="/img/kakao.png">
 			</a>
-			<a th:href="@{'https://accounts.google.com/o/oauth2/auth?client_id=613310099838-fvnikhprevm9v3po3m8afjbuffjjl2vj.apps.googleusercontent.com&redirect_uri=' + ${@environment.getProperty('google.redirect.uri')} + '&response_type=code&scope=email%20profile&prompt=consent'}" style="width: 50%">
+			<a th:href="@{'https://accounts.google.com/o/oauth2/auth?client_id=' + ${@environment.getProperty('spring.security.oauth2.client.registration.google.client-id')} + '&redirect_uri=' + ${@environment.getProperty('google.redirect.uri')} + '&response_type=code&scope=email%20profile&prompt=consent'}" style="width: 50%">
 				<img class="social-btn" src="/img/google.png">
 			</a>
 		</div>
