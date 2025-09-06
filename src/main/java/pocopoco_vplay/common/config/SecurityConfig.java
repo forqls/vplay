@@ -20,25 +20,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/login**").permitAll() // 기본 공개 경로
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/login**", "/error/**").permitAll() // 공개 경로
                         .anyRequest().authenticated() // 나머지는 인증 필요
                 )
                 .csrf(csrf -> csrf.disable())
-                .oauth2Login(oauth2 -> oauth2   // 구글 로그인 추가
-                        .loginPage("/login")        // 커스텀 로그인 페이지
-                        .defaultSuccessUrl("/", true) // 로그인 성공 시 이동할 경로
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")      // 로그아웃 후 이동
+                        .logoutSuccessUrl("/")
                         .permitAll()
-                ).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error/**").permitAll()
-                        .anyRequest().permitAll()
                 );
-
 
         return http.build();
     }
+
 
     @Bean
     public AuthenticationEntryPoint customEntryPoint() {
