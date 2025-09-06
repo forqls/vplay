@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Configuration
 public class SecurityConfig {
@@ -45,14 +43,6 @@ public class SecurityConfig {
             // authException.printStackTrace(); // root cause 확인
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         };
-    }
-    @ControllerAdvice
-    public class GlobalExceptionHandler {
-        @ExceptionHandler(Exception.class)
-        public String handleException(Exception e) {
-            e.printStackTrace();  // 진짜 원인 로그 찍기
-            return "error/500";   // templates/error/500.html
-        }
     }
 
 }
