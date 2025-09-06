@@ -9,14 +9,14 @@
 	<select id="getUsersCount">
 		SELECT COUNT(*) FROM users
 		<if test="search != null and search != ''">
-			WHERE user_name LIKE '%${search}%'
+			WHERE user_name LIKE '%' || #{search} || '%'
 		</if>
 	</select>
 
 	<select id="selectAllUser">
 		SELECT * FROM users
 		<if test="search != null and search != ''">
-			WHERE user_name LIKE '%${search}%'
+			WHERE user_name LIKE '%' || #{search} || '%'
 		</if>
 		ORDER BY user_no DESC
 	</select>
@@ -29,7 +29,7 @@
 			AND menu_no = #{menuNo}
 		</if>
 		<if test="search != null and search != ''">
-			AND content_title LIKE '%${search}%'
+			AND content_title LIKE '%' || #{search} || '%'
 		</if>
 	</select>
 
@@ -43,7 +43,7 @@
 			AND menu_no = #{menuNo}
 		</if>
 		<if test="search != null and search != ''">
-			AND (content_title LIKE '%${search}%' OR content_detail LIKE '%${search}%')
+			AND (content_title LIKE '%' || #{search} || '%'  OR content_detail LIKE '%' || #{search} || '%' )
 		</if>
 		ORDER BY content_no DESC
 	</select>
@@ -88,7 +88,7 @@
 			AND cat.menu_no = #{menuNo}
 		</if>
 		<if test="search != null and search != ''">
-			AND (c.content_title LIKE '%${search}%' OR c.content_detail LIKE '%${search}%')
+			AND (c.content_title LIKE  '%' || #{search} || '%' OR c.content_detail LIKE  '%' || #{search} || '%')
 		</if>
 		GROUP BY c.content_no, c.content_title, c.create_date, c.modify_date,
 		c.content_status, c.delete_status, c.user_no, c.md_recommendation, m.menu_name
@@ -106,7 +106,7 @@
 			AND menu_no = #{menuNo}
 		</if>
 		<if test="search != null and search != ''">
-			AND (content_title LIKE '%${search}%' OR content_detail LIKE '%${search}%')
+			AND (content_title LIKE  '%' || #{search} || '%' OR content_detail LIKE '%' || #{search} || '%' )
 		</if>
 	</select>
 
@@ -120,7 +120,7 @@
 			AND menu_no = #{menuNo}
 		</if>
 		<if test="search != null and search != ''">
-			AND (content_title LIKE '%${search}%' OR content_detail LIKE '%${search}%')
+			AND (content_title LIKE '%' || #{search} || '%' OR content_detail LIKE '%' || #{search} || '%' )
 		</if>
 		ORDER BY content_no DESC
 	</select>
@@ -167,8 +167,11 @@
 	</select>
 
 	<insert id="insertReply">
-		INSERT INTO reply
-		VALUES (nextval('reply_seq'), #{replyDetail}, current_timestamp, current_timestamp, 'Y', #{contentNo}, #{userNo})
+		INSERT INTO reply (
+			reply_no, reply_detail, create_date, modify_date, reply_status, content_no, user_no
+		) VALUES (
+					 nextval('reply_seq'), #{replyDetail}, current_timestamp, current_timestamp, 'Y', #{contentNo}, #{userNo}
+				 )
 	</insert>
 
 </mapper>

@@ -359,7 +359,7 @@
 			AND menu_no = #{menuNo}
 		</if>
 		<if test="search != null and search != ''">
-			AND (content_title LIKE '%${search}%' OR content_detail LIKE '%${search}%')
+			AND (content_title ILIKE '%' || #{search} || '%' OR content_detail ILIKE '%' || #{search} || '%')
 		</if>
 	</select>
 
@@ -603,8 +603,14 @@
 		<selectKey resultType="_int" keyProperty="contentNo" order="BEFORE">
 			SELECT nextval('content_seq')
 		</selectKey>
-		INSERT INTO content
-		VALUES (#{contentNo}, #{contentTitle}, #{contentDetail}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, #{userNo}, DEFAULT, DEFAULT)
+		INSERT INTO content (
+		content_no, content_title, content_detail, create_date, modify_date,
+		content_status, delete_status, user_no, views, md_recommendation
+		) VALUES (
+		#{contentNo}, #{contentTitle}, #{contentDetail}, DEFAULT, DEFAULT,
+		DEFAULT, DEFAULT, #{userNo}, DEFAULT, DEFAULT
+		)
+
 	</insert>
 
 	<insert id="insertContentCategory">

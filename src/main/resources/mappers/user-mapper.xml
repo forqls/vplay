@@ -138,7 +138,7 @@
 	<select id="existUsers">
 		SELECT *
 		FROM users
-		WHERE LOGIN_TYPE='K' AND user_id IS NULL AND KAKAO_ID=#{KAKAOID}
+		WHERE login_type = 'K' AND user_id IS NULL AND kakao_id = #{kakaoId}
 	</select>
 
 	<select id="selectTopUser" resultType="pocopoco_vplay.users.model.vo.Users">
@@ -202,7 +202,7 @@
 	<select id="existGoogleUsers">
 		SELECT *
 		FROM users
-		WHERE LOGIN_TYPE='G' AND user_id IS NULL AND GOOGLE_ID=#{googleId}
+		WHERE login_type = 'G' AND user_id IS NULL AND google_id = #{googleId}
 	</select>
 
 	<select id="existReceiver" resultType="int">
@@ -313,7 +313,8 @@
 
 	<update id="updateMessageStatus">
 		update message
-		set read_status
+		set read_status = 'Y'
+		where message_no = #{messageNo}
 	</update>
 
 	<select id="isSubscribed" resultType="int">
