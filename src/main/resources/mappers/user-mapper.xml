@@ -13,7 +13,7 @@
 	<select id="signIn">
 		select *
 		from users
-		where USER_ID = #{userId} and STATUS ='Y'
+		where user_id = #{userId} and status ='Y'
 	</select>
 
 	<insert id="insertUser">
@@ -84,7 +84,7 @@
 	<select id="selectuserIdPhone">
 		SELECT COUNT(*)
 		FROM users
-		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone}
+		WHERE user_name =#{userName} AND user_phone =#{userPhone}
 	</select>
 
 	<select id="findfollow">
@@ -94,9 +94,9 @@
 	</select>
 
 	<select id="findId">
-		SELECT USER_ID, USER_NAME
+		SELECT user_id, user_name
 		FROM users
-		WHERE USER_NAME =#{userName} AND USER_PHONE =#{userPhone} AND USER_EMAIL =#{userEmail}
+		WHERE user_name =#{userName} AND user_phone =#{userPhone} AND user_email =#{userEmail}
 	</select>
 
 	<update id="updateInfo">
@@ -130,7 +130,7 @@
 	</update>
 
 	<select id="findName">
-		select USER_NAME
+		select user_name
 		from users
 		where user_id =#{userId}
 	</select>
@@ -138,7 +138,7 @@
 	<select id="existUsers">
 		SELECT *
 		FROM users
-		WHERE LOGIN_TYPE='K' AND USER_ID IS NULL AND KAKAO_ID=#{KAKAOID}
+		WHERE LOGIN_TYPE='K' AND user_id IS NULL AND KAKAO_ID=#{KAKAOID}
 	</select>
 
 	<select id="selectTopUser" resultType="pocopoco_vplay.users.model.vo.Users">
@@ -202,7 +202,7 @@
 	<select id="existGoogleUsers">
 		SELECT *
 		FROM users
-		WHERE LOGIN_TYPE='G' AND USER_ID IS NULL AND GOOGLE_ID=#{googleId}
+		WHERE LOGIN_TYPE='G' AND user_id IS NULL AND GOOGLE_ID=#{googleId}
 	</select>
 
 	<select id="existReceiver" resultType="int">
