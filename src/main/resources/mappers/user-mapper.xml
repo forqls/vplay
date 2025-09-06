@@ -17,55 +17,68 @@
 	</select>
 
 	<insert id="insertUser">
-		insert into users (
-			USER_NO, USER_ID, USER_PW, USER_NICKNAME, USER_NAME,
-			USER_PHONE, USER_EMAIL, USER_BIRTH, USER_GENDER, STATUS,
-			IS_ADMIN, JOIN_DATE, USER_COMMENT, USER_CREATOR_RANK, USER_PLAN,
-			USER_PROFILE, LOGIN_TYPE, KAKAO_ID
-		) values (
+		INSERT INTO users (
+			user_no, user_id, user_pw, user_nickname, user_name,
+			user_phone, user_email, user_birth, user_gender, status,
+			is_admin, join_date, user_comment, user_creator_rank, user_plan,
+			user_profile, login_type, kakao_id
+		) VALUES (
 					 nextval('user_seq'), #{userId}, #{userPw}, #{userNickname}, #{userName},
 					 #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y',
-					 'N', CURRENT_TIMESTAMP, default, default, default,
-					 default, #{loginType},#{kakaoId}
+					 'N', CURRENT_TIMESTAMP, DEFAULT, DEFAULT, DEFAULT,
+					 DEFAULT, #{loginType}, #{kakaoId}
 				 )
 	</insert>
 
 	<select id="selectMyProject">
 		SELECT
-		c.content_title, c.VIEWS,
-		c.content_no, menu.menu_no, menu.menu_name,
-		(SELECT COUNT(*) FROM likes l2 WHERE l2.content_no = c.content_no) AS like_count
+			c.content_title,
+			c.views,
+			c.content_no,
+			menu.menu_no,
+			menu.menu_name,
+			(SELECT COUNT(*) FROM likes l2 WHERE l2.content_no = c.content_no) AS like_count
 		FROM content c
-		left JOIN likes l ON c.content_no = l.content_no
-		left join board b on c.content_no = b.content_no
-		left JOIN content_category on c.content_no = content_category.content_no
-		left join category on content_category.category_no = category.category_no
-		left JOIN menu ON category.menu_no = menu.menu_no
-		WHERE l.user_no =#{id} and b.board_type is null and menu_name is not null
+				 LEFT JOIN likes l ON c.content_no = l.content_no
+				 LEFT JOIN board b ON c.content_no = b.content_no
+				 LEFT JOIN content_category cc ON c.content_no = cc.content_no
+				 LEFT JOIN category cat ON cc.category_no = cat.category_no
+				 LEFT JOIN menu ON cat.menu_no = menu.menu_no
+		WHERE l.user_no = #{id}
+		  AND b.board_type IS NULL
+		  AND menu_name IS NOT NULL
 		GROUP BY c.content_no, c.content_title, c.views, menu.menu_no, menu.menu_name
 	</select>
 
+
 	<select id="selectMyRealProjects">
-		select c.CONTENT_NO,CONTENT_TITLE,c.CREATE_DATE,c.MODIFY_DATE,c.CONTENT_STATUS,c.DELETE_STATUS,c.USER_NO,c.VIEWS,
-		c.MD_RECOMMENDATION,(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count ,
-		b.board_type,m.menu_name, LISTAGG(ccc.category_name, ',') WITHIN GROUP (ORDER BY ccc.category_name) AS category_name, m.menu_no
-		from content c
-		left join board b on c.content_no = b.content_no
-		left JOIN content_category cc on c.content_no = cc.content_no
-		left join category ccc on cc.category_no = ccc.category_no
-		left JOIN menu m ON ccc.menu_no = m.menu_no
-		where c.user_no=#{userNo} and b.board_type is null and m.menu_name is not null and c.content_status='Y'
-		group by
-		c.CONTENT_NO,
-		c.CONTENT_TITLE,
-		c.CREATE_DATE,
-		c.MODIFY_DATE,
-		c.CONTENT_STATUS,
-		c.DELETE_STATUS,
-		c.USER_NO,
-		c.VIEWS,
-		c.MD_RECOMMENDATION,
-		b.board_type, m.menu_name, m.menu_no
+		SELECT
+			c.content_no,
+			c.content_title,
+			c.create_date,
+			c.modify_date,
+			c.content_status,
+			c.delete_status,
+			c.user_no,
+			c.views,
+			c.md_recommendation,
+			(SELECT COUNT(*) FROM likes WHERE likes.content_no = c.content_no) AS like_count,
+			b.board_type,
+			m.menu_name,
+			STRING_AGG(ccc.category_name, ',' ORDER BY ccc.category_name) AS category_name,
+			m.menu_no
+		FROM content c
+				 LEFT JOIN board b ON c.content_no = b.content_no
+				 LEFT JOIN content_category cc ON c.content_no = cc.content_no
+				 LEFT JOIN category ccc ON cc.category_no = ccc.category_no
+				 LEFT JOIN menu m ON ccc.menu_no = m.menu_no
+		WHERE c.user_no = #{userNo}
+		  AND b.board_type IS NULL
+		  AND m.menu_name IS NOT NULL
+		  AND c.content_status = 'Y'
+		GROUP BY c.content_no, c.content_title, c.create_date, c.modify_date,
+				 c.content_status, c.delete_status, c.user_no, c.views,
+				 c.md_recommendation, b.board_type, m.menu_name, m.menu_no
 	</select>
 
 	<select id="selectuserIdPhone">
@@ -130,19 +143,17 @@
 
 	<select id="selectTopUser" resultType="pocopoco_vplay.users.model.vo.Users">
 		SELECT
-			U.USER_NO,
-			U.USER_ID,
-			U.USER_NICKNAME,
-			U.USER_NAME,
-			U.USER_PHONE,
-			U.USER_EMAIL,
-			U.USER_COMMENT,
-			U.USER_PROFILE,
-			(SELECT COUNT(*) FROM SUBSCRIBE S WHERE S.CREATER_NO = U.USER_NO) AS SUBSCRIBER
-		FROM
-			users u
-		ORDER BY
-			SUBSCRIBER DESC
+			u.user_no,
+			u.user_id,
+			u.user_nickname,
+			u.user_name,
+			u.user_phone,
+			u.user_email,
+			u.user_comment,
+			u.user_profile,
+			(SELECT COUNT(*) FROM subscribe s WHERE s.creater_no = u.user_no) AS subscriber
+		FROM users u
+		ORDER BY subscriber DESC
 			LIMIT 12
 	</select>
 
@@ -153,9 +164,12 @@
 	</update>
 
 	<select id="getPaymentDate">
-		select payment_date from users join payment using(user_no)
-		where user_no=#{userNo} order by payment_date desc
-		fetch first 1 row only
+		SELECT payment_date
+		FROM users u
+				 JOIN payment p USING (user_no)
+		WHERE u.user_no = #{userNo}
+		ORDER BY payment_date DESC
+			LIMIT 1
 	</select>
 
 	<update id="deleteUserPlan">
@@ -198,17 +212,17 @@
 	<insert id="insertMessage">
 		INSERT INTO message (
 		message_no, sender_no, receiver_no, content, sent_time, read_status, conversation_id
-		)
-		VALUES (
+		) VALUES (
 		nextval('message_seq'),
 		#{senderNo},
 		#{receiverNo},
 		#{content},
-		current_timestamp,
-		default,
+		CURRENT_TIMESTAMP,
+		DEFAULT,
 		CASE
-		WHEN #{senderNo} &lt; #{receiverNo} THEN CONCAT(#{senderNo}, '_', #{receiverNo})
-		ELSE CONCAT(#{receiverNo}, '_', #{senderNo})
+		WHEN #{senderNo} &lt; #{receiverNo}
+		THEN #{senderNo} || '_' || #{receiverNo}
+		ELSE #{receiverNo} || '_' || #{senderNo}
 		END
 		)
 	</insert>
