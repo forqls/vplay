@@ -39,7 +39,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationEntryPoint customEntryPoint() {
         return (request, response, authException) -> {
-            authException.printStackTrace(); // root cause 확인
+            // authException.printStackTrace(); // root cause 확인
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         };
     }
