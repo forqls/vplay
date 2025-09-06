@@ -31,7 +31,11 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")      // 로그아웃 후 이동
                         .permitAll()
+                ).authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/error/**").permitAll()
+                        .anyRequest().permitAll()
                 );
+
 
         return http.build();
     }
