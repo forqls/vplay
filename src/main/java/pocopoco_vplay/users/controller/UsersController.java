@@ -558,8 +558,10 @@ public class UsersController {
 		ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
 		Users createrUser = uService.getInfoUser(createrNo);
 
-		boolean isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
-
+		boolean isSubscribed = false; // 기본값을 false로 설정
+		if (loginUser != null) { // 로그인한 경우에만 구독 여부 확인
+			isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
+		}
 
 		model.addAttribute("list", list)
 				.addAttribute("createrUser", createrUser)
