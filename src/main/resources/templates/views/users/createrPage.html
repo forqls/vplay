@@ -196,16 +196,16 @@
 			thumbnailPlay();
 		}
 
-		// ✅ 썸네일 로딩을 위한 수정된 함수
+		// ✅ 썸네일 로딩을 위한 최종 수정 함수
 		function thumbnailPlay() {
-			const thumbnailList = document.querySelectorAll('.grid-item');
+			const gridItems = document.querySelectorAll('.grid-item');
 
-			thumbnailList.forEach((item) => {
-				const thumbnail = item.querySelector('.item-thumbnail');
+			gridItems.forEach((item) => {
+				const thumbnailContainer = item.querySelector('.item-thumbnail');
 				const contentNo = item.querySelector('input[type=hidden]').value;
 				const menuNo = item.querySelector('input[type=hidden]:nth-of-type(2)').value;
 
-				if (!thumbnail || !contentNo || !menuNo) return;
+				if (!thumbnailContainer || !contentNo || !menuNo) return;
 
 				fetch("/board/select-thumbnail/" + contentNo)
 						.then(response => {
@@ -214,24 +214,20 @@
 						})
 						.then(data => {
 							if (!data || !data.thumbnail) {
-								console.error("썸네일 데이터 없음:", contentNo);
 								return;
 							}
 
-							thumbnail.innerHTML = ''; // 기존 내용 비우기
+							thumbnailContainer.innerHTML = ''; // 기존 내용 비우기
 
 							if (menuNo == 1 || menuNo == 5) {
 								const video = document.createElement('video');
 								video.id = "item-preview";
 								video.muted = true;
 								video.loop = true;
-								const source = document.createElement("source");
-								source.type = "video/mp4";
-								source.src = data.thumbnail;
-								video.appendChild(source);
-								thumbnail.appendChild(video);
+								video.src = data.thumbnail; // source 태그 대신 src 속성 직접 사용
+								thumbnailContainer.appendChild(video);
 
-								item.addEventListener('mouseenter', () => video.play().catch(e => console.log("비디오 재생 오류:", e)));
+								item.addEventListener('mouseenter', () => video.play().catch(e => {}));
 								item.addEventListener('mouseleave', () => {
 									video.pause();
 									video.currentTime = 0;
@@ -240,12 +236,12 @@
 								const img = document.createElement('img');
 								img.id = "item-preview";
 								img.src = data.thumbnail;
-								thumbnail.appendChild(img);
-							} else {
+								thumbnailContainer.appendChild(img);
+							} else { // menuNo == 3 (음악)
 								const img = document.createElement('img');
 								img.id = "item-preview";
 								img.src = "/img/sound-effects.png";
-								thumbnail.appendChild(img);
+								thumbnailContainer.appendChild(img);
 							}
 						})
 						.catch(err => console.error("썸네일 로딩 fetch 에러:", err));
