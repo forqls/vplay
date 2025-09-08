@@ -337,6 +337,9 @@
 		</choose>
 	</insert>
 
+	<select id="getInfoUser" resultType="pocopoco_vplay.users.model.vo.Users">
+		SELECT * FROM users WHERE user_no = #{userNo}
+	</select>
 
 
 
