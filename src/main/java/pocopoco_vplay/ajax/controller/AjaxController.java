@@ -64,29 +64,35 @@ public class AjaxController {
 		
 		return bService.unAllTempLike(map);
 	}
-	
+	@Value("${cloudflare.r2.public-url}")
+	private String r2PublicUrl;
+
 	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
 	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo){
-//		System.out.println(menuNo);
-//		System.out.println(contentNo);
-		
 		HashMap<String, String> map = new HashMap<>();
-		
 		String thumbnail = null;
 		String file = null;
-		
+
 		ArrayList<Files> contentFile = bService.selectFiles(contentNo);
 		for(Files f : contentFile) {
 			if(f.getFileLevel() == 1) {
 				thumbnail = f.getFileLocation();
-			}else {
+			} else {
 				file = f.getFileLocation();
 			}
 		}
-		
+
+		// ✅ 상대 경로면 퍼블릭 URL 붙여주기
+		if (thumbnail != null && !thumbnail.startsWith("http")) {
+			thumbnail = r2PublicUrl + "/" + thumbnail;
+		}
+		if (file != null && !file.startsWith("http")) {
+			file = r2PublicUrl + "/" + file;
+		}
+
 		map.put("thumbnail", thumbnail);
 		map.put("file", file);
-		
+
 		return map;
 	}
 	
