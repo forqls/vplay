@@ -16,6 +16,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -33,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/board/like", "/board/download/**").authenticated()
                         .requestMatchers("/myPage/**").authenticated()
 
-                        // 그 외는 다 인증 필요
+                        // 그 외는 다 인증
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf.disable())
