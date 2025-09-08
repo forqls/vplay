@@ -48,9 +48,14 @@ public class R2Service {
 		s3Client.putObject(PutObjectRequest.builder()
 						.bucket(bucketName)
 						.key(fileName)
-						.contentType(file.getContentType()) // ✅ Content-Type 지정
+						.contentType(file.getContentType())
 						.build(),
 				RequestBody.fromBytes(file.getBytes()));
+
+		// URL이 http로 시작하지 않으면 https:// 를 붙여주는 로직 추가
+		if (publicUrl != null && !publicUrl.startsWith("http")) {
+			return "https://" + publicUrl + "/" + fileName;
+		}
 
 		return publicUrl + "/" + fileName;
 	}
