@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/", "/index", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/login**", "/error/**").permitAll()// 공개 경로
+                                .requestMatchers("/", "/index", "/css/**", "/js/**", "/img/**", "/favicon.ico", "/login**", "/error/**").permitAll()// 공개 경로
                         .anyRequest().authenticated() // 나머지는 인증 필요
                 )
                 .csrf(csrf -> csrf.disable())
