@@ -32,7 +32,6 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // 로그인 필요한 기능
-                        .requestMatchers("/board/like", "/board/download/**").authenticated()
                         .requestMatchers("/myPage/**").authenticated()
 
                         // 그 외는 다 인증
