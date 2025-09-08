@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	function updateUnreadMessageCount() {
 		let messageBadge = document.getElementById("unreadMessageCount");
 
+		const unread = document.getElementById("unreadMessageCount");
+		if (unread) {
+			unread.innerText = count;   // count 변수는 기존 로직에서 그대로
+		}
+
 		if (!messageBadge) {
 			console.error("🚨 `unreadMessageCount` 요소를 찾을 수 없음!");
 			return;
