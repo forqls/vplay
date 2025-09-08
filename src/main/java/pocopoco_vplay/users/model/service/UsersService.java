@@ -3,8 +3,11 @@ package pocopoco_vplay.users.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.users.model.mapper.UsersMapper;
@@ -13,7 +16,7 @@ import pocopoco_vplay.users.model.vo.Users;
 
 @Service
 @RequiredArgsConstructor
-public class UsersService {
+public class UsersService implements UserDetailsService {
 
 	private final UsersMapper mapper;
 
@@ -157,5 +160,24 @@ public class UsersService {
 
 	public int updateSubscribe(HashMap<String, Object> map) {
 		return mapper.updateSubscribe(map);
+	}
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Users user = new Users();
+		user.setUserId(username);
+
+		// signIn 메소드를 사용해서 사용자 정보를 가져옵니다.
+		Users foundUser = mapper.signIn(user);
+
+		if (foundUser == null) {
+			throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
+		}
+
+		// Spring Security가 사용할 UserDetails 객체로 변환해서 반환합니다.
+		return User.builder()
+				.username(foundUser.getUserId())
+				.password(foundUser.getUserPw())
+				.roles(foundUser.getIsAdmin().equals("Y") ? "ADMIN" : "USER")
+				.build();
 	}
 }

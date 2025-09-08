@@ -1,6 +1,7 @@
 package pocopoco_vplay.common.config;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,8 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Bean
@@ -23,23 +27,28 @@ public class SecurityConfig {
         return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/error/**");
     }
 
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .authorizeHttpRequests(auth -> auth
-                        // 로그인이 필요한 /myPage/** 경로만 인증 요구
                         .requestMatchers("/myPage/**").authenticated()
-
-                        // 그 외 나머지 모든 경로는 전부 허용
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf.disable())
                 .formLogin(login -> login
                         .loginPage("/users/signIn")
+                        .loginProcessingUrl("/users/signIn")
+                        .successHandler(customAuthenticationSuccessHandler) // 성공 핸들러 등록
                         .permitAll()
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/users/logout") // 로그아웃 URL을 명시적으로 지정
                         .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true) // 세션 무효화
+                        .deleteCookies("JSESSIONID") // 쿠키 삭제
                         .permitAll()
                 );
 
