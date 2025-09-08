@@ -23,9 +23,9 @@ public class SecurityConfig {
                         // 공개 경로
                         .requestMatchers("/", "/index",
                                 "/css/**", "/js/**", "/img/**", "/favicon.ico",
-                                "/board/**",                // 게시판 구경은 누구나 가능
+                                "/board/**",
                                 "/users/signIn", "/users/join",
-                                "/users/findId", "/users/findPwd",
+                                "/users/findId", "/users/findPwd","/users/profile/**", "/users/post/**",
                                 "/error/**"
                         ).permitAll()
 
@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/myPage/**").authenticated()
 
                         // 그 외는 다 인증 필요
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf.disable())
                 .formLogin(login -> login
