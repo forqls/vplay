@@ -248,64 +248,62 @@
 			listPlay(topList);
 			listPlay(mdList);
 		}
-		
-		function listPlay(list){
-				[...list.children].map((template, index, array) =>{
-				
+
+		function listPlay(list) {
+			[...list.children].map((template, index, array) => {
 				const thumbnail = template.children[2].children[0];
 				const contentNo = template.children[0].value;
 				const menuNo = template.children[1].value;
 
-				//요청 찍기
-					console.log("요청 보냄:", contentNo, "menuNo:", menuNo);
+				// 요청 찍기
+				console.log("요청 보냄:", contentNo, "menuNo:", menuNo);
 
-					//썸네일 불러오기
-				fetch("/board/select-thumbnail/" + contentNo,{
-					method : 'get',
-					headers : {'content-type' : 'application/json; charset=UTF-8'}
+				// 썸네일 불러오기
+				fetch("/board/select-thumbnail/" + contentNo, {
+					method: 'get',
+					headers: { 'content-type': 'application/json; charset=UTF-8' }
 				})
-				.then(response => response.json())
-				.then(data=>{
-					//응답 찍기
-					console.log("썸네일 응답:", contentNo, data);
-// 					console.log(data);
-					if(menuNo == 1 || menuNo == 5){
-						const video = document.createElement('video');
-						video.muted = true;
-						video.loop = true;
+						.then(response => response.json())
+						.then(data => {
+							// 응답 찍기
+							console.log("썸네일 응답:", contentNo, data);
 
-						const source = document.createElement("source");
-						source.type = "video/mp4";
-						source.src = data.thumbnail;
+							if (menuNo == 1 || menuNo == 5) {
+								const video = document.createElement('video');
+								video.muted = true;
+								video.loop = true;
 
-						video.appendChild(source);
-						thumbnail.appendChild(video);
+								const source = document.createElement("source");
+								source.type = "video/mp4";
+								source.src = data.thumbnail;
 
-						template.addEventListener('mouseenter', function(){
-							video.play();
-						});
+								video.appendChild(source);
+								thumbnail.appendChild(video);
 
-						template.addEventListener('mouseleave', function(){
-							video.pause();
-							video.currentTime = 0;
-						});
-					}else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2){
-						const img = document.createElement('img');
-						img.src = data.thumbnail;
+								template.addEventListener('mouseenter', function () {
+									video.play();
+								});
 
-						thumbnail.appendChild(img);
-					}else{
-						const img = document.createElement('img');
-						img.src = "/img/sound-effects.png";
-						
-						thumbnail.appendChild(img);
-					}
-				})
+								template.addEventListener('mouseleave', function () {
+									video.pause();
+									video.currentTime = 0;
+								});
+							} else if (menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2) {
+								const img = document.createElement('img');
+								img.src = data.thumbnail;
+								thumbnail.appendChild(img);
+							} else {
+								const img = document.createElement('img');
+								img.src = "/img/sound-effects.png";
+								thumbnail.appendChild(img);
+							}
+						})
 						.catch(err => console.error("썸네일 에러:", err));
-				});
+			});
 		}
-				
-				//컨텐츠 이동
+
+
+		//컨텐츠 이동
 				template.addEventListener('click', function(event){
 					
 					switch(menuNo){
