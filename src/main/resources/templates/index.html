@@ -126,8 +126,8 @@
         <h2 class="section-title">MD가 추천하는 템플릿 리스트</h2>
         <div class="template-grid" id="template-grid-wrap">
             <div class="template-card" th:each="md : ${mdList}">
-                <input type="hidden" th:value=${md.contentNo}>
-                <input type="hidden" th:value=${md.menuNo}>
+                <input type="hidden" th:value="${md.contentNo}">
+                <input type="hidden" th:value="${md.menuNo}">
                 <div class="template-details">
                     <div class="template-image"></div>
                     <div class="overlay"></div>
@@ -208,8 +208,8 @@
         <h2 class="section-title">탑 템플릿 리스트</h2>
         <div class="template-grid" id="template-grid-wrap-top">
             <div class="template-card" th:each="c, rank : ${clist}">
-                <input type="hidden" th:value=${c.contentNo}>
-                <input type="hidden" th:value=${c.menuNo}>
+                <input type="hidden" th:value="${c.contentNo}">
+                <input type="hidden" th:value="${c.menuNo}">
                 <div class="template-details">
                     <div class="template-image"></div>
                     <div class="overlay"></div>
@@ -228,7 +228,7 @@
 									</svg>
 									<span>[[${c.downloadCount}]]</span>
 								</span>
-								<span class="icon" id="hd-icon-[[${c.contentNo}]]">
+								<span class="icon" id="md-icon">
 									<th:block th:if="${c.likeTo == 1}">
 									<svg width="16" height="14" viewBox="0 0 16 14" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -402,7 +402,8 @@
 
     //크리에이터 클릭 및 구독
     [...creatorList.children].map((creator, index, array) => {
-        //크리에이터 페이지 이동
+
+            //크리에이터 페이지 이동
         const createrNo = creator.querySelector('input').value;
         creator.addEventListener('click', function () {
             const count = this.querySelector('.subscriber_count').innerText;
