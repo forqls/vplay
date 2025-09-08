@@ -161,80 +161,96 @@
 				</div>
         </div>
     </div>
-    
-    <script type="text/javascript">
-    const button = document.getElementById("subscribeBtn");
-    const createrNo = document.getElementById('createrNo').value;
-	button.addEventListener("click", () => {
-		const isCancel = button.innerText === "구독 중";
 
-		fetch("/users/post/updateSubscribe", {
-			method: "POST",
-			headers: { 'content-type': 'application/json; charset=UTF-8' },
-			body: JSON.stringify({
-				createrNo: parseInt(createrNo),
-				isCancel: isCancel
-			})
-		})
-				.then(response => response.json())
-				.then(data => {
-					if (data === 1) {
-						button.innerText = isCancel ? "구독하기" : "구독 중";
-					}
-				});
-	});
+	<script type="text/javascript" th:inline="javascript">
+		const button = document.getElementById("subscribeBtn");
+		const createrNo = document.getElementById('createrNo').value;
+		const loginUser = /*[[${session.loginUser}]]*/ null;
 
- 
-    window.onload=()=>{
-    	thumbnailPlay();
-    }
-    
-    
-    //썸네일 불러오기
-    function thumbnailPlay() {
-        const thumbnailList = document.querySelectorAll('.item-thumbnail'); // 둘 다 잡아줌
-        console.log(thumbnailList);
-        
-        [...thumbnailList].forEach((thumbnail) => {
-        	 const contentNo = thumbnail.previousElementSibling.previousElementSibling.value;
-        	 const menuNo = thumbnail.previousElementSibling.value;
-        	 
-//         	 console.log("contentNo : " + contentNo);
-//         	 console.log("menuNo : " + menuNo);
-        	 
-        	 
-        	 console.log(menuNo);
-            fetch("/board/select-thumbnail/" + contentNo, {
-                method: "get",
-                headers: { 'content-type': 'application/json; charset=UTF-8' }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (menuNo == 1 || menuNo == 5) {
-                    const video = thumbnail.children[0];
-                	
-                    console.log(video);
-                    const source = video?.children[0];
-                    if (source) {
-                        source.src = data.thumbnail;
-                        video.appendChild(source);
-                        thumbnail.appendChild(video);
-                        video.addEventListener('mouseenter', () => {
-                        	video.play()
-                        });
-                        video.addEventListener('mouseleave', () => {
-                            video.pause();
-                            video.currentTime = 0;
-                        });
-                    }
-                } else if(menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2) {
-                    const img = thumbnail.children[0];
-                    if (img) img.src = data.thumbnail;
-                }
-            });
-        });
-    }
-    
-    </script>
+		if (button) {
+			button.addEventListener("click", () => {
+				if (!loginUser) {
+					alert('로그인 후 이용해주세요.');
+					return;
+				}
+				const isCancel = button.innerText === "구독 중";
+
+				fetch("/users/post/updateSubscribe", {
+					method: "POST",
+					headers: { 'content-type': 'application/json; charset=UTF-8' },
+					body: JSON.stringify({
+						createrNo: parseInt(createrNo),
+						isCancel: isCancel
+					})
+				})
+						.then(response => response.json())
+						.then(data => {
+							if (data === 1) {
+								button.innerText = isCancel ? "구독하기" : "구독 중";
+							}
+						});
+			});
+		}
+
+		window.onload = () => {
+			thumbnailPlay();
+		}
+
+		// ✅ 썸네일 로딩을 위한 수정된 함수
+		function thumbnailPlay() {
+			const thumbnailList = document.querySelectorAll('.grid-item');
+
+			thumbnailList.forEach((item) => {
+				const thumbnail = item.querySelector('.item-thumbnail');
+				const contentNo = item.querySelector('input[type=hidden]').value;
+				const menuNo = item.querySelector('input[type=hidden]:nth-of-type(2)').value;
+
+				if (!thumbnail || !contentNo || !menuNo) return;
+
+				fetch("/board/select-thumbnail/" + contentNo)
+						.then(response => {
+							if (!response.ok) throw new Error('Network response was not ok');
+							return response.json();
+						})
+						.then(data => {
+							if (!data || !data.thumbnail) {
+								console.error("썸네일 데이터 없음:", contentNo);
+								return;
+							}
+
+							thumbnail.innerHTML = ''; // 기존 내용 비우기
+
+							if (menuNo == 1 || menuNo == 5) {
+								const video = document.createElement('video');
+								video.id = "item-preview";
+								video.muted = true;
+								video.loop = true;
+								const source = document.createElement("source");
+								source.type = "video/mp4";
+								source.src = data.thumbnail;
+								video.appendChild(source);
+								thumbnail.appendChild(video);
+
+								item.addEventListener('mouseenter', () => video.play().catch(e => console.log("비디오 재생 오류:", e)));
+								item.addEventListener('mouseleave', () => {
+									video.pause();
+									video.currentTime = 0;
+								});
+							} else if (menuNo == 4 || menuNo == 6 || menuNo == 7 || menuNo == 2) {
+								const img = document.createElement('img');
+								img.id = "item-preview";
+								img.src = data.thumbnail;
+								thumbnail.appendChild(img);
+							} else {
+								const img = document.createElement('img');
+								img.id = "item-preview";
+								img.src = "/img/sound-effects.png";
+								thumbnail.appendChild(img);
+							}
+						})
+						.catch(err => console.error("썸네일 로딩 fetch 에러:", err));
+			});
+		}
+	</script>
 </body>
 </html>
