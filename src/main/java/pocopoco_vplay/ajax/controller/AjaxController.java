@@ -64,7 +64,7 @@ public class AjaxController {
 		
 		return bService.unAllTempLike(map);
 	}
-	@Value("${cloudflare.r2.public-url}")
+	@Value("${CLOUDFLARE_R2_PUBLIC_URL}")
 	private String r2PublicUrl;
 
 	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
@@ -82,7 +82,7 @@ public class AjaxController {
 			}
 		}
 
-		// ✅ 상대 경로면 퍼블릭 URL 붙여주기
+		// ✅ 여기! 경로 앞에 Public URL을 붙여주는 로직 추가
 		if (thumbnail != null && !thumbnail.startsWith("http")) {
 			thumbnail = r2PublicUrl + "/" + thumbnail;
 		}

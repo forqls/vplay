@@ -20,13 +20,26 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/", "/index", "/css/**", "/js/**", "/img/**", "/favicon.ico", "/board/select-thumbnail/**", "/login**", "/error/**").permitAll()// 공개 경로
-                        .anyRequest().authenticated() // 나머지는 인증 필요
+                        // 공개 경로
+                        .requestMatchers("/", "/index",
+                                "/css/**", "/js/**", "/img/**", "/favicon.ico",
+                                "/board/**",                // 게시판 구경은 누구나 가능
+                                "/users/signIn", "/users/join",
+                                "/users/findId", "/users/findPwd",
+                                "/error/**"
+                        ).permitAll()
+
+                        // 로그인 필요한 기능
+                        .requestMatchers("/board/like", "/board/download/**").authenticated()
+                        .requestMatchers("/myPage/**").authenticated()
+
+                        // 그 외는 다 인증 필요
+                        .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                .formLogin(login -> login
+                        .loginPage("/users/signIn")  // 로그인 페이지 경로
+                        .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
@@ -35,6 +48,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
     @Bean
