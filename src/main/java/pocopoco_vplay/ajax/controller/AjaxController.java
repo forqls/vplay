@@ -43,20 +43,20 @@ public class AjaxController {
 	private final BoardService bService;
 	private final UsersService uService;
 	private final R2Service r2Service;
-	
+
 	@PutMapping("like")
 	public int likeAllTemp(@RequestBody HashMap<String, Integer> map, HttpSession session){
-		System.out.println(map);
+		Users loginUser = (Users) session.getAttribute("loginUser");
+		if (loginUser == null) {
+			// 로그인 안했으면 -1 리턴 (프론트에서 "로그인 필요" 처리)
+			return -1;
+		}
 
-		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
+		int userNo = loginUser.getUserNo();
 		map.put("userNo", userNo);
-		
-		System.out.println(map);
-		
-		
 		return bService.allTempLike(map);
 	}
-	
+
 	@DeleteMapping("like")
 	public int unLikeAllTemp(@RequestBody HashMap<String, Integer> map, HttpSession session) {
 		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
@@ -283,7 +283,8 @@ public class AjaxController {
 	
 	@GetMapping("download/{fileName}/{contentNo}/{userNo}")
 	public ResponseEntity<StreamingResponseBody> downloadFile(@PathVariable("fileName") String fileName,@PathVariable("contentNo") int contentNo,@PathVariable("userNo") int userNo) {
-		
+
+
 		System.out.println(fileName);
 		
 		InputStream fileStream = r2Service.downloadFileStream(fileName);
