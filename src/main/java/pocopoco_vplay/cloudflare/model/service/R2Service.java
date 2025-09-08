@@ -41,20 +41,20 @@ public class R2Service {
 	     this.bucketName = bucketName;
 	     this.publicUrl = publicUrl;
 	}
-	
+
 	public String uploadFile(MultipartFile file) throws IOException {
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+		String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        s3Client.putObject(PutObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(fileName)
-                        .build(),
-                RequestBody.fromBytes(file.getBytes()));
+		s3Client.putObject(PutObjectRequest.builder()
+						.bucket(bucketName)
+						.key(fileName)
+						.contentType(file.getContentType()) // ✅ Content-Type 지정
+						.build(),
+				RequestBody.fromBytes(file.getBytes()));
 
-          return publicUrl + "/" + fileName;
-          
-    }
-	
+		return publicUrl + "/" + fileName;
+	}
+
 	public boolean deleteFile(String fileName) {
 		 try {
 		        DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()

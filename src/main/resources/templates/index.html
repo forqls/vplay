@@ -400,18 +400,20 @@
 
 
 
-    //크리에이터 클릭 및 구독
-    [...creatorList.children].map((creator, index, array) => {
+    // 크리에이터 클릭 및 구독
+    creatorList.children.forEach((creator) => {
 
-            //크리에이터 페이지 이동
+        // 크리에이터 페이지 이동
         const createrNo = creator.querySelector('input').value;
         creator.addEventListener('click', function () {
             const count = this.querySelector('.subscriber_count').innerText;
             console.log(this);
             console.log(count);
             console.log(createrNo);
-            location.href = "/users/createrPage?createrNo=" + createrNo + "&subscriberCount=" + count;
-        })
+            location.href = `/users/createrPage?createrNo=${createrNo}&subscriberCount=${count}`;
+        });
+
+    });
 
         //구독
         const subscribe = creator.querySelector('button');
