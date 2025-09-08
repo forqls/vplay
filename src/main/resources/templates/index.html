@@ -255,14 +255,19 @@
 				const thumbnail = template.children[2].children[0];
 				const contentNo = template.children[0].value;
 				const menuNo = template.children[1].value;
-				
-				//썸네일 불러오기
+
+				//요청 찍기
+					console.log("요청 보냄:", contentNo, "menuNo:", menuNo);
+
+					//썸네일 불러오기
 				fetch("/board/select-thumbnail/" + contentNo,{
 					method : 'get',
 					headers : {'content-type' : 'application/json; charset=UTF-8'}
 				})
 				.then(response => response.json())
 				.then(data=>{
+					//응답 찍기
+					console.log("썸네일 응답:", contentNo, data);
 // 					console.log(data);
 					if(menuNo == 1 || menuNo == 5){
 						const video = document.createElement('video');
@@ -295,8 +300,10 @@
 						
 						thumbnail.appendChild(img);
 					}
-
 				})
+						.catch(err => console.error("썸네일 에러:", err));
+				});
+		}
 				
 				//컨텐츠 이동
 				template.addEventListener('click', function(event){
