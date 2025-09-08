@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 @Configuration
 public class SecurityConfig {
@@ -17,29 +18,24 @@ public class SecurityConfig {
     }
 
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/error/**");
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // 공개 경로
-                        .requestMatchers("/", "/index",
-                                "/css/**", "/js/**", "/img/**", "/favicon.ico",
-                                "/board/**",
-                                "/users/signIn", "/users/join",
-                                "/users/findId", "/users/findPwd","/users/profile/**", "/users/post/**",
-                                "/error/**"
-                        ).permitAll()
-
-                        // 로그인 필요한 기능
+                        // 🔐 로그인이 필요한 /myPage/** 경로만 인증 요구
                         .requestMatchers("/myPage/**").authenticated()
 
-                        // 그 외는 다 인증
+                        // 🔓 그 외 나머지 모든 경로는 전부 허용
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf.disable())
                 .formLogin(login -> login
-                        .loginPage("/users/signIn")  // 로그인 페이지 경로
+                        .loginPage("/users/signIn")
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -49,6 +45,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
 

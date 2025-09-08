@@ -14,7 +14,7 @@ import lombok.ToString;
 
 public class Files {
 	private int fileNo;
-	private String refContentNo;
+	private int refContentNo;
 	private String fileLocation;
 	private String fileStatus;
 	private int fileLevel;
