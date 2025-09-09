@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .loginPage("/users/signIn")
                         .loginProcessingUrl("/users/signIn")
                         .successHandler(customAuthenticationSuccessHandler) // 성공 핸들러 등록
+                        .usernameParameter("userId")   // 아이디 파라미터 이름 설정
+                        .passwordParameter("userPw")    // 비밀번호 파라미터 이름 설정
                         .permitAll()
                 )
                 .logout(logout -> logout
