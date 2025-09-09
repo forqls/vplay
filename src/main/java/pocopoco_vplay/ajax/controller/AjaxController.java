@@ -67,9 +67,6 @@ public class AjaxController {
 	@Value("${CLOUDFLARE_R2_PUBLIC_URL}")
 	private String r2PublicUrl;
 
-	// AjaxController.java의 selectThumbnail 메소드를 이렇게 수정해줘
-
-	// AjaxController.java의 selectThumbnail 메소드
 
 	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
 	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo) {
@@ -87,7 +84,6 @@ public class AjaxController {
 			}
 		}
 
-		// 불필요한 replace 코드를 제거하고, thumbnailLocation을 그대로 사용합니다.
 		map.put("thumbnail", thumbnailLocation != null ? thumbnailLocation : "");
 		return map;
 	}

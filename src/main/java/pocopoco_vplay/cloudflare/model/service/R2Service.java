@@ -52,11 +52,17 @@ public class R2Service {
 						.build(),
 				RequestBody.fromBytes(file.getBytes()));
 
-		if (publicUrl != null && !publicUrl.trim().toLowerCase().startsWith("http")) {
-			return "https://" + publicUrl + "/" + fileName;
+		String cleanPublicUrl = publicUrl.trim();
+		if (!cleanPublicUrl.startsWith("http")) {
+			cleanPublicUrl = "https://" + cleanPublicUrl;
 		}
 
-		return publicUrl + "/" + fileName;
+		// URL 마지막에 '/'가 없으면 추가
+		if (!cleanPublicUrl.endsWith("/")) {
+			cleanPublicUrl += "/";
+		}
+
+		return cleanPublicUrl + fileName;
 	}
 
 	public boolean deleteFile(String fileName) {
