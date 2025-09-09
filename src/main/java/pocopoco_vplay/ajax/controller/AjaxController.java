@@ -69,6 +69,8 @@ public class AjaxController {
 
 	// AjaxController.java의 selectThumbnail 메소드를 이렇게 수정해줘
 
+	// AjaxController.java의 selectThumbnail 메소드
+
 	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
 	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo) {
 		HashMap<String, String> map = new HashMap<>();
@@ -78,13 +80,17 @@ public class AjaxController {
 
 		if (fileList != null && !fileList.isEmpty()) {
 			for (Files f : fileList) {
-				if (f.getFileLevel() == 1) { // 원본 영상/이미지
+				if (f.getFileLevel() == 1) {
 					thumbnailLocation = f.getFileLocation();
 					break;
 				}
 			}
 		}
-		String fullUrl = (thumbnailLocation != null) ? thumbnailLocation : "";
+
+		String fullUrl = "";
+		if (thumbnailLocation != null) {
+			fullUrl = thumbnailLocation.replace("https:--", "https://");
+		}
 
 		map.put("thumbnail", fullUrl);
 		return map;
