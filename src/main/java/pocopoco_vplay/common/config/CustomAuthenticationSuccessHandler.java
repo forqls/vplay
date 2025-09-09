@@ -32,7 +32,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         HttpSession session = request.getSession();
         session.setAttribute("loginUser", loginUser);
 
-        /*Timestamp loginUserPaymentDate = (Timestamp) uService.getPaymentDate(loginUser);
+        Timestamp loginUserPaymentDate = (Timestamp) uService.getPaymentDate(loginUser);
+
+        // loginUserPaymentDate가 null이 아닐 때만 실행
         if (loginUserPaymentDate != null) {
             LocalDateTime localDateTime = loginUserPaymentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
             Timestamp loginUserPaymentEndDate = Timestamp.valueOf(localDateTime.plusDays(30));
@@ -48,7 +50,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 loginUser = uService.signIn(user);
                 session.setAttribute("loginUser", loginUser);
             }
-        }*/
+        }
 
         String targetUrl = "/";
         String beforeURL = (String) session.getAttribute("beforeURL");
