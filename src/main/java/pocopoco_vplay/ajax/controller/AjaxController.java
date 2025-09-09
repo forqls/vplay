@@ -67,39 +67,27 @@ public class AjaxController {
 	@Value("${CLOUDFLARE_R2_PUBLIC_URL}")
 	private String r2PublicUrl;
 
+	// AjaxController.java의 selectThumbnail 메소드를 이렇게 수정해줘
+
 	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
 	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo) {
 		HashMap<String, String> map = new HashMap<>();
-		String thumbnailLocation = null; // S3에 저장된 최종 파일 경로/이름
+		String thumbnailLocation = null;
 
-		// bService.selectFiles(contentNo)가 해당 게시물의 파일 목록을 가져오는 것 같아.
 		ArrayList<Files> fileList = bService.selectFiles(contentNo);
 
-		// ✨ 중요: 파일 목록이 null이거나 비어있지 않은 경우에만 로직 실행 (Null 체크 1)
 		if (fileList != null && !fileList.isEmpty()) {
 			for (Files f : fileList) {
-				// fileLevel 1이 원본 영상/이미지 썸네일이라고 가정
-				if (f.getFileLevel() == 1) {
+				if (f.getFileLevel() == 1) { // 원본 영상/이미지
 					thumbnailLocation = f.getFileLocation();
-					break; // 원하는 파일을 찾았으면 더 반복할 필요 없음
+					break;
 				}
 			}
 		}
-
-		String fullUrl = ""; // 기본값은 빈 문자열
-
-		// ✨ 중요: thumbnailLocation을 찾은 경우에만 전체 URL 생성 (Null 체크 2)
-		if (thumbnailLocation != null) {
-			// @Value로 주입받은 r2PublicUrl 필드를 사용
-			fullUrl = r2PublicUrl + "/" + thumbnailLocation;
-		}
+		String fullUrl = (thumbnailLocation != null) ? thumbnailLocation : "";
 
 		map.put("thumbnail", fullUrl);
-
-		// 이 로직에서는 thumbnail 정보만 필요하므로 file 정보는 빼도 괜찮아.
-		// map.put("file", ...);
-
-		return map; // 파일이 없으면 {"thumbnail": ""} 이라는 정상적인 JSON이 반환됨
+		return map;
 	}
 	
 	@PostMapping("{menuName:[a-zA-Z-]+}")
