@@ -52,8 +52,7 @@ public class R2Service {
 						.build(),
 				RequestBody.fromBytes(file.getBytes()));
 
-		// URL이 http로 시작하지 않으면 https:// 를 붙여주는 로직 추가
-		if (publicUrl != null && !publicUrl.startsWith("http")) {
+		if (publicUrl != null && !publicUrl.trim().toLowerCase().startsWith("http")) {
 			return "https://" + publicUrl + "/" + fileName;
 		}
 

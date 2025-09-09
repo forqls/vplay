@@ -87,12 +87,8 @@ public class AjaxController {
 			}
 		}
 
-		String fullUrl = "";
-		if (thumbnailLocation != null) {
-			fullUrl = thumbnailLocation.replace("https:--", "https://");
-		}
-
-		map.put("thumbnail", fullUrl);
+		// 불필요한 replace 코드를 제거하고, thumbnailLocation을 그대로 사용합니다.
+		map.put("thumbnail", thumbnailLocation != null ? thumbnailLocation : "");
 		return map;
 	}
 	
