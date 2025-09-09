@@ -750,5 +750,29 @@
 		</if>
 	</select>
 
+	<select id="selectRecommendedVideos" resultType="Content">
+		SELECT
+			C.CONTENT_NO,
+			C.CONTENT_TITLE,
+			C.USER_NICKNAME,
+			F.FILE_LOCATION AS storedFileName FROM
+			CONTENT C
+				LEFT JOIN
+			FILES F ON (C.CONTENT_NO = F.REF_CONTENT_NO) WHERE
+			C.MD_RECOMMENDATION = 'Y'
+		   AND F.FILE_LEVEL = 1
+     </select>
+
+	<select id="selectThumbnailFile" resultType="Files">
+		SELECT
+			FILE_LOCATION,
+			ORIGINAL_FILE_NAME
+		FROM
+			FILES
+		WHERE
+			REF_CONTENT_NO = #{contentNo}
+		  AND FILE_LEVEL = 1
+    </select>
+
 
 </mapper>

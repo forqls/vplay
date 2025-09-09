@@ -37,4 +37,5 @@ public class Content {
 	private String mdRecommendation;
 	private int downloadCount;
 	private String UserProfile;
+	private String storedFileName;
 }

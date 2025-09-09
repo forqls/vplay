@@ -3,6 +3,8 @@ package pocopoco_vplay.board.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.VideoResponseDto;
 import pocopoco_vplay.board.exception.BoardException;
 import pocopoco_vplay.board.model.service.BoardService;
 import pocopoco_vplay.board.model.vo.Content;
@@ -770,6 +773,38 @@ public class BoardController {
 		}else {
 			throw new UsersException("로그인 하셈");
 		}
+	}
+
+	@GetMapping("/")
+	public String mainPage(Model model) {
+		List<VideoResponseDto> videoList = bService.findRecommendedVideos();
+		model.addAttribute("videos", videoList);
+		return "index"; // 메인 페이지 HTML
+	}
+
+	@GetMapping("/select-thumbnail/{contentNo}")
+	@ResponseBody // HTML 페이지가 아닌, 데이터(JSON) 자체를 반환하겠다는 의미!
+	public Map<String, Object> selectThumbnail(@PathVariable("contentNo") int contentNo) {
+
+		// 1. 서비스 & 매퍼를 통해 contentNo로 파일 정보를 조회한다.
+		//    이 역할을 하는 서비스/매퍼 메소드가 새로 필요
+		//    (예: boardService.selectThumbnailFile(contentNo))
+		Files file = bService.selectThumbnailFile(contentNo);
+
+		// 2. 버킷 URL을 application.properties에서 가져온다. (Service에 이미 있음)
+		String bucketUrl = bService.getBucketBaseUrl(); // Service에 getter 추가 필요
+
+		// 3. 파일 정보가 있다면, 전체 S3 URL을 만든다.
+		String fullUrl = "";
+		if (file != null) {
+			fullUrl = bucketUrl + "/" + file.getFileLocation();
+		}
+
+		// 4. JSON 형태로 데이터를 만들어서 반환한다. (이게 JavaScript의 'data' 객체가 됨)
+		Map<String, Object> response = new HashMap<>();
+		response.put("thumbnail", fullUrl); // JS에서 data.thumbnail로 접근 가능
+
+		return response;
 	}
 
 

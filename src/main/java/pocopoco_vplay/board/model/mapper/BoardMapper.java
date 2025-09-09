@@ -128,4 +128,8 @@ public interface BoardMapper {
    int deleteContentCategory(@Param("contentNo")int contentNo);
 
    ArrayList<Content> selectDownloadsCategorySort(@Param("menu") String menu, @Param("userNo") int userNo, @Param("sort") String sort);
+
+    ArrayList<Content> selectRecommendedVideos();
+
+	Files selectThumbnailFile(int contentNo);
 }

@@ -7,15 +7,26 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import pocopoco_vplay.board.Video;
+import pocopoco_vplay.board.VideoResponseDto;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
 import pocopoco_vplay.board.model.vo.Files;
 import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.common.model.vo.PageInfo;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
+import pocopoco_vplay.board.model.vo.Content;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
+
+	@Value("${cloud.aws.s3.bucket-url}")
+	private String bucketBaseUrl;
 
 	private final BoardMapper mapper;
 
@@ -201,16 +212,18 @@ public class BoardService {
 		return mapper.insertContentFile(cFileUrl, contentNo, cFileOriginalName);
 	}
 
-    public int updateRecommendation(HashMap<String, String> map) {
+	public int updateRecommendation(HashMap<String, String> map) {
 		return mapper.updateRecommendation(map);
-    }
-
-
-	public int getMdRecommendationCount() {	return mapper.getMdRecommendationCount();
 	}
 
-    public ArrayList<Content> selectMdList() { return mapper.selectMdList();
-    }
+
+	public int getMdRecommendationCount() {
+		return mapper.getMdRecommendationCount();
+	}
+
+	public ArrayList<Content> selectMdList() {
+		return mapper.selectMdList();
+	}
 
 	public ArrayList<Files> contentFile(int contentNo) {
 		return mapper.contentFile(contentNo);
@@ -246,8 +259,32 @@ public class BoardService {
 
 
 	public ArrayList<Content> selectDownloadsCategorySort(String menu, int userNo, String sort) {
-		return mapper.selectDownloadsCategorySort(menu,userNo,sort);
+		return mapper.selectDownloadsCategorySort(menu, userNo, sort);
 	}
 
+	/**
+	 * MD 추천 비디오 목록을 가져와서,
+	 * 완전한 비디오 URL을 포함한 DTO 리스트로 변환하는 메소드
+	 */
+	public List<VideoResponseDto> findRecommendedVideos() {
 
+		// 1. Mapper 호출: DB에서 CONTENT와 FILES 테이블을 JOIN한 추천 콘텐츠 목록을 가져온다.
+		// (이 시점에서 각 Content 객체에는 'storedFileName' 필드에 파일명 정보가 채워져 있음)
+		ArrayList<Content> contentList = mapper.selectRecommendedVideos();
+
+		// 2. DTO로 변환: 가져온 Content 리스트를 스트림으로 변환하여
+		//    각각의 Content 객체를 VideoResponseDto로 변환한다.
+		//    이 과정에서 '전체 비디오 URL'이 만들어진다.
+		return contentList.stream()
+				.map(content -> new VideoResponseDto(content, bucketBaseUrl))
+				.collect(Collectors.toList());
+	}
+
+	public Files selectThumbnailFile(int contentNo) {
+		return mapper.selectThumbnailFile(contentNo);
+	}
+
+	public String getBucketBaseUrl() {
+		return this.bucketBaseUrl;
+	}
 }
