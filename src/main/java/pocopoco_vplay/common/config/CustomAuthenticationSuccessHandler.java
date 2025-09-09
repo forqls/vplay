@@ -55,7 +55,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             System.err.println("결제 만료일 확인 중 오류 발생 (로그인 진행에는 영향 없음): " + e.getMessage());
         }
 
-        // 3. [더 똑똑해진 리디렉션 로직] 세션에서 최신 사용자 정보를 다시 가져옴
+        // 3. 세션에서 최신 사용자 정보를 다시 가져옴
         Users finalLoginUser = (Users) session.getAttribute("loginUser");
         String isAdmin = finalLoginUser.getIsAdmin();
 
