@@ -31,22 +31,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         HttpSession session = request.getSession();
         session.setAttribute("loginUser", loginUser);
 
-        // 2. [안전하게 수정된 결제 로직] 어떤 경우에도 오류가 나지 않도록 try-catch로 감쌈
         try {
             Timestamp loginUserPaymentDate = (Timestamp) uService.getPaymentDate(loginUser);
             if (loginUserPaymentDate != null) {
                 LocalDateTime localDateTime = loginUserPaymentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 Timestamp loginUserPaymentEndDate = Timestamp.valueOf(localDateTime.plusDays(30));
                 Timestamp today = Timestamp.valueOf(LocalDateTime.now());
-
                 boolean isPaymentExpired = today.after(loginUserPaymentEndDate);
                 boolean hasSeenAlert = loginUser.isAlertShown();
-
                 if (isPaymentExpired && !hasSeenAlert) {
                     uService.deleteUserPlan(loginUser);
                     uService.updateAlertShown(loginUser.getUserNo());
-
-                    // 세션 정보를 최신 상태로 업데이트
                     Users updatedUser = uService.signIn(user);
                     session.setAttribute("loginUser", updatedUser);
                 }
@@ -55,9 +50,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             System.err.println("결제 만료일 확인 중 오류 발생 (로그인 진행에는 영향 없음): " + e.getMessage());
         }
 
-        // 3. 세션에서 최신 사용자 정보를 다시 가져옴
         Users finalLoginUser = (Users) session.getAttribute("loginUser");
         String isAdmin = finalLoginUser.getIsAdmin();
+
+        // [디버깅 로그] isAdmin 변수의 실제 값을 로그로 출력
+        System.out.println("===== DEBUGGING ADMIN CHECK =====");
+        System.out.println("User ID: " + finalLoginUser.getUserId());
+        System.out.println("isAdmin value from DB: [" + isAdmin + "]"); // 대괄호로 감싸서 공백까지 확인
+        System.out.println("Is Admin Check Result: " + (isAdmin != null && "Y".equalsIgnoreCase(isAdmin.trim())));
+        System.out.println("===============================");
 
         String targetUrl = "/";
         String beforeURL = (String) session.getAttribute("beforeURL");
@@ -65,7 +66,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (beforeURL != null && !beforeURL.contains("/signIn")) {
             targetUrl = beforeURL;
         } else if (isAdmin != null && "Y".equalsIgnoreCase(isAdmin.trim())) {
-            // is_admin 값이 'Y' 또는 'y'이고, 공백이 있어도 관리자로 인식
             targetUrl = "/admin/dashboard";
         }
 
