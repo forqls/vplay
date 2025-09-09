@@ -166,18 +166,17 @@ public class UsersService implements UserDetailsService {
 		Users user = new Users();
 		user.setUserId(username);
 
-		// signIn 메소드를 사용해서 사용자 정보를 가져옵니다.
 		Users foundUser = mapper.signIn(user);
 
 		if (foundUser == null) {
 			throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
 		}
 
-		// Spring Security가 사용할 UserDetails 객체로 변환해서 반환합니다.
 		return User.builder()
 				.username(foundUser.getUserId())
 				.password(foundUser.getUserPw())
-				.roles(foundUser.getIsAdmin().equals("Y") ? "ADMIN" : "USER")
+				// NullPointerException을 방지
+				.roles("Y".equals(foundUser.getIsAdmin()) ? "ADMIN" : "USER")
 				.build();
 	}
 }
