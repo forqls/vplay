@@ -7,7 +7,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import pocopoco_vplay.board.Video;
 import pocopoco_vplay.board.VideoResponseDto;
 import pocopoco_vplay.board.model.mapper.BoardMapper;
 import pocopoco_vplay.board.model.vo.Content;
@@ -16,10 +15,9 @@ import pocopoco_vplay.board.model.vo.Reply;
 import pocopoco_vplay.common.model.vo.PageInfo;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import pocopoco_vplay.board.model.vo.Content;
 
 @Service
 @RequiredArgsConstructor
