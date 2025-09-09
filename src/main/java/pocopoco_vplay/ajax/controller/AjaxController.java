@@ -68,32 +68,38 @@ public class AjaxController {
 	private String r2PublicUrl;
 
 	@GetMapping("/select-thumbnail/{contentNo:[0-9]+}")
-	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo){
+	public HashMap<String, String> selectThumbnail(@PathVariable("contentNo") int contentNo) {
 		HashMap<String, String> map = new HashMap<>();
-		String thumbnail = null;
-		String file = null;
+		String thumbnailLocation = null; // S3에 저장된 최종 파일 경로/이름
 
-		ArrayList<Files> contentFile = bService.selectFiles(contentNo);
-		for(Files f : contentFile) {
-			if(f.getFileLevel() == 1) {
-				thumbnail = f.getFileLocation();
-			} else {
-				file = f.getFileLocation();
+		// bService.selectFiles(contentNo)가 해당 게시물의 파일 목록을 가져오는 것 같아.
+		ArrayList<Files> fileList = bService.selectFiles(contentNo);
+
+		// ✨ 중요: 파일 목록이 null이거나 비어있지 않은 경우에만 로직 실행 (Null 체크 1)
+		if (fileList != null && !fileList.isEmpty()) {
+			for (Files f : fileList) {
+				// fileLevel 1이 원본 영상/이미지 썸네일이라고 가정
+				if (f.getFileLevel() == 1) {
+					thumbnailLocation = f.getFileLocation();
+					break; // 원하는 파일을 찾았으면 더 반복할 필요 없음
+				}
 			}
 		}
 
-		// ✅ 여기! 경로 앞에 Public URL을 붙여주는 로직 추가
-		if (thumbnail != null && !thumbnail.startsWith("http")) {
-			thumbnail = r2PublicUrl + "/" + thumbnail;
-		}
-		if (file != null && !file.startsWith("http")) {
-			file = r2PublicUrl + "/" + file;
+		String fullUrl = ""; // 기본값은 빈 문자열
+
+		// ✨ 중요: thumbnailLocation을 찾은 경우에만 전체 URL 생성 (Null 체크 2)
+		if (thumbnailLocation != null) {
+			// @Value로 주입받은 r2PublicUrl 필드를 사용
+			fullUrl = r2PublicUrl + "/" + thumbnailLocation;
 		}
 
-		map.put("thumbnail", thumbnail);
-		map.put("file", file);
+		map.put("thumbnail", fullUrl);
 
-		return map;
+		// 이 로직에서는 thumbnail 정보만 필요하므로 file 정보는 빼도 괜찮아.
+		// map.put("file", ...);
+
+		return map; // 파일이 없으면 {"thumbnail": ""} 이라는 정상적인 JSON이 반환됨
 	}
 	
 	@PostMapping("{menuName:[a-zA-Z-]+}")
