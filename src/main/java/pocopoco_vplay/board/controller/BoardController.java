@@ -794,9 +794,9 @@ public class BoardController {
 		// 2. 버킷 URL을 application.properties에서 가져온다. (Service에 이미 있음)
 		String bucketUrl = bService.getBucketBaseUrl(); // Service에 getter 추가 필요
 
-		// 3. 파일 정보가 있다면, 전체 S3 URL을 만든다.
+		// 3. file이 null이 아닐 때만 URL을 만듬
 		String fullUrl = "";
-		if (file != null) {
+		if (file != null && file.getFileLocation() != null) {
 			fullUrl = bucketUrl + "/" + file.getFileLocation();
 		}
 
