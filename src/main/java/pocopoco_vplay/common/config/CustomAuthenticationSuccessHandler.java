@@ -54,7 +54,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String beforeURL = (String) session.getAttribute("beforeURL");
         if (beforeURL != null && !beforeURL.contains("/signIn")) {
             targetUrl = beforeURL;
-        } else if (loginUser.getIsAdmin().equals("Y")) {
+        } else if ("Y".equals(loginUser.getIsAdmin())) {
             targetUrl = "/admin/dashboard";
         }
 
