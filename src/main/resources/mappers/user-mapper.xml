@@ -164,11 +164,11 @@
 	</update>
 
 	<select id="getPaymentDate">
-		SELECT payment_date
+		SELECT p.payment_date
 		FROM users u
 				 JOIN payment p USING (user_no)
 		WHERE u.user_no = #{userNo}
-		ORDER BY payment_date DESC
+		ORDER BY p.payment_date DESC
 			LIMIT 1
 	</select>
 
