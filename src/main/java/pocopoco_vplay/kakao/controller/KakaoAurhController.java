@@ -17,11 +17,11 @@ import org.springframework.web.client.RestTemplate;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import pocopoco_vplay.kakao.config.GoogleOAuthConfig;
 import pocopoco_vplay.users.exception.UsersException;
 import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Value;
 
 @Controller
@@ -29,8 +29,13 @@ import org.springframework.beans.factory.annotation.Value;
 @RequiredArgsConstructor
 public class KakaoAurhController {
     private final UsersService uService;
-    private final GoogleOAuthConfig googleOAuthConfig;
     private final String KAKAO_CLIENT_ID = "ffd6b91df4ad805e542c6a8a450195b3";
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String GOOGLE_CLIENT_ID;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    private String GOOGLE_CLIENT_SECRET;
 
     @Value("${kakao.redirect.uri}")
     private String KAKAO_REDIRECT_URI;
@@ -75,9 +80,8 @@ public class KakaoAurhController {
 
     @GetMapping("/google")
     public String googleLogin(@RequestParam("code") String code, HttpSession session) {
-    	 String CLIENT_ID = googleOAuthConfig.getClientId();
-    	 String CLIENT_SECRET = googleOAuthConfig.getClientSecret();
-        String accessToken = getAccessToken(code, GOOGLE_TOKEN_URL, CLIENT_ID, GOOGLE_REDIRECT_URI,CLIENT_SECRET);
+        String accessToken = getAccessToken(code, GOOGLE_TOKEN_URL, GOOGLE_CLIENT_ID, GOOGLE_REDIRECT_URI, GOOGLE_CLIENT_SECRET);
+
         if (accessToken == null) throw new UsersException("구글 토큰 못 가져옴 ㅋㅋ");
 
         Map<String, Object> userInfo = getUserInfo(accessToken, GOOGLE_USER_INFO_URL);

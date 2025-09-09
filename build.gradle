@@ -55,7 +55,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	implementation("com.github.iamport:iamport-rest-client-java:0.2.23")
-	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 	
 	//버킷용
 	implementation platform('software.amazon.awssdk:bom:2.25.48') // 버전 관리자 먼저 소개!
