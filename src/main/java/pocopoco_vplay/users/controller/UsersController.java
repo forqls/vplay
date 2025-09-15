@@ -88,7 +88,7 @@ public class UsersController {
 		}
 
 		// 이메일 발송 로직 (SendGrid)
-		Email from = new Email("no-reply@vplay.com"); // 보내는 사람 이메일 (아무거나 상관없음)
+		Email from = new Email("poco.vplay@gmail.com");
 		String subject = "VPLAY 인증번호 안내";
 		Email to = new Email(email); // 받는 사람 이메일
 		com.sendgrid.helpers.mail.objects.Content content = new com.sendgrid.helpers.mail.objects.Content("text/plain", "인증번호는 " + random + " 입니다.");
