@@ -1,5 +1,30 @@
 package pocopoco_vplay.users.controller;
 
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Email;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pocopoco_vplay.board.model.service.BoardService;
+import pocopoco_vplay.board.model.vo.Content;
+import pocopoco_vplay.board.model.vo.Reply;
+import pocopoco_vplay.users.exception.UsersException;
+import pocopoco_vplay.users.model.service.UsersService;
+import pocopoco_vplay.users.model.vo.Message;
+import pocopoco_vplay.users.model.vo.Users;
+
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -9,36 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import pocopoco_vplay.board.model.service.BoardService;
-import pocopoco_vplay.board.model.vo.Content;
-import pocopoco_vplay.board.model.vo.Reply;
-import pocopoco_vplay.users.exception.UsersException;
-import pocopoco_vplay.users.model.service.UsersService;
-import pocopoco_vplay.users.model.vo.Message;
-import pocopoco_vplay.users.model.vo.Users;
-
 @Controller
 @RequestMapping("/users/")
 @RequiredArgsConstructor
@@ -47,7 +42,9 @@ public class UsersController {
 	private final UsersService uService;
 	private final BoardService bService;
 	private final BCryptPasswordEncoder bcrypt;
-	private final JavaMailSender mailSender;
+
+	@Value("${SENDGRID_API_KEY}") // Railway 변수를 주입
+	private String sendGridApiKey;
 
 	@GetMapping("home")
 	public String goHome(HttpSession session) {
@@ -83,25 +80,40 @@ public class UsersController {
 	@GetMapping("emailCheck")
 	@ResponseBody
 	public String emailSend(@RequestParam("email") String email) {
-		System.out.println("email");
-		MimeMessage mimeMessage = mailSender.createMimeMessage();
-		System.out.println("email은 " + email);
+		System.out.println("SendGrid로 이메일 발송 시도: " + email);
+
 		String random = "";
 		for (int i = 0; i < 5; i++) {
 			random += (int) (Math.random() * 10);
 		}
-		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+
+		// 이메일 발송 로직 (SendGrid)
+		Email from = new Email("no-reply@vplay.com"); // 보내는 사람 이메일 (아무거나 상관없음)
+		String subject = "VPLAY 인증번호 안내";
+		Email to = new Email(email); // 받는 사람 이메일
+		com.sendgrid.helpers.mail.objects.Content content = new com.sendgrid.helpers.mail.objects.Content("text/plain", "인증번호는 " + random + " 입니다.");
+		Mail mail = new Mail(from, subject, to, content);
+
+		SendGrid sg = new SendGrid(sendGridApiKey);
+		Request request = new Request();
+
 		try {
-			mimeMessageHelper.setFrom("poco.vplay@gmail.com");
-			mimeMessageHelper.setSubject(random);
-			mimeMessageHelper.setTo(email);
-			mimeMessageHelper.setText("인증번호는 : " + random + " 입니다.");
-		} catch (MessagingException e) {
-			e.printStackTrace();
+			request.setMethod(Method.POST);
+			request.setEndpoint("mail/send");
+			request.setBody(mail.build());
+			Response response = sg.api(request);
+			System.out.println("SendGrid 응답 코드: " + response.getStatusCode());
+			if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+				System.out.println("이메일 발송 성공!");
+				return random; // 성공 시 인증번호 반환
+			} else {
+				System.out.println("SendGrid 에러: " + response.getBody());
+				return "error"; // 실패 시 "error" 문자열 반환
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return "error";
 		}
-		mailSender.send(mimeMessage);
-		System.out.println(random);
-		return random;
 	}
 
 	@PostMapping("signUp")
