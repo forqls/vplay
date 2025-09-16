@@ -478,9 +478,8 @@ public class UsersController {
 		}
 	}
 
-	@GetMapping("/{userNo}")
+	@GetMapping("/messages/{userNo}")
 	public String messagePage(@PathVariable("userNo") String userNo, HttpSession session, Model model) {
-		System.out.println("들어왔음 " + userNo);
 		Users loginUser = (Users) session.getAttribute("loginUser");
 
 		if (loginUser == null || loginUser.getUserNo() != Integer.parseInt(userNo)) {
@@ -493,15 +492,14 @@ public class UsersController {
 			String timeout = getTimeAgo(m.getSentTime());
 			m.setTimeout(timeout);
 		}
-//		System.out.println("list 는 " + list);
+		//System.out.println("list 는 " + list);
 
-		// 시간 변환
-		System.out.println(list);
 
 		model.addAttribute("list", list);
 
 		return "my_message";
 	}
+
 
 	// 시간 변환 메소드 듀레이션사용함
 	private String getTimeAgo(LocalDateTime sentTime) {
@@ -614,28 +612,29 @@ public class UsersController {
 		return "subscribe";
 	}
 
-	@RequestMapping("/createrPage/{createrNo}")
-	public String createrPage(@PathVariable int createrNo, Model model, HttpSession session) {
+	@GetMapping("createrPage")
+	public String goToCreaterPage(@RequestParam("createrNo") int createrNo,
+								  HttpSession session,
+								  Model model) {
 		try {
-
-			Users loginUser = (Users) session.getAttribute("loginUser");
-			boolean isSubscribed = false;
-
-			if (loginUser != null) {
-				isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
-			}
-			ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
 			Users createrUser = uService.getInfoUser(createrNo);
+			ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
 
 			Users tempUser = new Users();
 			tempUser.setUserNo(createrNo);
 			int subscriberCount = uService.findfollow(tempUser);
 
+			boolean isSubscribed = false;
+			Users loginUser = (Users) session.getAttribute("loginUser");
+
+			if (loginUser != null) {
+				isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
+			}
 
 			model.addAttribute("list", list)
 					.addAttribute("createrUser", createrUser)
 					.addAttribute("subscriberCount", subscriberCount)
-					.addAttribute("isSubscribed", isSubscribed) // 최종적으로 결정된 isSubscribed 값을 사용
+					.addAttribute("isSubscribed", isSubscribed) // 최종적으로 결정된 isSubscribed 값을 사용합니다.
 					.addAttribute("createrNo", createrNo);
 
 			return "createrPage";
@@ -643,8 +642,6 @@ public class UsersController {
 			throw new UsersException("크리에이터 페이지 조회 실패: " + e.getMessage());
 		}
 	}
-
-
 
 
 
