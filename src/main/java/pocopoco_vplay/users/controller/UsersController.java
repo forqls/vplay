@@ -88,6 +88,8 @@ public class UsersController {
 			random += (int) (Math.random() * 10);
 		}
 
+		System.out.println("생성된 인증번호: " + random);
+
 		// 이메일 발송 로직 (SendGrid)
 		Email from = new Email("poco.vplay@gmail.com");
 		String subject = "VPLAY 인증번호 안내";
@@ -128,13 +130,20 @@ public class UsersController {
 
 		if (socialUser != null) {
 			// --- 2-A. 소셜 로그인 사용자인 경우 ---
-
-			user.setLoginType(socialUser.getLoginType()); // 예: "K" 또는 "G"
+			user.setLoginType(socialUser.getLoginType());
 
 			if ("K".equals(socialUser.getLoginType())) {
 				user.setKakaoId(socialUser.getKakaoId());
+				// 카카오 사용자는 user_id가 null이므로, 카카오 ID를 기반으로 고유한 user_id를 생성
+				if (user.getUserId() == null || user.getUserId().isEmpty()) {
+					user.setUserId("kakao_" + socialUser.getKakaoId());
+				}
 			} else if ("G".equals(socialUser.getLoginType())) {
 				user.setGoogleId(socialUser.getGoogleId());
+				// 구글 사용자는 user_id가 null이므로, 구글 ID를 기반으로 고유한 user_id를 생성
+				if (user.getUserId() == null || user.getUserId().isEmpty()) {
+					user.setUserId("google_" + socialUser.getGoogleId());
+				}
 				if (user.getUserEmail() == null || user.getUserEmail().isEmpty()) {
 					user.setUserEmail(socialUser.getUserEmail());
 				}

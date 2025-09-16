@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Value;
 public class KakaoAurhController {
     private final UsersService uService;
 
-    // KAKAO_CLIENT_ID를 하드코딩하는 대신 @Value로 불러오도록 수정합니다.
     @Value("${kakao.client.id}")
     private String KAKAO_CLIENT_ID;
 
