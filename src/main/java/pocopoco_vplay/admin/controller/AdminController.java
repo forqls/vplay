@@ -301,7 +301,7 @@ public class AdminController {
 
 	@PostMapping("insertReply")
 	@ResponseBody
-	public int insertReply(@ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") String contentNo) {
+	public int insertReply(@ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") int contentNo) { // String -> int로 변경
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			reply.setUserNo(loginUser.getUserNo());
