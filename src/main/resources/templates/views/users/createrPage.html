@@ -135,14 +135,17 @@
 		const button = document.getElementById("subscribeBtn");
 		const createrNo = document.getElementById('createrNo').value;
 		const loginUser = /*[[${session.loginUser}]]*/ null;
+		// 이 부분을 스크립트 최상단에 선언하여 전역에서 접근할 수 있도록 변경했습니다.
+		const subscriberCountSpan = document.querySelector('.subscriber_count');
 
-		if (button) {
+		if (button && subscriberCountSpan) {
 			button.addEventListener("click", () => {
 				if (!loginUser) {
 					alert('로그인 후 이용해주세요.');
 					return;
 				}
 				const isCancel = button.innerText === "구독 중";
+				let currentCount = parseInt(subscriberCountSpan.innerText);
 
 				fetch("/users/post/updateSubscribe", {
 					method: "POST",
@@ -174,14 +177,11 @@
 
 		function thumbnailPlay() {
 			const gridItems = document.querySelectorAll('.grid-item');
-
 			gridItems.forEach((item) => {
 				const thumbnailContainer = item.querySelector('.item-thumbnail');
 				const contentNo = item.querySelector('input[type=hidden]').value;
 				const menuNo = item.querySelector('input[type=hidden]:nth-of-type(2)').value;
-
 				if (!thumbnailContainer || !contentNo || !menuNo) return;
-
 				fetch("/board/select-thumbnail/" + contentNo)
 						.then(response => {
 							if (!response.ok) throw new Error('Network response was not ok');
@@ -191,9 +191,7 @@
 							if (!data || !data.thumbnail) {
 								return;
 							}
-
-							thumbnailContainer.innerHTML = ''; // 기존 내용 비움
-
+							thumbnailContainer.innerHTML = '';
 							if (menuNo == 1 || menuNo == 5) {
 								const video = document.createElement('video');
 								video.id = "item-preview";
@@ -201,7 +199,6 @@
 								video.loop = true;
 								video.src = data.thumbnail;
 								thumbnailContainer.appendChild(video);
-
 								item.addEventListener('mouseenter', () => video.play().catch(e => {}));
 								item.addEventListener('mouseleave', () => {
 									video.pause();
@@ -212,7 +209,7 @@
 								img.id = "item-preview";
 								img.src = data.thumbnail;
 								thumbnailContainer.appendChild(img);
-							} else { // menuNo == 3 (음악)
+							} else {
 								const img = document.createElement('img');
 								img.id = "item-preview";
 								img.src = "/img/sound-effects.png";
@@ -225,7 +222,6 @@
 
 		function clickDetail() {
 			const list = document.querySelectorAll(".grid-item");
-
 			[...list].map((content, index, array) => {
 				content.addEventListener('click', function(event) {
 					const contentNo = this.children[0].value;
