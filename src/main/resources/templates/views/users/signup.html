@@ -322,7 +322,7 @@ input[type="date"] {
 				nickNameCheck = nickName !== '';
 			});
 
-			// 전화번호 중복 확인 로직
+			// 전화번호 중복 확인
 			telInput.addEventListener('blur', () => {
 				const userPhone = telInput.value.trim();
 
@@ -342,6 +342,7 @@ input[type="date"] {
 							confirmPhoneText.style.color = 'red';
 							phoneCheck = false;
 						} else {
+							// 중복이 아닐 때 성공 메시지를 명확히 표시합니다.
 							confirmPhoneText.innerText = '사용 가능한 전화번호입니다.';
 							confirmPhoneText.style.color = 'green';
 							phoneCheck = true;
@@ -351,7 +352,7 @@ input[type="date"] {
 				});
 			});
 
-			// 이메일 중복 확인 로직
+			// 이메일 중복 확인
 			emailInput.addEventListener('blur', () => {
 				const userEmail = emailInput.value.trim();
 
