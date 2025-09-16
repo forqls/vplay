@@ -21,7 +21,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
-    margin: 4rem 0;
+    margin: 5rem 0 7rem;
 }
 
 .hero-image-wrap {
@@ -151,7 +151,7 @@ img.Ghost_custom{
 }
 
 .section {
-    margin-bottom: 5rem;
+    margin-bottom: 7rem;
 }
 
 .section-title {
@@ -321,6 +321,11 @@ button.subscribe-button {
     aspect-ratio: 16 / 9;
     background-color: #222;
     overflow: hidden;
+}
+
+/*메인 슬라이드 버튼 삭제*/
+span.buttonWrap {
+    display: none;
 }
 
 .content_wrap {
