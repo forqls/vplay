@@ -251,7 +251,7 @@ input[type="date"] {
 					<input type="radio" name="userGender" value="M" class="radio-input" id="male"> <span>남자</span> <input type="radio" name="userGender" value="F" class="radio-input" id="female"> <span>여자</span>
 				</div>
 			</div>
-			<button type="button" class="signup-btn" onclick="joinBtn()" id="join">회원가입</button>
+			<button type="button" class="signup-btn" id="join">회원가입</button>
 		</form>
 		<div id="successModal" class="modal">
 			<div class="modal-content">
@@ -303,6 +303,9 @@ input[type="date"] {
 		        const tel = telInput.value.trim();
 		        phoneCheck = tel !== '';
 		    });
+
+			const signupButton = document.getElementById('join');
+			signupButton.addEventListener('click', joinBtn);
 		};
 		
 		document.getElementById('checkIdBtn').addEventListener('click',()=>{
