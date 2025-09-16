@@ -155,7 +155,13 @@
 						.then(response => response.json())
 						.then(data => {
 							if (data === 1) {
-								button.innerText = isCancel ? "구독하기" : "구독 중";
+								if (isCancel) {
+									button.innerText = "구독하기";
+									subscriberCountSpan.innerText = currentCount - 1;
+								} else {
+									button.innerText = "구독 중";
+									subscriberCountSpan.innerText = currentCount + 1;
+								}
 							}
 						});
 			});
