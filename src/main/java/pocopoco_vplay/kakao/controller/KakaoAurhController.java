@@ -22,14 +22,16 @@ import pocopoco_vplay.users.model.service.UsersService;
 import pocopoco_vplay.users.model.vo.Users;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.annotation.Value;
 
 @Controller
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
 public class KakaoAurhController {
     private final UsersService uService;
-    private final String KAKAO_CLIENT_ID = "ffd6b91df4ad805e542c6a8a450195b3";
+
+    // KAKAO_CLIENT_ID를 하드코딩하는 대신 @Value로 불러오도록 수정합니다.
+    @Value("${kakao.client.id}")
+    private String KAKAO_CLIENT_ID;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String GOOGLE_CLIENT_ID;
@@ -54,10 +56,10 @@ public class KakaoAurhController {
     @GetMapping("/kakao")
     public String kakaoLogin(@RequestParam("code") String code, HttpSession session) {
         String accessToken = getAccessToken(code, KAKAO_TOKEN_URL, KAKAO_CLIENT_ID, KAKAO_REDIRECT_URI,null);
-        if (accessToken == null) throw new UsersException("카카오 토큰 못 가져옴 ㅋㅋ");
+        if (accessToken == null) throw new UsersException("카카오 토큰을 가져오는 데 실패했습니다. 다시 시도해 주세요.");
 
         Map<String, Object> userInfo = getUserInfo(accessToken, KAKAO_USER_INFO_URL);
-        if (userInfo == null) throw new UsersException("카카오 사용자 정보 못 가져옴 ㅋㅋ");
+        if (userInfo == null) throw new UsersException("카카오 사용자 정보를 가져오는 데 실패했습니다. 다시 시도해 주세요.");
 
         String kakaoId = userInfo.get("id").toString();
         String nickname = userInfo.get("nickname") != null ? userInfo.get("nickname").toString() : "닉네임 없음";
@@ -70,8 +72,8 @@ public class KakaoAurhController {
         } else {
             Users users = new Users();
             users.setKakaoId(kakaoId);
-            users.setUserId(null); 
-            users.setLoginType("K"); 
+            users.setUserId(null);
+            users.setLoginType("K");
             users.setUserNickname(nickname);
             session.setAttribute("kakaoUser", users);
             return "redirect:/users/signUp";
@@ -82,10 +84,10 @@ public class KakaoAurhController {
     public String googleLogin(@RequestParam("code") String code, HttpSession session) {
         String accessToken = getAccessToken(code, GOOGLE_TOKEN_URL, GOOGLE_CLIENT_ID, GOOGLE_REDIRECT_URI, GOOGLE_CLIENT_SECRET);
 
-        if (accessToken == null) throw new UsersException("구글 토큰 못 가져옴 ㅋㅋ");
+        if (accessToken == null) throw new UsersException("구글 토큰을 가져오는 데 실패했습니다. 다시 시도해 주세요.");
 
         Map<String, Object> userInfo = getUserInfo(accessToken, GOOGLE_USER_INFO_URL);
-        if (userInfo == null) throw new UsersException("구글 사용자 정보 못 가져옴 ㅋㅋ");
+        if (userInfo == null) throw new UsersException("구글 사용자 정보를 가져오는 데 실패했습니다. 다시 시도해 주세요.");
 
         String googleId = userInfo.get("id").toString();
         String email = userInfo.get("email") != null ? userInfo.get("email").toString() : "이메일 없음";
@@ -99,7 +101,7 @@ public class KakaoAurhController {
             Users users = new Users();
             users.setGoogleId(googleId);
             users.setUserId(null);
-            users.setLoginType("G"); 
+            users.setLoginType("G");
             users.setUserEmail(email);
             session.setAttribute("googleUser", users);
             return "redirect:/users/signUp";
@@ -116,11 +118,11 @@ public class KakaoAurhController {
         params.add("client_id", clientId);
         params.add("redirect_uri", redirectUri);
         params.add("code", code);
-        
+
         if (clientSecret != null) {
             params.add("client_secret", clientSecret);
         }
-        
+
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         ResponseEntity<Map> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, Map.class);
@@ -138,5 +140,5 @@ public class KakaoAurhController {
         ResponseEntity<Map> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, request, Map.class);
         return response.getBody();
     }
-    
+
 }
