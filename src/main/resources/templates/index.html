@@ -185,7 +185,12 @@
                 <div class="creator-header">
                     <div class="creator_profile_wrap">
                         <div class="creator_profile">
-                            <img th:src="${l.userProfile}" class="creator-avatar" alt="creator_profile"/>
+                            <th:block th:if="${l.userProfile == null}">
+                                <img src="/img/testProfile.jpg" class="creator-avatar" alt="기본 프로필 이미지"/>
+                            </th:block>
+                            <th:block th:unless="${l.userProfile == null}">
+                                <img th:src="${l.userProfile}" class="creator-avatar" alt="creator_profile"/>
+                            </th:block>
                         </div>
                         <div class="verified-badge_wrap">
                             <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
