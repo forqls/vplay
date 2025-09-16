@@ -157,7 +157,7 @@
 				})
 						.then(response => response.json())
 						.then(data => {
-							if (data === 1) {
+							if (data === 1 || data === 0) {
 								if (isCancel) {
 									button.innerText = "구독하기";
 									subscriberCountSpan.innerText = currentCount - 1;
