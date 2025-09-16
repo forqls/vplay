@@ -16,19 +16,19 @@
 		where user_id = #{userId} and status ='Y'
 	</select>
 
+
 	<insert id="insertUser">
 		INSERT INTO users (
 			user_no, user_id, user_pw, user_nickname, user_name,
 			user_phone, user_email, user_birth, user_gender, status,
 			is_admin, join_date, user_comment, user_creator_rank, user_plan,
-			user_profile, login_type, kakao_id
-		) VALUES (
-					 nextval('user_seq'), #{userId}, #{userPw}, #{userNickname}, #{userName},
-					 #{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y',
-					 'N', CURRENT_TIMESTAMP, DEFAULT, DEFAULT, DEFAULT,
-					 DEFAULT, #{loginType}, #{kakaoId}
-				 )
+			user_profile, login_type, kakao_id, google_id  ) VALUES (
+			nextval('user_seq'), #{userId}, #{userPw}, #{userNickname}, #{userName},
+			#{userPhone}, #{userEmail}, #{userBirth}, #{userGender}, 'Y',
+			'N', CURRENT_TIMESTAMP, DEFAULT, DEFAULT, DEFAULT,
+			DEFAULT, #{loginType}, #{kakaoId}, #{googleId} )
 	</insert>
+
 
 	<select id="selectMyProject">
 		SELECT
