@@ -162,7 +162,8 @@ public class UsersService implements UserDetailsService {
 
 	public int updateSubscribe(Map<String, Object> map) throws UsersException {
 		try {
-			boolean isCancel = (boolean) map.get("isCancel");
+			Integer isCancelInt = (Integer) map.get("isCancel");
+			boolean isCancel = (isCancelInt != null) && (isCancelInt == 1);
 			int result = 0;
 
 			if (!isCancel) { // 구독하려는 경우
@@ -174,7 +175,8 @@ public class UsersService implements UserDetailsService {
 				}
 			}
 
-			return mapper.updateSubscribe(map);
+			result = mapper.updateSubscribe(map);
+			return result;
 
 		} catch (Exception e) {
 			throw new UsersException("구독 처리 실패: " + e.getMessage());
