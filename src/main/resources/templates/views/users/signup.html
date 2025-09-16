@@ -207,6 +207,7 @@ input[type="date"] {
 	</div>
 	<main class="signup-container">
 		<h1 class="signup-title" th:text="${session.kakaoUser != null ? '카카오 유저 회원가입' : (session.googleUser != null ? '구글 유저 회원가입' : '회원가입')}"></h1>
+
 		<form id="signupForm" method="post" action="/users/signUp">
 			<div class="input-group" th:style="${session.kakaoUser != null || session.googleUser != null} ? 'display: none;' : ''">
 				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID" required><label class="input-label">ID</label>
@@ -236,12 +237,13 @@ input[type="date"] {
 				<label class="input-label">Email</label>
 				<button type="button" class="button verify-button" id="emailBtn" th:if="${session.googleUser == null}">인증하기</button>
 			</div>
-			<div class="verification-section" id="verificationSection" th:if="${session.googleUser == null}">
+			<div id="confirmEmailDuplicateText"></div> <div class="verification-section" id="verificationSection" th:if="${session.googleUser == null}">
 				<div class="input-group">
 					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi" id="confirmVerifi">
 					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 				</div>
 			</div>
+
 			<div class="input-group">
 				<input type="date" placeholder="Birth day" class="input-field" name="userBirth"><label class="input-label">BirthDay</label>
 			</div>
@@ -274,7 +276,6 @@ input[type="date"] {
 		/*]]>*/
 
 		const joinBtn = () => {
-			// ... 기존 joinBtn 함수 내용 ...
 			if(!idCheck){
 				alert('아이디를 입력하세요!');
 			}else if(!pwdCheck){
@@ -291,21 +292,24 @@ input[type="date"] {
 				document.getElementById('signupForm').submit();
 			}
 		};
+
 		window.onload = () => {
-		    const nameInput = document.getElementById('name');
-		    const nickNameInput = document.getElementById('nickName');
-		    const telInput = document.getElementById('tel');
-		    
-		    
-		    if(kakaoUser){
-		    	idCheck = true;
-		    	pwdCheck = true;
-		    }
+			const nameInput = document.getElementById('name');
+			const nickNameInput = document.getElementById('nickName');
+			const telInput = document.getElementById('tel');
+			const emailInput = document.getElementById('email');
+			const confirmPhoneText = document.getElementById('confirmPhoneText');
+			const confirmEmailDuplicateText = document.getElementById('confirmEmailDuplicateText');
+
+			if(kakaoUser){
+				idCheck = true;
+				pwdCheck = true;
+			}
 
 			if(googleUser) {
-				idCheck = true;       // ID 통과
-				pwdCheck = true;      // PW 통과
-				emailCheck = true;    // 구글 이메일은 이미 인증된 것으로 간주
+				idCheck = true;
+				pwdCheck = true;
+				emailCheck = true;
 			}
 
 			nameInput.addEventListener('input', () => {
@@ -318,9 +322,63 @@ input[type="date"] {
 				nickNameCheck = nickName !== '';
 			});
 
-			telInput.addEventListener('input', () => {
-				const tel = telInput.value.trim();
-				phoneCheck = tel !== '';
+			// 전화번호 중복 확인 로직
+			telInput.addEventListener('blur', () => {
+				const userPhone = telInput.value.trim();
+
+				if (userPhone === '') {
+					confirmPhoneText.innerText = '';
+					phoneCheck = false;
+					return;
+				}
+
+				$.ajax({
+					url: '/users/phoneCheck',
+					method: 'POST',
+					data: { userPhone: userPhone },
+					success: (data) => {
+						if (data > 0) {
+							confirmPhoneText.innerText = '이미 등록된 전화번호입니다.';
+							confirmPhoneText.style.color = 'red';
+							phoneCheck = false;
+						} else {
+							confirmPhoneText.innerText = '사용 가능한 전화번호입니다.';
+							confirmPhoneText.style.color = 'green';
+							phoneCheck = true;
+						}
+					},
+					error: (error) => console.error('Error:', error)
+				});
+			});
+
+			// 이메일 중복 확인 로직
+			emailInput.addEventListener('blur', () => {
+				const userEmail = emailInput.value.trim();
+
+				if (userEmail === '') {
+					confirmEmailDuplicateText.innerText = '';
+					emailCheck = false;
+					return;
+				}
+
+				$.ajax({
+					url: '/users/emailDuplicateCheck',
+					method: 'POST',
+					data: { userEmail: userEmail },
+					success: (data) => {
+						if (data > 0) {
+							confirmEmailDuplicateText.innerText = '이미 등록된 이메일입니다.';
+							confirmEmailDuplicateText.style.color = 'red';
+							emailCheck = false;
+							document.getElementById('emailBtn').disabled = true;
+						} else {
+							confirmEmailDuplicateText.innerText = '사용 가능한 이메일입니다.';
+							confirmEmailDuplicateText.style.color = 'green';
+							document.getElementById('emailBtn').disabled = false;
+						}
+					},
+					error: (error) => console.error('Error:', error)
+				});
 			});
 
 			const signupButton = document.getElementById('join');
@@ -336,7 +394,6 @@ input[type="date"] {
 					method:'post',
 					data:{id:id},
 					success:(data)=>{
-// 						console.log(data);
 						if(data == 1){
 							confirmIdText.innerText = '이미 존재하는 아이디입니다.';
 							confirmIdText.style.color='red';
@@ -352,12 +409,12 @@ input[type="date"] {
 				alert('아이디를 입력하세요!');
 			}
 		});
-		
+
 		document.getElementById('confirmPassword').addEventListener('change',()=>{
 			const password = document.getElementById('password').value;
 			const confirmPassword = document.getElementById('confirmPassword').value;
 			const confirmPwText = document.getElementById('confirmPwText');
-			
+
 			if(password != confirmPassword){
 				confirmPwText.innerText = '비밀번호가 일치하지 않습니다.';
 				confirmPwText.style.color='red';
@@ -368,7 +425,7 @@ input[type="date"] {
 				pwdCheck = true;
 			}
 		});
-		
+
 		const showVerification=()=>{
 			const email = document.getElementById('email').value.trim();
 			const verification  = document.getElementById('verificationSection');
@@ -390,17 +447,17 @@ input[type="date"] {
 				});
 			}
 		}
-		
-		document.addEventListener("DOMContentLoaded", function () {
-		    const emailBtn = document.getElementById("emailBtn");
 
-		    if (emailBtn) {
-		        emailBtn.addEventListener("click", showVerification);
-		    }else{
-		    	console.log("하");
-		    }
+		document.addEventListener("DOMContentLoaded", function () {
+			const emailBtn = document.getElementById("emailBtn");
+
+			if (emailBtn) {
+				emailBtn.addEventListener("click", showVerification);
+			}else{
+				console.log("하");
+			}
 		});
-		
+
 		confirmEmailBtn.addEventListener('click',()=> {
 			const confirmEmailBtn = document.getElementById('confirmEmailBtn');
 			const confirmVerifi = document.getElementById('confirmVerifi').value.trim();
@@ -412,7 +469,7 @@ input[type="date"] {
 				emailCheck = true;
 				verfication.style.display = 'none';
 			}else{
-				alert('인증번호가 틀렸습니다.');
+				alert('인증번호가 틀렸습니다. 다시 한번 확인해주세요.');
 				emailCheck = false;
 			}
 		});

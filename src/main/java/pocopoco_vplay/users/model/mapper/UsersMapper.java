@@ -81,4 +81,8 @@ public interface UsersMapper {
 	int isSubscribed(@Param("createrNo") int createrNo, @Param("userNo") int userNo);
 
 	int updateSubscribe(HashMap<String, Object> map);
+
+    int checkPhone(String userPhone);
+
+	int checkEmail(String userEmail);
 }

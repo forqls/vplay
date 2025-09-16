@@ -341,6 +341,14 @@
 		SELECT * FROM users WHERE user_no = #{userNo}
 	</select>
 
+	<select id="checkPhone" resultType="int">
+		SELECT COUNT(*) FROM users WHERE user_phone = #{userPhone}
+	</select>
+
+	<select id="checkEmail" resultType="int">
+		SELECT COUNT(*) FROM users WHERE user_email = #{userEmail}
+	</select>
+
 
 
 </mapper>

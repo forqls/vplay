@@ -179,4 +179,12 @@ public class UsersService implements UserDetailsService {
 				.roles("Y".equals(foundUser.getIsAdmin()) ? "ADMIN" : "USER")
 				.build();
 	}
+
+	public int checkPhone(String userPhone) {
+		return mapper.checkPhone(userPhone);
+	}
+
+	public int checkEmail(String userEmail) {
+		return mapper.checkEmail(userEmail);
+	}
 }

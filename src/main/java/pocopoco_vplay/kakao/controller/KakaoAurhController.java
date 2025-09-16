@@ -61,7 +61,7 @@ public class KakaoAurhController {
         if (userInfo == null) throw new UsersException("카카오 사용자 정보를 가져오는 데 실패했습니다. 다시 시도해 주세요.");
 
         String kakaoId = userInfo.get("id").toString();
-        String nickname = userInfo.get("nickname") != null ? userInfo.get("nickname").toString() : "닉네임 없음";
+        String nickname = userInfo.get("nickname") != null ? userInfo.get("nickname").toString() : "";
 
         Users result = uService.existUsers(kakaoId);
 

@@ -170,6 +170,20 @@ public class UsersController {
 		return "signup_success";
 	}
 
+	@PostMapping("phoneCheck")
+	@ResponseBody
+	public int checkPhone(@RequestParam("userPhone") String userPhone) {
+		int result = uService.checkPhone(userPhone);
+		return result;
+	}
+
+	@PostMapping("emailDuplicateCheck")
+	@ResponseBody
+	public int emailDuplicateCheck(@RequestParam("userEmail") String userEmail) {
+		int result = uService.checkEmail(userEmail);
+		return result;
+	}
+
 	@GetMapping("signIn")
 	public String signIn(HttpServletRequest request, Model model) {
 		String beforeURL = request.getHeader("Referer");
