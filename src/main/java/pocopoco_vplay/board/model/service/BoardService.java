@@ -94,11 +94,11 @@ public class BoardService {
 		return mapper.allPopularCate(i);
 	}
 
-	public int getrequestPostCount(HashMap<String, String> map) {
+	public int getrequestPostCount(HashMap<String, Object> map) {
 		return mapper.getrequestPostCount(map);
 	}
 
-	public ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, PageInfo pi) {
+	public ArrayList<Content> selectAllRequestPost(HashMap<String, Object> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 

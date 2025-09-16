@@ -46,9 +46,9 @@ public interface BoardMapper {
 
 	ArrayList<Content> allPopularCate(int i);
 
-	int getrequestPostCount(HashMap<String, String> map);
+	int getrequestPostCount(HashMap<String, Object> map);
 
-	ArrayList<Content> selectAllRequestPost(HashMap<String, String> map, RowBounds rowBounds);
+	ArrayList<Content> selectAllRequestPost(HashMap<String, Object> map, RowBounds rowBounds);
 
 	String selectUser(int userNo);
 

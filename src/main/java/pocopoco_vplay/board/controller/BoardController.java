@@ -180,7 +180,6 @@ public class BoardController {
 		if (inquiry == null) {
 			throw new UsersException("문의 불러오기에 실패했습니다.");
 		} else {
-			inquiry.setContentDetail(HtmlUtils.htmlUnescape(inquiry.getContentDetail()));
 			model.addAttribute("inquiry", inquiry);
 			model.addAttribute("reply", reply);
 			return "inquiry_detail";
@@ -377,7 +376,7 @@ public class BoardController {
 	public ModelAndView joinrequestPost(@RequestParam(value = "page", defaultValue = "1") int currentPage,
 										@RequestParam(value = "search", required = false) String search,
 										ModelAndView mv) {
-		HashMap<String, String> map = new HashMap<>();
+		HashMap<String, Object> map = new HashMap<>();
 		map.put("search", search);
 		int listCount = bService.getrequestPostCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
@@ -396,23 +395,23 @@ public class BoardController {
 	public String filterRequestList(@RequestParam(value = "search", required = false) String search,
 									@RequestParam(value = "page", defaultValue = "1") int currentPage,
 									@PathVariable("menuName") String menuName, Model model) {
-		HashMap<String, String> map = new HashMap<>();
+		HashMap<String, Object> map = new HashMap<>();
 		map.put("search", search);
 		switch (menuName) {
 		case "video-Templates":
-			map.put("menuNo", "1");break;
+			map.put("menuNo", 1);break;
 		case "Graphic-Templates":
-			map.put("menuNo", "4");break;
+			map.put("menuNo", 4);break;
 		case "Stock-Video":
-			map.put("menuNo", "5");break;
+			map.put("menuNo", 5);break;
 		case "Photos":
-			map.put("menuNo", "6");break;
+			map.put("menuNo", 6);break;
 		case "Music":
-			map.put("menuNo", "2");break;
+			map.put("menuNo", 2);break;
 		case "Sound-Effects":
-			map.put("menuNo", "3");break;
+			map.put("menuNo", 3);break;
 		case "Fonts":
-			map.put("menuNo", "7");break;
+			map.put("menuNo", 7);break;
 		}
 		int listCount = bService.getrequestPostCount(map);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
