@@ -230,6 +230,7 @@ input[type="date"] {
 			<div class="input-group">
 				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel"><label class="input-label">Phone</label>
 			</div>
+			<div id="confirmPhoneText"></div>
 			<div class="input-group">
 				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email"
 					   th:value="${session.googleUser != null ? session.googleUser.userEmail : ''}"
@@ -238,12 +239,11 @@ input[type="date"] {
 				<button type="button" class="button verify-button" id="emailBtn" th:if="${session.googleUser == null}">인증하기</button>
 			</div>
 			<div id="confirmEmailDuplicateText"></div> <div class="verification-section" id="verificationSection" th:if="${session.googleUser == null}">
-				<div class="input-group">
-					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi" id="confirmVerifi">
-					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
-				</div>
+			<div class="input-group">
+				<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi" id="confirmVerifi">
+				<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
 			</div>
-
+		</div>
 			<div class="input-group">
 				<input type="date" placeholder="Birth day" class="input-field" name="userBirth"><label class="input-label">BirthDay</label>
 			</div>
