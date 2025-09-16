@@ -272,6 +272,25 @@ input[type="date"] {
 		let kakaoUser = /*[[${session.kakaoUser != null}]]*/false;
 		let googleUser = /*[[${session.googleUser != null}]]*/false;
 		/*]]>*/
+
+		const joinBtn = () => {
+			// ... 기존 joinBtn 함수 내용 ...
+			if(!idCheck){
+				alert('아이디를 입력하세요!');
+			}else if(!pwdCheck){
+				alert('비밀번호를 입력하세요!');
+			}else if(!emailCheck){
+				alert('이메일 인증을 성공하지 못했습니다.');
+			}else if(!nameCheck){
+				alert('이름을 확인하세요!');
+			}else if(!nickNameCheck){
+				alert('사용하실 활동명(닉네임)을 적어주세요.');
+			}else if(!phoneCheck){
+				alert('핸드폰 번호를 입력해주세요!');
+			}else{
+				document.getElementById('signupForm').submit();
+			}
+		};
 		window.onload = () => {
 		    const nameInput = document.getElementById('name');
 		    const nickNameInput = document.getElementById('nickName');
@@ -288,26 +307,26 @@ input[type="date"] {
 				pwdCheck = true;      // PW 통과
 				emailCheck = true;    // 구글 이메일은 이미 인증된 것으로 간주
 			}
-		    
-		    nameInput.addEventListener('input', () => {
-		        const name = nameInput.value.trim();
-		        nameCheck = name !== '';
-		    });
 
-		    nickNameInput.addEventListener('input', () => {
-		        const nickName = nickNameInput.value.trim();
-		        nickNameCheck = nickName !== '';
-		    });
+			nameInput.addEventListener('input', () => {
+				const name = nameInput.value.trim();
+				nameCheck = name !== '';
+			});
 
-		    telInput.addEventListener('input', () => {
-		        const tel = telInput.value.trim();
-		        phoneCheck = tel !== '';
-		    });
+			nickNameInput.addEventListener('input', () => {
+				const nickName = nickNameInput.value.trim();
+				nickNameCheck = nickName !== '';
+			});
+
+			telInput.addEventListener('input', () => {
+				const tel = telInput.value.trim();
+				phoneCheck = tel !== '';
+			});
 
 			const signupButton = document.getElementById('join');
 			signupButton.addEventListener('click', joinBtn);
 		};
-		
+
 		document.getElementById('checkIdBtn').addEventListener('click',()=>{
 			const id = document.getElementById('ID').value;
 			const confirmIdText = document.getElementById('confirmIdText');
