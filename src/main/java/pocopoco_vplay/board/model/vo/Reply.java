@@ -20,7 +20,7 @@ public class Reply {
 	private Date createDate;
 	private Date modifyDate;
 	private String replyStatus;
-	private String contentNo;
+	private int contentNo;
 	private int userNo;
 	private String userNickname;
 	private String userProfile;

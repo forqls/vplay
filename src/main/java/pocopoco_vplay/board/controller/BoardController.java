@@ -544,7 +544,7 @@ public class BoardController {
 	}
 
 	@PostMapping("insertReply")
-	public String insertReply(@RequestParam(value = "page", defaultValue = "1") int currentPage, @ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") String contentNo) {
+	public String insertReply(@RequestParam(value = "page", defaultValue = "1") int currentPage, @ModelAttribute Reply reply, HttpSession session, Model model, @RequestParam("contentNo") int contentNo) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
 		if (loginUser != null) {
 			reply.setUserNo(loginUser.getUserNo());
@@ -553,14 +553,13 @@ public class BoardController {
 		int result = bService.insertReply(reply);
 
 		if (result > 0) {
-			ArrayList<Reply> replyList = bService.selectReplyList(Integer.parseInt(contentNo));
+			ArrayList<Reply> replyList = bService.selectReplyList(Integer.parseInt(String.valueOf(contentNo))); // 이 부분도 수정
 			model.addAttribute("replyList", replyList);
 			return "redirect:/board/" + contentNo + "/" + currentPage;
 
 		} else {
 			throw new BoardException("댓글 등록에 실패하였습니다.");
 		}
-
 	}
 
 	@PostMapping("updateReply")
