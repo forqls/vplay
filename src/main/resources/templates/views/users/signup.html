@@ -206,17 +206,17 @@ input[type="date"] {
 		<a href="/">Home</a> > <span class="current">Sign Up</span>
 	</div>
 	<main class="signup-container">
-		<h1 class="signup-title" th:text="${session.kakaoUser != null ? ' 카카오 유저 회원가입' : '회원가입'}"></h1>
+		<h1 class="signup-title" th:text="${session.kakaoUser != null ? '카카오 유저 회원가입' : (session.googleUser != null ? '구글 유저 회원가입' : '회원가입')}"></h1>
 		<form id="signupForm" method="post" action="/users/signUp">
-			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
+			<div class="input-group" th:style="${session.kakaoUser != null || session.googleUser != null} ? 'display: none;' : ''">
 				<input type="text" placeholder="ID" class="input-field" name="userId" id="ID" required><label class="input-label">ID</label>
 				<button type="button" id="checkIdBtn" class="button verify-button">중복확인</button>
 			</div>
 			<div id="confirmIdText"></div>
-			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
+			<div class="input-group" th:style="${session.kakaoUser != null || session.googleUser != null} ? 'display: none;' : ''">
 				<input type="password" placeholder="Password" class="input-field" name="userPw" id="password"><label class="input-label">Password</label>
 			</div>
-			<div class="input-group" th:style="${session.kakaoUser != null} ? 'display: none;' : ''">
+			<div class="input-group" th:style="${session.kakaoUser != null || session.googleUser != null} ? 'display: none;' : ''">
 				<input type="password" placeholder="Password 확인" class="input-field" name="confirmPassword" id="confirmPassword"><label class="input-label">Password 확인</label>
 			</div>
 			<div id="confirmPwText"></div>
@@ -230,10 +230,13 @@ input[type="date"] {
 				<input type="tel" placeholder="Phone" class="input-field" name="userPhone" id="tel"><label class="input-label">Phone</label>
 			</div>
 			<div class="input-group">
-				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email"><label class="input-label">Email</label>
-				<button type="button" class="button verify-button" id="emailBtn">인증하기</button>
+				<input type="email" placeholder="Email" class="input-field" name="userEmail" id="email"
+					   th:value="${session.googleUser != null ? session.googleUser.userEmail : ''}"
+					   th:readonly="${session.googleUser != null}">
+				<label class="input-label">Email</label>
+				<button type="button" class="button verify-button" id="emailBtn" th:if="${session.googleUser == null}">인증하기</button>
 			</div>
-			<div class="verification-section" id="verificationSection">
+			<div class="verification-section" id="verificationSection" th:if="${session.googleUser == null}">
 				<div class="input-group">
 					<input type="text" placeholder="인증번호 입력" class="input-field" name="confirmVerifi" id="confirmVerifi">
 					<button type="button" class="button verify-button" id="confirmEmailBtn">확인</button>
@@ -266,7 +269,8 @@ input[type="date"] {
 		let phoneCheck = false;
 		let confirmEmail = '';
 		/*<![CDATA[*/
-		let kakaoUser = /*[[${session.kakaoUser != null}]]*/false; 
+		let kakaoUser = /*[[${session.kakaoUser != null}]]*/false;
+		let googleUser = /*[[${session.googleUser != null}]]*/false;
 		/*]]>*/
 		window.onload = () => {
 		    const nameInput = document.getElementById('name');
@@ -278,6 +282,12 @@ input[type="date"] {
 		    	idCheck = true;
 		    	pwdCheck = true;
 		    }
+
+			if(googleUser) {
+				idCheck = true;       // ID 통과
+				pwdCheck = true;      // PW 통과
+				emailCheck = true;    // 구글 이메일은 이미 인증된 것으로 간주
+			}
 		    
 		    nameInput.addEventListener('input', () => {
 		        const name = nameInput.value.trim();
