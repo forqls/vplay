@@ -96,7 +96,7 @@
 				</svg>
 				<span class="subscriber_count">[[${subscriberCount}]]</span>
 			</p>
-			<button class="subscribe-button" th:text="${isSubscribed == 1 ? '구독 중' : '구독하기'}"></button>
+			<button class="subscribe-button" th:text="${isSubscribed ? '구독 중' : '구독하기'}"></button>
 			<input type="hidden" id="createrNo" th:value="${createrNo}">
 		</div>
 
