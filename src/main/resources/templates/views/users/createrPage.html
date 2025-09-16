@@ -70,49 +70,8 @@
         .project-section h2 {
             font-size: 20px;
             margin-bottom: 20px;
-        } 
-
-        /*.grid {*/
-        /*    display: grid;*/
-        /*    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));*/
-        /*    gap: 20px;*/
-        /*}*/
-
-        /*.grid-item {*/
-        /*    background-color: #2b2a33;*/
-        /*    padding: 16px;*/
-        /*    border-radius: 12px;*/
-        /*}*/
-
-        /*.item-thumbnail img,*/
-        /*.item-thumbnail video {*/
-        /*    width: 100%;*/
-        /*    height: 120px;*/
-        /*    border-radius: 8px;*/
-        /*    object-fit: cover;*/
-        /*    background-color: #444;*/
-        /*}*/
-
-        .item-content {
-            margin-top: 12px;
         }
 
-        .item-title {
-            font-weight: 500;
-            font-size: 16px;
-        }
-
-        .item-actions {
-            margin-top: 8px;
-            font-size: 14px;
-            color: #ccc;
-            display: flex;
-            justify-content: space-between;
-        }
-        p {
-			display: flex;
-			align-items: center;
-		}
     </style>
 </head>
 <body>
@@ -125,7 +84,7 @@
             <p><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M4.20042 5.60056C4.9431 5.60056 5.65536 5.30553 6.18052 4.78038C6.70567 4.25522 7.0007 3.54296 7.0007 2.80028C7.0007 2.0576 6.70567 1.34534 6.18052 0.820183C5.65536 0.295029 4.9431 0 4.20042 0C3.45774 0 2.74548 0.295029 2.22032 0.820183C1.69517 1.34534 1.40014 2.0576 1.40014 2.80028C1.40014 3.54296 1.69517 4.25522 2.22032 4.78038C2.74548 5.30553 3.45774 5.60056 4.20042 5.60056ZM10.501 5.60056C11.0581 5.60056 11.5923 5.37929 11.9861 4.98542C12.38 4.59156 12.6013 4.05736 12.6013 3.50035C12.6013 2.94334 12.38 2.40914 11.9861 2.01528C11.5923 1.62141 11.0581 1.40014 10.501 1.40014C9.94404 1.40014 9.40984 1.62141 9.01598 2.01528C8.62211 2.40914 8.40084 2.94334 8.40084 3.50035C8.40084 4.05736 8.62211 4.59156 9.01598 4.98542C9.40984 5.37929 9.94404 5.60056 10.501 5.60056ZM1.75017 7.0007C0.784078 7.0007 0 7.78478 0 8.75088C0 8.75088 0 11.9012 4.20042 11.9012C7.52995 11.9012 8.22022 9.92139 8.36304 9.10091C8.40084 8.88669 8.40084 8.75088 8.40084 8.75088C8.40084 7.78478 7.61676 7.0007 6.65067 7.0007H1.75017ZM9.79538 9.24092C9.79258 9.29693 9.78698 9.3632 9.77858 9.43974C9.70132 10.017 9.50076 10.571 9.19052 11.0639C9.56156 11.1493 9.9942 11.2011 10.4997 11.2011C14 11.2011 14 8.75088 14 8.75088C14 7.78478 13.2159 7.0007 12.2498 7.0007H9.26893C9.60496 7.50195 9.79958 8.10261 9.79958 8.75088V9.10091L9.79538 9.24092Z" fill="#6F757D"/>
 				</svg>
-				  팔로잉 수 : [[${subscriberCount}]]
+				  [[${subscriberCount}]]
             </p>
 			<button id="subscribeBtn" th:text="${isSubscribed == 1 ? '구독 중' : '구독하기'}"></button>
             <input type="hidden" id="createrNo" th:value="${createrNo}">
@@ -195,9 +154,9 @@
 
 		window.onload = () => {
 			thumbnailPlay();
+			clickDetail();
 		}
 
-		// ✅ 썸네일 로딩을 위한 최종 수정 함수
 		function thumbnailPlay() {
 			const gridItems = document.querySelectorAll('.grid-item');
 
@@ -218,14 +177,14 @@
 								return;
 							}
 
-							thumbnailContainer.innerHTML = ''; // 기존 내용 비우기
+							thumbnailContainer.innerHTML = ''; // 기존 내용 비움
 
 							if (menuNo == 1 || menuNo == 5) {
 								const video = document.createElement('video');
 								video.id = "item-preview";
 								video.muted = true;
 								video.loop = true;
-								video.src = data.thumbnail; // source 태그 대신 src 속성 직접 사용
+								video.src = data.thumbnail;
 								thumbnailContainer.appendChild(video);
 
 								item.addEventListener('mouseenter', () => video.play().catch(e => {}));
@@ -248,6 +207,33 @@
 						.catch(err => console.error("썸네일 로딩 fetch 에러:", err));
 			});
 		}
+
+		function clickDetail() {
+			const list = document.querySelectorAll(".grid-item");
+
+			[...list].map((content, index, array) => {
+				content.addEventListener('click', function(event) {
+					const contentNo = this.children[0].value;
+					const menuNo = this.children[1].value;
+					let menuName = "";
+					switch(menuNo) {
+						case "1": menuName = "video-templates"; break;
+						case "2": menuName = "music"; break;
+						case "3": menuName = "sound-effects"; break;
+						case "4": menuName = "graphic-templates"; break;
+						case "5": menuName = "stock-video"; break;
+						case "6": menuName = "photo"; break;
+						case "7": menuName = "font"; break;
+						default: menuName = "unknown";
+					}
+					location.href = "/board/" + menuName + "/" + contentNo;
+					event.stopPropagation();
+				});
+			});
+		}
+	</script>
+</body>
+</html>
 	</script>
 </body>
 </html>
