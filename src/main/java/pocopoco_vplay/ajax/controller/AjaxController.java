@@ -320,7 +320,7 @@ public class AjaxController {
 
 		map.put("userNo", userNo);
 		map.put("createrNo", createrNo);
-		map.put("isCancel", isCancel ? 1 : 0); // 매퍼에서 사용하기 쉽도록 int로 변환
+		map.put("isCancel", isCancel ? 1 : 0);
 
 		int result = uService.updateSubscribe(map);
 

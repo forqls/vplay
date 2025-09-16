@@ -323,7 +323,7 @@
 		  AND user_no = #{userNo}
 	</select>
 
-	<insert id="updateSubscribe" parameterType="map">
+	<update id="updateSubscribe" parameterType="map">
 		<choose>
 			<when test="isCancel == 1">
 				DELETE FROM subscribe
@@ -335,7 +335,7 @@
 				VALUES (nextval('subscribe_seq'), #{createrNo}, #{userNo})
 			</otherwise>
 		</choose>
-	</insert>
+	</update>
 
 	<select id="getInfoUser" resultType="pocopoco_vplay.users.model.vo.Users">
 		SELECT * FROM users WHERE user_no = #{userNo}
