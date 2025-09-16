@@ -325,14 +325,22 @@
 
 	<update id="updateSubscribe" parameterType="map">
 		<choose>
-			<when test="isCancel == 1">
+			<when test="isCancel == true">
 				DELETE FROM subscribe
-				WHERE creater_no = #{createrNo}
-				AND user_no = #{userNo}
+				WHERE creater_no = #{createrNo} AND user_no = #{userNo}
 			</when>
 			<otherwise>
-				INSERT INTO subscribe (subscribe_no, creater_no, user_no)
-				VALUES (nextval('subscribe_seq'), #{createrNo}, #{userNo})
+				<if test="isSubscribed == false">
+					INSERT INTO subscribe (
+					subscribe_no,
+					creater_no,
+					user_no
+					) VALUES (
+					nextval('subscribe_seq'),
+					#{createrNo},
+					#{userNo}
+					)
+				</if>
 			</otherwise>
 		</choose>
 	</update>

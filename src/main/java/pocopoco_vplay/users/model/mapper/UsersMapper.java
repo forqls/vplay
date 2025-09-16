@@ -2,6 +2,7 @@ package pocopoco_vplay.users.model.mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -85,4 +86,6 @@ public interface UsersMapper {
     int checkPhone(String userPhone);
 
 	int checkEmail(String userEmail);
+
+	int getSubscriptionCount(Map<String, Object> map);
 }

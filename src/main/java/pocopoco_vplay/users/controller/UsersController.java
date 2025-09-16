@@ -30,10 +30,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/users/")
@@ -616,28 +613,35 @@ public class UsersController {
 		}
 		return "subscribe";
 	}
-	@GetMapping("createrPage")
-	public String goToCreaterPage(@RequestParam("createrNo") int createrNo,
-								  @RequestParam("subscriberCount") int subscriberCount,
-								  HttpSession session,
-								  Model model) {
 
-		Users loginUser = (Users) session.getAttribute("loginUser");
-		ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
-		Users createrUser = uService.getInfoUser(createrNo);
+	@RequestMapping("/createrPage/{createrNo}")
+	public String createrPage(@PathVariable int createrNo, Model model, HttpSession session) {
+		try {
 
-		boolean isSubscribed = false; // 기본값을 false로 설정
-		if (loginUser != null) { // 로그인한 경우에만 구독 여부 확인
-			isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
+			Users loginUser = (Users) session.getAttribute("loginUser");
+			boolean isSubscribed = false;
+
+			if (loginUser != null) {
+				isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
+			}
+			ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
+			Users createrUser = uService.getInfoUser(createrNo);
+
+			Users tempUser = new Users();
+			tempUser.setUserNo(createrNo);
+			int subscriberCount = uService.findfollow(tempUser);
+
+
+			model.addAttribute("list", list)
+					.addAttribute("createrUser", createrUser)
+					.addAttribute("subscriberCount", subscriberCount)
+					.addAttribute("isSubscribed", isSubscribed) // 최종적으로 결정된 isSubscribed 값을 사용
+					.addAttribute("createrNo", createrNo);
+
+			return "createrPage";
+		} catch (Exception e) {
+			throw new UsersException("크리에이터 페이지 조회 실패: " + e.getMessage());
 		}
-
-		model.addAttribute("list", list)
-				.addAttribute("createrUser", createrUser)
-				.addAttribute("subscriberCount", subscriberCount)
-				.addAttribute("isSubscribed", isSubscribed)
-				.addAttribute("createrNo", createrNo);
-
-		return "createrPage";
 	}
 
 
