@@ -345,6 +345,11 @@
 		</choose>
 	</update>
 
+	<select id="getSubscriptionCount" resultType="int">
+		SELECT COUNT(*) FROM subscribe
+		WHERE creater_no = #{createrNo} AND user_no = #{userNo}
+	</select>
+
 	<select id="getInfoUser" resultType="pocopoco_vplay.users.model.vo.Users">
 		SELECT * FROM users WHERE user_no = #{userNo}
 	</select>
