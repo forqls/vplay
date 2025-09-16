@@ -162,27 +162,13 @@ public class UsersService implements UserDetailsService {
 
 	public int updateSubscribe(Map<String, Object> map) throws UsersException {
 		try {
-			Integer isCancelInt = (Integer) map.get("isCancel");
-			boolean isCancel = (isCancelInt != null) && (isCancelInt == 1);
-			int result = 0;
-
-			if (!isCancel) { // 구독하려는 경우
-				// 이미 구독 중인지 확인
-				int subscriptionCount = mapper.getSubscriptionCount(map);
-				if (subscriptionCount > 0) {
-					// 이미 구독 중이면 중복 구독 방지
-					return -1; // -1을 반환하여 중복 구독을 알림
-				}
-			}
-
-			result = mapper.updateSubscribe(map);
+			int result = mapper.updateSubscribe(map);
 			return result;
 
 		} catch (Exception e) {
 			throw new UsersException("구독 처리 실패: " + e.getMessage());
 		}
 	}
-
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Users user = new Users();

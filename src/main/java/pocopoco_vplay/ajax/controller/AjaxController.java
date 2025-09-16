@@ -310,6 +310,7 @@ public class AjaxController {
 	public ResponseEntity<String> updateSubscribe(@RequestBody HashMap<String, Object> map, HttpSession session) {
 		try {
 			Users loginUser = (Users) session.getAttribute("loginUser");
+			
 			if (loginUser == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
 			}
