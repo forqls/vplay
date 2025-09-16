@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Getter
@@ -27,6 +28,7 @@ public class Users {
     private String userName;
     private String userPhone;
     private String userEmail;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date userBirth;
     private String userGender;
     private String status;
