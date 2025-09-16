@@ -480,6 +480,7 @@ public class UsersController {
 
 	@GetMapping("/messages/{userNo}")
 	public String messagePage(@PathVariable("userNo") String userNo, HttpSession session, Model model) {
+		System.out.println("들어왔음 " + userNo);
 		Users loginUser = (Users) session.getAttribute("loginUser");
 
 		if (loginUser == null || loginUser.getUserNo() != Integer.parseInt(userNo)) {
@@ -492,8 +493,7 @@ public class UsersController {
 			String timeout = getTimeAgo(m.getSentTime());
 			m.setTimeout(timeout);
 		}
-		//System.out.println("list 는 " + list);
-
+		System.out.println(list);
 
 		model.addAttribute("list", list);
 
@@ -617,24 +617,23 @@ public class UsersController {
 								  HttpSession session,
 								  Model model) {
 		try {
-			Users createrUser = uService.getInfoUser(createrNo);
+			Users loginUser = (Users) session.getAttribute("loginUser");
+			boolean isSubscribed = false;
+
+			if (loginUser != null) {
+				isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
+			}
 			ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
+			Users createrUser = uService.getInfoUser(createrNo);
 
 			Users tempUser = new Users();
 			tempUser.setUserNo(createrNo);
 			int subscriberCount = uService.findfollow(tempUser);
 
-			boolean isSubscribed = false;
-			Users loginUser = (Users) session.getAttribute("loginUser");
-
-			if (loginUser != null) {
-				isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
-			}
-
 			model.addAttribute("list", list)
 					.addAttribute("createrUser", createrUser)
 					.addAttribute("subscriberCount", subscriberCount)
-					.addAttribute("isSubscribed", isSubscribed) // 최종적으로 결정된 isSubscribed 값을 사용합니다.
+					.addAttribute("isSubscribed", isSubscribed)
 					.addAttribute("createrNo", createrNo);
 
 			return "createrPage";
