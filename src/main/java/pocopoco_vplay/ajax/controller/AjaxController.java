@@ -308,20 +308,28 @@ public class AjaxController {
 	@PostMapping("post/updateSubscribe")
 	public int updateSubscribe(@RequestBody HashMap<String,Object> map , HttpSession session) {
 		System.out.println("dddd");
-		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
+		Users loginUser = (Users)session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return 0;
+		}
+
+		int userNo = loginUser.getUserNo();
 		int createrNo = Integer.parseInt(map.get("createrNo").toString());
 		boolean isCancel = (Boolean)map.get("isCancel");
 
 		map.put("userNo", userNo);
 		map.put("createrNo", createrNo);
+		map.put("isCancel", isCancel ? 1 : 0); // 매퍼에서 사용하기 쉽도록 int로 변환
 
 		int result = uService.updateSubscribe(map);
-		System.out.println(map);
-		if(result == 1 ) {
-			return result;
-		}else {
+
+		if(result >= 0) { // 1 또는 0을 반환해도 성공으로 처리
+			return 1;
+		} else {
 			throw new UsersException("구독 처리 실패!");
 		}
+	}
 
 	}
 	
@@ -331,7 +339,4 @@ public class AjaxController {
 	
 	
 	
-	
-	
 
-}
