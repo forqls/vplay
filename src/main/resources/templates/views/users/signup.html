@@ -301,6 +301,17 @@ input[type="date"] {
 			const confirmPhoneText = document.getElementById('confirmPhoneText');
 			const confirmEmailDuplicateText = document.getElementById('confirmEmailDuplicateText');
 
+			// 기존에 email과 phone check 메시지를 보여주기 위한 div가 없으므로 동적으로 생성
+			const phoneAlertDiv = document.createElement('div');
+			phoneAlertDiv.id = 'confirmPhoneText';
+			const phoneInputGroup = document.querySelector('.input-group:has(#tel)');
+			if(phoneInputGroup) phoneInputGroup.after(phoneAlertDiv);
+
+			const emailAlertDiv = document.createElement('div');
+			emailAlertDiv.id = 'confirmEmailDuplicateText';
+			const emailInputGroup = document.querySelector('.input-group:has(#email)');
+			if(emailInputGroup) emailInputGroup.after(emailAlertDiv);
+
 			if(kakaoUser){
 				idCheck = true;
 				pwdCheck = true;
@@ -322,7 +333,7 @@ input[type="date"] {
 				nickNameCheck = nickName !== '';
 			});
 
-			// 전화번호 중복 확인
+			// 전화번호 중복 확인 로직
 			telInput.addEventListener('blur', () => {
 				const userPhone = telInput.value.trim();
 
@@ -342,7 +353,6 @@ input[type="date"] {
 							confirmPhoneText.style.color = 'red';
 							phoneCheck = false;
 						} else {
-							// 중복이 아닐 때 성공 메시지를 명확히 표시합니다.
 							confirmPhoneText.innerText = '사용 가능한 전화번호입니다.';
 							confirmPhoneText.style.color = 'green';
 							phoneCheck = true;
@@ -352,12 +362,13 @@ input[type="date"] {
 				});
 			});
 
-			// 이메일 중복 확인
+			// 이메일 중복 확인 로직
 			emailInput.addEventListener('blur', () => {
 				const userEmail = emailInput.value.trim();
 
 				if (userEmail === '') {
 					confirmEmailDuplicateText.innerText = '';
+					// 이메일 입력칸이 비어 있으면, 이메일 인증이 완료되지 않은 상태로 간주
 					emailCheck = false;
 					return;
 				}
@@ -376,6 +387,7 @@ input[type="date"] {
 							confirmEmailDuplicateText.innerText = '사용 가능한 이메일입니다.';
 							confirmEmailDuplicateText.style.color = 'green';
 							document.getElementById('emailBtn').disabled = false;
+							// 중복이 아니면 emailCheck를 true로 설정하지 않음. 이메일 인증을 완료해야 true가 되도록 함.
 						}
 					},
 					error: (error) => console.error('Error:', error)
@@ -470,7 +482,7 @@ input[type="date"] {
 				emailCheck = true;
 				verfication.style.display = 'none';
 			}else{
-				alert('인증번호가 틀렸습니다. 다시 한번 확인해주세요.');
+				alert('인증번호가 틀렸습니다.');
 				emailCheck = false;
 			}
 		});
