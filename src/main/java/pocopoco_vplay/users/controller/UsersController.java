@@ -148,12 +148,7 @@ public class UsersController {
 			session.removeAttribute("googleUser");
 
 		} else {
-			// --- 2-B. 일반 회원가입인 경우 (socialUser == null) ---
-
-			// 일반 가입자 구분 값 설정
-			user.setLoginType("V"); // "VPlay" 일반 가입자
-
-			// 폼에서 받은 실제 비밀번호를 암호화
+			// --- 2 일반 회원
 			user.setUserPw(bcrypt.encode(user.getUserPw()));
 		}
 
