@@ -174,12 +174,13 @@ public class UsersService implements UserDetailsService {
 				}
 			}
 
-			result = mapper.updateSubscribe(map);
-			return result;
+			return mapper.updateSubscribe(map);
+
 		} catch (Exception e) {
 			throw new UsersException("구독 처리 실패: " + e.getMessage());
 		}
 	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Users user = new Users();
@@ -194,7 +195,6 @@ public class UsersService implements UserDetailsService {
 		return User.builder()
 				.username(foundUser.getUserId())
 				.password(foundUser.getUserPw())
-				// NullPointerException을 방지
 				.roles("Y".equals(foundUser.getIsAdmin()) ? "ADMIN" : "USER")
 				.build();
 	}
