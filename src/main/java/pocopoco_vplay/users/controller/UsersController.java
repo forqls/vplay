@@ -621,7 +621,12 @@ public class UsersController {
 			boolean isSubscribed = false;
 
 			if (loginUser != null) {
-				isSubscribed = uService.isSubscribed(createrNo, loginUser.getUserNo());
+				int userNo = loginUser.getUserNo();
+				System.out.println("로그인 유저 번호: " + userNo);
+				System.out.println("크리에이터 번호: " + createrNo);
+
+				isSubscribed = uService.isSubscribed(createrNo, userNo);
+				System.out.println("구독 상태 (true/false): " + isSubscribed);
 			}
 			ArrayList<Content> list = uService.selectMyRealProjects(createrNo);
 			Users createrUser = uService.getInfoUser(createrNo);
