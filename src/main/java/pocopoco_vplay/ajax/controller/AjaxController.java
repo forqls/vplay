@@ -304,25 +304,25 @@ public class AjaxController {
 	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
 	            .body(responseBody);
 	}
-	
+
 	@PostMapping("post/updateSubscribe")
 	public int updateSubscribe(@RequestBody HashMap<String,Object> map , HttpSession session) {
 		System.out.println("dddd");
 		int userNo = ((Users)session.getAttribute("loginUser")).getUserNo();
 		int createrNo = Integer.parseInt(map.get("createrNo").toString());
 		boolean isCancel = (Boolean)map.get("isCancel");
-		
-//		System.out.println("여기 전부 다 있어요 " + userNo + createrNo + isCancel);
+
 		map.put("userNo", userNo);
-		
+		map.put("createrNo", createrNo);
+
 		int result = uService.updateSubscribe(map);
 		System.out.println(map);
 		if(result == 1 ) {
 			return result;
 		}else {
-			throw new UsersException("ㅋㅋ");
+			throw new UsersException("구독 처리 실패!");
 		}
-		
+
 	}
 	
 	
