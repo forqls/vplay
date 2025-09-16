@@ -87,7 +87,9 @@
     <div th:replace="~{views/common/topbar :: topbar}"></div>
     <div class="main-content">
 		<div class="creator-profile">
-			<img th:src="${createrUser.userProfile}" alt="프로필 이미지">
+			<th:block th:if="${createrUser.userProfile == null}">
+				<img src="/img/testProfile.jpg" alt="프로필 이미지">
+			</th:block>
 			<h2 th:text="${createrUser.userNickname}">크리에이터 이름</h2>
 			<p th:text="${createrUser.userComment}">소개 문구가 들어갑니다</p>
 			<p>
