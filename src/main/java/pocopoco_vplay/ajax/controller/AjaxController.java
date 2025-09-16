@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -306,28 +307,31 @@ public class AjaxController {
 	}
 
 	@PostMapping("post/updateSubscribe")
-	public int updateSubscribe(@RequestBody HashMap<String,Object> map , HttpSession session) {
-		System.out.println("dddd");
-		Users loginUser = (Users)session.getAttribute("loginUser");
+	public ResponseEntity<String> updateSubscribe(@RequestBody HashMap<String, Object> map, HttpSession session) {
+		try {
+			Users loginUser = (Users) session.getAttribute("loginUser");
+			if (loginUser == null) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+			}
 
-		if (loginUser == null) {
-			return 0;
-		}
+			int userNo = loginUser.getUserNo();
+			int createrNo = Integer.parseInt(map.get("createrNo").toString());
+			boolean isCancel = (Boolean) map.get("isCancel");
 
-		int userNo = loginUser.getUserNo();
-		int createrNo = Integer.parseInt(map.get("createrNo").toString());
-		boolean isCancel = (Boolean)map.get("isCancel");
+			map.put("userNo", userNo);
+			map.put("createrNo", createrNo);
+			map.put("isCancel", isCancel ? 1 : 0);
 
-		map.put("userNo", userNo);
-		map.put("createrNo", createrNo);
-		map.put("isCancel", isCancel ? 1 : 0);
+			int result = uService.updateSubscribe(map);
 
-		int result = uService.updateSubscribe(map);
-
-		if(result >= 0) { // 1 또는 0을 반환해도 성공으로 처리
-			return 1;
-		} else {
-			throw new UsersException("구독 처리 실패!");
+			if (result > 0) {
+				return ResponseEntity.ok("1");
+			} else {
+				return ResponseEntity.ok("0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("구독 처리 실패: " + e.getMessage());
 		}
 	}
 

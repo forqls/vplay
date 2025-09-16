@@ -555,7 +555,7 @@ public class UsersController {
 	@ResponseBody
 	public int getUnreadMessageCount(HttpSession session) {
 		Users loginUser = (Users) session.getAttribute("loginUser");
-		System.out.println("요청 들어오긴함");
+		//System.out.println("요청 들어오긴함");
 		if (loginUser == null) {
 			return 0;
 		}
