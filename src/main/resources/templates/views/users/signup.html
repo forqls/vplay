@@ -416,24 +416,6 @@ input[type="date"] {
 				emailCheck = false;
 			}
 		});
-		
-		const joinBtn = () => {
-			if(!idCheck){
-				alert('아이디를 입력하세요!');
-			}else if(!pwdCheck){
-				alert('비밀번호를 입력하세요!');
-			}else if(!emailCheck){
-				alert('이메일 인증을 성공하지 못했습니다.');
-			}else if(!nameCheck){
-				alert('이름을 확인하세요!');
-			}else if(!nickNameCheck){
-				alert('사용하실 활동명(닉네임)을 적어주세요.');
-			}else if(!phoneCheck){
-				alert('핸드폰 번호를 입력해주세요!');
-			}else{
-				document.getElementById('signupForm').submit();
-			}
-		};
 	</script>
 </body>
 </html>
