@@ -641,27 +641,6 @@ public class UsersController {
 	}
 
 
-	@PostMapping("post/updateSubscribe")
-	@ResponseBody
-	public int updateSubscribe(@RequestBody HashMap<String, Object> map, HttpSession session) {
-		int userNo = ((Users) session.getAttribute("loginUser")).getUserNo();
-		int createrNo = Integer.parseInt(map.get("createrNo").toString());
-
-		Object isCancelObj = map.get("isCancel");
-		boolean isCancel = Boolean.parseBoolean(String.valueOf(isCancelObj));
-		map.put("isCancel", isCancel ? 1 : 0); // mapper에 int로 전달
-
-		map.put("userNo", userNo);
-
-		int result = uService.updateSubscribe(map);
-		if (result == 1) {
-			return result;
-		} else {
-			throw new UsersException("구독 처리 실패!");
-		}
-	}
-
-
 
 
 
