@@ -460,6 +460,9 @@ public class BoardController {
 			mv.addObject("userNickname", loginUser.getUserNickname());
 		}
 		Content c = bService.selectRequest(bId, id);
+		// 로그로 contentDetail 내용 확인
+		System.out.println("가져온 글 내용: " + c.getContentDetail());
+
 		ArrayList<Reply> replyList = bService.selectReplyList(bId);/* 글 번호에 해당하는 댓글을 들고와야하기 때문 */
 		// System.out.println(replyList);
 		if (c != null) {
