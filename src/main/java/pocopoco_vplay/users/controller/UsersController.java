@@ -118,18 +118,51 @@ public class UsersController {
 
 	@PostMapping("signUp")
 	public String joinUser(@ModelAttribute Users user, HttpSession session) {
-		user.setUserPw(bcrypt.encode(user.getUserPw()));
 
-		Users kakaoUser = (Users) session.getAttribute("kakaoUser");
-		if (kakaoUser != null) {
-			user.setKakaoId(kakaoUser.getKakaoId());
-			user.setLoginType(kakaoUser.getLoginType());
+		// 1. 세션에서 소셜 로그인 정보가 있는지 먼저 확인 (카카오 또는 구글)
+		Users socialUser = (Users) session.getAttribute("kakaoUser");
+		if (socialUser == null) {
+			socialUser = (Users) session.getAttribute("googleUser");
 		}
-		System.out.println(user);
-		int result = uService.insertUser(user);
-		System.out.println("결과 값은 : " + result);
-		return "signup_success";
 
+		if (socialUser != null) {
+			// --- 소셜 로그인 사용자가 추가 정보를 입력한 경우 ---
+
+			// 1-1. 세션에 있던 소셜 정보(ID, 로그인 타입)를 DB에 저장할 user 객체에 합쳐준다.
+			user.setLoginType(socialUser.getLoginType()); // 예: "K" 또는 "G"
+			if (socialUser.getKakaoId() != null) {
+				user.setKakaoId(socialUser.getKakaoId());
+			}
+			if (socialUser.getGoogleId() != null) {
+				user.setGoogleId(socialUser.getGoogleId());
+				// 구글 유저는 이메일을 미리 가져왔으므로, 폼에서 안 채웠다면 세션 값으로 설정
+				if (user.getUserEmail() == null || user.getUserEmail().isEmpty()) {
+					user.setUserEmail(socialUser.getUserEmail());
+				}
+			}
+
+			// 1-2. (핵심!) 소셜 로그인 유저는 앱 내부 비밀번호를 사용하지 않으므로, Null 대신 임의의 보안 문자열을 암호화해서 저장 (DB의 NOT NULL 제약조건 대비)
+			user.setUserPw(bcrypt.encode("!SOCIAL_LOGIN_DUMMY_PASSWORD_" + System.currentTimeMillis()));
+
+		} else {
+			// --- 일반 회원가입인 경우 ---
+			// 2-1. 폼에서 받은 비밀번호를 암호화한다.
+			user.setUserPw(bcrypt.encode(user.getUserPw()));
+		}
+
+		// 3. 완성된 user 객체를 DB에 저장
+		System.out.println("DB 저장 : " + user); // 로그 확인
+		int result = uService.insertUser(user);
+		System.out.println("결과 값 : " + result);
+
+		// 4. 회원가입에 사용된 세션 정보는 깨끗하게 삭제
+		if (socialUser != null) {
+			session.removeAttribute("kakaoUser");
+			session.removeAttribute("googleUser");
+		}
+
+		// 5. 완료 페이지로 이동
+		return "signup_success";
 	}
 
 	@GetMapping("signIn")
