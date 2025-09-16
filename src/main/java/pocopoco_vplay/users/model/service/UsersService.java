@@ -163,7 +163,7 @@ public class UsersService implements UserDetailsService {
 	public int updateSubscribe(Map<String, Object> map) throws UsersException {
 		try {
 			Integer isCancelInt = (Integer) map.get("isCancel");
-			boolean isCancel = (isCancelInt != null) && (isCancelInt > 1);
+			boolean isCancel = (isCancelInt != null) && (isCancelInt > 0);
 			int result = 0;
 
 			if (!isCancel) { // 구독하려는 경우
