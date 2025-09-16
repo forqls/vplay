@@ -330,7 +330,6 @@
 				WHERE creater_no = #{createrNo} AND user_no = #{userNo}
 			</when>
 			<otherwise>
-				<if test="isSubscribed == false">
 					INSERT INTO subscribe (
 					subscribe_no,
 					creater_no,
@@ -340,7 +339,6 @@
 					#{createrNo},
 					#{userNo}
 					)
-				</if>
 			</otherwise>
 		</choose>
 	</update>
