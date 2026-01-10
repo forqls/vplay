@@ -15,8 +15,8 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
 
-# ----- 2단계: 실행(포장)하는 환경 (자바 21 버전) -----
-FROM openjdk:21-jdk-slim
+# ----- 2단계: 실행(포장)하는 환경
+FROM eclipse-temurin:21-jdk
 
 # 작업 폴더 설정
 WORKDIR /app
