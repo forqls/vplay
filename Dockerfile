@@ -1,5 +1,4 @@
-# ----- 1단계: 빌드(요리)하는 환경 (자바 21 버전) -----
-# (수정된 2번 줄)
+# ----- 1단계: 빌드하는 환경 -----
 FROM eclipse-temurin:21-jdk AS builder
 
 # 작업 폴더 설정
@@ -8,14 +7,14 @@ WORKDIR /app
 # 프로젝트 파일 전체 복사
 COPY . .
 
-# Gradle 실행 권한 부여 (중요!)
+# Gradle 실행 권한 부여
 RUN chmod +x ./gradlew
 
-# Gradle로 프로젝트 빌드(요리)하기! (테스트는 건너뛰기!)
+# Gradle로 프로젝트 빌드하기
 RUN ./gradlew build -x test
 
 
-# ----- 2단계: 실행(포장)하는 환경
+# ----- 2단계: 실행하는 환경
 FROM eclipse-temurin:21-jdk
 
 # 작업 폴더 설정
@@ -24,7 +23,5 @@ WORKDIR /app
 # 1단계(builder)에서 만들어진 완성품(.jar)만 복사해오기
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# =================================================================
-# === 이 아랫부분으로 교체해주세요! (데이터베이스 정보 강제 주입) ===
 # =================================================================
 CMD ["sh", "-c", "java -Dspring.datasource.url=${DATABASE_URL} -Dspring.datasource.username=${PGUSER} -Dspring.datasource.password=${PGPASSWORD} -Dspring.datasource.driver-class-name=org.postgresql.Driver -jar app.jar --server.port=${PORT}"]
