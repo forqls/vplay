@@ -1,5 +1,6 @@
 # ----- 1단계: 빌드(요리)하는 환경 (자바 21 버전) -----
-FROM openjdk:21-jdk-slim AS builder
+# (수정된 2번 줄)
+FROM eclipse-temurin:21-jdk AS builder
 
 # 작업 폴더 설정
 WORKDIR /app
